@@ -7,7 +7,7 @@
 与外部服务通信相关的配置写在microservice.yaml文件中。
 
 * 启用h2\(Http2 + TLS\)进行通信  
-  服务端在配置服务监听地址时，可以通过在地址后面追加`?sslEnabled=true`开启TLS通信，具体介绍见[使用TLS通信](https://huawei-servicecomb.gitbooks.io/developerguide/content/security/tls.html "使用TLS通信")章节。然后再追加`&protocol=http2`启用h2通信。示例如下：
+  服务端在配置服务监听地址时，可以通过在地址后面追加`?sslEnabled=true`开启TLS通信，具体介绍见[使用TLS通信](../../security/tls.md)章节。然后再追加`&protocol=http2`启用h2通信。示例如下：
 
   ```yaml
   servicecomb:
