@@ -76,16 +76,16 @@ servicecomb:
           enabled: true
           prefix: rest
           withVersion: true
-          pathIndex: 2
+          pathIndex: 1
 ```
 
 常见的这些配置项的示例及含义如下:
-* [prefix=rest;withVersion=true;pathIndex=2]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;pathIndex=3]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;pathIndex=4]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=false;pathIndex=2]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;pathIndex=3]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;pathIndex=3]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/abc，，请求可能转发到任意微服务实例。
+* [prefix=rest;withVersion=true;pathIndex=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+* [prefix=rest;withVersion=true;pathIndex=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+* [prefix=rest;withVersion=true;pathIndex=3]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+* [prefix=rest;withVersion=false;pathIndex=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求可能转发到任意微服务实例。
+* [prefix=rest;withVersion=false;pathIndex=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，，请求可能转发到任意微服务实例。
+* [prefix=rest;withVersion=false;pathIndex=2]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/abc，，请求可能转发到任意微服务实例。
 
 withVersion配置项提供了客户端灰度规则，可以让客户端指定访问的服务端版本。Edge Service还包含根据接口兼容性自动路由的功能，请求会转发到包含了该接口的实例。假设某微服务，兼容规划为所有高版本必须兼容低版本，部署了以下版本实例：
 
@@ -98,6 +98,32 @@ Edge Service在转发operation1时，会自动使用1.0.0+的规则来过滤实�
 Edge Service在转发operation2时，会自动使用1.1.0+的规则来过滤实例
 
 以上过程用户不必做任何干预，全自动完成，以避免将新版本的operation转发到旧版本的实例中去。
+
+### 使用URLMappedEdgeDispatcher
+URLMappedEdgeDispatcher运行用户配置URL和微服务的映射关系。使用它可以非常灵活的定义那些URL转发到哪些微服务。它包含如下几个配置项：
+```
+servicecomb:
+  http:
+    dispatcher:
+      edge:
+        url:
+          enabled: true
+          mappings:
+            businessV1:
+              pathIndex: 1
+              path: "/url/business/v1/.*"
+              microserviceName: business
+              versionRule: 1.0.0-2.0.0
+            businessV2:
+              pathIndex: 1
+              path: "/url/business/v2/.*"
+              microserviceName: business
+              versionRule: 2.0.0-3.0.0
+```
+
+businessV1配置项表示的含义是将请求路径为/usr/business/v1/.*的请求，转发到business这个微服务，并且只转发到版本号为1.0.0-2.0.0的实例（不含2.0.0）。转发的时候URL为/business/v1/.*。path使用的是JDK的正则表达式，可以查看Pattern类的说明。
+
+从上面的配置可以看出，URLMappedEdgeDispatcher也支持客户端灰度。当然配置项会比DefaultEdgeDispatcher多。URLMappedEdgeDispatcher支持通过配置中心动态的修改配置，调整路由规则。
 
 ### 自定义Dispatcher
 
