@@ -6,7 +6,7 @@
 
 1. 限流策略的控制并不是绝对精确的，可能会有少量误差。
 2. provider端的流量控制是业务层面的功能，不是安全意义上的流量控制，如需防止DDoS攻击，需要结合其他的一系列措施。
-3. 流量控制是微服务级的，不是进程级的。
+3. 流量控制是微服务级的，不是实例级的。例如一个consumer服务有三个实例，当对它们依赖的provider实例配置限流策略后，provider不会区分consumer的请求具体是由哪个实例发出的，而是汇总成微服务级的统计数据进行限流判断。
 
 ## 配置说明
 
@@ -39,4 +39,3 @@
 
 > **注意：**
 > provider端限流策略配置中的`ServiceName`指的是调用该provider的consumer，而`shema`、`operation`指的是provider自身的。即provider端限流配置的含义是，限制指定consumer调用本provider的某个schema、operation的流量。
-
