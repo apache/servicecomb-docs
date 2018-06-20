@@ -1,6 +1,8 @@
-## 接口约束说明
+# 接口定义和数据类型
 
-ServiceComb-Java-Chassis对于接口的使用约束建立在一个简单的原则上：接口定义即接口使用说明，不用通过查看代码实现，就能识别如何调用这个接口。可以看出，我们是站在使用者这边的，以更容易被使用作为参考。这个原则，不同的开发者的理解也是有差异的。
+## 接口定义的要求
+
+ServiceComb-Java-Chassis对于接口定义的要求建立在一个简单的原则上：接口定义即接口使用说明，不用通过查看代码实现，就能识别如何调用这个接口。可以看出，我们是站在使用者这边的，以更容易被使用作为参考。
 
 举个例子：
 
@@ -31,7 +33,7 @@ ResponseType methodName(RequestType...)
 
 不能定义异常、不能包含在接口原型未声明的错误码和输出（如果没声明错误码，缺省的错误码除外，比如HTTP 的200）。
 
-通常，系统约束越多，那么就更加容易对系统进行统一的管控和治理；开发方式越自由，实现业务功能则更加快速。需要在这两方面取得一些平衡。ServiceComb-Java-Chassis是比gRPC要灵活的多的框架，同时也去掉了Spring MVC的一些不常用的扩展。开发者可以在ServiceComb-Java-Chassis讨论区反馈开发过程中期望支持的场景，更好的维护这个平衡。期望这个讨论是围绕某个具体的应用场景来进行的，比如上传文件如何更好的进行，而不是具体的开发方式进行的，比如使用Object来传递参数。
+通常，系统约束越多，那么就更加容易对系统进行统一的管控和治理；开发方式越自由，实现业务功能则更加快速，需要在这两方面取得一些平衡。ServiceComb-Java-Chassis是比gRPC要灵活很多的框架，同时也去掉了Spring MVC的一些不常用的扩展。开发者可以在ServiceComb-Java-Chassis讨论区反馈开发过程中期望支持的场景，更好的维护这个平衡。期望这个讨论是围绕某个具体的应用场景来进行的，比如上传文件如何更好的进行，而不是具体的开发方式进行的，比如使用Object来传递参数。
 
 ## 详细的约束列表
 
@@ -57,6 +59,45 @@ ResponseType methodName(RequestType...)
 除了上面一些类型，开发者尽可能不要使用一些包含特殊内部状态的类型，这些类型会给开发者代码很大的困扰。比如java.math.BigDecimal，开发者可能以为他会以一个数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
 
 总之，数据结构需要能够使用简单的数据类型进行描述，一目了然就是最好的。这个在不同的语言，不同的协议里面都支持的很好，长期来看，可以大大减少开发者联调沟通和后期重构的成本。
+
+### 关于数据结构和接口变更
+接口名称、参数类型、参数顺序、返回值类型变更都属于接口变更。ServiceComb启动的时候，会根据版本号检测接口变化，接口变化要求修改版本号。ServiceComb识别接口是否变化是通过代码生成的契约内容，有些不规范的接口定义可能导致在代码没有变化的情况下，生成的契约不同。比如：
+
+```
+public void get(Person p)
+class Person {
+  private String value;
+  private boolean isOk;
+  public String getName() {return value}
+  public boolean isOk() {return isOK}
+}
+```
+
+这个接口通过access method定义了"name"和"ok"两个属性，和实际的字段"value"和"isOk"不同。这种情况可能导致每次启动生成的契约不一样。需要将代码调整为符合JAVA Bean规范的定义。
+```
+public void get(Person p)
+class Person {
+  private String name;
+  private boolean ok;
+  public String getName() {return name}
+  public boolean isOk() {return ok}
+}
+```
+
+或者通过JSON标注，显示的指明字段顺序。比如：
+
+```
+public void get(Person p)
+@JsonPropertyOrder({"name", "ok"})
+class Person {
+  private String value;
+  private boolean isOk;
+  public String getName() {return value}
+  public boolean isOk() {return isOK}
+}
+```
+
+考虑到接口变更的影响，建议在进行对外接口定义的时候，尽可能不要使用第三方软件提供的类作为接口参数，而是使用自定义的POJO类。一方面升级三方件的时候，可能感知不到接口变化；另外一方面，如果出现问题，无法通过修改第三方代码进行规避。比如：java.lang.Timestamp, org.joda.time.JodaTime等。
 
 ## 协议上的差异
 
