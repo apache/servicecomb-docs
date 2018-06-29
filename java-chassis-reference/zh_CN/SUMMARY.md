@@ -55,6 +55,7 @@
   * [跨应用调用](general-development/cross-app-invocation.md)
   * [定制序列化和反序列化方法](general-development/secret-field.md)
   * [使用Context传递控制消息](general-development/context.md)
+  * [返回值序列化扩展](general-development/produceprocess.md)
 * [服务能力开放](edge/open-service.md)
   * [使用Edge Service做边缘服务](edge/by-servicecomb-sdk.md)
   * [使用confd和Nginx做边缘服务](edge/nginx.md)
