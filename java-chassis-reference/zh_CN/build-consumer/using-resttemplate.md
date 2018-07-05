@@ -10,6 +10,8 @@ RestTemplate是Spring提供的RESTful访问接口，ServiceComb提供该接口�
 
 RestTemplate实例通过调用`RestTemplateBuilder.create()`方法获取，再使用该实例通过自定义的URL进行服务调用，代码如下：
 
+* Spring MVC 客户端示例代码：
+
 ```java
 @Component
 public class SpringmvcConsumerMain {
@@ -32,6 +34,31 @@ public class SpringmvcConsumerMain {
         BeanUtils.init();
     }
 }
+
+
+
+
+```
+
+* JAX RS 客户端示例代码：
+
+```java
+
+@Component
+public class JaxrsConsumerMain {
+
+    public static void main(String[] args) throws Exception {
+        init();
+        //其他都类似spring MVC示例的客户端代码，注意如果服务端只接收 GET 请求，要使用方法 getForObject()
+        RestTemplate restTemplate = RestTemplateBuilder.create();
+        String result = restTemplate.getForObject("cse://jaxrs/jaxrshello/saybye", String.class);
+    }
+
+    public static void init() throws Exception {
+        Log4jUtils.init();
+        BeanUtils.init();
+    }
+}
 ```
 
 > 说明：
@@ -39,5 +66,7 @@ public class SpringmvcConsumerMain {
 > * URL格式为：`cse://microserviceName/path?querystring`。以[用SpringMVC开发微服务](/用SpringMVC开发微服务)中定义的服务提供者为例，其微服务名称是springmvc，basePath是`/springmvchello`，那么URL中的microserviceName=`springmvc`，请求sayhi时的path=`springmvchello/sayhi`，所以示例代码中请求sayhi的URL是`cse://springmvc/springmvchello/sayhi?name=Java Chassis`。
 > * 使用这种URL格式，ServiceComb框架会在内部进行服务发现、熔断容错等处理并最终将请求发送到服务提供者。
 
+![](java-chassis-reference/zh_CN/build-consumer/consumer-serviceName.PNG)
 
+![](java-chassis-reference/zh_CN/build-consumer/consumer-basePath.PNG)
 
