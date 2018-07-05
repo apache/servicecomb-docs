@@ -178,9 +178,3 @@ b. 设置编码格式都为 utf-8。
 c. 设置maven 配置
 
 ![](java-chassis-reference/zh_CN/start/idea-maven.PNG)
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> b8a890e... Updates java-chassis-reference/zh_CN/start/development-environment.md
