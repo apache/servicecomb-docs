@@ -1,6 +1,8 @@
+# 用SpringMVC 开发微服务
+
 ## 概念阐述
 
-ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。
+ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着项目 [SpringMVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)进行详细阅读
 
 ## 开发示例
 
@@ -41,7 +43,7 @@ public class SpringmvcHelloImpl implements Hello {
 
 ### 步骤 3发布服务
 
-在`resources/META-INF/spring`目录下创建`springmvcHello.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
+在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -54,6 +56,20 @@ public class SpringmvcHelloImpl implements Hello {
 
     <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.povider"/>
 </beans>
+```
+
+### 步骤 4启动provider 服务
+
+进行主要相关配置初始化。
+
+```java
+public class SpringmvcProviderMain {
+
+  public static void main(String[] args) throws Exception {
+    Log4jUtils.init();
+    BeanUtils.init();
+  }
+}
 ```
 
 ## 涉及API

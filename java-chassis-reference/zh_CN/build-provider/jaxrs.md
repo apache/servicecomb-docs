@@ -1,6 +1,7 @@
+# 用JAX-RS开发微服务
 ## 概念阐述
 
-ServiceComb支持开发者使用JAX-RS注解，使用JAX-RS模式开发服务。
+ServiceComb支持开发者使用JAX-RS注解，使用[JAX-RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)模式开发服务。
 
 ## 开发示例
 
@@ -39,6 +40,15 @@ public class JaxrsHelloImpl implements Hello {
     public String sayHello(Person person) {
         return "Hello person " + person.getName();
     }
+    /**
+    * 这个方法是实现类特有的,因此对它的远程调用会有所不同.
+    * 具体可以参考 jaxrs-consumer
+    */
+    @Path("/saybye")
+    @GET
+    public String sayBye() {
+       return "Bye !";
+    }
 }
 ```
 
@@ -56,6 +66,18 @@ public class JaxrsHelloImpl implements Hello {
 
     <context:component-scan base-package="org.apache.servicecomb.samples.jaxrs.provider"/>
 </beans>
+```
+
+### 步骤 4启动服务。
+
+```
+public class JaxrsProviderMain{
+
+  public static void main(String[] args) throws Exception {
+    Log4jUtils.init();
+    BeanUtils.init();
+  }
+}
 ```
 
 ## 涉及API

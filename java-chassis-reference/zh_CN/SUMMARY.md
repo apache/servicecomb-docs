@@ -32,6 +32,7 @@
   * [Access Log配置](build-provider/access-log-configuration.md)
 * [开发服务消费者](catalog/build-consumer.md)
   * [使用RestTemplate开发服务消费者](build-consumer/using-resttemplate.md)
+  * [使用AsynRestTemplate开发服务消费者](build-consumer/using-AsyncRestTemplate.md)
   * [使用RPC方式开发服务消费者](build-consumer/develop-consumer-using-rpc.md)
   * [使用服务契约](build-consumer/with-contract.md)
   * [调用控制](build-consumer/invoke-control.md)
