@@ -2,7 +2,7 @@
 
 ## 接口定义的要求
 
-ServiceComb-Java-Chassis对于接口定义的要求建立在一个简单的原则上：接口定义即接口使用说明，不用通过查看代码实现，就能识别如何调用这个接口。可以看出，我们是站在使用者这边的，以更容易被使用作为参考。
+ServiceComb-Java-Chassis建议接口定义遵循一个简单的原则：接口定义即接口使用说明，不用通过查看代码实现，就能识别如何调用这个接口。可以看出，这个原则站在使用者这边，以更容易被使用作为参考。ServiceComb会根据接口定义生成接口契约，符合这个原则的接口，生成的契约也是用户容易阅读的。
 
 举个例子：
 
@@ -14,7 +14,7 @@ public class Person {String name;}
 
 显然调用接口一，我们知道要传递一个String类型的id参数，返回值是一个Person类型，Person里面存在String类型的name参数。调用接口二，我们不知道怎么处理返回值，必须参考服务提供者的文档说明。这个视角是熟练的RPC开发者的视角。
 
-当我们要将接口发布为REST接口的时候，可以通过使用swagger文件，指定id使用RequestParam或者PathVariable或者RequestBody进行传递，也可以使用SpringMVC或者JAX RS提供的标签来描述。
+当我们要将接口发布为REST接口的时候，可以指定接口参数和HTTP协议的映射关系，比如：
 
 ```java
 public Person query(@RequestParam String id);
@@ -40,6 +40,9 @@ ResponseType methodName(RequestType...)
 开发者不能在接口定义的时候使用如下类型：
 
 * 抽象的数据结构: java.lang.Object, net.sf.json.JsonObject等
+
+  **备注：** 最新版本可以使用java.lang.Object作为参数和返回值。它的运行时类型可以是int、String、Map等。尽管如此，建议开发者不要使用抽象数据结构，以及第三方提供的非POJO类作为接口的参数和返回值。这些类型包括java.math.BigDecimal、org.joda.time.JodaTime等。这些类型会给开发者带来很大的困扰。比如开发者可能以为BidDecimal会以数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
+
 * 接口或者抽象类
   ```java
    public interface IPerson {//...}
@@ -55,8 +58,6 @@ ResponseType methodName(RequestType...)
   ```
 
 开发者不用担心记不住这些约束，程序会在启动的时候检查不支持的类型，并给与错误提示。
-
-除了上面一些类型，开发者尽可能不要使用一些包含特殊内部状态的类型，这些类型会给开发者代码很大的困扰。比如java.math.BigDecimal，开发者可能以为他会以一个数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
 
 总之，数据结构需要能够使用简单的数据类型进行描述，一目了然就是最好的。这个在不同的语言，不同的协议里面都支持的很好，长期来看，可以大大减少开发者联调沟通和后期重构的成本。
 
@@ -143,3 +144,17 @@ public Generic getHolderListArea() {
 
 > ***说明:***   
 > 虽然 ServiceComb-Java-Chassis 支持REST泛型参数，但是我们更加推荐用户使用实体类作为参数，以获得更加明确的接口语义。
+
+## 其他常见问题
+
+* 使用RestTemplate传递raw json
+假设服务端定义了接口
+```
+Person test(Person input)
+```
+用户期望使用RestTemplate自行拼接json字符串，然后进行传递:
+```
+      String personStr = JsonUtils.writeValueAsString(input);
+      result = template.postForObject(cseUrlPrefix + "sayhello", personStr, Person.class);
+```
+ServiceComb不推荐开发者这样使用，里面的处理逻辑存在大量歧义。如果必须使用，需要满足几个约束：Person必须包含带String类型的构造函数；provider/consumer都必须存在这个Person类型。
