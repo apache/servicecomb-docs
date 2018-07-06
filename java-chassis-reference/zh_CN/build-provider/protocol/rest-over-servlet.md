@@ -1,3 +1,5 @@
+# REST over Servlet
+
 ## 配置说明
 
 REST over Servlet对应使用web容器模式部署运行，需要新建一个servlet工程将微服务包装起来，加载到web容器中启动运行，包装微服务的方法有两种，一种完全使用web.xml配置文件配置，另一种仅在web.xml文件中配置listener，在microservice.yaml文件中配置urlPattern，两种方式任选一种即可，配置方式如下所示：
@@ -112,5 +114,14 @@ servicecomb:
       timeout: 3000
 ```
 
+## 对外发布的Path
+由于将应用部署到Servlet，Servlet会在用户访问的URL上追加context和servlet pattern，比如/mywebapp/rest。在接口定义的时候声明path=/appliation，实际用户需要通过/mywebapp/rest/application来访问服务。通过ServiceComb的API，可以屏蔽部署差异，使用者可以使用一致的URL来访问，比如: restTemplate.getForObject("cse://serviceName/application"...)。因此后续用户将应用改造为独立部署，或者修改context，使用者的代码都可以不需要修改。
 
+对于一些遗留系统改造，用户期望继续使用restTemplate.getForObject("cse://serviceName/mywebapp/rest/application"...)，这个时候，用户必须将接口定义的path定位为: /mywebapp/rest/application，例如：
+```
+@RestSchema(schemaId = "test")
+@RequestMapping(path = "/mywebapp/rest/application")
+```
+
+尽管如此，仍然推荐使用部署形态无关的方式来编码，可以减少后续由于部署形态变化，带来的频繁修改客户端代码问题。
 
