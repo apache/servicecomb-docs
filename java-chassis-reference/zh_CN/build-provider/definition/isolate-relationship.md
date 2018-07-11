@@ -28,11 +28,10 @@ ServiceComb支持自定义分层配置，满足用户的实例分层管理需求
 
 ```
 servicecomb:
-  loadbalance:
-    serverListFilters: zoneaware
-    serverListFilter:
-      zoneaware:
-        className: org.apache.servicecomb.loadbalance.filter.ZoneAwareServerListFilterExt
+  datacenter:
+    name: mydatacenter
+    region: my-Region
+    availableZone: my-Zone
 ```
 
 这样配置后，客户端在路由的时候，会优先将请求转发到zone/region都相同的实例，然后是region相同，但zone不相同的实例，都不相同的时候，则按照路由规则选择一个。亲和性不是逻辑隔离，只要实例之间网络是联通的，那么都有可能访问到；如果网络不通，则会访问失败。
