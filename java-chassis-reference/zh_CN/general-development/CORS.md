@@ -31,8 +31,6 @@ servicecomb:
     enabled: true
     origin: "*"
     allowCredentials: false
-    allowedHeaders: Header-abc, Header-def
-    allowdedMethod: GET,PUT,DELETE,POST
-    exposedHeaders: Header-abc, Header-def
+    allowedMethod: PUT,DELETE
     maxAge: 3600
 ```
