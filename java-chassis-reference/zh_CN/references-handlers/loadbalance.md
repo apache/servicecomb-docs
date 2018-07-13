@@ -32,6 +32,29 @@ servicecomb:
 
 该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.zoneaware.enabled进行关闭。数据中心信息隔离功能在ZoneAwareDiscoveryFilter实现。
 
+## 根据实例属性进行路由转发
+微服务可以指定实例的属性。实例属性可以在microservice.yaml中指定，也可以通过服务中心的API进行修改。
+```
+instance_description:
+  properties:
+    tag: mytag
+```
+
+消费者可以指定消费具备某些属性的实例，不访问其他实例
+```
+servicecomb:
+  loadbalance:
+    myservice:
+      transactionControl:
+        options:
+          tag: mytag
+```
+上面的配置表示只访问myservice所有实例中tag属性为mytag的实例。
+
+该规则需要给每个服务单独配置，为配置表示不启用该规则，不支持对于所有服务的全局配置。
+
+该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.instanceProperty.enabled进行关闭。根据实例属性进行路由转发功能在InstancePropertyDiscoveryFilter实现。
+
 ## 实例隔离功能
 开发者可以配置实例隔离的参数，以暂时屏蔽对于错误实例的访问，提升系统可靠性和性能。下面是其配置项和缺省值
 ```
