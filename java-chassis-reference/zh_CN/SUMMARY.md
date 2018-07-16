@@ -78,5 +78,6 @@
   * [Spring MVC模式的差异](using-java-chassis-in-spring-boot/diff-spring-mvc.md)
 * [处理链参考](references-handlers/intruduction.md)
   * [负载均衡](references-handlers/loadbalance.md)
+  * [公钥认证](references-handlers/publickey.md)
 * [常见问题](question-and-answer/question_answer.md)
   * [微服务接口兼容常见问题](question-and-answer/interface-compatibility.md)
