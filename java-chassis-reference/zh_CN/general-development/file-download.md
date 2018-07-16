@@ -1,4 +1,4 @@
-文件下载，当前只在vertx rest通道中可用，servlet rest的支持后续会增加。
+文件下载，当前在vertx rest通道和servlet rest中可用。
 
 # 一、Producer
 
@@ -156,6 +156,3 @@ org.apache.servicecomb.foundation.vertx.http.ReadStreamPart.saveToFile(File, Ope
 
   * 如果要阻塞等待下载完成，通过future.get\(\)即可
   * 如果通过future.whenComplete进行异步回调处理，要注意回调是发生在网络线程中的，此时需要遵守reactive的线程规则。
-
-
-

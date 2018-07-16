@@ -8,6 +8,7 @@
 * ### 扩展
 
   开发人员可以根据业务需要，通过编程的方式来扩展返回值序列化方式。实施步骤如下，以扩展支持application/xml格式为例：
+
   1.实现接口`ProduceProcessor`
 
   > getName\(\)返回当前扩展的数据类型名
@@ -18,7 +19,7 @@
   >
   > doDecodeResponse\(InputStream input, JavaType type\)把input解析成相应对象，此处逻辑需要自行实现
 
-* ```java
+  ```java
   public class ProduceAppXmlProcessor implements ProduceProcessor {
 
     @Override
@@ -86,6 +87,3 @@
       TestMgr.check(person, resEntity.getBody());
     }
   ```
-
-
-
