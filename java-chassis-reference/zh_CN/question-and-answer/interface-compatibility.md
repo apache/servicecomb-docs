@@ -9,6 +9,9 @@
 3. 作为Consumer，使用Provider的新接口时候，指定Provider的最小版本号。比如：servicecomb.references.\[serviceName\].version-rule=2.1.3+，其中serviceName为Provider的微服务名称。
 4. 在服务中心，定期清理不再使用的老版本的微服务信息。
 
+ServiceComb还有如下一些注意事项：
+1. 修改微服务信息，必须升级版本号，因为服务注册的时候，不会覆盖已经注册的微服务信息。
+
 # 接口兼容常见问题及其解决办法
 
 开发阶段，由于存在频繁的接口修改，也不会清理服务中心的数据，容易出现调试的时候接口调用失败的情况。建议开发者可以安装下载一个[服务中心的frontend](http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center/1.0.0-m1/), 可以随时清理服务中心数据。
@@ -32,9 +35,5 @@
 * consumer method \[Method Name\] not exist in swagger
 
 可能是Provider增加了接口，但是没有更新版本号。需要删除微服务数据或者更新版本号后重新启动Provider，并重启Consumer。
-
-
-
-* 
 
 
