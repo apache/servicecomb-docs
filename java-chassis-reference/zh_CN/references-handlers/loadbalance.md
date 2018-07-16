@@ -51,7 +51,7 @@ servicecomb:
 ```
 上面的配置表示只访问myservice所有实例中tag属性为mytag的实例。
 
-该规则需要给每个服务单独配置，为配置表示不启用该规则，不支持对于所有服务的全局配置。
+该规则需要给每个服务单独配置，未配置表示不启用该规则，不支持对于所有服务的全局配置。
 
 该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.instanceProperty.enabled进行关闭。根据实例属性进行路由转发功能在InstancePropertyDiscoveryFilter实现。
 
