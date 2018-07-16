@@ -76,5 +76,7 @@
   * [Web开发方式开发步骤](using-java-chassis-in-spring-boot/web-application.md)
   * [JAVA应用方式和Web开发方式的区别](using-java-chassis-in-spring-boot/diff-between-java-web.md)
   * [Spring MVC模式的差异](using-java-chassis-in-spring-boot/diff-spring-mvc.md)
+* [处理链参考](references-handlers/intruduction.md)
+  * [负载均衡](references-handlers/loadbalance.md)
 * [常见问题](question-and-answer/question_answer.md)
   * [微服务接口兼容常见问题](question-and-answer/interface-compatibility.md)

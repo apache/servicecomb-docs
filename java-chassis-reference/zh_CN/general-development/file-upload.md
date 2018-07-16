@@ -22,7 +22,7 @@ springmvc开发模式：
 
 注意：
 
-* 先配置文件上传临时目录，默认为null不支持文件上传
+* 先配置文件上传临时目录，默认为null不支持文件上传，文件上传请求Content-Type必须为multipart/form-data
 
 * 同名参数只支持一个文件
 
