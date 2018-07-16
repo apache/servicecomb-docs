@@ -16,6 +16,14 @@ servicecomb:
         default: loadbalance
 ```
 
+POM依赖：
+```
+ <dependency> 
+  <groupId>org.apache.servicecomb</groupId> 
+  <artifactId>handler-loadbalance</artifactId> 
+  </dependency>
+```
+
 ## 按照数据中心信息进行路由转发
 服务提供者和消费者都可以通过在microservice.yaml中声明自己的服务中心信息：
 ```yaml
@@ -69,6 +77,13 @@ servicecomb:
 ```
 
 隔离的统计周期是1分钟。按照上面的配置，在1分钟内，如果请求总数大于5，并且[1]错误率大于20%或者[2]连续错误超过2次，那么就会将实例隔离。实例隔离的时间是60秒，60秒后会尝试启用实例（还需要根据负载均衡策略确定是否选中）。
+
+需要注意ServiceComb为了检测实例状态，在后台启动类一个线程，每隔10秒检测一次实例状态（如果实例在10秒内有被访问，则不检测），如果检测失败，每次检测会将错误计数加1。这里的计数，也会影响实例隔离。
+
+系统缺省的实例状态检测机制是发送一个telnet指令，参考SimpleMicroserviceInstancePing的实现。如果业务需要覆盖状态检测机制，可以通过如下两个步骤完成：
+
+1. 实现MicroserviceInstancePing接口
+2. 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing，内容为实现类的全名
 
 开发者可以针对不同的微服务配置不一样的隔离策略。只需要给配置项增加服务名，例如：
 ```
