@@ -13,6 +13,7 @@ jaxrs开发模式：
 springmvc开发模式：
 
 * 支持servlet定义的javax.servlet.http.Part类型，也支持org.springframework.web.multipart.MultipartFile类型
+
 * 两种数据类型功能是一致的，MultipartFile的底层也是Part
 
 * 两种数据类型可以混合使用，比如第一个参数是Part，第二个参数是MultipartFile
@@ -27,7 +28,7 @@ springmvc开发模式：
 
 * 支持一次传输多个不同参数名的文件
 
-* 通过MultipartFile或Part打开流后，若上传出错，可能导致临时文件无法被删除，此时可手动清除临时目录下的残留临时文件
+* 通过MultipartFile或Part打开流后，记得关闭，否则上传的临时文件会无法删除，最终导致上传临时目录被撑爆
 
 Springmvc模式下的代码样例：
 
