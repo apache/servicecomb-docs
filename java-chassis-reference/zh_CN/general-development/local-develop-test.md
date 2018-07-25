@@ -40,13 +40,11 @@
    ```
    
     注意：前端（frontend）在Linux环境下默认会绑定ipv6地址，导致浏览器报错，修复办法为：先修改conf/app.conf中的httpaddr为外部可达网卡ip，之后修改app/appList/apiList.js中`ip : 'http://127.0.0.1'`为对应ip，最后重启ServiceCenter即可。
-    {: .notice--warning}
   
     </div>
    </div>
 
    注意：Window和Linux版本均只支持64位系统。
-   {: .notice--warning}
 
 2. 以Docker的方式运行
 
@@ -59,11 +57,11 @@ docker run -d -p 30100:30100 servicecomb/service-center:latest
 
 ```yaml
 servicecomb:
- service:
- registry:
- address: 
-http://127.0.0.1:30100
- #服务中心地址及端口
+  service:
+    registry:
+      address:
+        # 服务中心地址及端口
+        http://127.0.0.1:30100
 ```
 
 * **步骤 3 **开发服务提供/消费者，启动微服务进行本地测试。
@@ -71,35 +69,44 @@ http://127.0.0.1:30100
 **----结束**
 
 ## Mock机制启动服务中心
+在本进程内存中模拟一个只能本进程使用的服务中心，一般是在测试场景中使用。
+* ### 进程内调用
+只需要在启动ServiceComb引擎之前声明一下即可启用：
+```java
+System.setProperty("local.registry.file", "notExistJustForceLocal");
+```
+* ### 跨进程调用
+如果部署比较简单，并且部署信息是静态的，即使有跨进程调用也可以使用本Mock机制
+producer端仍然像“进程内调用”一样声明即可
+但是，因为Mock并不能跨进程生效，所以consumer端的Mock，需要提供一个本地的配置文件，在里面描述调用目标的详细信息，包括名字、版本、地址、schema id等等信息
+同样，因为Mock不能跨进程，consumer也无法动态取得producer的契约信息，所以，需要在本地提供契约文件
+（这个场景，使用Mock服务中心，比使用standalone的服务中心，成本高得多得多，不建议使用）
 
-* **步骤 1**新建本地服务中心定义文件registry.yaml，内容如下：
+* **步骤 1**新建本地服务中心定义文件，假设名字为registry.yaml，内容示例如下：
 
 ```yaml
-springmvctest: 
-  - id: "001"  
-    version: "1.0"  
-    appid: myapp #调试的服务id  
-    instances:  
-      - endpoints:  
-        - rest://127.0.0.1:8080
+localserv:
+  - id: "100"
+    version: "0.0.1"
+    appid: localservreg
+    schemaIds:
+      - hello
+    instances:
+      - endpoints:
+        - rest://localhost:8080
+        - highway://localhost:7070
 ```
+* **步骤 2**consumer本地部署契约文件
 
-#### 注意：mock机制需要自己准备契约，并且当前只支持在本地进行服务消费端\(consumer\)侧的调试，不支持服务提供者\(provider\)
-
-* **步骤 2**在服务消费者Main函数首末添加如下代码：
+参考：[定义服务契约](https://huaweicse.github.io/servicecomb-java-chassis-doc/zh_CN/build-provider/define-contract.html)
+* **步骤 3**在consumer main函数，启动ServiceComb引擎之前声明：
 
 ```java
-public class xxxClient {
-public static void main(String[] args) {
 　　System.setProperty("local.registry.file", "/path/registry.yaml");
-    // your code
-　　System.clearProperty("local.registry.file");
-}
 ```
 
 setProperty第二个参数填写registry.yaml在磁盘中的系统绝对路径，注意区分在不同系统下使用对应的路径分隔符。
 
-* **步骤 3**开发服务消费者，启动微服务进行本地测试。
 
 ## 通过设置环境信息方便本地调试
 java chassis在设计时，严格依赖于契约，所以正常来说契约变了就必须要修改微服务的版本。但是如果当前还是开发模式，那么修改接口是很正常的情况，每次都需要改版本的话，对用户来说非常的不友好，所以增加了一个环境设置。如果微服务配置成开发环境，接口修改了（schema发生了变化），重启就可以注册到服务中心，而不用修改版本号。但是如果有consumer已经调用了重启之前的服务，那么consumer端需要重启才能获取最新的schema。比如A -> B，B接口进行了修改并且重启，那么A这个时候还是使用B老的schema，调用可能会出错，以免出现未知异常，A也需要重启。有三种方式可以设置，推荐使用方法1
