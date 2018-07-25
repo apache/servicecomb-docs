@@ -1,8 +1,17 @@
 # 定义服务契约
-
+``
 ## 概念阐述
 
-服务契约，指基于OpenAPI规范的微服务接口契约，是服务端与消费端对于接口的定义。java chassis提供了两种方式定义契约：显示和隐式。显示契约用于开发者使用RPC方式开发代码，然后期望内部程序客户端使用RPC方式访问，同时期望浏览器、手机终端等通过HTTP访问后台接口场景，显示契约需要开发者在yaml文件中描述接口的访问方式。隐式契约中的契约完全由框架根据默认规则（对于RPC方式）或者Annotation（Spring MVC和JAX RS方式）来生成运行时的契约，不需要准备单独的yaml文件。
+服务契约，指基于OpenAPI规范的微服务接口契约，是服务端与消费端对于接口的定义。java chassis提供了两种方式定义契约：code first和contract first。
+* code first
+
+producer使用Jax-RS或SpringMVC的RESTful annotation声明接口的输入、输出参数，或者再配合OpenAPI的annotation，增加人类可读的信息，比如样例代码、文本描述等等；ServiceComb引擎启动时，根据这些annotation生成契约描述，并自动上传到服务中心。producer也可以使用透明RPC方式开发，但是因为没有任何RESTful的annotation指导如何生成契约，所以此时自动生成的契约非常的不RESTful化，不建议使用。
+consumer使用透明RPC或RestTemplate进行调用。
+code first的开发模式下，开发人员，不必手写契约。
+
+* contract first
+
+此场景下，不使用框架自动生成的契约，而是直接使用开发人员提供的契约文件，这需要由开发人员保证契约与代码的一致性。
 
 ## 场景描述
 
@@ -95,7 +104,10 @@ definitions:
 
 > **注意**：
 >
-> * 根据swagger标准，basePath配置的路径需要包括web server的webroot。
+> * ServiceComb中的契约，建议basePath不要包含web container的web root，以及servlet的url pattern。
+
+因为ServiceComb支持部署解耦，既可以脱离servlet container独立部署，也可使用war的方式部署到servlet container中，还可以使用embedded servlet container的方式运行。
+只要base path不包含web root以及url pattern，则部署方式修改导致的实际url变更，ServiceComb consumer业务代码并不需要感知，框架会自动适配。 
 > * info.x-java-interface需要标明具体的接口路径，根据项目实际情况而定。
 > * SchemaId中可以包含"."字符，但不推荐这样命名。这是由于ServiceComb使用的配置文件是yaml格式的，"."符号用于分割配置项名称，如果SchemaId中也包含了"."可能会导致一些支持契约级别的配置无法正确被识别。
 > * OperationId的命名中不可包含"."字符。
