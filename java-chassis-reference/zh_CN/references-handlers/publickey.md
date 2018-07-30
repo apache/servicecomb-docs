@@ -25,15 +25,15 @@ POM依赖：
 * 在pom.xml中增加依赖：
 
   ```
-   <dependency> 
-      <groupId>org.apache.servicecomb</groupId> 
-      <artifactId>handler-publickey-auth</artifactId> 
+   <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>handler-publickey-auth</artifactId>
     </dependency>
   ```
 
 ## 配置黑白名单
 
-基于公钥认证机制，ServiceComb提供了黑白名单功能。通过黑白名单，可以控制微服务允许其他哪些服务访问。目前支持通过配置服务属性来控制，配置项如下：
+基于公钥认证机制，ServiceComb提供了黑白名单功能。通过黑白名单，可以控制微服务允许其他哪些服务访问。目前支持通过配置服务属性来控制，支持按照服务名或版本来筛选，配置项如下：
 
 ```
 servicecomb:
@@ -42,11 +42,12 @@ servicecomb:
       black:
         list01:
           category: property ## property, fixed value
-          propertyName: serviceName ## property name
-# property value match expression. 
-# only supports prefix match and postfix match and exactly match. 
+          propertyName: serviceName ## property name, e.g. serviceName or version
+# property value match expression.
+# if propertyName is serviceName, only supports prefix match and postfix match and exactly match.
 # e.g. hacker*, *hacker, hacker
-          rule: hacker 
+# if propertyName is version, only supports exactly match. e.g. 1.0.0(a.b.c)
+          rule: hacker
       white:
         list02:
           category: property
