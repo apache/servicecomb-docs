@@ -21,6 +21,7 @@ Highway通道在microservice.yaml文件中的配置项如下表所示：
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | servicecomb.highway.address | 0.0.0.0:7070 | - | 否 | 服务监听地址 | - |
 | servicecomb.highway.server.thread-count | 1 | - | 否 | 服务端网络线程个数 | - |
+| servicecomb.highway.server.connection-limit | Integer.MAX_VALUE | - | 否 | 允许客户端最大连接数 | - |
 | servicecomb.highway.client.thread-count | 1 | - | 否 | 客户端网络线程个数 | - |
 | servicecomb.request.timeout | 30000 | - | 否 | 请求超时时间 | 同REST over Vertx的配置 |
 | servicecomb.references.\[服务名\].transport | rest |  | 否 | 访问的transport类型 | 同REST over Vertx的配置 |
