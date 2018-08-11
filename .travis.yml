@@ -3,11 +3,11 @@ script:
   - gitbook build java-chassis-reference docs
   - git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
 after_success:
-  - cp -r docs/ servicecomb-java-chassis-doc/docs/
+  - cp -r docs/ servicecomb-java-chassis-doc/
   - cd servicecomb-java-chassis-doc
   - git checkout -b master
   - git add docs
-  - git commit -m "update the website docs source"
+  - git commit -m "Publish gitbook docs"
   - git push https://$DEPLOY_TOKEN@$PUSH_TARGET_URL master
 branches:
  only:
