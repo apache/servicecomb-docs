@@ -28,6 +28,7 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | servicecomb.rest.address | 0.0.0.0:8080 | - | 否 | 服务监听地址 | 仅服务提供者需要配置 |
 | servicecomb.rest.server.thread-count | 1 | - | 否 | 服务端线程数 | 仅服务提供者需要配置 |
+| servicecomb.rest.server.connection-limit | Integer.MAX_VALUE | - | 否 | 允许客户端最大连接数 | 仅服务提供者需要配置 |
 | servicecomb.rest.server.connection.idleTimeoutInSeconds | 60 | - | 否 | 服务端连接闲置超时时间 | 闲置连接会被回收 |
 | servicecomb.rest.client.thread-count | 1 | - | 否 | 客户端网络线程数 | 仅服务消费者需要配置 |
 | servicecomb.rest.client.connection.maxPoolSize | 5 | - | 否 | 每个连接池的最大连接数 | 连接数=网络线程数\*连接池个数\*连接池连接数 |
