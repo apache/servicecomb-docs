@@ -60,6 +60,7 @@
   * [返回值序列化扩展](general-development/produceprocess.md)
   * [CORS机制](general-development/CORS.md)
   * [获取熔断与实例隔离告警事件信息](general-development/AlarmEvent.md)
+  * [优雅停机](general-development/shutdown.md)
 * [服务能力开放](edge/open-service.md)
   * [使用Edge Service做边缘服务](edge/by-servicecomb-sdk.md)
   * [使用confd和Nginx做边缘服务](edge/nginx.md)
