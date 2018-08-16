@@ -51,6 +51,7 @@
   * [DNS自定义配置](general-development/dnsconfig.md)
   * [代理设置](general-development/dai-li-she-zhi.md)
   * [框架上报版本号](general-development/report-framework-version.md)
+  * [Shutdown gracefully](general-development/shutdown.md)
 * [服务能力开放](catalog/open-service.md)
   * [使用confd和Nginx做边缘服务](edge/nginx.md)
   * [使用zuul做边缘服务](edge/zuul.md)
@@ -70,6 +71,3 @@
   * [Spring MVC模式的差异](using-java-chassis-in-spring-boot/diff-spring-mvc.md)
 * [常见问题](question-and-answer/question_answer.md)
   * [微服务接口兼容常见问题](question-and-answer/interface-compatibility.md)
-
-
-
