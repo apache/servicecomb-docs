@@ -24,3 +24,4 @@ Consumer watches the information of provider instances from SC and if there is a
 When Consumer needs to communicate to Provider then consumer reads endpoints of the provider instances from cache and do loadbalancing to communicate to Provider.
 
 Note: This document is in beta stage, feel free to contribute to this document.
+w
