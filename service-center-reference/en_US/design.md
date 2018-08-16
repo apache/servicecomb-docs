@@ -12,12 +12,12 @@ Here we assume that micro-services are written using [java-chassis](https://gith
 4. Consumer sdk stores all the information of provider instances in its cache.
 5. Consumer sdk creates a web socket connection to SC to watch all the provider instance information, if there is any change in the provider then sdk updates it's cache information.
 
-![Onstartup](/docs/onStartup.PNG)
+![Onstartup](static_files/onStartup.PNG)
 
 #### Communication between Consumer -> Provider
 Once the bootup is successful then the consumer can communicate with providers flawlessly, below is the diagram illustrating the communication between provider and consumer.
 
-![Commuication](/docs/communication.PNG)
+![Commuication](static_files/communication.PNG)
 
 Provider instance regularly sends heartbeat signal every 30 seconds to SC, if SC does not receive the heartbeat for particular instance then the information in etcd expires and the provider instance information is removed.  
 Consumer watches the information of provider instances from SC and if there is any change then the cache is updated.  

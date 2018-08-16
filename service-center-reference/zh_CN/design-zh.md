@@ -17,12 +17,12 @@ SC使用ETCD存储微服务的所有信息及其实例。下面是SC的工作原
 5 Consumer SDK创建到SC的Web socket连接，以查看所有提供程序实例信息，如果提供者中有任何更改，SDK更新其缓存信息。
 
 
-![Onstartup](/docs/onStartup.PNG)
+![Onstartup](static_files/onStartup.PNG)
 
 #### Consumer -> Provider 之间的通信
 一旦启动成功，那么消费者可以完美地与提供者通信，下面是说明提供者和消费者之间的通信的图表。
 
-![Commuication](/docs/communication.PNG)
+![Commuication](static_files/communication.PNG)
 
 Provider程序实例每隔30秒定期发送心跳信号到SC，如果SC不接收某一个实例的心跳，则该实例信息将在ETCD中过期，并且该provider实例信息被sc移除。Consumer由SC监视Provider实例的信息，如果有任何变化，则更新缓存。当Consumer需要与Provider通信时，Consumer从缓存读取Provider实例的endpoints，并进行负载平衡以与provider者通信。
 
