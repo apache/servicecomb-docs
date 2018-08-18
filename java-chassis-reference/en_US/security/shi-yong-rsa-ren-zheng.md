@@ -2,7 +2,7 @@
 
 用户通过简单的配置即可启用服务间RSA认证，以保障服务接口的安全性。
 
-
+详细介绍参考[公钥认证](../references-handlers/publickey.md)
 
 ## Consumer配置
 

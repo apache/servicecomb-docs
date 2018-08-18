@@ -1,0 +1,6 @@
+## 以standalone模式打包
+一个Standalone的容器，以简单的Main加载Spring启动，因为服务通常不需要Tomcat/JBoss等Web容器的特性，没必要用Web容器去加载服务。微框架提供了standalone部署运行模式，服务容器只是一个简单的Main方法，并加载一个简单的Spring容器，用于暴露服务。
+
+## 以WEB容器模式打包
+如果需要将该微服务加载到web容器中启动运行时，需要新建一个servlet工程包装一下，该servlet工程，根据需要，可以不写或写少量的引导代码即可。
+

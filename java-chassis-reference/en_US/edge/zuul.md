@@ -1,3 +1,5 @@
+# 使用zuul做边缘服务
+
 ## 概念阐述
 
 ### API Gateway：
@@ -24,6 +26,10 @@ Zuul是Netflix的基于JVM的路由器和服务器端负载均衡器，可以使
 ## 场景描述
 
 Zuul做API Gateway，即建立一个Zuul Proxy应用，在该Proxy应用中统一定义所有的微服务访问入口，通过使用不同的前缀\(stripped\)来区分各个微服务。本小节通过建立一个ZuulProxy SpringBoot应用来演示Zuul的API Gateway功能。
+
+## 注意事项
+
+本小节介绍的ZuulProxy和ZuulServer等demo都是基于SpringBoot和ServiceComb框架的应用，具体请参考[在Spring Boot中使用java chassis](/using-java-chassis-in-spring-boot.md)。
 
 ## 启动Zuul Proxy
 
@@ -88,8 +94,6 @@ servicecomb:
  rest: 
    address: 0.0.0.0:8082                         #微服务端口，可不写
 ```
-
-本小节所有服务使用的都是本地的服务中心，具体的服务中心启动流程请参考[启动本地服务中心](#li2337491491436)
 
 * **步骤 5　**Run ZuulMain Application
 

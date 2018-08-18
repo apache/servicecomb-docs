@@ -1,20 +1,24 @@
-文件上传，当前只在vertx rest通道中可用，servlet rest的支持后续会增加。
+文件上传，当前支持在vertx rest通道和servlet rest中使用。
 
 文件上传使用标准的http form格式，可与浏览器的上传直接对接。
 
 ## Producer：
+支持jaxrs和springmvc开发模式
 
-在jaxrs或springmvc开发模式下可用：
+jaxrs开发模式：
+* 支持servlet定义的javax.servlet.http.Part类型
 
-* 支持servlet定义的javax.servlet.http.Part类型，
+* 可以直接使用@FormParam传递文件类型及普通参数
 
-* Springmvc模式下，也支持org.springframework.web.multipart.MultipartFile
+springmvc开发模式：
 
-两种数据类型：
+* 支持servlet定义的javax.servlet.http.Part类型，也支持org.springframework.web.multipart.MultipartFile类型
 
-* 功能是一致的，MultipartFile的底层也是Part
+* 两种数据类型功能是一致的，MultipartFile的底层也是Part
 
-* 可以混合使用，比如第一个参数是Part，第二个参数是MultipartFile
+* 两种数据类型可以混合使用，比如第一个参数是Part，第二个参数是MultipartFile
+
+* 可以直接使用@RequestPart传递文件类型及普通参数
 
 注意：
 
@@ -25,8 +29,6 @@
 * 支持一次传输多个不同参数名的文件
 
 * 通过MultipartFile或Part打开流后，记得关闭，否则上传的临时文件会无法删除，最终导致上传临时目录被撑爆
-
-* 可以直接使用@RequestPart传递普通参数
 
 Springmvc模式下的代码样例：
 
@@ -89,6 +91,3 @@ String reseult = template.postForObject(
     entry,
     String.class);
 ```
-
-
-
