@@ -1,6 +1,6 @@
- 
+# 安装本地开发环境
 
-应用开发环境所需安装的工具包括JDK、Maven和Eclipse。如果已经安装了这些开发工具，请跳过本节。
+应用开发环境所需安装的工具包括JDK、Maven、Eclipse 和 IDEA 。如果已经安装了这些开发工具，请跳过本节。
 
 ## JDK约束及安装步骤
 
@@ -53,7 +53,18 @@ e.（可选）设置本地仓库路径，用于保存从远程仓库获取的插
 
 这里以路径D:\maven\repository为例。在/conf中找到settings.xml文件，设置localRepository为D:\maven\repository
 
-f.结果验证
+f. （可选）要想项目能够快速的下载各种依赖，建议配置下中心仓库。
+
+```
+ <mirror>
+      <id>mirrorId</id>
+      <mirrorOf>*</mirrorOf>
+      <name>Mirror of central repository.</name>
+      <url>http://maven.huaweicse.com/nexus/content/groups/public</url>
+  </mirror>
+```
+
+g.结果验证
 
 使用mvn -version命令验证是否安装成功，windows环境下回显如下：
 
@@ -88,3 +99,26 @@ c.（可选）将之前Maven安装中介绍的插件m2eclipse解压到Eclipse安
 
 d.启动Eclipse，配置jre、maven settings以及默认编码格式为utf-8。
 
+
+
+## IDEA安装
+
+### **前提条件**
+
+a.JDK已经安装。
+
+b.Maven已经安装。
+
+### **安装步骤**
+
+a. 在官方网站下载 IDEA 安装包，收费版或者社区版的按个人需求。
+
+b. 设置编码格式都为 utf-8。
+
+打开IDEA，选择 File -> Settings -> Editor -> File Encoding
+把 project Encoding 和 default encoding for properties files 改为 utf-8。
+
+c. 设置maven 配置
+
+打开IDEA，选择 File -> Settings -> Build，Execution,Deployment -> Bulid Tools -> Maven
+注意配置 Maven home directory  和 User settings file

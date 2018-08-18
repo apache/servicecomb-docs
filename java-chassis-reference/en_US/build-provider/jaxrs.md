@@ -1,6 +1,7 @@
+# 用JAX-RS开发微服务
 ## 概念阐述
 
-ServiceComb支持开发者使用JAX-RS注解，使用JAX-RS模式开发服务。
+ServiceComb支持开发者使用JAX-RS注解，使用[JAX-RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)模式开发服务。
 
 ## 开发示例
 
@@ -39,6 +40,15 @@ public class JaxrsHelloImpl implements Hello {
     public String sayHello(Person person) {
         return "Hello person " + person.getName();
     }
+    /**
+    * 这个方法是实现类特有的,因此对它的远程调用会有所不同.
+    * 具体可以参考 jaxrs-consumer
+    */
+    @Path("/saybye")
+    @GET
+    public String sayBye() {
+       return "Bye !";
+    }
 }
 ```
 
@@ -56,6 +66,18 @@ public class JaxrsHelloImpl implements Hello {
 
     <context:component-scan base-package="org.apache.servicecomb.samples.jaxrs.provider"/>
 </beans>
+```
+
+### 步骤 4启动服务。
+
+```
+public class JaxrsProviderMain{
+
+  public static void main(String[] args) throws Exception {
+    Log4jUtils.init();
+    BeanUtils.init();
+  }
+}
 ```
 
 ## 涉及API
@@ -76,11 +98,101 @@ JAX-RS开发模式当前支持如下注解，所有注解的使用方法参考[J
 | javax.ws.rs.PathParam | parameter | 从path中获取参数，必须在path中定义该参数 |
 | javax.ws.rs.HeaderParam | parameter | 从header中获取参数 |
 | javax.ws.rs.CookieParam | parameter | 从cookie中获取参数 |
+| javax.ws.rs.FormParam | parameter | 从form中获取参数 |
+| javax.ws.rs.BeanParam | parameter | 用于参数聚合，允许在一个JavaBean的属性上打上参数标记以将多个参数聚合为一个JavaBean |
 
 > **说明:**
 >
-> * 当方法参数没有注解，且不为HttpServletRequest类型参数时，默认为body类型参数，一个方法只支持最多一个body类型参数。
-> * 打在参数上面的注解建议显式定义出value值，否则将直接使用契约中的参数名，例如应该使用`@QueryParam\("name"\) String name`，而不是`@QueryParam String name`。
+> * 当方法参数没有注解，且不为`HttpServletRequest`、`InvocationContext`类型参数时，默认为body类型参数，一个方法最多只支持一个body类型参数。
 
+## 使用@BeanParam聚合参数
 
+### 使用说明
 
+用户可以使用@BeanParam注解将多个参数聚合到一个JavaBean中，通过将@QueryParam等参数注解打在此JavaBean的属性或setter方法上来声明参数，从而简化业务接口的参数表。可以参考JAX-RS的官方说明：https://docs.oracle.com/javaee/7/api/javax/ws/rs/BeanParam.html
+
+ServiceComb现在也支持类似的用法，该用法的要求如下：
+1. 聚合参数所用的类型必须是标准的JavaBean，即类型的属性与getter、setter方法名称匹配，setter方法的返回类型为`void`
+2. 参数注解可以打在JavaBean的属性或setter方法上
+3. 允许通过@FormParam将多个上传文件参数聚合到JavaBean中
+4. 作为BeanParam的JavaBean内部如果有多余的属性，需要打上`@JsonIgnore`忽略掉
+5. body参数无法聚合进BeanParam
+6. Consumer端不支持将参数聚合为JavaBean发送，即仍然需要按照接口契约单独填写各个参数
+
+### 代码示例
+
+#### Provider端开发服务
+
+- Provider端业务接口代码：
+```java
+  @RestSchema(schemaId = "helloService")
+  @Path("/hello")
+  public class HelloService {
+    @Path("/sayHello/{name}")
+    @GET
+    public String sayHello(@BeanParam Person person) {
+      System.out.println("sayHello is called, person = [" + person + "]");
+      return "Hello, your name is " + person.getName() + ", and age is " + person.getAge();
+    }
+  }
+```
+- BeanParam参数定义：
+```java
+  public class Person {
+    private String name;
+    @QueryParam("age")
+    private int age;
+    @PathParam("name")
+    public void setName(String name) {
+      this.name = name;
+    }
+    @JsonIgnore // 忽略复杂属性
+    private List<Person> children;
+
+    // 其他方法忽略
+  }
+```
+- 接口契约：
+```yaml
+# 忽略契约的其他部分
+basePath: "/hello"
+paths:
+  /sayHello/{name}:
+    get:
+      operationId: "sayHello"
+      parameters:
+      - name: "name"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "age"
+        in: "query"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "response of 200"
+          schema:
+            type: "string"
+```
+
+#### Consumer端调用服务
+
+- consumer端RPC开发模式：
+  - Provider接口定义
+  ```java
+    public interface HelloServiceIntf {
+      String sayHello(String name, int age);
+    }
+  ```
+  - 调用代码
+  ```java
+    String result = helloService.sayHello("Bob", 22); // result的值为"Hello, your name is Bob, and age is 22"
+  ```
+- consumer端RestTemplate开发模式：
+  ```java
+    String result = restTemplate.getForObject(
+      "cse://provider-service/hello/sayHello/Bob?age=22",
+      String.class); // 调用效果与RPC方式相同
+  ```
