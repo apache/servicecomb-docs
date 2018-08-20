@@ -1,9 +1,9 @@
-## 处理链参考
-处理链(Handlers)是ServiceComb的核心组成部分，它们构成服务运行管控的基础。ServiceComb通过处理链来处理负载均衡、熔断容错、流量控制等。
+## Processing Chain Reference
+Handlers are the core components of ServiceComb, which form the basis of service operation and control. ServiceComb handles load balancing, fuse tolerance, flow control, and more through the processing chain.
 
-## 开发处理链
-开发者自定义处理链包含如下几个步骤。由于ServiceComb的核心组成就是处理链，开发者可以参考handlers目录的实现详细了解处理链。下面简单总结下几个关键步骤：
+## Development Processing Chain
+The developer's custom processing chain consists of the following steps. Since the core component of ServiceComb is the processing chain, developers can refer to the implementation of the handlers directory to learn more about the processing chain. Here are a few key steps to summarize:
 
-* 实现Handler接口
-* 增加*.handler.xml文件，给Handler取一个名字
-* 在microservice.yaml中启用新增加的处理链
+* Implement Handler interface
+* Add *.handler.xml file, give Handler a name
+* Enable the newly added processing chain in microservice.yaml
