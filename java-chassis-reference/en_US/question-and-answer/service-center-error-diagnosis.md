@@ -1,27 +1,27 @@
-开发者可以直接使用华为公有云提供的服务中心进行开发工作。使用服务中心，开发者需要注册华为云账号，并在"我的凭据”里面生成AK/SK信息用于访问认证控制。如何接入华为云的详细信息请参考“[华为公有云上部署](/start/deployment-on-cloud.md)”。
+Developers can directly use the service center provided by Huawei Public Cloud for development work. To use the service center, the developer needs to register the Huawei cloud account and generate AK/SK information in "My Credentials" for access to the authentication control. For details on how to access Huawei cloud, see "[Huawei Public Cloud Deployment] (/start/deployment-on-cloud.md)."
 
-本章节重点介绍连接服务中心一些常见的异常及其排查方法。
+This chapter focuses on some common anomalies in the Connection Service Center and their Troubleshooting method.
 
 # \#1
 
-* 异常消息
+* Exception message
 
 {"errorCode":"401002","errorMessage":"Request unauthorized","detail":"Invalid request, header is invalid, ak sk or project is empty."}
 
-* 问题原因
+* Reason of problem
 
-AK、SK没有正确设置和携带到请求头里面。
+AK, SK is not set correctly and carried into the request header.
 
-* 排查方法
+* Troubleshooting method
 
-检查项目中是否依赖如下认证模块。（间接依赖也是可以的，比如依赖cse-solution-service-engine\)
+Check if the following authentication modules are used in the project. (Indirect dependencies are also possible, such as relying on cse-solution-service-engine\)
 
 ```
 <groupId>com.huawei.paas.cse</groupId>
 <artifactId>foundation-auth</artifactId>
 ```
 
-检查microservice.yaml中的ak/sk配置是否正确，accessKey和secretKey是否填写错误，一般secretKey长度比accessKey长。
+Check if the ak/sk configuration in microservice.yaml is correct, whether the accessKey and secretKey are filled in incorrectly, and the length of the secretKey is longer than the accessKey.
 
 ```
 servicecomb:
@@ -31,39 +31,39 @@ servicecomb:
     akskCustomCipher: default
 ```
 
-可以登陆华为云，在“我的凭证”里面查询到accessKey信息，secretKey由用户自己保存，无法查询。如果忘记相关凭证，可以删除凭证信息，生成新的凭证信息。
+You can log in to Huawei Cloud and query the accessKey information in "My Credentials". The secretKey is saved by the user and cannot be queried. If you forget the relevant credentials, you can delete the voucher information and generate new voucher information.
 
 # \#2
 
-* 异常消息
+* Exception message
 
 {"errorCode":"401002","errorMessage":"Request unauthorized","detail":"Get service token from iam proxy failed,{\"error\":\"validate ak sk error\"}"}
 
-* 问题原因
+* Reason of problem
 
-AK、SK不正确。
+AK, SK are not correct.
 
-* 排查方法
+* Troubleshooting method
 
-检查microservice.yaml中的ak/sk配置是否正确。可以登陆华为云，在“我的凭证”里面查询到accessKey信息，secretKey由用户自己保存，无法查询。如果忘记相关凭证，可以删除凭证信息，生成新的凭证信息。
+Check if the ak/sk configuration in microservice.yaml is correct. You can log in to Huawei Cloud and query the accessKey information in "My Credentials". The secretKey is saved by the user and cannot be queried. If you forget the relevant credentials, you can delete the voucher information and generate new voucher information.
 
 # \#3
 
-* 异常消息
+* Exception message
 
 {"errorCode":"401002","errorMessage":"Request unauthorized","detail":"Get service token from iam proxy failed,{\"error\":\"get project token from iam failed. error:http post failed, statuscode: 400\"}"}
 
-* 问题原因
+* Reason of problem
 
-Project名称不正确。
+The Project name is incorrect.
 
-* 排查方法
+* Troubleshooting method
 
-检查配置项servicecomb.credentials.project的值是否正确，在“我的凭证”里面查询正确的Project名称。如果没有这个配置项，默认会根据服务中心的域名进行判断。当域名也不包含合法的Project名称的时候，需要增加这个配置项，保证其名称是“我的凭证”里面合法的Project名称。
+Check if the value of the configuration item servicecomb.credentials.project is correct, and query the correct Project name in "My Credentials". If there is no such configuration item, the default will be based on the domain name of the service center. When the domain name does not contain a legal Project name, you need to add this configuration item to ensure that its name is the legal Project name in "My Credentials".
 
 # \#4
 
-* 异常消息
+* Exception message
 
 {"errorCode":"400001","errorMessage":"Invalid parameter\(s\)","detail":"Version validate failed, rule: {Length: 64,Length: ^\[a-zA-Z0-9\_
 
@@ -71,11 +71,10 @@ Project名称不正确。
 
 "}
 
-* 问题原因
+* Reason of problem
 
-使用新版本SDK连接服务中心的老版本。
+Use the new version of the SDK to connect to an older version of the Service Center.
 
-* 排查方法
+* Troubleshooting method
 
-检查服务中心的版本。可以从华为云官网下载最新版本的服务中心，或者从ServiceComb官网下载最新版本的服务中心。
-
+Check the version of the service center. You can download the latest version of the service center from the Huawei Cloud official website, or download the latest version of the service center from ServiceComb's official website.
