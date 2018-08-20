@@ -1,13 +1,14 @@
-# 负载均衡
+# load balancing
 
-## 场景描述
+## Scene Description
 
-ServiceComb提供了非常强大的负载均衡能力。它的核心包括两部分，第一部分是DiscoveryTree，通过将微服务实例根据接口兼容性、数据中心、实例状态等分组，DiscoveryFilter是其主要组成部分；第二部分是基于Ribbon的负载均衡方案，支持随机、顺序、基于响应时间的权值等多种负载均衡路由策略IRule，以及可以支持Invocation状态的ServerListFilterExt。
+ServiceComb provides very powerful load balancing capabilities. Its core consists of two parts. The first part is DiscoveryTree. DiscoveryFilter is its main component by grouping microservice instances according to interface compatibility, data center, instance status, etc. The second part is based on Ribbon's load balancing scheme, which supports random. Various load balancing routing policies IRule, such as order, response time-based weights, and ServerListFilterExt that can support the Invocation state.
 
-DiscoveryTree的逻辑比较复杂，可以通过下面的处理流程了解其处理过程。
+DiscoveryTree's logic is more complex. You can understand its processing through the following process.
 ![](/assets/loadbalance-001.png)
 
-负载均衡适用于Consumer处理链，名称为loadbalance，示例如下：
+Load balancing is applied to the Consumer processing chain. The name is loadbalance. The examples are as follows:
+
 ```
 servicecomb:
   handler:
@@ -16,7 +17,7 @@ servicecomb:
         default: loadbalance
 ```
 
-POM依赖：
+POM dependence:
 ```
  <dependency>
   <groupId>org.apache.servicecomb</groupId>
@@ -24,8 +25,8 @@ POM依赖：
   </dependency>
 ```
 
-## 按照数据中心信息进行路由转发
-服务提供者和消费者都可以通过在microservice.yaml中声明自己的服务中心信息：
+## Routing and forwarding according to data center information
+Service providers and consumers can declare their service center information in microservice.yaml:
 ```yaml
 servicecomb:
   datacenter:
@@ -34,21 +35,21 @@ servicecomb:
     availableZone: my-Zone
 ```
 
-消费者通过比较自己的数据中心信息和提供者的信息，优先将请求转发到region和availableZone都相同的实例；如果不存在，则转发到region相同的实例；如果仍然不存在，则转发到其他实例。
+Consumers compare their own data center information and provider information, preferentially forward the request to the same instance of region and availableZone; if it does not exist, it forwards to the same instance of the region; if it still does not exist, it forwards to other Example.
 
-这里的region和availableZone是一般性的概念，用户可以自行确定其业务含义以便应用于资源隔离的场景中。可以参见[微服务实例之间的逻辑隔离关系](/build-provider/definition/isolate-relationship.md)，了解更多其他实例发现相关的隔离机制。
+The region and availableZone here are general concepts, and users can determine their business meanings to apply them to resource-isolated scenarios. See [Logical isolation relationships between microservice instances] (/build-provider/definition/isolate-relationship.md) for more isolation and isolation mechanisms.
 
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.zoneaware.enabled进行关闭。数据中心信息隔离功能在ZoneAwareDiscoveryFilter实现。
+This rule is enabled by default. If it is not needed, it can be closed by servicecomb.loadbalance.filter.zoneaware.enabled. Data center information isolation is implemented in ZoneAwareDiscoveryFilter.
 
-## 根据实例属性进行路由转发
-微服务可以指定实例的属性。实例属性可以在microservice.yaml中指定，也可以通过服务中心的API进行修改。
+## Routing and forwarding based on instance attributes
+Microservices can specify the properties of an instance. Instance properties can be specified in microservice.yaml or modified through the API of the service center.
 ```
 instance_description:
   properties:
     tag: mytag
 ```
 
-消费者可以指定消费具备某些属性的实例，不访问其他实例
+Consumers can specify to consume instances with certain attributes without accessing other instances.
 ```
 servicecomb:
   loadbalance:
@@ -57,40 +58,35 @@ servicecomb:
         options:
           tag: mytag
 ```
-上面的配置表示只访问myservice所有实例中tag属性为mytag的实例。
+The above configuration means that only instances with the tag attribute mytag in all instances of myservice are accessed.
 
-该规则需要给每个服务单独配置，未配置表示不启用该规则，不支持对于所有服务的全局配置。
+This rule needs to be configured separately for each service. Unconfigured means that the rule is not enabled and global configuration for all services is not supported.
 
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.instanceProperty.enabled进行关闭。根据实例属性进行路由转发功能在InstancePropertyDiscoveryFilter实现。
+This rule is enabled by default. If it is not needed, it can be closed by servicecomb.loadbalance.filter.instanceProperty.enabled. The route forwarding function based on the instance attribute is implemented in InstancePropertyDiscoveryFilter.
 
-## 实例隔离功能
-开发者可以配置实例隔离的参数，以暂时屏蔽对于错误实例的访问，提升系统可靠性和性能。下面是其配置项和缺省值
+## Instance isolation
+Developers can configure instance-isolated parameters to temporarily mask access to the wrong instance, improving system reliability and performance. Below are its configuration items and default values
 ```
 servicecomb:
   loadbalance:
     isolation:
       enabled: true
-      errorThresholdPercentage: 0
+      errorThresholdPercentage: 20
       enableRequestThreshold: 5
       singleTestTime: 60000
       continuousFailureThreshold: 2
 ```
 
-隔离的统计周期是1分钟。按照上面的配置，在1分钟内，如果请求总数大于5，并且连续错误超过2次，那么就会将实例隔离。
-错误率默认值为0，表示不启用，可通过配置100以内的整数来启用，例如配置为20，则表示，在1分钟内，如果请求总数大于5，并且[1]错误率大于20%或者[2]连续错误超过2次，那么就会将实例隔离。
-实例隔离的时间是60秒，60秒后会尝试启用实例（还需要根据负载均衡策略确定是否选中）。
+The statistical period of isolation is 1 minute. According to the above configuration, in 1 minute, if the total number of requests is greater than 5, and the [1] error rate is greater than 20% or [2] consecutive errors exceed 2 times, then the instance is isolated. The instance isolation time is 60 seconds. After 60 seconds, the instance will be tried (it needs to be determined according to the load balancing policy).
 
-注意事项：
+Note that ServiceComb starts a thread in the background to detect the instance state, and checks the instance state every 10 seconds (if the instance is accessed within 10 seconds, it is not detected). If the detection fails, each test will count the error. Plus 1. The count here also affects instance isolation.
 
-1. 当错误率达到设定值导致实例隔离后，要想恢复，需要等待隔离时间窗结束后的第一次成功请求进行周期性累加，直到总的错误率下降到设定值以下才行。由于请求总数是触发实例隔离的门槛，若请求总数达到设定值时计算出来的错误率远大于设定值，要想恢复是需要很久的。
-2. ServiceComb为了检测实例状态，在后台启动类一个线程，每隔10秒检测一次实例状态（如果实例在10秒内有被访问，则不检测），如果检测失败，每次检测会将错误计数加1。这里的计数，也会影响实例隔离。
+The system default instance state detection mechanism is to send a telnet instruction, refer to the implementation of SimpleMicroserviceInstancePing. If the service needs to cover the status detection mechanism, you can complete the following two steps:
 
-系统缺省的实例状态检测机制是发送一个telnet指令，参考SimpleMicroserviceInstancePing的实现。如果业务需要覆盖状态检测机制，可以通过如下两个步骤完成：
+1. Implement the MicroserviceInstancePing interface
+2. Configure SPI: Add META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing, the full name of the implementation class
 
-1. 实现MicroserviceInstancePing接口
-2. 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing，内容为实现类的全名
-
-开发者可以针对不同的微服务配置不一样的隔离策略。只需要给配置项增加服务名，例如：
+Developers can configure different isolation policies for different microservices. Just add a service name to the configuration item, for example:
 ```
 servicecomb:
   loadbalance:
@@ -103,10 +99,10 @@ servicecomb:
         continuousFailureThreshold: 2
 ```
 
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.isolation.enabled进行关闭。数据中心信息隔离功能在IsolationDiscoveryFilter实现。
+This rule is enabled by default and can be turned off by servicecomb.loadbalance.filter.isolation.enabled if it is not needed. Data center information isolation is implemented in IsolationDiscoveryFilter.
 
-## 配置路由规则
-开发者可以通过配置项指定负载均衡策略。
+## Configuring routing rules
+Developers can specify load balancing policies through configuration items.
 ```
 servicecomb:
   loadbalance:
@@ -114,7 +110,7 @@ servicecomb:
       name: RoundRobin # Support RoundRobin,Random,WeightedResponse,SessionStickiness
 ```
 
-开发者可以针对不同的微服务配置不一样的策略，只需要给配置项增加服务名，例如：
+Developers can configure different policies for different microservices, add a service name to the configuration item, for example:
 ```
 servicecomb:
   loadbalance:
@@ -123,7 +119,7 @@ servicecomb:
         name: RoundRobin # Support RoundRobin,Random,WeightedResponse,SessionStickiness
 ```
 
-每种策略还有一些专属配置项，也支持针对不同微服务进行配置。
+Each policy also has some proprietary configuration items that also support configuration for different microservices.
 
 * SessionStickiness
 
@@ -131,12 +127,12 @@ servicecomb:
 servicecomb:
   loadbalance:
     SessionStickinessRule:
-      sessionTimeoutInSeconds: 30 # 客户端闲置时间，超过限制后选择后面的服务器
-      successiveFailedTimes: 5 # 客户端失败次数，超过后会切换服务器
+      sessionTimeoutInSeconds: 30 # Client idle time, after the limit is exceeded, select the server behind
+      successiveFailedTimes: 5 # The number of client failures will switch after the server is exceeded.
 ```
 
-## 设置重试策略
-负载均衡模块还支持配置失败重试的策略。
+## Set retry strategy
+The load balancing module also supports the policy of configuring failed retry.
 ```
 servicecomb:
   loadbalance:
@@ -144,7 +140,7 @@ servicecomb:
     retryOnNext: 0
     retryOnSame: 0
 ```
-缺省情况未启用重试。同时也支持对不同的服务设置特殊的策略：
+Retry is not enabled by default. It also supports setting special strategies for different services:
 ```
 servicecomb:
   loadbalance:
@@ -154,19 +150,19 @@ servicecomb:
       retryOnSame: 0
 ```
 
-retryOnNext表示失败以后，根据负载均衡策略，重新选择一个实例重试（可能选择到同一个实例）。 retryOnSame表示仍然使用上次失败的实例进行重试。
+retryOnNext indicates that after the failure, according to the load balancing policy, re-select an instance to retry (may choose to the same instance). retryOnSame means that the last failed instance is still used for retry.
 
-## 自定义
-负载均衡模块提供的功能已经非常强大，能够通过配置支持大部分应用场景。同时它也提供了强大的扩展能力，包括DiscoveryFilter、ServerListFilterExt、ExtensionsFactory（扩展IRule，RetryHandler等）。loadbalance模块本身包含了每一个扩展的实现，这里不再详细描述如何扩展，只简单描述步骤。开发者可以自行下载ServiceComb源码进行参考。
+## Customization
+The load balancing module provides powerful functions that can support most application scenarios through configuration. It also provides powerful extension capabilities, including DiscoveryFilter, ServerListFilterExt, ExtensionsFactory (extension IRule, RetryHandler, etc.). The loadbalance module itself contains the implementation of each extension. The extension is not described in detail here. The steps are described simply. Developers can download the ServiceComb source code for reference.
 
 * DiscoveryFilter
-  * 实现DiscoveryFilter接口
-  * 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.discovery.DiscoveryFilter文件，内容为实现类的全名
+  * Implement the DiscoveryFilter interface
+  * Configure SPI: Add META-INF/services/org.apache.servicecomb.serviceregistry.discovery.DiscoveryFilter file with the full name of the implementation class
 
 * ServerListFilterExt
-  * 实现ServerListFilterExt接口
-  * 配置SPI：增加META-INF/services/org.apache.servicecomb.loadbalance.ServerListFilterExt文件，内容为实现类的全名
-  * 注意：这个开发说明适用于1.0.0及其以后的版本，早期的版本开发方式不同。
+  * Implement the ServerListFilterExt interface
+  * Configure SPI: Add META-INF/services/org.apache.servicecomb.loadbalance.ServerListFilterExt file, the content is the full name of the implementation class
+  * Note: This development note applies to versions 1.0.0 and later. Earlier versions were developed differently.
 
 * ExtensionsFactory
-  * 实现ExtensionsFactory，并使用@Component将其发布为一个spring bean。
+  * Implement the ExtensionsFactory and publish it as a spring bean using @Component.
