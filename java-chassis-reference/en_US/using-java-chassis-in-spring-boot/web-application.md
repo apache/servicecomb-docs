@@ -1,29 +1,29 @@
-Web开发方式和JAVA应用方式的开发步骤基本类似。
+The development steps of the web development method and the JAVA application method are similar.
 
-本项目[代码示例](https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-web)
+This project [code example] (https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-web)
 
 
-主要有如下区别：
+There are mainly the following differences:
 
-* JAVA应用方式基于spring-boot-starter，而Web开发方式基于spring-boot-starter-web。
+* JAVA application is based on spring-boot-starter, and web development is based on spring-boot-starter-web.
 
-* JAVA应用方式依赖spring-boot-starter-provider，而Web开发方式依赖spring-boot-starter-transport。spring-boot-starter-web已经携带了hibernate-validator，不需要额外依赖。
+* JAVA application relies on spring-boot-starter-provider, while web development relies on spring-boot-starter-transport. Spring-boot-starter-web already carries hibernate-validator and does not require additional dependencies.
 
-* 在启动函数中，Web开发方式可以通过声明
+* In the startup function, the web development method can be declared
+
 
 ```
 @SpringBootApplication(exclude=DispatcherServletAutoConfiguration.class)
 ```
 
-来关闭org.springframework.web.servlet.DispatcherServlet，通过@EnableServiceComb会启用org.apache.servicecomb.transport.rest.servlet.RestServlet。虽然排除DispatcherServlet不是必须的，但是大多数场景一个微服务里面存在多个REST框架都不是很好的主意，会造成很多使用上的误解。
+To close org.springframework.web.servlet.DispatcherServlet, enable org.apache.servicecomb.transport.rest.servlet.RestServlet via @EnableServiceComb. Although it is not necessary to exclude the DispatcherServlet, it is not a good idea to have multiple REST frameworks in a microservice in most scenarios, which will cause many misunderstandings in use.
 
-* 在microservice.yaml文件中通过配置项servicecomb.rest.servlet.urlPattern来指定RestServlet的URL根路径。并且配置项servicecomb.rest.address里面的监听端口，必须和tomcat监听的端口保持一致（默认是8080，可以通过application.yml中增加server.port修改）
-
-
+* Specify the URL root path of the RestServlet in the microservice.yaml file via the configuration item servicecomb.rest.servlet.urlPattern. And the listening port in the configuration item servicecomb.rest.address must be consistent with the port that the tomcat listens on (the default is 8080, which can be modified by adding server.port in application.yml)
 
 
 
-集成java chassis后，可以通过它的方式开发REST接口：
+
+After integrating java chassis, you can develop REST interface through it:
 
 ```
 @RestSchema(schemaId = "hello")
@@ -36,15 +36,14 @@ public class HelloService {
 }
 ```
 
-然后可以通过：http://localhost:9093/hello?name=world来访问。
+Then you can access it by http://localhost:9093/hello?name=world.
 
-可以看到使用的标签和Spring MVC大部分是一样的。但也有少量不一样的地方，比如：
+You can see that the tags used are mostly the same as Spring MVC. But there are also a few different places, such as:
 
-1. 通过RestSchema替换RestController
+1. Replace RestController with RestSchema
 
-2. 需要显示声明@RequestMapping
+2. Need to display the declaration @RequestMapping
 
-如果业务代码不是新开发，而是基于Spring MVC做的开发，现在java chassis基于做改造，还需要注意在禁用DispatcherServlet后，和其有关的功能特性将不再生效。
+If the business code is not a new development but based on the development of Spring MVC, now the java chassis is based on the transformation, but also need to pay attention to the disabling of the DispatcherServlet, and its related features will no longer take effect.
 
-在下面的章节，还会详细介绍在Spring MVC模式下两者的区别。
-
+In the following sections, the differences between the two in Spring MVC mode are also detailed.
