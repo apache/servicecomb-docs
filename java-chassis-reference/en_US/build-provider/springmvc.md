@@ -1,182 +1,142 @@
-# 用SpringMVC 开发微服务
+---
+title: "Develop Microservice with SpringMVC"
+lang: en
+ref: develop-with-springmvc
+permalink: /users/develop-with-springmvc/
+excerpt: "Develop Microservice with SpringMVC"
+last_modified_at: 2017-08-15T15:01:43-04:00
+redirect_from:
+  - /theme-setup/
+---
 
-## 概念阐述
+{% include toc %}
+## Concept Description
 
-ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着项目 [SpringMVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)进行详细阅读
+ServiceComb supports Spring MVC remark and allows you to develop microservices in Spring MVC mode.
 
-## 开发示例
+## Development Example
 
-### 步骤 1定义服务接口。
+* **Step 1** Import dependencies into your maven project:
 
-根据开发之前定义好的契约，编写Java业务接口，代码如下。定义接口不是必须的，但是 一个好习惯，可以简化客户端使用RPC方式编写代码。
+   ```xml
+    <dependencyManagement>
+     <dependencies>
+       <dependency>
+         <groupId>org.apache.servicecomb</groupId>
+         <artifactId>java-chassis-dependencies</artifactId>
+         <version>1.0.0-m1</version>
+         <type>pom</type>
+         <scope>import</scope>
+       </dependency>
+     </dependencies>
+    </dependencyManagement>
+    <dependencies>
+      <!--transport can optional import through endpoint setting in microservice.yaml, we import both rest and highway as example-->
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>transport-rest-vertx</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>transport-highway</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>provider-springmvc</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+      </dependency>
+    </dependencies>
+   ```
 
-```java
-public interface Hello {
-    String sayHi(String name);
-    String sayHello(Person person);
-}
-```
+* **Step 2** Implement the services. Spring MVC is used to describe the development of service code. The implementation of the Hello service is as follow:
 
+   ```java
+   import javax.ws.rs.core.MediaType;
+   import org.springframework.web.bind.annotation.RequestBody;
+   import org.springframework.web.bind.annotation.RequestMapping;
+   import org.springframework.web.bind.annotation.RequestMethod;
+   import org.springframework.web.bind.annotation.RequestParam;
+   import org.apache.servicecomb.samples.common.schema.models.Person;
 
+   @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
+   public class SpringmvcHelloImpl {
+     @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
+     public String sayHi(@RequestParam(name = "name") String name) {
+   　  return "Hello " + name;
+     }
 
-### 步骤 2实现服务。
+     @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
+     public String sayHello(@RequestBody Person person) {
+   　  return "Hello person " + person.getName();
+   　}
+   }
+   ```
+   
+   **Note: PLEASE MAKE SURE TO MARK @RequestMapping ON YOUR PRODUCER(SpringmvcHelloImpl), OR THE PATH AND METHOD OF PUBLISHED WILL BE INCORRECT!**
+   
+   In this sample the Path of sayHi is `/springmvchello/sayhi`, and the Path of sayHello is `/springmvchello/sayhello`, if you wish them `/sayhi` and `/sayhello`, please change the setting of `@RequestMapping` on the SpringmvcHelloImpl to `@RequestMapping("/")`.
 
-使用Spring MVC注解开发业务代码，Hello的服务实现如下。在服务的实现类上打上注解@RestSchema，指定schemaId，schemaId必须保证微服务范围内唯一。
+* **Step 3** Release the service. Add @RestSchema as the annotation of the service implementation class and specify schemaId, which indicates that the implementation is released as a schema of the current microservice. The code is as follows:
 
-```java
-@RestSchema(schemaId = "springmvcHello")
-@RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
-public class SpringmvcHelloImpl implements Hello {
-    @Override
-    @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
-    public String sayHi(@RequestParam(name = "name") String name) {
-        return "Hello " + name;
-    }
+   ```java
+   import org.apache.servicecomb.provider.rest.common.RestSchema;
+   // other code omitted
+   @RestSchema(schemaId = "springmvcHello")
+   public class SpringmvcHelloImpl {
+     // other code omitted
+   }
+   ```
 
-    @Override
-    @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
-    public String sayHello(@RequestBody Person person) {
-        return "Hello person " + person.getName();
-    }
-}
-```
+   Create the ```springmvcHello.bean.xml```  file(the file name format is *.bean.xml) in the ``` resources/META-INF/spring``` directory and configure base-package that performs scanning. The content of the file is as follows:
 
-### 步骤 3发布服务
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
 
-在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
+   <beans xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
+       <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.provider"/>
+   </beans>
+   ```
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+* **Step 4** Add service definition file:
 
-    <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.povider"/>
-</beans>
-```
+   Add [microservice.yaml](http://servicecomb.incubator.apache.org/cn/users/service-definition/) file into resources folder of your project.
 
-### 步骤 4启动provider 服务
+* **Step 5** Add Main class:
 
-进行主要相关配置初始化。
+   ```java
+   import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+   import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
 
-```java
-public class SpringmvcProviderMain {
+   public class Application {
+     public static void main(String[] args) throws Exception {
+        //initializing log, loading bean(including its parameters), and registering service, more detail can be found here : http://servicecomb.incubator.apache.org/users/application-boot-process/
+        Log4jUtils.init();
+        BeanUtils.init();
+     }
+   }
+   ```
 
-  public static void main(String[] args) throws Exception {
-    Log4jUtils.init();
-    BeanUtils.init();
-  }
-}
-```
+## Involved APIs
 
-## 涉及API
+Currently, the Spring MVC development mode supports the following annotations in the org.springframework.web.bind.annotation package. For details about how to use the annotations, see [Spring MVC official documentation](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html)。
 
-Spring MVC开发模式当前支持org.springframework.web.bind.annotation包下的如下注解，所有注解的使用方法参考[Spring MVC官方文档](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html)。
-
-### 表1-1 Spring MVC注解支持汇总
-
-| 注解 | 位置 | 描述 |
-| :--- | :--- | :--- |
-| RequestMapping | schema/operation | 支持标注path/method/produces三种数据，operation默认继承schema上的produces |
-| PathVariable | parameter | 从path中获取参数 |
-| RequestParam | parameter | 从query中获取参数 |
-| RequestHeader | parameter | 从header中获取参数 |
-| RequestBody | parameter | 从body中获取参数，每个operation只能有一个body参数 |
-
-## Query参数聚合为POJO对象
-
-### 使用说明
-
-SpringBoot支持将Java业务接口中的多个query参数聚合为一个POJO类，SpringBoot原生用法示例如下：
-```java
-@RequestMapping("/hello")
-public class HelloService {
-  @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-  public String sayHello(Person person) {
-    System.out.println("sayHello is called, person = [" + person + "]");
-    return "Hello, your name is " + person.getName() + ", and age is " + person.getAge();
-  }
-}
-```
-其中，作为参数的`Person`类是一个标准的JavaBean，包含属性`name`和`age`。当服务接收到的请求时，SpringBoot会将query参数`name`和`age`聚合为Person对象传入业务接口。
-
-ServiceComb的SpringMVC开发模式现在也支持类似的用法，该用法的要求如下：
-1. POJO参数上不能有Spring的参数注解，否则ServiceComb不会将其作为聚合的query参数对象处理。
-2. 仅支持聚合query参数
-3. POJO参数类中的属性名与query参数名需要保持一致
-4. POJO参数中不支持复杂的属性，如其他POJO对象、List等。用户可以在这些复杂类型打上`@JsonIgnore`注解来让ServiceComb忽略这些复杂属性。
-5. consumer端不支持query参数聚合为POJO对象，调用服务时依然要按照契约发送请求。即provider端被聚合的POJO参数在契约中会被展开成一系列的query参数，consumer端需要在provider接口方法中依次定义这些query参数（RPC开发模式），或在发送请求时填入这些query参数（RestTemplate开发模式）。
-
-### 代码示例
-
-#### Provider端开发服务
-
-- Provider端业务接口代码：
-```java
-  @RestSchema(schemaId = "helloService")
-  @RequestMapping("/hello")
-  public class HelloService {
-    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-    public String sayHello(Person person) {
-      System.out.println("sayHello is called, person = [" + person + "]");
-      return "Hello, your name is " + person.getName() + ", and age is " + person.getAge();
-    }
-  }
-```
-- POJO参数对象定义：
-```java
-  public class Person {
-    private String name;
-    private int age;
-    @JsonIgnore  // 复杂属性需要标记@JsonIgnore，否则启动时会报错
-    private List<Person> children;
-  }
-```
-- 接口契约：
-```yaml
-# 忽略契约的其他部分
-basePath: "/hello"
-paths:
-  /sayHello:
-    get:
-      operationId: "sayHello"
-      parameters:
-        # Person类的name属性和age属性作为契约中的query参数
-      - name: "name"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "age"
-        in: "query"
-        required: false
-        type: "integer"
-        format: "int32"
-      responses:
-        200:
-          description: "response of 200"
-          schema:
-            type: "string"
-```
-
-#### Consumer端调用服务
-
-- consumer端RPC开发模式：
-  - Provider接口定义
-  ```java
-    public interface HelloServiceIntf {
-      String sayHello(String name, int age);
-    }
-  ```
-  - 调用代码
-  ```java
-    String result = helloService.sayHello("Bob", 22); // result的值为"Hello, your name is Bob, and age is 22"
-  ```
-- consumer端RestTemplate开发模式：
-  ```java
-    String result = restTemplate.getForObject(
-      "cse://provider-service/hello/sayHello?name=Bob&age=22",
-      String.class); // 调用效果与RPC方式相同
-  ```
+| Remarks        | Location         | Description                              |
+| :------------- | :--------------- | :--------------------------------------- |
+| RequestMapping | schema/operation | Data of path, method or produces is allowed. By default, an operation inherits produces from a schema. |
+| GetMapping     | schema/operation | Data of path or produces is allowed. By default, an operation inherits produces from a schema. |
+| PutMapping     | schema/operation | Data of path or produces is allowed, an operation inherits produces from a schema. |
+| PostMapping    | schema/operation | Data of path or produces is allowed, an operation inherits produces from a schema. |
+| DeleteMapping  | schema/operation | Data of path or produces is allowed, an operation inherits produces from a schema. |
+| PatchMapping   | schema/operation | Data of path or produces is allowed, an operation inherits produces from a schema. |
+| PathVariable   | parameter        | Obtain parameters from path.             |
+| RequestParam   | parameter        | Obtain parameters from query.            |
+| RequestHeader  | parameter        | Obtain parameters from header.           |
+| RequestBody    | parameter        | Obtain parameters from body. Each operation can have only one body parameter. |
