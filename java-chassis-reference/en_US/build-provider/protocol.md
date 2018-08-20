@@ -1,5 +1,12 @@
-# 通信协议
+## Communication Protocol
+### Concept Description
 
-### 概念阐述
+ServiceComb uses two network channels, REST and Highway, both supporting encrypted Transport Layer Security (TLS) transmission. The REST channel releases services in the standard RESTful form. The consumer can send requests using http client.
 
-ServiceComb实现了两种网络通道，包括REST和Highway，均支持TLS加密传输。其中，REST网络通道将服务以标准RESTful形式发布，调用端兼容直接使用http client使用标准RESTful形式进行调用。
+### Precautions
+
+Serialization of parameters and the returned values:
+
+Currently, the body parameters of the REST channel support only the application/json serialization. To send form-type parameters to the server, construct a body of the application/json format at the consumer end. Do not send the form type parameters in multipart/form-data format.
+
+Currently, the REST channel supports the application/json and text/plain serialization. A provider uses produces to declare that it has the serialization capability. The consumer specifies the serialization mode of the returned values by setting parameters regarding the requested Accept header. Data serialized in application/json serialization mode is returned by default.
