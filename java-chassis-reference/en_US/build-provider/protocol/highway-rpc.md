@@ -1,41 +1,39 @@
-## 概念阐述
+## Highway RPC Protocol
+### Concept Description
 
-Highway是ServiceComb的高性能私有协议，用户可在有特殊性能需求的场景下选用。
+Highway is a high-performance proprietary protocol of ServiceComb, and you can use it in scenarios having special performance requirements.
 
-## 配置说明
+### Configuration
 
-使用Highway网络通道需要在maven pom文件中添加如下依赖：
+To use the Highway communication channel, you need to add the following dependencies in the maven pom.xml file:
 
 ```xml
- <dependency>
-     <groupId>org.apache.servicecomb</groupId>
-     <artifactId>transport-highway</artifactId>
- </dependency>
+<dependency> 
+  <groupId>org.apache.servicecomb</groupId>  
+  <artifactId>transport-highway</artifactId> 
+</dependency>
 ```
 
-Highway通道在microservice.yaml文件中的配置项如下表所示：
+Configuration items that need to be set in the microservice.yaml file are described as follows:
 
-表1-1Highway配置项说明
+Table 3 Configuration items of Highway
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.highway.address | 0.0.0.0:7070 | - | 否 | 服务监听地址 | - |
-| servicecomb.highway.server.thread-count | 1 | - | 否 | 服务端网络线程个数 | - |
-| servicecomb.highway.server.connection-limit | Integer.MAX_VALUE | - | 否 | 允许客户端最大连接数 | - |
-| servicecomb.highway.client.thread-count | 1 | - | 否 | 客户端网络线程个数 | - |
-| servicecomb.request.timeout | 30000 | - | 否 | 请求超时时间 | 同REST over Vertx的配置 |
-| servicecomb.references.\[服务名\].transport | rest |  | 否 | 访问的transport类型 | 同REST over Vertx的配置 |
-| servicecomb.references.\[服务名\].version-rule | latest | - | 否 | 访问实例的版本号 | 同REST over Vertx的配置 |
+| Configuration Item                       | Default Value | Value Range | Mandatory | Description                              | Remark                                   |
+| :--------------------------------------- | :------------ | :---------- | :-------- | :--------------------------------------- | :--------------------------------------- |
+| servicecomb.highway.address                      | 0.0.0.0:7070  | -           | No        | Specifies the server listening IP address. | -                                        |
+| servicecomb.highway.server.thread-count          | 1             | -           | No        | Specifies the number of server network threads. | -                                        |
+| servicecomb.highway.client.thread-count          | 1             | -           | No        | Specifies the number of client network threads. | -                                        |
+| servicecomb.highway.client.connection-pool-per-thread | 1             | -           | No        | Specifies the number of connection pools in each client thread. | -                                        |
+| servicecomb.request.timeout                      | 30000         | -           | No        | Specifies the request timeout duration.  | The configuration of this parameter for Highway is the same as that for REST over Vertx. |
+| servicecomb.references.\[服务名\].transport         | rest          |             | No        | Specifies the accessed transport type.   | The configuration of this parameter for Highway is the same as that for REST over Vertx. |
+| servicecomb.references.\[服务名\].version-rule      | latest        | -           | No        | Specifies the version of the accessed instance. | The configuration of this parameter for Highway is the same as that for REST over Vertx. |
 
-## 示例代码
+### 
 
-microservice.yaml文件中的配置示例：
+An example of the configuration in the microservice.yaml file for Highway is as follows:
 
 ```yaml
 servicecomb:
   highway:
     address: 0.0.0.0:7070
 ```
-
-
-

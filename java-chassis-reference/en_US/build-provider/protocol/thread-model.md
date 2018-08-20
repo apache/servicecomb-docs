@@ -1,25 +1,28 @@
-## 概念阐述
+## Thread Model
+### Concept Description
 
-本小节主要介绍serviceComb微服务的完整线程模型，介绍IO线程和业务线程之间的关系
+This section describes the thread model for ServiceComb microservices and the relationship between the I/O and service threads.
 
-## 完整线程
+### Thread Model
 
-servicecComb微服务的完整线程模型如下图所示：![](/start/thread-model.png)
+The complete thread model of CSE is shown in the following figure.
 
-> 1. 业务线程在第一次调用时会绑定某一个网络线程,避免在不同网络线程之间切换,无谓地增加线程冲突的概率
-> 2. 业务线程绑定网络线程后,会再绑定该网络线程内部的某个连接,同样是为了避免线程冲突
+![](/assets/images/thread-model-en.png)
 
-* 客户端和服务器都可以配置多个网络线程\(eventloop\)，默认为CPU核数的两倍，每个网络线程可以配置多个连接，默认为1，支持Rest和Highway两种网络通道，具体配置请查看如下章节：
-  * [REST over Servlet](/build-provider/protocol/rest-over-servlet.md)
-  * [REST over Vertx](/build-provider/protocol/rest-over-vertx.md)
-  * [Highway RPC协议](/build-provider/protocol/highway-rpc.md)
-* 服务端可配置业务线程池executor，线程粒度可细化至schemaId:operation，配置如下：
+> 1. When a service thread is called for the first time, it binds to a network thread to avoid thread conflicts caused by switching among different network threads.
+> 2. After the service thread bound to a network thread, it will bind to a connection of the network to avoid thread conflicts.
 
-在microservice.yaml中添加executors配置，为schemaId:operation配置单独的业务线程池：
+* Multiple network threads (eventloop) can be bound to both the client and the server. The number of network threads is two times the quantity of the CPU cores by default. Multiple connections can be configured for each network thread, and the default number is 1. The Rest and Highway network channels are supported. For details about these configurations, see following sections:
+   * [REST over Servlet](/users/communicate-protocol#rest-over-servlet)
+   * [REST over Vertx](/users/communicate-protocol/#rest-over-vertx)
+   * [Highway RPC Protocol](/users/communicate-protocol/#highway-rpc协议)
+* You can configure the service thread pool executor for the client, and the thread granularity can be schemaId: operation.
+
+Add the executors in the microservice.yaml file and configure an independent service thread pool for schemaId: operation:
 
 ```yaml
-servicecomb:
-  executors:
-    Provider:
+servicecomb: 
+  executors: 
+    Provider: 
       [schemaId].[operation]
 ```
