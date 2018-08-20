@@ -1,118 +1,156 @@
-# 用透明RPC开发微服务
+---
+title: "Develop Microservice with Transparent RPC"
+lang: en
+ref: develop-with-transparent-rpc
+permalink: /users/develop-with-transparent-rpc/
+excerpt: "Develop Microservice with Transparent RPC"
+last_modified_at: 2017-08-15T15:01:43-04:00
+redirect_from:
+  - /theme-setup/
+---
 
-## 概念阐述
+{% include toc %}
+## Concept Description
 
-透明RPC开发模式是一种基于接口和接口实现的开发模式，服务的开发者不需要使用Spring MVC和JAX-RS注解。
+The transparent remote procedure call(RPC) development mode is a development mode based on API and API implementation. The service developer does not need to use the description of Spring MVC and JAX-RS.
 
-## 开发示例
+## Development Example
 
-透明RPC开发模式支持Spring xml配置和注解配置两种服务发布方式，通过Spring xml配置的方式如下：
+* **Step 1** Import dependencies into your maven project:
 
-### 步骤 1定义服务接口。
+   ```xml
+    <dependencyManagement>
+     <dependencies>
+       <dependency>
+         <groupId>org.apache.servicecomb</groupId>
+         <artifactId>java-chassis-dependencies</artifactId>
+         <version>1.0.0-m1</version>
+         <type>pom</type>
+         <scope>import</scope>
+       </dependency>
+     </dependencies>
+    </dependencyManagement>
+    <dependencies>
+      <!--transport can optional import through endpoint setting in microservice.yaml, we import both rest and highway as example-->
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>transport-rest-vertx</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>transport-highway</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>provider-pojo</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+      </dependency>
+    </dependencies>
+   ```
 
-根据开发之前定义好的契约，编写Java业务接口，代码如下：
+* **Step 2** Define a service API. Compile the Java API definition based on the API definition defined before development. The code is as follows:
 
-```java
-public interface Hello {
-    String sayHi(String name);
-    String sayHello(Person person);
-}
+   ```java
+   public interface Hello {
+     String sayHi(String name);
+     String sayHello(Person person);
+   }
+   ```
 
-public interface Compute {
-  int add(int a, int b);
-  int multi(int a, int b);
-  int sub(int a, int b);
-  int divide(int a, int b);
-}
+* **Step 3** implement the service. The implementation of the Hello service is as follows:
 
-```
+   ```java
+   import org.apache.servicecomb.samples.common.schema.Hello;
+   import org.apache.servicecomb.samples.common.schema.models.Person;
 
+   public class HelloImpl implements Hello {
+     @Override
+     public String sayHi(String name) {
+       return "Hello " + name;
+     }
 
+     @Override
+     public String sayHello(Person person) {
+       return "Hello person " + person.getName();
+     }
+   }
+   ```
 
-### 步骤 2实现服务
+* **Step 4** Release the service. 
+   The transparent RPC development mode supports two service release mode: Spring XML configuration and Annotation configuration:
+1. Spring XML configuration Mode:
+   Create the pojoHello.bean.xml file in the resources/META-INF/spring directory and declare the schema in the file. The content of the file is as follows:
 
-Hello的服务实现如下：
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+          xmlns:cse="http://www.huawei.com/schema/paas/cse/rpc"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.huawei.com/schema/paas/cse/rpc classpath:META-INF/spring/spring-paas-cse-rpc.xsd">
 
-> **说明**：  
-> 每一个服务接口都需要定义一个schema声明。
+       <cse:rpc-schema schema-id="pojoHello" implementation="org.apache.servicecomb.samples.pojo.provider.PojoHelloImpl"/>
+   </beans>
+   ```
 
-* 在接口Hello 和 Compute 的实现类上使用@RpcSchema注解定义schema，代码如下：
+2. Annotation configuration Mode:
+   @RpcSchema is used to define schema during the API Hello implementation. The code is as follows:
 
-```java
-@RpcSchema(schemaId = "hello")
-public class HelloImpl implements Hello {
-    @Override
-    public String sayHi(String name) {
+   ```java
+   import org.apache.servicecomb.provider.pojo.RpcSchema;
+   @RpcSchema(schemaId = "pojoHello")
+   public class HelloImpl implements Hello {
+      @Override
+      public String sayHi(String name) {
         return "Hello " + name;
-    }
-
-    @Override
-    public String sayHello(Person person) {
+      }
+ 
+      @Override
+      public String sayHello(Person person) {
         return "Hello person " + person.getName();
-    }
-}
+      }
+   }
+   ```
 
-@RpcSchema(schemaId = "codeFirstCompute")
-public class CodeFirstComputeImpl implements Compute {
-  @Override
-  public int add(int a, int b) {
-    return a + b;
-  }
+   In the pojoHello.bean.xml file of resources/META-INF/spring directory, configure base-package that performs scanning. The content of the file is as follows:
 
-  @Override
-  public int multi(int a, int b) {
-    return a * b;
-  }
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+          xmlns:cse="http://www.huawei.com/schema/paas/cse/rpc"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.huawei.com/schema/paas/cse/rpc classpath:META-INF/spring/spring-paas-cse-rpc.xsd">
 
-  @Override
-  public int sub(int a, int b) {
-    return a - b;
-  }
+       <context:component-scan base-package="org.apache.servicecomb.samples.pojo.provider"/>
+   </beans>
+   ```
 
-  @Override
-  public int divide(int a, int b) {
-    if (b != 0) {
-      return a / b;
-    }
-    return 0;
-  }
-}
-```
+**Note: THE PATH FOR RPC IS `ClassName/MethodName`, AND THE METHOD IS `POST`.**
 
-### 步骤 3发布服务
+In this sample the Path of sayHi is `/HelloImpl/sayHi`, and the Path of sayHello is `/HelloImpl/sayHello`.
 
-* 通过配置文件方式
+> **NOTE**：
+Different from the Spring MVC and JAX-RS development modes, the transparent RPC development mode used `@RpcSchema` instead of `@RestSchema`.
 
-在resources/META-INF/spring目录下的pojoHello.bean.xml文件中，配置Spring进行服务扫描的base-package，文件内容如下：
+* **Step 5** Add service definition file:
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns=" http://www.springframework.org/schema/beans " xmlns:xsi=" http://www.w3.org/2001/XMLSchema-instance "
-       xmlns:p=" http://www.springframework.org/schema/p " xmlns:util=" http://www.springframework.org/schema/util "
-       xmlns:cse=" http://www.huawei.com/schema/paas/cse/rpc "
-       xmlns:context=" http://www.springframework.org/schema/context "
-       xsi:schemaLocation=" http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.huawei.com/schema/paas/cse/rpc classpath:META-INF/spring/spring-paas-cse-rpc.xsd">
+   Add [microservice.yaml](http://servicecomb.incubator.apache.org/cn/users/service-definition/) file into resources folder of your project.
+   
+* **Step 6** Add Main class:
 
-    <context:component-scan base-package="org.apache.servicecomb.samples.pojo.provider"/>
-</beans>
-```
+   ```java
+   import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+   import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
 
-
-
-### 步骤 4 启动服务
-
-```java
-public class PojoProviderMain {
-
-  public static void main(String[] args) throws Exception {
-    Log4jUtils.init();
-    BeanUtils.init();
-  }
-}
-```
-
-> **说明**：  
-> 与Spring MVC开发模式和JAX-RS开发模式不同的是，透明RPC开发模式使用的注解是`@RpcSchema`而非`@RestSchema`。
-
-
-
+   public class Application {
+     public static void main(String[] args) throws Exception {
+        //initializing log, loading bean(including its parameters), and registering service, more detail can be found here : http://servicecomb.incubator.apache.org/users/application-boot-process/
+        Log4jUtils.init();
+        BeanUtils.init();
+     }
+   }
+   ```
