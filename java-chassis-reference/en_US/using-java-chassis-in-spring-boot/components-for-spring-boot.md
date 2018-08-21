@@ -20,7 +20,7 @@ Adapt to the Spring Cloud's DiscoveryClient interface. When using @EnableDiscove
 
 * spring-boot-starter-provider
 
-Enable the core functionality of java chassis via @EnableServiceComb in Spring Boot. This feature can be used for "JAVA application mode" and "Web development mode". In the "Web development method", the web environment is disabled by spring.main.web-environment=false. Therefore, this module is mainly to solve the problem of "JAVA application mode".
+Enable the core functionality of java chassis via @EnableServiceComb in Spring Boot. This feature can be used for "JAVA application mode" and "Web development mode". In the "Web development mode", the web environment is disabled by spring.main.web-environment=false. Therefore, this module is mainly to solve the problem of "JAVA application mode".
 
 
 

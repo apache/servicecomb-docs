@@ -43,7 +43,7 @@ ServiceComb provides a log4j extension that supports incremental configuration o
 * It will actually search all the `config/log4j.properties and config/log4j.*.properties` in the classpath, cut out the `\*` part from the searched file, sort the alpha, then load it in order, and finally compose The file is used as the log4j configuration file.
 * If you want to use ServiceComb's log4j extension, you need to call Log4jUtils.init, otherwise it will be used according to the rules of the standard logger.
 
-# Problem: When the service is configured with multiple transports, how do you choose which transport to use at runtime?
+# Problem: When the service is configured with multiple types of transport, What are the mechanisms for ServiceComb choose which transport to use at runtime?
 
 ** Solution:**
 
@@ -53,7 +53,7 @@ ServiceComb provides a log4j extension that supports incremental configuration o
 
 Decomposed, there are the following scenarios:
 
-* When a microservice producer opens both the highway and the RESTful endpoint
+* When a microservice producer provided both the highway and the RESTful endpoint
   * Only the highway transport jar is deployed in the consumer process, only the producer's highway endpoint is accessed.
   * Only the RESTful transport jar is deployed in the consumer process, only the RESTful endpoint of the producer is accessed.
   * The consumer process, while deploying the highway and RESTful transport jar, will take turns accessing the producer's highway, RESTful endpoint
@@ -67,13 +67,13 @@ servicecomb:
       transport: highway
 ```
 
-* When a microservice producer only opens the endpoint of the highway
+* When a microservice producer only provided the endpoint of the highway
 
-  * The consumer process only deploys the highway transport jar, and normally uses higway access.
+  * The consumer process only deploys the highway transport jar, and normally uses higway endpoint.
   * The consumer process can only be accessed if only the RESTful transport jar is deployed
   * The consumer process deploys both the highway and the RESTful transport jar, and the highway access is normally used.
 
-* When a microservice producer only opens RESTful endpoints
+* When a microservice producer only provided RESTful endpoints
 
   * The consumer process only deploys the highway transport jar and cannot access it.
   * The consumer process only deploys RESTful transport jars, which normally use RESTful access
@@ -143,13 +143,13 @@ When defining the type of the body parameter, you can't use type directly instea
             $ref: "#/definitions/ReponseImpl"
 ```
 
-# Problem: Does the microservices framework service call use long connections?
+# Problem: Does the microservices framework service call use long live connection?
 
 ** Solution:**
 
 Http uses a long connection (with a timeout), and the highway mode uses a long connection (always on).
 
-# Problem: Whether the service disconnection service's center registration information is automatically deleted
+# Problem: When the service is disconnected from the service center, will the registration information be deleted automatically?
 
 ** Solution:**
 
@@ -164,7 +164,7 @@ Transmitting data into:
 
 ```java
 CseHttpEntity<xxxx.class> httpEntity = new CseHttpEntity<>(xxx);
-//Transparent content
+//Transmission content
 httpEntity.addContext("contextKey","contextValue");
 ResponseEntity<String> responseEntity = RestTemplateBuilder.create().exchange("cse://springmvc/springmvchello/sayhello",HttpMethod.POST,httpEntity,String.class);
 ```
@@ -245,7 +245,7 @@ servicecomb:
     timeout: 30000
 ```
 
-# Problem: Is there a requirement for the processing chain of service governance?
+# Problem: Is there a required for the processing chain's sequence of service governance?
 
 **Solution:**
 
@@ -271,4 +271,4 @@ Consumer: loadbalance, tracing-consumer, sla-consumer, bizkeeper-consumer
 
 Provider: tracing-provider, sla-provider, bizkeeper-provider
 
-This order is sufficient for most scenarios and is not prone to incomprehensible errors.
+This order is sufficient for most scenarios and is not easy to cause errors.
