@@ -1,6 +1,6 @@
 script:
   - npm install gitbook-cli -g
-  - gitbook build java-chassis-reference docs
+  - gitbook build java-chassis-reference docs/java-chassis
   - gitbook build saga-reference docs/saga
   - gitbook build service-center-reference docs/service-center
   - git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
