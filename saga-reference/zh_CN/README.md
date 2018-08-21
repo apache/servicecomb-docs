@@ -1,5 +1,4 @@
 # Saga 用户指南
-[![EN doc](https://img.shields.io/badge/document-English-blue.svg)](user_guide.md)
 
 ## 准备环境
 1. 安装[JDK 1.8][jdk]
