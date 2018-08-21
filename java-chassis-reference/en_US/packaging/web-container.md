@@ -1,6 +1,6 @@
 ## Concept Description
 
-If you need to load the microservice into the web container to start the runtime, you need to create a new servlet project wrapper, the servlet project, you just need write few lines of code
+If you need to load the microservice into the web container to start the runtime, you need to create a new servlet project wrapper, the servlet project, you just need to write few lines of code
 
 ## Development example
 
