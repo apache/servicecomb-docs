@@ -7,8 +7,9 @@ A Standalone container that loads Spring with a simple Main, because the service
 * **Step 1** Write the Main function, initialize the log and load the service configuration as follows:
 
 ```java
-import com.huawei.paas.foundation.common.utils.BeanUtils;
-import com.huawei.paas.foundation.common.utils.Log4jUtils;
+import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
+
 public class MainServer {
 public static void main(String[] args) throws Exception {
 　Log4jUtils.init(); # Log initialization
