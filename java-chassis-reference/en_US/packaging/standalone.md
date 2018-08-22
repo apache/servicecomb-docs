@@ -1,25 +1,25 @@
-## 概念阐述
+## Concept Description
 
-一个Standalone的容器，以简单的Main加载Spring启动，因为服务通常不需要Tomcat/JBoss等Web容器的特性，没必要用Web容器去加载服务。微框架提供了standalone部署运行模式，服务容器只是一个简单的Main方法，并加载一个简单的Spring容器，用于暴露服务。
+A Standalone container that loads Spring with a simple Main, because the service usually does not require the properties of a Web container such as Tomcat/JBoss, and there is no need to use the Web container to load the service. The microframework provides a standalone deployment run mode. The service container is just a simple Main method and loads a simple Spring container to expose the service.
 
-## 操作步骤
+## Operation steps
 
-* **步骤1** 编写Main函数，初始化日志和加载服务配置，内容如下：
+* **Step 1** Write the Main function, initialize the log and load the service configuration as follows:
 
 ```java
-import com.huawei.paas.foundation.common.utils.BeanUtils;
-import com.huawei.paas.foundation.common.utils.Log4jUtils;
+import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
+
 public class MainServer {
 public static void main(String[] args) throws Exception {
-　Log4jUtils.init(); # 日志初始化
-　BeanUtils.init();  # Spring bean初始化
+　Log4jUtils.init(); # Log initialization
+　BeanUtils.init();  # Spring bean initialization
  }
 }
 ```
 
-* **步骤2** 运行MainServer即可启动该微服务进程，向外暴露服务。
+* **Step 2** Run the MainServer to start the microservice process and expose the service.
 
-## 注意事项
+## Notes
 
-如果使用的是rest网络通道，需要将pom中的transport改为使用cse-transport-rest-vertx包
-
+If you are using the rest network channel, you need to change the transport in the pom to use the cse-transport-rest-vertx package.
