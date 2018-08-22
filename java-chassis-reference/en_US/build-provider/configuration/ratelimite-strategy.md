@@ -1,41 +1,45 @@
-## 场景描述
 
-用户在provider端使用限流策略，可以限制指定微服务向其发送请求的频率，达到限制每秒钟最大请求数量的效果。
+## Rate Limiting Policy
+### Scenario
 
-## 注意事项
+Users at the provider end can use the rate limiting policy to limit the maximum number of requests sent from a specified microservice per second. 
 
-1. 限流策略的控制并不是绝对精确的，可能会有少量误差。
-2. provider端的流量控制是业务层面的功能，不是安全意义上的流量控制，如需防止DDoS攻击，需要结合其他的一系列措施。
-3. 流量控制是微服务级的，不是实例级的。例如一个consumer服务有三个实例，当对它们依赖的provider实例配置限流策略后，provider不会区分consumer的请求具体是由哪个实例发出的，而是汇总成微服务级的统计数据进行限流判断。
+### Precautions
 
-## 配置说明
+1. There may be a small different between the rate limit and actual traffic.
+2. The rate limit function at the provider end is for service rather than security purpose. To prevent distributed denial of service(DDos) attacks, you need to take other measures.
+3. Traffic control is a microservice-level rather than process-level function.
 
-限流策略配置在microservice.yaml文件中，相关配置项见表**QPS流控配置项说明**。要开启服务提供者端的限流策略，还需要在处理链中配置服务端限流handler，并添加pom依赖。
+### Configuration
 
-* microservice.yaml配置示例如下：
-  ```yaml
-  servicecomb:
-    handler:
-      chain:
-        Provider:
-          default: qps-flowcontrol-provider
-  ```
-* 添加handler-flowcontrol-qps的pom依赖：
-  ```xml
-  <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>handler-flowcontrol-qps</artifactId>
-      <version>1.0.0.B003</version>
-  </dependency>
-  ```
+　　Rate limiting policies are configured in the microservice.yaml file. For related configuration items, see Table 2. To enable the rate limiting policy at the provider end, you also need to configure the rate limiting handler on the server in the processing chain and add dependencies in the pom.xml file. 
 
-**QPS流控配置项说明**
+　　An example of microservice.yaml file configuration is as follows,
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.flowcontrol.Provider.qps.enabled | true | true/false | 否 | 是否启用Provider流控 | - |
-| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\].\[Schema\].\[operation\] | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | 每秒钟允许的请求数 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
-| servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | provider接受请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
+```yaml
+servicecomb:
+  handler:
+    chain:
+      Provider:
+        default: qps-flowcontrol-provider
+```
 
-> **注意：**
-> provider端限流策略配置中的`ServiceName`指的是调用该provider的consumer，而`shema`、`operation`指的是provider自身的。即provider端限流配置的含义是，限制指定consumer调用本provider的某个schema、operation的流量。
+　　Add dependencies of handler-flowcontrol-qps in the pom.xml file,
+
+```xml
+<dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>handler-flowcontrol-qps</artifactId>
+    <version>1.0.0-m1</version>
+</dependency>
+```
+
+　　**Table2 Configuration items of the QPS rate limit**
+
+| Configuration Item                       | Default Value       | Value Range              | Mandatory | Description                              | Remarks                                  |
+| :--------------------------------------- | :------------------ | :----------------------- | :-------- | :--------------------------------------- | :--------------------------------------- |
+| servicecomb.flowcontrol.Provider.qps.enabled     | true                | true/false               | No        | Specifies whether to enable traffic control  at the provider end. | -                                        |
+| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\] | 2147483647（max int） | \(0,2147483647\]，Integer | No        | Specifies the number of requests allowed per second. | This parameter can only be configured for microservice |
+| servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | (0,2147483647\]，Integer  | No        | Specifies the total number of requests allowed per second at the provider end | If no configuration is set for any specific microservices, this parameter takes effect |
+
+## 
