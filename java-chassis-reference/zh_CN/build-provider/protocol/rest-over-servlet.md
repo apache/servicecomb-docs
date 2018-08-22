@@ -72,7 +72,7 @@ REST over Servlet对应使用web容器部署运行，需要新建一个servlet�
   ```
 * ServiceComb servlet  
   url pattern根据业务自身规划设置即可，下面的/rest/*仅仅是示例，不是固定值。  
-  url pattern必须以/*结尾  
+  url pattern必须以/\*结尾  
   以下两种声明方式也是多选一的关系，不要同时使用
   * 标准声明
   ```xml
@@ -199,5 +199,4 @@ REST over Servlet在microservice.yaml文件中的配置项见表3-9。
 | servicecomb.rest.server.timeout | 3000 | - | 否 | 超时时间 | 单位为毫秒 |
 | servicecomb.rest.servlet.urlPattern | 无 |  | 否 | 用于简化servlet+servlet mapping配置 | 只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
 
-```
 
