@@ -1,15 +1,4 @@
----
-title: "Develop Microservice with SpringMVC"
-lang: en
-ref: develop-with-springmvc
-permalink: /users/develop-with-springmvc/
-excerpt: "Develop Microservice with SpringMVC"
-last_modified_at: 2017-08-15T15:01:43-04:00
-redirect_from:
-  - /theme-setup/
----
-
-{% include toc %}
+# Develop Microservice with SpringMVC  
 ## Concept Description
 
 ServiceComb supports Spring MVC remark and allows you to develop microservices in Spring MVC mode.

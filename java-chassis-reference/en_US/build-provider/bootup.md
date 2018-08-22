@@ -1,13 +1,4 @@
----
-title: "Application Boot-up Process"
-lang: en
-ref: application-boot-process
-permalink: /users/application-boot-process/
-excerpt: "Application Boot-up Process"
-last_modified_at: 2017-08-15T15:01:43-04:00
-redirect_from:
-  - /theme-setup/
----
+# Application Boot-up Process  
 
 The starup process of a service provider includes initializing Log4j, loading bean(including its parameters), and registering service.
 

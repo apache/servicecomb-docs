@@ -1,16 +1,4 @@
----
-title: "API Constraints"
-lang: en
-ref: service-interface-constraints
-permalink: /users/service-interface-constraints/
-excerpt: "API Constraints"
-last_modified_at: 2017-08-15T15:01:43-04:00
-redirect_from:
-  - /theme-setup/
----
-
-{% include toc %}
-## API Constraints
+# API Constraints
 A Java Chassis API constraints is that an API definition should describe its usage. You can identify how to call the API without checking the code.
 
 As developers, we aim at making our APIs easy to be called. However, developers have different understanding about this aim.

@@ -1,15 +1,4 @@
----
-title: "Develop Microservice with Transparent RPC"
-lang: en
-ref: develop-with-transparent-rpc
-permalink: /users/develop-with-transparent-rpc/
-excerpt: "Develop Microservice with Transparent RPC"
-last_modified_at: 2017-08-15T15:01:43-04:00
-redirect_from:
-  - /theme-setup/
----
-
-{% include toc %}
+# Develop Microservice with Transparent RPC 
 ## Concept Description
 
 The transparent remote procedure call(RPC) development mode is a development mode based on API and API implementation. The service developer does not need to use the description of Spring MVC and JAX-RS.
