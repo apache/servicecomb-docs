@@ -1,4 +1,4 @@
-Using JAVA integration, an efficient HTTP server and REST development framework has been added for Spring Boot applications. This way of integration is very simple. Just introduce the relevant dependencies into the project and use the @EnableServiceComb tag.
+Using JAVA integration, an efficient HTTP server and REST development framework has been added for Spring Boot applications. This way of integration is very simple. Just introduce the relevant dependencies into the project and use the @EnableServiceComb annotation.
 
 This project [code example] (https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-simple)
 
@@ -59,7 +59,7 @@ With the above configuration, you can fully use all the functions provided by th
 
 * Configure microservices
 
-The microservice.yaml file allows you to customize the microservice information, including the application name, microservice name, listener address and port.
+The microservice.yaml file allows you to customize the microservice information, including the application id, microservice name, listener address and port.
 
 
 
