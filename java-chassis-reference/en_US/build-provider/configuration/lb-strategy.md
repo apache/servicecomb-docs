@@ -1,35 +1,34 @@
-## 场景描述
+## Load Balancing Policy
+### Scenario
 
-ServiceComb提供了基于Ribbon的负载均衡方案，用户可以通过配置文件配置负载均衡策略，当前支持随机、顺序、基于响应时间的权值等多种负载均衡路由策略。
+　　ServiceComb provides a Ribbon-based load balancing solution. You can configure a load balancing policy in the configuration file. Currently, a load balancing routing policy can be random, sequential, or based on response time weight.
 
-## 配置说明
+### Configuration
 
-负载均衡策略在mocroservice.yaml文件中配置，配置项为`servicecomb.loadbalance.[MicroServiceName].[property name]`，其中若省略MicroServiceName，则为全局配置；若指定MicroServiceName，则为针对特定微服务的配置。
+　　Load balancing policies are configured by setting the parameter `servicecomb.loadbalance.[MicroServiceName].[property name]` in the microservice.yaml fiel. If MicroServiceName is not set, the configuration is set for all microservices. Otherwise, the configuration is set for a specific microservice.
 
-表1-1配置项说明
+　　**Table 1 Configuration items of load balancing policy**
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.loadbalance.\[服务名\].strategy.name | RoundRobin | RoundRobin（轮询）<br/>Random（随机）<br/>WeightedResponse（服务器响应时间权值）<br/>SessionStickiness（会话保持） | 否 | 负载均衡路由策略 | - |
-| servicecomb.loadbalance.\[服务名\].SessionStickinessRule.sessionTimeoutInSeconds | 30 | Integer | 否 | 客户端闲置时间，超过限制后选择后面的服务器。 | - |
-| servicecomb.loadbalance.\[服务名\].SessionStickinessRule.successiveFailedTimes | 5 | Integer | 否 | 客户端失败次数，超过后会切换服务器 | - |
-| servicecomb.loadbalance.\[服务名\].retryEnabled | FALSE | Boolean | 否 | 负载均衡捕获到服务调用异常，是否进行重试 | - |
-| servicecomb.loadbalance.\[服务名\].retryOnNext | 0 | Integer | 否 | 尝试新的服务器的次数 | - |
-| servicecomb.loadbalance.\[服务名\].retryOnSame | 0 | Integer | 否 | 同一个服务器尝试的次数 | - |
-| servicecomb.loadbalance.\[服务名\].isolation.enabled | FALSE | Boolean | 否 | 是否开启故障实例隔离功能 | - |
-| servicecomb.loadbalance.\[服务名\].isolation.enableRequestThreshold | 20 | Integer | 否 | 当实例的调用总次数达到该值时开始进入隔离逻辑门槛 | - |
-| servicecomb.loadbalance.\[服务名\].isolation.continuousFailureThreshold | - | Integer | 否 | 当请求实例连续出错达到此阈值时触发实例隔离 | 若配置了此项则覆盖实例故障百分比的配置，否则按照实例故障百分比触发隔离。<br/>由于按请求错误率触发实例隔离在请求次数较多时不易触发也不易恢复，因此建议使用此配置项代替实例故障百分比配置。<br/>请求实例成功时会将连续错误次数请零以保证实例快速恢复。 |
-| servicecomb.loadbalance.\[服务名\].isolation.errorThresholdPercentage | 20 | Integer，区间为\(0,100\] | 否 | 实例故障隔离错误百分比 | - |
-| servicecomb.loadbalance.\[服务名\].isolation.singleTestTime | 10000 | Integer | 否 | 故障实例单点测试时间 | 单位为ms |
+| Configuration Items                      | Default Value                            | Value Range                              | Mandatory | Description                              | Remarks                                  |
+| :--------------------------------------- | :--------------------------------------- | :--------------------------------------- | :-------- | :--------------------------------------- | :--------------------------------------- |
+| servicecomb.loadbalance.NFLoadBalancerRuleClassName | com.netflix.loadbalancer.RoundRobinRule  | com.netflix.loadbalancer.RoundRobinRule（polling）com.netflix.loadbalancer.RandomRule（random）com.netflix.loadbalancer.WeightedResponseTimeRule（server response time weight）org.apache.servicecomb.loadbalance.SessionStickinessRule（session stickiness） | No        | Specifiles the load balancing policy     | -                                        |
+| servicecomb.loadbalance.SessionStickinessRule.sessionTimeoutInSeconds | 30                                       | Integer                                  | No        | Specifies the idle time of a client. If the idle time exceeds the set value, ServiceComb will select another server. | Currently, this parameter cannot be set for a certain microservice. For example, servicecomb.loadbalance.SessionStickinessRule.sessionTimeoutInSeconds cannot be set to servicecomb.loadbalance.DemoService.SessionStickinessRule.sessionTimeoutInSeconds |
+| servicecomb.loadbalance.SessionStickinessRule.successiveFailedTimes | 5                                        | Integer                                  | No        | Specifies the number of failed requests from the client. If the number exceeds the set value, ServiceComb will switch to another server | Currently, this parameter cannot be set for a certain microservice. |
+| servicecomb.loadbalance.retryEnabled             | FALSE                                    | Boolean                                  | No        | Specifies whether to call a service again when a exception is captured by the load balance. | -                                        |
+| servicecomb.loadbalance.retryOnNext              | 0                                        | Integer                                  | No        | Specifies the number of attempts to connect to another server. | -                                        |
+| servicecomb.loadbalance.retryOnSame              | 0                                        | Integer                                  | No        | Specifies the number of attempts to connect to the same server. | -                                        |
+| servicecomb.loadbalance.isolation.enabled        | FALSE                                    | Boolean                                  | No        | Specifies whether to enable faulty instance isolation. | -                                        |
+| servicecomb.loadbalance.isolation.enableRequestThreshold | 20                                       | Integer                                  | No        | Specifies the threshold number of instance calls. If this value is reached, isolation is enabled. | -                                        |
+| servicecomb.loadbalance.isolation.errorThresholdPercentage | 20                                       | Integer，\(0,100\]                        | No        | Specifies the error percentage. Instance fault isolation is enabled when the set value is reached. | -                                        |
+| servicecomb.loadbalance.isolation.singleTestTime | 10000                                    | Integer                                  | No        | Specifies the duration of a faulty instance test on a single node. | This unit is ms.                         |
+| servicecomb.loadbalance.transactionControl.policy | org.apache.servicecomb.loadbalance.filter.SimpleTransactionControlFilter | -                                        | No        | Specifies the offload policies for dynamic routing. | The framework provides simple offload mechanisms. You can also customize offload policies. |
+| servicecomb.loadbalance.transactionControl.options | -                                        | key/value pairs                          | No        | Specifies the parameter configured for the SimpleTransactionControlFilter offload policy. You can add any filtration tag for this item. | -                                        |
 
-**说明**：
-- 以上配置项都支持全局和微服务两个粒度的配置。例如：servicecomb.loadbalance.strategy.name是全局的负载均衡路由策略；servicecomb.loadbalance.DemoService.strategy.name是仅在调用DemoService服务时生效的负载均衡路由策略。
+### Sample Code
 
-## 示例代码
+　　in the src/main/resources/microservice.yaml file, configure a load balancing policy.
 
-负载均衡策略配置在src\main\resources\microservice.yaml文件中。
-
-配置处理链：
+　　Configure a processing link：
 
 ```yaml
 servicecomb:
@@ -38,33 +37,28 @@ servicecomb:
     chain:
       Consumer:
         default: loadbalance
+  # other configurations omitted
 ```
 
-增加路由策略：
+　　Add a routing policy:
 
 ```yaml
-servicecomb:
+servicecomb：
   # other configurations omitted
   loadbalance:
-    strategy:
-      name: RoundRobin
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+  # other configurations omitted
 ```
 
-## 自定义路由策略
+## Customizing Routing Policies
 
-用户可以在ServiceComb提供的路由策略框架下根据业务需要，通过编程的方式来开发路由策略。实施步骤如下：
+　　Based on the routing policy framework provided by ServiceComb, you can program to customize routing policies as required. Perform the following steps:
 
-* 实现接口`com.netflix.loadbalancer.IRule`中定义的接口方法。  
-  路由选择逻辑在`public Server choose(Object key)`方法中实现。LoadBalancerStats是一个封装了负载均衡器当前运行状态的一个结构。通过获取stats中各个实例的运行指标，在choose方法中，判定将当前请求路由到哪个实例上进行处理。处理风格可以参照`org.apache.servicecomb.loadbalance.SessionStickinessRule`。
-* 定义一个负载均衡规则工厂类，实现接口`ExtensionsFactory`。<br/>
-其中，`boolean isSupport(String key, String value)`方法用于确定此工厂是否支持microservice.yaml文件中配置的规则（key值为`Configuration.PROP_RULE_STRATEGY_NAME`，value值为自定义的规则名称）；`IRule createLoadBalancerRule(String ruleName)`方法用于获取对应的规则。具体实现方式参考`org.apache.servicecomb.loadbalance.RuleNameExtentionsFactory`，该实现类需要打上`@Component`注解以保证能够被引用。
-* 通过SDK配置该负载均衡策略，假如是`AbcRule`。则配置如下：<br/>
-```yaml
-  servicecomb:
-    loadbalance:
-      strategy:
-        name: AbcRule
-```
+* Encode using the API method defined in the `com.netflix.loadbalancer.IRule` API. Encode in the public Server  choose(Object key) method. LoadBalancerStats is a structure that encapsulates the running state of the load balancer. Determine on which instance the current routing request will be processed based on the running indexes of each instance by using the Server choose(Object key) method. Use method `org.apache.servicecomb.loadbalance.SessionStickinessRule`for instance processing.
+
+* Compile the developed policy and ensure that the generated class is under classpath.
+
+* Use the software development kit(SDK) to configure the routing policy. Use AbcRule as a routing policy example. The configuration is as follows:        `servicecomb.loadbalance.NFLoadBalancerRuleClassName=org.apache.servicecomb.ribbon.rule.AbcRule`
 
 ## 过滤器机制
 

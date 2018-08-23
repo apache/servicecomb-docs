@@ -15,7 +15,7 @@
 | 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | APPLICATION\_ID | - | - | 是 | 应用名 | - |
-| service\_description.name | - | - | 是 | 微服务名 | 应确保app内部唯一。微服务名支持数字、大小写字母和"-"、"\_"、"."三个特殊字符，但是不能以特殊字符作为首尾字符，命名规范为：^\[a-zA-Z0-9\]+$\|^\[a-zA-Z0-9\]\[a-zA-Z0-9\_-.\]\*\[a-zA-Z0-9\]$。 |
+| service\_description.name | - | - | 是 | 微服务名 | 应确保app内部唯一。微服务名支持数字、大小写字母和"-"、"\_"、"."三个特殊字符，但是不能以特殊字符作为首尾字符，命名规范为：^\[a-zA-Z0-9\]+$&#124;^\[a-zA-Z0-9\]\[a-zA-Z0-9\_-.\]\*\[a-zA-Z0-9\]$。 |
 | service\_description.version | - | - | 是 | 微服务版本号 | - |
 | service\_description.description | - | - | 否 | 微服务描述 |  |
 | service\_description.properties | - | - | 否 | 微服务元数据配置（通过microservice.yaml文件进行配置） | - |

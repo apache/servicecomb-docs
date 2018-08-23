@@ -1,8 +1,8 @@
-# 问题描述：如何自定义某个Java方法对应的REST接口里的HTTP Status Code？
+# Problem: How to customize the HTTP status code in the REST interface corresponding to a Java method?
 
-** 解决方法：**
+**Solution:**
 
-对于正常的返回值，可以通过SwaggerAnnotation实现，例如：
+For normal return values, this can be done with SwaggerAnnotation, for example:
 
 ```java
 @ApiResponse(code = 300, response = String.class, message = "")
@@ -11,7 +11,7 @@ public int test(int x) {
 }
 ```
 
-对于异常的返回值，可以通过抛出自定义的InvocationException实现，例如：、
+For the return value of the exception, you can do this by throwing a custom InvocationException, for example:
 
 ```java
     public String testException(int code) {
@@ -33,33 +33,32 @@ public int test(int x) {
     }
 ```
 
-# 问题描述： 如何定制自己微服务的日志配置
+# Problem: How to customize the log configuration of your own microservice
 
-** 解决方法：**  
-ServiceComb不绑定日志器，只是使用了slf4j，用户可以自由选择log4j/log4j2/logback等等。ServiceComb提供了一个log4j的扩展，在标准log4j的基础上，支持log4j的properties文件的增量配置。
+** Solution:**
+ServiceComb does not bind the logger, use slf4j, users can freely choose log4j/log4j2/logback and so on.
+ServiceComb provides a log4j extension that supports incremental configuration of log4j's properties files on a standard log4j basis.
 
-* 默认以规则："classpath\*:config/log4j.properties"加载配置文件
-* 实际会搜索出classpath中所有的`config/log4j.properties和config/log4j.*.properties`, 从搜索出的文件中切出`\*`的部分，进行alpha排序，然后按顺序加载，最后合成的文件作为log4j的配置文件。
-* 如果要使用ServiceComb的log4j扩展，则需要调用Log4jUtils.init，否则完全按标准的日志器的规则使用。
+* By default, the configuration file is loaded from the path: "classpath\*:config/log4j.properties"
+* It will actually search all the `config/log4j.properties and config/log4j.*.properties` in the classpath, cut out the `\*` part from the searched file, sort the alpha, then load it in order, and finally compose The file is used as the log4j configuration file.
+* If you want to use ServiceComb's log4j extension, you need to call Log4jUtils.init, otherwise it will be used according to the rules of the standard logger.
 
-# 问题描述： 当服务配置了多个transport的时候，在运行时是怎么选择使用哪个transport的？
+# Problem: When the service is configured with multiple types of transport, What are the mechanisms for ServiceComb choose which transport to use at runtime?
 
-** 解决方法：**
+** Solution:**
 
-* ServiceComb的consumer、transport、handler、producer之间是解耦的，各功能之间通过契约定义联合在一起工作的，即：  
-  consumer使用透明rpc，还是springmvc开发与使用highway，还是RESTful在网络上传输没有关系与producer是使用透明rpc，还是jaxrs，或者是springmvc开发，也没有关系handler也不感知，业务开发方式以及传输方式
+* ServiceComb's consumer, transport, handler, and producer are decoupled. The functions work together through contract definitions, that is, whether the consumer uses transparent rpc, or springmvc develops and uses a highway, or RESTful does not transmit on the network. Relationships and producers use transparent rpc, or jaxrs, or springmvc development, and there is no relationship between the receiver and the perception, business development methods and transmission methods.
 
-* consumer访问producer，在运行时的transport选择上，总规则为：  
-  consumer的transport与producer的endpoint取交集，如果交集后，还有多个transport可选择，则轮流使用
+* Consumer access producer, in the runtime transport selection, the general rule is: the consumer's transport and producer's endpoint intersection, if there are multiple transports after the intersection, then use in turn
 
-分解开来，存在以下场景：
+Decomposed, there are the following scenarios:
 
-* 当一个微服务producer同时开放了highway以及RESTful的endpoint
-  * consumer进程中只部署了highway transport jar，则只会访问producer的highway endpoint
-  * consumer进程中只部署了RESTful transport jar，则只会访问producer的RESTful endpoint
-  * consumer进程中，同时部署了highway和RESTful transport jar，则会轮流访问producer的highway、RESTful endpoint
+* When a microservice producer provided both the highway and the RESTful endpoint
+  * Only the highway transport jar is deployed in the consumer process, only the producer's highway endpoint is accessed.
+  * Only the RESTful transport jar is deployed in the consumer process, only the RESTful endpoint of the producer is accessed.
+  * The consumer process, while deploying the highway and RESTful transport jar, will take turns accessing the producer's highway, RESTful endpoint
 
-如果，此时consumer想固定使用某个transport访问producer，可以在consumer进程的microservice.yaml中配置，指定transport的名称:
+If at this time, the consumer wants to use a transport to access the producer, it can be configured in the microservice.yaml of the consumer process, specifying the name of the transport:
 
 ```
 servicecomb:
@@ -68,23 +67,23 @@ servicecomb:
       transport: highway
 ```
 
-* 当一个微服务producer只开放了highway的endpoint
+* When a microservice producer only provided the endpoint of the highway
 
-  * consumer进程只部署了highway transport jar，则正常使用higway访问
-  * consumer进程只部署了RESTful transport jar，则无法访问
-  * consumer进程同时部署了highway和RESTful transport jar，则正常使用highway访问
+  * The consumer process only deploys the highway transport jar, and normally uses higway endpoint.
+  * The consumer process can only be accessed if only the RESTful transport jar is deployed
+  * The consumer process deploys both the highway and the RESTful transport jar, and the highway access is normally used.
 
-* 当一个微服务producer只开放了RESTful的endpoint
+* When a microservice producer only provided RESTful endpoints
 
-  * consumer进程只部署了highway transport jar，则无法访问
-  * consumer进程只部署了RESTful transport jar，则正常使用RESTful访问
-  * consumer进程同时部署了highway和RESTful transport jar，则正常使用RESTful访问
+  * The consumer process only deploys the highway transport jar and cannot access it.
+  * The consumer process only deploys RESTful transport jars, which normally use RESTful access
+  * The consumer process deploys both the highway and the RESTful transport jar, and the RESTful access is normally used.
 
-# 问题描述： swagger body参数类型定义错误，导致服务中心注册的内容没有类型信息
+# Problem: The swagger body parameter type is incorrectly defined, resulting in no content information for the content registered by the service center.
 
-**现象描述:**
+**Symptom:**
 
-定义如下接口，将参数放到body传递
+Define the following interface, put the parameters into the body to pass
 
 ```
 /testInherate:
@@ -102,7 +101,7 @@ servicecomb:
             $ref: "#/definitions/ReponseImpl"
 ```
 
-采用上面方式定义接口。在服务注册以后，从服务中心查询下来的接口type: string 丢失，变成了：
+Define the interface in the above way. After the service is registered, the interface type: a string that is queried from the service center is lost and becomes:
 
 ```
 /testInherate:
@@ -119,13 +118,13 @@ servicecomb:
             $ref: "#/definitions/ReponseImpl"
 ```
 
-如果客户端没有放置swagger，还会报告如下异常：
+If the client does not place a swagger, the following exception is also reported:
 
-Caused by: java.lang.ClassFormatError: Method "testInherate" in class ? has illegal signature "
+Caused by: java.lang.ClassFormatError: Method "testInherate" in class ? has illegal signature. "
 
-**解决方法：**
+**Solution:**
 
-定义body参数的类型的时候，需要使用schema，不能直接使用type。
+When defining the type of the body parameter, you can't use type directly instead use the schema.
 
 ```
 /testInherate:
@@ -144,47 +143,47 @@ Caused by: java.lang.ClassFormatError: Method "testInherate" in class ? has ille
             $ref: "#/definitions/ReponseImpl"
 ```
 
-# 问题描述：微服务框架服务调用是否使用长连接
+# Problem: Does the microservices framework service call use long live connection?
 
-** 解决方法：**
+** Solution:**
 
-http使用的是长连接（有超时时间），highway方式使用的是长连接（一直保持）。
+Http uses a long connection (with a timeout), and the highway mode uses a long connection (always on).
 
-# 问题描述：服务断连服务中心注册信息是否自动删除
+# Problem: When the service is disconnected from the service center, will the registration information be deleted automatically?
 
-** 解决方法：**
+** Solution:**
 
-服务中心心跳检测到服务实例不可用，只会移除服务实例信息，服务的静态数据不会移除。
+The service center heartbeat detects that the service instance is unavailable, only the service instance information is removed, and the static data of the service is not removed.
 
 
-# 问题描述：微服务框架如何实现数据多个微服务间透传
+# Problem: How does the microservices framework achieve transparent transmission of data between multiple microservices?
 
-** 解决方法：**
+** Solution:**
 
-透传数据塞入：
+Transmitting data into:
 
 ```java
 CseHttpEntity<xxxx.class> httpEntity = new CseHttpEntity<>(xxx);
-//透传内容
+//Transmission content
 httpEntity.addContext("contextKey","contextValue");
 ResponseEntity<String> responseEntity = RestTemplateBuilder.create().exchange("cse://springmvc/springmvchello/sayhello",HttpMethod.POST,httpEntity,String.class);
 ```
 
-透传数据获取：
+Transparent data acquisition:
 
 ```java
 @Override
 @RequestMapping(path="/sayhello",method = RequestMethod.POST)
 public String sayHello(@RequestBody Person person,InvocationContext context){
-    //透传数据获取
+    //Transparent data acquisition
     context.getContext();
     return "Hello person " + person.getName();
 }
 ```
 
-# 问题描述：微服务框架服务如何自定义返回状态码
+# Problem: How the microservices framework service customizes the return status code
 
-** 解决方法：**
+** Solution:**
 
 ```java
 @Override
@@ -197,48 +196,48 @@ public String sayHello(@RequestBody Person person){
 }
 ```
 
-# 问题描述： body Model部分暴露
+# Problem: Partial exposure of body Model
 
-** 解决方法：**
+** Solution:**
 
-一个接口对应的body对象中，可能有一些属性是内部的，不想开放出去，生成schema的时候不要带出去，使用：
+In the body object corresponding to an interface, there may be some attributes that are internal. Do not want to open it. Do not bring it out when generating the schema. Use:
 
 ```java
 @ApiModelProperty(hidden = true)
 ```
 
-# 问题描述：框架获取远端consumer的地址
+# Problem: The framework obtains the address of the remote consumer
 
-** 解决方法：**
+** Solution:**
 
-如果使用http rest方式（使用transport-rest-vertx依赖）可以用下面这种方式获取：
+If you use the http rest method (using the transport-rest-vertx dependency) you can get it in the following way:
 
 ```java
 HttpServletRequest request = (HttpServletRequest) invocation.getHandlerContext().get(RestConst.REST_REQUEST);
 String host = request.getRemoteHost();
 ```
 
-实际场景是拿最外层的地址，所以应该是LB传入到edgeservice，edgeService再放到context外下传递。
+The actual scene is to take the external address, so it should be LB passed to edgeservice, and edgeService is then passed to the context and passed.
 
 
-# 问题描述：对handler描述
+# Problem: Description of the handler
 
-** 解决方法：**
+** Solution:**
 
-consumer默认的handler是simpleLB，没有配置的时候handler链会使用这个，如果配置了handler，里面一定要包含lb的handler，否则调用报错，需要在文档里面进行说明。
+Consumer default handler is simpleLB, and the handler chain will use this when there is no configuration, if the handler is configured, it must contain the lb handler. Otherwise the call error, need to be described in the document.
 
 
-# 问题描述：netty版本问题
+# Problem: Netty version problem
 
-** 解决方法：**
+** Solution:**
 
-netty3和netty4是完全不同的三方件，因为坐标跟package都不相同，所以可以共存，但是要注意小版本问题，小版本必须使用的版本。
+Netty3 and netty4 are completely different tripartites because the coordinates are not the same as the package, so they can coexist, but pay attention to the minor version problem, the version that the small version must use.
 
-# 问题描述：服务超时设置
+# Problem: Service Timeout Settings
 
-** 解决方法：**
+** Solution:**
 
-在微服务描述文件（microservice.yaml）中添加如下配置：
+Add the following configuration to the microservice description file (microservice.yaml):
 
 ```
 servicecomb:
@@ -246,30 +245,30 @@ servicecomb:
     timeout: 30000
 ```
 
-# 问题描述：服务治理的处理链顺序是否有要求？
+# Problem: Is there a required for the processing chain's sequence of service governance?
 
-**解决方法：**
+**Solution:**
 
-处理链的顺序不同，那么系统工作行为也不同。 下面列举一下常见问题。
+The order of the processing chains is different, and the system works differently. List the common questions below.
 
-1、loadbalance和bizkeeper-consumer
+1, loadbalance and bizkeeper-consumer
 
-这两个顺序可以随机组合。但是行为是不一样的。
+These two sequences can be combined randomly. But the behavior is different.
 
-当loadbalance在前面的时候，那么loadbalance提供的重试功能会在bizkeeper-consumer抛出异常时发生，比如超时等。但是如果已经做了fallbackpolicy配置，比如returnnull，那么loadbalance则不会重试。
+When loadbalance is in the front, the retry function provided by loadbalance will occur when bizkeeper-consumer throws an exception, such as timeout. But if you have done a fallback policy configuration, such as return null, then loadbalance will not retry.
 
-如果loadbalance在后面，那么loadbalance的重试会延长超时时间，即使重试成功，如果bizkeeper-consumer设置的超时时间不够，那么最终的调用结果也是失败。
+If loadbalance is behind, the retry will extend the timeout. Even if the retry is successful, if the timeout period set by bizkeeper-consumer is not enough, the final call result will also fail.
 
-2、tracing-consumer，sla-consumer，tracing-provider，sla-provider
+2, tracing-consumer, sla-consumer, tracing-provider, sla-provider
 
-这些处理链建议放到处理链的最开始位置，保证成功、失败的情况都可以记录日志（由于记录日志需要IP等信息，对于消费者，只能放到loadbalance后面）。
+These processing chains are recommended to be placed at the very beginning of the processing chain to ensure that the success and failure of the log can be recorded (because the log requires IP and other information, for consumers, can only be placed behind the loadbalance).
 
-如果不需要记录客户端返回的异常，则可以放到末尾，只关注网络层返回的错误。但是如果bizkeeper-consumer等超时提前返回的话，则可能不会记录日志。
+If you do not need to record the exception returned by the client, you can put it to the end and only pay attention to the error returned by the network layer. However, if the bizkeeper-consumer timeout returns earlier, the log may not be logged.
 
-3、建议的顺序
+3. Suggested order
 
 Consumer: loadbalance, tracing-consumer, sla-consumer, bizkeeper-consumer
 
 Provider: tracing-provider, sla-provider, bizkeeper-provider
 
-这种顺序能够满足大多数场景，并且不容易出现不可理解的错误。
+This order is sufficient for most scenarios and is not easy to cause errors.

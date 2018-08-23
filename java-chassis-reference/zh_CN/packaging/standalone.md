@@ -7,8 +7,8 @@
 * **步骤1** 编写Main函数，初始化日志和加载服务配置，内容如下：
 
 ```java
-import com.huawei.paas.foundation.common.utils.BeanUtils;
-import com.huawei.paas.foundation.common.utils.Log4jUtils;
+import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
 public class MainServer {
 public static void main(String[] args) throws Exception {
 　Log4jUtils.init(); # 日志初始化

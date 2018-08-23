@@ -1,21 +1,21 @@
-## 概念阐述
+# Local Development and Test  
+## Concept Description
 
-本小节介绍如何在开发者本地进行消费者/提供者应用的开发调试。开发服务提供者请参考3 开发服务提供者章节，开发服务消费者请参考4 开发服务消费者。服务提供者和消费提供者均需要连接到在远程的服务中心，为了本地微服务的开发和调试，本小节介绍了两种搭建本地服务中心的方法进行本地微服务调试：
+This section describes how developers can locally develop and commission consumer and provider applications. Both service providers and consumers need to connect to the remote service center. Two methods of building Local  ServiceCenter for local microservice commissioning are as follows:
 
-* 启动[本地服务中心](#section2945986191314)；
+* Starting [Local Service Center](#section2945986191314)。
 
-* 通过local file模拟启动服务中心\([Mock机制](#section960893593759)\)。
+* Starting Local Service Center [Mock mechanism](#section960893593759)。
 
-* 通过设置环境信息方便本地调试
+### Local debugging by setting up environmental information 
 
-服务中心是微服务框架中的重要组件，用于服务元数据以及服务实例元数据的管理和处理注册、发现。服务中心与微服务提供/消费者的逻辑关系下图所示：  
-![](/start/develop-test.png)
+Service center is an important component in the microservice architecture, and is used for managing, registering, and detecting metadata and instance metadata. The logic relationship between the service center and microservice provider/consumer is as follows:![](../assets/images/local_develop_test_en.png)
 
-## 启动本地服务中心
+## Starting Local ServiceCenter
 
-* **步骤 1 **启动本地服务中心
+* **Step 1** Starting local service center 
 
-1. 以可执行文件的方式运行
+1. run in executable files  
 
    <ul class="nav nav-tabs">
      <li data-toggle="tab" class="active"><a data-toggle="tab" href="#windows">Windows</a></li>
@@ -24,65 +24,68 @@
    
    <div class="tab-content">
      <div id="windows" class="tab-pane active" markdown="1">
-   1. 下载[服务注册中心可执行文件压缩包](http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center/1.0.0-m1/apache-servicecomb-incubating-service-center-1.0.0-m1-windows-amd64.tar.gz)
-   2. 解压缩到当前文件夹
-   3. 进入解压缩后的目录，然后双击运行**start-service-center.bat**文件
-     </div>
-     <div id="linux" class="tab-pane fade" markdown="1">
-   1. 下载服务注册中心可执行文件压缩包并解压缩
+    (1) Download the [Service Registry Executable Compressor] (http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center/1.0.0-m1/apache-servicecomb- Incubating-service-center-1.0.0-m1-windows-amd64.tar.gz)  
+    (2) Extract to the current folder  
+    (3) Go to the unzipped directory and double-click to run the **start-service-center.bat** file.  
+  
+      </div>
+      <div id="linux" class="tab-pane fade" markdown="1">
+    1) Download the Service Registry executable file archive and extract it  
    ```bash
    wget http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center/1.0.0-m1/apache-servicecomb-incubating-service-center-1.0.0-m1-linux-amd64.tar.gz
    tar xvf apache-servicecomb-incubating-service-center-1.0.0-m1-linux-amd64.tar.gz
-   ```
-   2. 运行服务注册中心
-   ```bash
-   bash apache-servicecomb-incubating-service-center-1.0.0-m1-linux-amd64/start-service-center.sh
-   ```
-   
-    注意：前端（frontend）在Linux环境下默认会绑定ipv6地址，导致浏览器报错，修复办法为：先修改conf/app.conf中的httpaddr为外部可达网卡ip，之后修改app/appList/apiList.js中`ip : 'http://127.0.0.1'`为对应ip，最后重启ServiceCenter即可。
-  
-    </div>
-   </div>
+  ```  
+   2) Run the service registry  
+   ```bash
+   Bash apache-servicecomb-incubating-service-center-1.0.0-m1-linux-amd64/start-service-center.sh
+   ```  
+   
+    Note: The frontend (frontend) will be bound to the ipv6 address by default in the Linux environment, causing the browser to report an error. The repair method is: first modify the httpaddr in conf/app.conf to the external reachable network card ip, and then modify the app/appList/apiList. .js `ip : 'http://127.0.0.1'` for the corresponding ip, and finally restart ServiceCenter.
+  
+    </div>
+   </div>
 
-   注意：Window和Linux版本均只支持64位系统。
+   Note: Both Windows and Linux versions only support 64-bit systems.  
 
-2. 以Docker的方式运行
+2. Run as Docker  
 
 ```bash
-docker pull servicecomb/service-center
-docker run -d -p 30100:30100 servicecomb/service-center:latest
+Docker pull servicecomb/service-center
+Docker run -d -p 30100:30100 servicecomb/service-center:latest
 ```
 
-* **步骤 2 **启动本地服务中心后，在服务提供/消费者的microservice.yaml文件中配置ServerCenter的地址和端口，示例代码：
+* **Step 2 ** After starting the local service center, configure the ServerCenter address and port in the service provider/consumer's microservice.yaml file. Example code:
 
 ```yaml
-servicecomb:
-  service:
-    registry:
-      address:
-        # 服务中心地址及端口
-        http://127.0.0.1:30100
+Servicecomb:
+  Service:
+    Registry:
+      Address:
+        #Service Center address and port
+        Http://127.0.0.1:30100
 ```
 
-* **步骤 3 **开发服务提供/消费者，启动微服务进行本地测试。
+* **Step 3 **Development service provider/consumer, launch microservices for local testing.
 
-**----结束**
+**----End**
 
-## Mock机制启动服务中心
-在本进程内存中模拟一个只能本进程使用的服务中心，一般是在测试场景中使用。
-* ### 进程内调用
-只需要在启动ServiceComb引擎之前声明一下即可启用：
+## Mock mechanism start service center
+Simulate a service center that can only be used by this process in the process memory, which is generally used in the test scenario.
+* ### In-process call
+Just declare it before starting the ServiceComb engine to enable it:
 ```java
 System.setProperty("local.registry.file", "notExistJustForceLocal");
 ```
-* ### 跨进程调用
-如果部署比较简单，并且部署信息是静态的，即使有跨进程调用也可以使用本Mock机制
-producer端仍然像“进程内调用”一样声明即可
-但是，因为Mock并不能跨进程生效，所以consumer端的Mock，需要提供一个本地的配置文件，在里面描述调用目标的详细信息，包括名字、版本、地址、schema id等等信息
-同样，因为Mock不能跨进程，consumer也无法动态取得producer的契约信息，所以，需要在本地提供契约文件
-（这个场景，使用Mock服务中心，比使用standalone的服务中心，成本高得多得多，不建议使用）
+* ### Cross-process call
+If the deployment is simple and the deployment information is static, you can use this mock mechanism even if you have a cross-process call.
+The producer end is still declared like "in-process call"
+However, because the Mock does not work across processes, the Mock on the consumer side needs to provide a local configuration file that describes the details of the call target, including the name, version, address, schema id, etc.
+Similarly, because the Mock cannot cross processes, the consumer cannot dynamically obtain the contract information of the producer. Therefore, the contract file needs to be provided locally.
+(This scenario, using the Mock Service Center, is much more costly than using a standalone service center, not recommended)
 
-* **步骤 1**新建本地服务中心定义文件，假设名字为registry.yaml，内容示例如下：
+* **Step 1** Create a new local service center definition file, assuming the name is registry.yaml, the content example is as follows:  
+
+* **Step 1** Create a new local service center definition file, assuming the name is registry.yaml, the content example is as follows:
 
 ```yaml
 localserv:
@@ -96,28 +99,32 @@ localserv:
         - rest://localhost:8080
         - highway://localhost:7070
 ```
-* **步骤 2**consumer本地部署契约文件
+* **Step 2**consumer local deployment contract file
 
-参考：[定义服务契约](https://huaweicse.github.io/servicecomb-java-chassis-doc/zh_CN/build-provider/define-contract.html)
-* **步骤 3**在consumer main函数，启动ServiceComb引擎之前声明：
+Reference: [Define Service Contract] (https://docs.servicecomb.io/java-chassis/zh_CN/build-provider/define-contract.html)
+* **Step 3** In the consumer main function, declare the ServiceComb engine before starting:
 
 ```java
 　　System.setProperty("local.registry.file", "/path/registry.yaml");
 ```
 
-setProperty第二个参数填写registry.yaml在磁盘中的系统绝对路径，注意区分在不同系统下使用对应的路径分隔符。
+The second parameter of setProperty fills in the absolute path of the registry.yaml system on the disk, pay attention to distinguish the corresponding path separator in different systems.
 
 
-## 通过设置环境信息方便本地调试
-java chassis在设计时，严格依赖于契约，所以正常来说契约变了就必须要修改微服务的版本。但是如果当前还是开发模式，那么修改接口是很正常的情况，每次都需要改版本的话，对用户来说非常的不友好，所以增加了一个环境设置。如果微服务配置成开发环境，接口修改了（schema发生了变化），重启就可以注册到服务中心，而不用修改版本号。但是如果有consumer已经调用了重启之前的服务，那么consumer端需要重启才能获取最新的schema。比如A -> B，B接口进行了修改并且重启，那么A这个时候还是使用B老的schema，调用可能会出错，以免出现未知异常，A也需要重启。有三种方式可以设置，推荐使用方法1
-* 方法1：通过JVM启动参数**-Dinstance_description.environment=development**进行设置
+## Local debugging by setting environment information
+The java chassis is strictly dependent on the contract when designing, so usually the version of the microservice has to change when the contract updated. However, if the development mode is still in progress, it is normal to modify the interface.   
+If you need to change the version every time, it is very unfriendly to the user, so an environment setting is added for this case. If the microservice is configured as a development environment, the interface is modified (the schema has changed), and the restart can be registered to the service center without modifying the version number.  
+However, if  consumer client has already called the service before the restart, the consumer client needs to be restarted to get the latest schema. For example, A -> B, B interface has been modified and restarted, then A is still using B last schema at this time, the call may be wrong, so as to avoid unknown exceptions, A also needs to restart. There are three ways to set it up, Recommended method 1  
 
-* 方法2：通过microservice.yaml配置文件来指定
+* Method 1: Set by the JVM startup parameter   
+**-Dinstance_description.environment=development**
+
+* Method 2: Specify by microservice.yaml configuration file
 
 ```yaml
 instance_description:
   environment: development
 ```
 
-* 方法3：通过环境变量来指定（仅限于Windowns系统），比如在Eclipse下面进行如下设置
-![](/assets/env.PNG)
+* Method 3: Specify by environment variable (only for Windowns system), such as the following settings under Eclipse
+![](../assets/env.PNG)
