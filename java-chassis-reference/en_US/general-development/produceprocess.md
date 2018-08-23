@@ -1,23 +1,23 @@
-# 返回值序列化扩展
-## 概念阐述
+# return value serialization extension
+## Concept Description
 
-当前REST通道返回值支持application/json和text/plain两种格式，支持开发人员扩展和重写，服务提供者通过produces声明可提供序列化能力，服务消费者通过请求的Accept头指明返回值序列化方式，默认返回application/json格式的数据。
+The current REST channel return value supports both application/json and text/plain formats, supports developer extensions and rewrites, service providers provide serialization capabilities through producer declarations, and service consumers specify return value serialization through the request's Accept header. By default, the data in application/json format is returned.
 
-## 开发说明
+## Development Instructions
 
-* ### 扩展
+* ### extension
 
-  开发人员可以根据业务需要，通过编程的方式来扩展返回值序列化方式。实施步骤如下，以扩展支持application/xml格式为例：
+  Developers can extend the return value serialization method programmatically based on business needs. The implementation steps are as follows, taking the extended support application/xml format as an example:
 
-  1.实现接口`ProduceProcessor`
+  1. Implement the interface `ProduceProcessor`.
 
-  > getName\(\)返回当前扩展的数据类型名
-  >
-  > getOrder\(\)返回当前数据类型优先级，有多个同名实现类时生效，只加载优先级最高的，数字越小优先级越高
-  >
-  > doEncodeResponse\(OutputStream output, Object result\)把result对象编码成output，此处逻辑需要自行实现
-  >
-  > doDecodeResponse\(InputStream input, JavaType type\)把input解析成相应对象，此处逻辑需要自行实现
+  > getName\(\) returns the current extended data type name
+  >
+  > getOrder\(\) returns the current data type priority. It has multiple implementation classes with the same name. It only loads the highest priority. The smaller the number, the higher the priority.
+  >
+  > doEncodeResponse\(OutputStream output, Object result\) encodes the result object into output, where the logic needs to be implemented by itself.
+  >
+  > doDecodeResponse\(InputStream input, JavaType type\) parses the input into the corresponding object, where the logic needs to be implemented by itself.
 
   ```java
   public class ProduceAppXmlProcessor implements ProduceProcessor {
@@ -44,25 +44,25 @@
   }
   ```
 
-  2.添加配置文件
+  2. Add a configuration file
 
-  在resources下META-INF/services/文件夹新建文件xxx.ProduceProcessor（xxx为接口的包名），内容填写xxx.ProduceAppXmlProcessor（xxx为实现类的包名）。
+  In the META-INF/services/ folder under resources, create a new file xxx.ProduceProcessor (xxx is the package name of the interface), and fill in the content xxx.ProduceAppXmlProcessor (xxx is the package name of the implementation class).
 
-* ### 重写
+* ### Rewrite
 
-  开发人员可以对现有的application/json和text/plain两种格式实现逻辑进行重写，也可以对自行扩展的格式进行重写，以重写xml序列化方式为例：
+  Developers can rewrite the existing application/json and text/plain implementation logic, or rewrite the self-extended format to rewrite the xml serialization method as an example:
 
-  1.创建一个同名类`ProduceAppXmlProcessor`，实现接口`ProduceProcessor`
+  1. Create a class named 'ProduceAppXmlProcessor` with the same name to implement the interface `ProduceProcessor`.
 
-  2.重写`doEncodeResponse`和`doDecodeResponse`方法里的编解码逻辑
+  2. Rewrite the codec logic in the `doEncodeResponse` and `doDecodeResponse` methods
 
-  3.更改getOrder方法里的返回值，要比原方法的返回值小，例如返回-1，application/json和text/plain的原方法返回值默认都为0
+  3. Change the return value in the getOrder method, which is smaller than the return value of the original method. For example, return -1, the original method return value of application/json and text/plain defaults to 0.
 
-  4.在resources下META-INF/services/文件夹新建文件xxx.ProduceProcessor（xxx为接口的包名），内容填写xxx.ProduceAppXmlProcessor（xxx为实现类的包名）。
+  4. In the META-INF/services/ folder under resources, create a new file xxx.ProduceProcessor (xxx is the package name of the interface), and fill in the content xxx.ProduceAppXmlProcessor (xxx is the package name of the implementation class).
 
-* ### 验证
+* ### verification
 
-  服务提供者通过produces声明可提供xml序列化能力
+  Service providers provide xml serialization capabilities through producer declarations
 
   ```java
     @RequestMapping(path = "/appXml", method = RequestMethod.POST, produces = MediaType.APPLICATION_XML_VALUE)
@@ -71,7 +71,7 @@
     }
   ```
 
-  服务消费者通过请求的Accept头指明返回值xml序列化方式
+  The service consumer indicates the return value xml serialization mode through the request's Accept header.
 
   ```java
     private void testCodeFirstAppXml(RestTemplate template, String cseUrlPrefix) {
