@@ -71,7 +71,7 @@ servicecomb:
   loadbalance:
     isolation:
       enabled: true
-      errorThresholdPercentage: 20
+      errorThresholdPercentage: 0
       enableRequestThreshold: 5
       singleTestTime: 60000
       continuousFailureThreshold: 2
