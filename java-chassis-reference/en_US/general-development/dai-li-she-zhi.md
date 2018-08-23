@@ -1,32 +1,29 @@
-## 背景
+## background
 
-作为一名开发者，在公司开发环境，可能是通过公司代理网络接入到因特网。如果调试服务时还必须依赖网上资源，比如直接连接华为共有云服务中心，那么就必须配置代理。
+As a developer, in a company development environment, it is possible to access the Internet through a corporate agent network. If debugging services depends on online resources, such as directly connecting to public cloud service center, you must configure the agent.
 
-配置方式，在microservice.yaml文件增加proxy配置：
+Configuration mode, add proxy configuration in microservice.yaml file:
 
 ```yaml
 servicecomb:
-  proxy:
-    enable: true            #是否开启代理
-    host: yourproxyaddress  #代理地址
-    port: 80                #代理端口
-    username: yourname      #用户名
-    passwd: yourpassword    #密码
+  proxy:
+    enable: true #Do you want to enable the proxy?
+    host: yourproxyaddress #proxy address
+    port: 80 #proxy port
+    username: yourname #username
+    passwd: yourpassword #password
 ```
 
-**注意：当前仅支持连接服务中心、配置中心、服务看板支持代理，如果对接其他三方服务，可以读取这个配置，自行配置代理，vertx httpclient支持代理设置，例如：**
+**Note: Currently only supports connection service center, configuration center, service kanban support agent. If you connect other three-party services, you can read this configuration, configure the agent yourself, vertx httpclient supports proxy settings, for example: **
 
 ```java
-    HttpClientOptions httpClientOptions = new HttpClientOptions();
-    if (isProxyEnable()) {
-      ProxyOptions proxy = new ProxyOptions();
-      proxy.setHost("host");
-      proxy.setPort(port);
-      proxy.setUsername("username");
-      proxy.setPassword("passwd");
-      httpClientOptions.setProxyOptions(proxy);
-    }
+    HttpClientOptions httpClientOptions = new HttpClientOptions();
+    If (isProxyEnable()) {
+      ProxyOptions proxy = new ProxyOptions();
+      proxy.setHost("host");
+      proxy.setPort(port);
+      proxy.setUsername("username");
+      proxy.setPassword("passwd");
+      httpClientOptions.setProxyOptions(proxy);
+    }
 ```
-
-
-
