@@ -1,32 +1,32 @@
-某些场景中，业务使用http而不是https，作为网络传输通道，此时为了防止被伪造或篡改请求，需要提供consumer、producer之间对http码流的签名功能。
+In some scenarios, the service uses http instead of https as the network transmission channel. To prevent the falsification or tampering request, consumer and the producer must be provided a method to signature the http stream.
 
-签名功能使用org.apache.servicecomb.common.rest.filter.HttpClientFilter和org.apache.servicecomb.common.rest.filter.HttpServerFilter接口来承载，建议http码流强相关的逻辑使用这里的Filter机制，而契约参数相关逻辑使用Handler机制。
+The signature method is carried using the org.apache.servicecomb.common.rest.filter.HttpClientFilter and org.apache.servicecomb.common.rest.filter.HttpServerFilter interfaces. It is recommended that the http stream related logic use the Filter mechanism here, and the contract The parameter related logic uses the Handler mechanism.
 
-关于Filter接口的使用，可以参考[demo-signature](https://github.com/ServiceComb/ServiceComb-Java-Chassis/tree/master/demo/demo-signature)。
+About the use of the Filter interface, please reference [demo-signature] (https://github.com/ServiceComb/ServiceComb-Java-Chassis/tree/master/demo/demo-signature).
 
 
 
-# 1.概述
+# 1 Overview
 
-Filter机制使用Java标准的SPI机制加载。
+The Filter mechanism is loaded using the Java standard SPI mechanism.
 
-HttpClientFilter、HttpServerFilter都各自允许加载多个：
+Both HttpClientFilter and HttpServerFilter allow multiple loads:
 
-* 各实例之间的执行顺序由getOrder的返回值决定
+* The order of execution between instances is determined by the return value of getOrder
 
-* 如果getOrder返回值相同，则相应的实例顺序随机决定
+* If getOrder returns the same value, the corresponding instance order is randomly determined
 
-无论是request，还是response，读取body码流，都使用getBodyBytes\(\)，返回值可能为null（比如get调用的场景），如果不为null，对应的码流长度，通过getBodyBytesLength\(\)获取。
+Whether it is request or response, read the body stream, use getBodyBytes\ (\), the return value may be null (such as the scene called get), if not null, the corresponding stream length, Obtain through getBodyBytesLength\ (\ ).
 
 # 2.HttpClientFilter
 
-系统内置2个HttpClientFilter，扩展功能时注意order值不要冲突：
+The system has two built-in HttpClientFilter. Note that the order value does not conflict when extending the function:
 
-* org.apache.servicecomb.provider.springmvc.reference.RestTemplateCopyHeaderFilter, order值为Integer.MIN\_VALUE
+* org.apache.servicecomb.provider.springmvc.reference.RestTemplateCopyHeaderFilter, order value is Integer.MIN\_VALUE
 
-* org.apache.servicecomb.transport.rest.client.http.DefaultHttpClientFilter, order值为Integer.MAX\_VALUE
+* org.apache.servicecomb.transport.rest.client.http.DefaultHttpClientFilter, order value is Integer.MAX\_VALUE
 
-## 2.1原型
+## 2.1 Prototype
 
 ```
 public interface HttpClientFilter {
@@ -42,19 +42,21 @@ public interface HttpClientFilter {
 
 ## 2.2 beforeSendRequest
 
-用于在已经生成码流之后，发送请求之前，根据url、header、query、码流计算签名，并设置到header中去\(requestEx.setHeader\)。
+Used to send a request after the stream has been generated
+calculate the signature based on url, header, query, and stream
+then set to the header \ (requestEx.setHeader\).
 
-从入参invocation中可以获取本次调用的各种元数据以及对象形式的参数（码流是根据这些参数生成的）。
+From the invocation, you can get the various metadata and the object parameters of this call (the stream is generated according to these parameters).
 
 ## 2.3 afterReceiveResponse
 
-用于在从网络收到应答后，根据header、码流计算签名，并与header中的签名对比。如果签名不对，直接构造一个Response
+Used to calculate the signature according to the header and the stream after receiving the response from the network, and compare it with the signature in the header. If the signature is incorrect, directly construct a Response.
 
-作为返回值，只要不是返回NULL，则框架会中断对其他HttpClientFilter的调用。
+As a return value, the framework will interrupt calls to other HttpClientFilters as long as it does not return NULL.
 
 # 3 HttpServerFilter
 
-## 3.1原型
+## 3.1 Prototype
 
 ```
 public interface HttpServerFilter {
@@ -75,23 +77,20 @@ public interface HttpServerFilter {
 
 ## 3.2 needCacheRequest
 
-与HttpClientFilter不同的是，增加了决定是否缓存请求的功能。
+Unlike HttpClientFilter, the ability to decide whether to cache requests is added.
 
-这是因为ServiceComb不仅仅能使用standalone的方式运行，也能运行于web容器（比如tomcat），在servlet的实现上，请求码流只能读取一次，并且不一定支持reset（比如tomcat），RESTful框架需要执行反序列化，需要读取body码流，签名逻辑也需要读取body码流，如果使用默认的处理，必然有一方功能无法实现。
+This is because ServiceComb can not only run in standalone mode but also run in web container (such as Tomcat). In the implementation of a servlet, request stream can only be read once, and does not necessarily support reset (such as Tomcat), RESTful The framework needs to perform deserialization. It needs to read the body stream. The signature logic also needs to read the body stream. If the default processing is used, one of the functions cannot be implemented.
 
-所以运行于web容器场景时，所有HttpServerFilter，只要有一个返回需要缓存请求，则body码流会被复制保存起来，以支持重复读取。
+So when running in a web container scenario, all HttpServerFilters, as long as there is a return request that needs to be cached, the body stream will be copied and saved to support repeated reads.
 
-入参是本次请求对应的元数据，业务可以针对该请求决定是否需要缓存请求。
+The input parameter is the metadata corresponding to the request, and the service can decide whether the cache request is needed for the request.
 
 ## 3.3 afterReceiveRequest
 
-在收到请求后，根据url、header、query、码流计算签名，并与header中的签名对比,如果签名不对，直接构造一个Response作为返回值，只要不是返回NULL，则框架会中断对其他HttpClientFilter的调用。
+After receiving the request, the signature is calculated according to the URL, header, query, and code stream, and compared with the signature in the header. If the signature is incorrect, a Response is directly constructed as the return value. As long as the NULL is not returned, the framework will interrupt the other HttpClientFilter. Call.
 
 ## 3.4 beforeSendResponse
 
-在发送应答之前，根据header、码流计算签名，并设置到header中去。
+Before sending a response, the signature is calculated according to the header and the stream and set to the header.
 
-因为可能invocation还没来得及构造，调用流程已经出错，所以入参invocation可能是null。
-
-
-
+Because the invocation has not yet been constructed, the call flow has gone wrong, so the invocation may be null.<Paste>

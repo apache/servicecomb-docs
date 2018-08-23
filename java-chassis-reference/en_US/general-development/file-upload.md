@@ -1,54 +1,54 @@
-文件上传，当前支持在vertx rest通道和servlet rest中使用。
+File upload, currently supported in vertx rest channel and servlet rest.
 
-文件上传使用标准的http form格式，可与浏览器的上传直接对接。
+File uploads use the standard http form format, which can directly upload the file from the browser.
 
-## Producer：
-支持jaxrs和springmvc开发模式
+## Producer:
+Support jaxrs and springmvc development mode
 
-jaxrs开发模式：
-* 支持servlet定义的javax.servlet.http.Part类型
+Jaxrs development model:
+* javax.servlet.http.Part type that supports servlet definitions
 
-* 可以直接使用@FormParam传递文件类型及普通参数
+* You can directly use @FormParam to pass file types and common parameters
 
-springmvc开发模式：
+Springmvc development mode:
 
-* 支持servlet定义的javax.servlet.http.Part类型，也支持org.springframework.web.multipart.MultipartFile类型
+* Supports servlet-defined javax.servlet.http.Part type, also supports org.springframework.web.multipart.MultipartFile type
 
-* 两种数据类型功能是一致的，MultipartFile的底层也是Part
+* The two datatype functions are consistent, and the underlying part of MultipartFile is also Part
 
-* 两种数据类型可以混合使用，比如第一个参数是Part，第二个参数是MultipartFile
+* Two data types can be mixed, for example, the first parameter is Part and the second parameter is MultipartFile
 
-* 可以直接使用@RequestPart传递文件类型及普通参数
+* You can directly use @RequestPart to pass file types and common parameters
 
-注意：
+note:
 
-* 先配置文件上传临时目录，默认为null不支持文件上传，文件上传请求Content-Type必须为multipart/form-data
+* First file upload temporary directory, the default is null does not support file upload, file upload request Content-Type must be multipart/form-data
 
-* 同名参数只支持一个文件
+* The same name parameter only supports one file
 
-* 支持一次传输多个不同参数名的文件
+* Supports transferring files with multiple different parameter names at one time
 
-* 通过MultipartFile或Part打开流后，记得关闭，否则上传的临时文件会无法删除，最终导致上传临时目录被撑爆
+* After opening the stream through MultipartFile or Part, remember to close it. Otherwise the uploaded temporary file will not be deleted, and eventually, the upload temporary directory will be exploded.
 
-Springmvc模式下的代码样例：
+Sample code in Springmvc mode:
 
 ```java
 @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA)
 public String fileUpload(@RequestPart(name = "file1") MultipartFile file1, @RequestPart(name = "file2") Part file2, @RequestPart String param1) {
-  ……
+  ......
 }
 ```
 
-### 配置说明：
+### Configuration instructions:
 
-| 配置项 | 默认值 | 取值范围 | 含义 |
+| Configuration Item | Default Value | Range of Value |
 | :--- | :--- | :--- | :--- |
-| servicecomb.uploads.directory | null |  | 上传的临时文件保存在哪个目录，**默认值null表示不支持文件上传** |
-| servicecomb.uploads.maxSize | -1 |  | http body的最大允许大小，默认值-1表示无限制 |
+| servicecomb.uploads.directory | null | | In which directory the uploaded temporary file is saved, **default value null means file upload is not supported** |
+| servicecomb.uploads.maxSize | -1 | | The maximum allowable size of http body, the default value of -1 means unlimited |
 
-## Consumer：
+## Consumer:
 
-支持以下数据类型：
+The following data types are supported:
 
 * java.io.File
 
@@ -58,11 +58,11 @@ public String fileUpload(@RequestPart(name = "file1") MultipartFile file1, @Requ
 
 * org.springframework.core.io.Resource
 
-使用InputStream时，因为是流的方式，此时没有客户端文件名的概念，所以producer获取客户端文件名会得到null
+When using InputStream, because it is a stream, there is no concept of client file name at this time, so the producer will get the client file name will get null.
 
-如果既要使用内存数据，又想让producer可以获取客户端文件名，可以使用resource类型，继承org.springframework.core.io.ByteArrayResource，且override getFilename即可。
+If you want to use both memory data and the producer to get the client file name, you can use the resource type, inherit org.springframework.core.io.ByteArrayResource, and override getFilename.
 
-### 透明RPC代码样例：
+### Transparent RPC Code Sample:
 
 ```java
 interface UploadIntf {
@@ -70,13 +70,13 @@ interface UploadIntf {
 }
 ```
 
-获得接口引用后，直接调用即可：
+After getting the interface reference, you can call it directly:
 
 ```java
 String result = uploadIntf.upload(file);
 ```
 
-### RestTemplate代码样例：
+### RestTemplate code example:
 
 ```java
 Map<String, Object> map = new HashMap<>();
