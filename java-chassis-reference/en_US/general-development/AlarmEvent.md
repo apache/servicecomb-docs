@@ -1,11 +1,11 @@
-# 获取熔断与实例隔离告警事件
+# Get the fuse and instance isolation alarm events
 
-## 场景描述
-* 在微服务运行期间熔断或实例隔离状态发生变化时，需要监听到相关事件，获取相关信息并进行处理
+## Scene Description
+* When the microservice is running or the instance isolation status changes, you need to listen to related events, get relevant information and process it.
 
-## 使用参考
+## Use Reference
 
-* 监听熔断事件
+* Monitor blown events
 ```
 Object receiveEvent = new Object() {
   @Subscribe
@@ -15,7 +15,7 @@ Object receiveEvent = new Object() {
   };
 circutBreakerEventNotifier.eventBus.register(receiveEvent);
 ```
-* 监听实例隔离事件
+* Listen for instance isolation events
 ```
 Object receiveEvent = new Object() {
   @Subscribe
@@ -25,7 +25,7 @@ Object receiveEvent = new Object() {
   };
 circutBreakerEventNotifier.eventBus.register(receiveEvent);
 ```
-* 两个事件均监听
+* Both events are monitored
 ```
 Object receiveEvent = new Object() {
   @Subscribe
