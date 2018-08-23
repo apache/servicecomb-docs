@@ -3,7 +3,7 @@ Java chassis supports the use of the label \(org.springframework.web.bind.annota
 
 * Service declaration method
 
-Spring MVC uses @RestController to declare the service, and java chassis uses @RestSchema to declare the service and needs to display the service path using @RequestMapping to distinguish whether the service uses Spring MVC tags or JAX RS tags.
+Spring MVC uses @RestController to declare the service, and java chassis uses @RestSchema to declare the service and needs to display the service path using @RequestMapping to distinguish whether the service uses Spring MVC Annotations or JAX RS Annotations.
 
 ```
 @RestSchema(schemaId = "hello")
@@ -21,7 +21,7 @@ With Spring MVC, you can use multiple data types in a service definition as long
 Public void postData(@RequestBody Object data)
 // Interface definition
 Public void postData(@RequestBody IPerson interfaceData)
-// no generic type of the specified type
+//  Generics tpye without specified type
 Public void postData(@RequestBody Map rawData)
 // specific protocol related types
 Public void postData(HttpServletRequest request)
@@ -33,9 +33,9 @@ To support rapid development, the data type restrictions of java chassis are als
 
 For more information on java chassis support for data types, please refer to the "Supported Data Types" section.
 
-* Common label support
+* Common Annotation Support
 
-The following is the java chassis support for Spring MVC common tags.
+The following is the java chassis support for Spring MVC common annotation.
 
 | Tag Name | Support | Description |
 | :--- | :--- | :--- |

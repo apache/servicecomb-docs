@@ -1,22 +1,22 @@
-The development steps of the web development method and the JAVA application method are similar.
+The development steps of the web development mode and the JAVA application mode are similar.
 
 This project [code example] (https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-web)
 
 
-There are mainly the following differences:
+Mainly differences:
 
 * JAVA application is based on spring-boot-starter, and web development is based on spring-boot-starter-web.
 
-* JAVA application relies on spring-boot-starter-provider, while web development relies on spring-boot-starter-transport. Spring-boot-starter-web already carries hibernate-validator and does not require additional dependencies.
+* JAVA application depends on spring-boot-starter-provider, while web development depends on spring-boot-starter-transport. Spring-boot-starter-web already carries hibernate-validator and does not require additional dependencies.
 
-* In the startup function, the web development method can be declared
+* In the startup function, the web development mode can be declared
 
 
 ```
 @SpringBootApplication(exclude=DispatcherServletAutoConfiguration.class)
 ```
 
-To close org.springframework.web.servlet.DispatcherServlet, enable org.apache.servicecomb.transport.rest.servlet.RestServlet via @EnableServiceComb. Although it is not necessary to exclude the DispatcherServlet, it is not a good idea to have multiple REST frameworks in a microservice in most scenarios, which will cause many misunderstandings in use.
+To close org.springframework.web.servlet.DispatcherServlet, enable org.apache.servicecomb.transport.rest.servlet.RestServlet via @EnableServiceComb. Although it is not necessary to exclude the DispatcherServlet, it is not a good idea to have multiple REST frameworks in a microservice in most scenarios, which will cause much confusion in use.
 
 * Specify the URL root path of the RestServlet in the microservice.yaml file via the configuration item servicecomb.rest.servlet.urlPattern. And the listening port in the configuration item servicecomb.rest.address must be consistent with the port that the tomcat listens on (the default is 8080, which can be modified by adding server.port in application.yml)
 
