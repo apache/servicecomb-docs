@@ -1,23 +1,20 @@
-## 表1-1术语表
+## Table 1-1 Glossary
 
-| 缩略语 | 英文词汇 | 中文词汇 | 解释 |
+Abbreviations | English | Chinese | Acronyms |
 | :--- | :--- | :--- | :--- |
-| MicroServices | MicroServices | 微服务 | 微服务是一种轻量级SOA架构，通常用来描述广泛用于云应用、互联网应用的一种松耦合分布式架构。 |
-| Provider | Provider | 服务提供者 | 在微服务调用关系中处于被调用一方的服务。 |
-| Consumer | Consumer | 服务消费者 | 在微服务调用关系中处于调用发起方的服务。 |
-| Application | Application | 应用 | 应用代表一个软件应用的逻辑实体，表示一个有业务功能呈现给用户的计算机软件应用。一个以微服务化架构构建的应用通常由多个微服务组成。 |
-| Instance | Instance | 微服务实例 | 一个微服务的最小运行和部署单元，通常对应一个应用进程。 |
-| IAM | Identity and Access Management | 身份及权限管理 | 负责PaaS系统中管理层级、用户、角色、授权关系，用户的组织归性等信息的维护。并实施授权和授权检查。 |
-| AK/SK | AK/SK | AK/SK密钥 | Access key/Secret key是一组密钥对，用于API的身份认证和访问控制。 |
-| Service | Service | 服务 | 服务是对按需取用的功能对象的一种描述。在应用模型中，服务一般面向应用，应用使用服务需要先订购服务，再绑定服务并使用，某些商业场景下可能还需要按使用量付费。 |
-| Load Balance | Load Balance | 负载均衡 | 当应用访问一个具有多个实例的微服务时，会涉及到路由负载均衡。可以通过配置文件配置负载均衡策略，支持随机，轮询、会话保持和基于响应时间的权值等多种负载均衡路由策略。 |
-| Rate limit | Rate limit | 限流 | 当资源成为瓶颈时，服务框架需要对消费者的访问请求做限流，启动流控保护机制。在服务消费者端和提供者端均可进行流量控制。在服务消费端，可以限制发往某个微服务提供者的请求频率；在服务提供端，可以限制每个微服务消费端发过来的请求频率，也可以根据服务提供端资源消耗情况确定总的请求频率限制，防止服务因资源耗尽而崩溃。 |
-| Service Degrade | Service Degrade | 降级 | 服务降级主要包括屏蔽降级和容错降级两种策略：屏蔽降级是指当外界的触发条件达到某个临界值时，由运维人员/开发人员决策，对某类或者某个服务进行强制降级。容错降级是指当非核心服务不可用时，可以对故障服务做业务逻辑放通，以保障核心服务的运行。 |
-| Fault tolarance | Fault tolarance | 容错 | 容错是消费者访问服务时出现异常的场景下的一种处理策略，出现异常后由服务框架自动选择新的服务路由进行调用。 |
-| Circuit Breaker | Circuit Breaker | 熔断 | 微服务之间通常存在依赖关系，服务调用链路可能包含多个微服务，如果链路中一个或多个服务访问延迟过高，会导致入口服务的请求不断堆积，持续消耗更多的线程、io资源，最终由于资源累积使系统出现瓶颈，造成更多服务不可用，产生雪崩效应。熔断机制就是针对上述场景设计的，当某个目标服务响应缓慢或者有大量超时情况发生时，熔断该服务的调用，对于后续调用请求，不再继续调用目标服务，直接返回，快速释放资源，等到该目标服务情况好转再恢复调用。 |
-| Isolation | Isolation | 隔离 | 服务隔离是一种异常检测机制，常用的检测方法是请求超时、流量过大等。一般的设置参数包括超时时间、最大并发请求数等，当超过超时时间或最大并发请求数时，记录一次异常，并用于在熔断机制中计算错误率和错误请求数。 |
-| Service Mesh | Service Mesh | 服务网格 | 一种基础设施层服务。在微服务化的过程中，开发者需要解决应用运行在分布式网络中所引入的问题，例如容错，限流，负载均衡，注册发现，可监控等，Service Mesh作为L4/L7协议代理，为应用解决了微服务化后带来的问题。 |
-| legacy | legacy | 遗留系统 | 遗留系统是一个还在运行和使用，但已步入软件生命周期衰老期的软件系统。 |
-
-
-
+MicroServices | MicroServices |  微服务 | Microservices is a lightweight SOA architecture that is commonly used to describe a loosely coupled distributed architecture that is widely used in cloud applications and Internet applications. |
+| Provider | Provider | 服务提供者  | The service of the called party in the microservice invocation relationship. |
+| Consumer | Consumer | 服务消费者 | The service that invokes the initiator in the microservice invocation relationship. |
+Application | Application | 应用 | A logical entity that represents a software application that represents a computer software application that has business functions presented to the user. An application built with a microservice architecture typically consists of multiple microservices. |
+Instance | Instance | 微服务实例 | A minimal service and deployment unit for a microservice, usually corresponding to an application process. |
+IAM | Identity and Access Management | 身份及权限管理 | Responsible for maintaining the management level, user, role, authorization relationship, user organization and other information in the PaaS system. And carry out authorization and authorization checks. |
+AK/SK | AK/SK Key | AK/SK密钥 |Access key/Secret key is a set of key pairs used for API authentication and access control. |
+| Service | Service | 服务 | A service is a description of a functional object that is accessed on demand. In the application model, the service is generally oriented to the application. The application usage service needs to subscribe to the service first, then bind the service and use it. In some business scenarios, it may also need to pay according to usage. |
+Load Balance | Load Balance | 负载均衡 | When an application accesses a microservice with multiple instances, it involves routing load balancing. Load balancing policies can be configured through configuration files to support multiple load balancing routing policies such as random, polling, session hold, and response time based weights. |
+Rate limit | Rate limit | 限流 | When a resource becomes a bottleneck, the service framework needs to limit the access request of the consumer and start the flow control protection mechanism. Flow control is available on both the consumer and provider sides. On the service consumer side, the frequency of requests sent to a micro service provider can be limited; on the service provider side, the frequency of requests sent by each microservice consumer can be limited, or the total consumption of the service provider can be determined according to the resource consumption of the service provider. Request frequency limits to prevent services from crashing due to resource exhaustion. |
+Service Degrade | Service Degrade | 降级 | Service downgrade mainly includes two strategies: masked downgrade and fault tolerant downgrade: shielded downgrade refers to the decision of the operation and maintenance personnel/developers when the trigger condition of the outside world reaches a certain critical value. Or a service is forced to downgrade. Fault-tolerant degradation means that when non-core services are unavailable, business logic can be released for faulty services to ensure the operation of core services. |
+Fault tolarance | Fault tolarance | 容错 | Fault Tolerance is a processing strategy in the scenario where an exception occurs when a consumer accesses a service. After an exception occurs, the service framework automatically selects a new service route to invoke. |
+Circuit Breaker | Circuit Breaker | 熔断 | There is usually a dependency between microservices. The service invocation link may contain multiple microservices. If one or more service access delays in the link are too high, the request for the portal service will continue. Stacking, continue to consume more threads, io resources, and eventually the system bottleneck due to resource accumulation, resulting in more services unavailable, resulting in avalanche effect. The fuse mechanism is designed for the above scenario. When a target service responds slowly or a large number of timeouts occur, the service call is blown. For subsequent call requests, the target service is no longer called, directly returned, and resources are quickly released. The target service situation is improved and the call is resumed. |
+Isolation | Isolation | 隔离 | Service isolation is an anomaly detection mechanism. Common detection methods are request timeout, excessive traffic, and so on. The general setting parameters include the timeout period, the maximum number of concurrent requests, etc. When the timeout period or the maximum number of concurrent requests is exceeded, an exception is recorded and used to calculate the error rate and the number of error requests in the fuse mechanism. |
+Service Mesh | Service Mesh | 网路服务 | An infrastructure layer service. In the process of micro-service, developers need to solve the problems introduced by applications running in distributed networks, such as fault tolerance, current limiting, load balancing, registration discovery, monitoring, etc. Service Mesh acts as the L4/L7 protocol agent. The application solves the problems caused by micro-services. |
+Legacy | Legacy | 遗留系统 | A legacy system is a software system that is still running and in use, but has entered the aging phase of the software lifecycle. |
