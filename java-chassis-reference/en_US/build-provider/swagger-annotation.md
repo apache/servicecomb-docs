@@ -1,110 +1,109 @@
-# 使用 Swagger 注解
+# Using Swagger annotations
 
-## 概念阐述
+## Concept Description
 
-Swagger提供了一套注解用于描述接口契约，用户使用注解，可以在代码中增加对于契约的描述信息。ServiceComb支持其中的部分注解。
+Swagger provides a set of annotations for describing interface contracts. Users can use annotations to add descriptions of contracts to their code. ServiceComb supports part of these annotations.
 
-## 场景描述
+## Scene Description
 
-通过使用注解描述接口契约，用户可以利用ServiceComb的Swagger契约生成功能自动生成符合要求的契约文件，而无须手工编写和修改契约，能够有效提高开发效率。
+By using annotations to describe interface contracts, users can use ServiceComb's Swagger contract generation function to automatically generate contract documents that meet the requirements without having to manually write and modify contracts, which can effectively improve development efficiency.
 
-## 配置说明
+## Configuration instructions
 
-关于Swagger注解的含义，可以在[Swagger注解文档](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X)中找到官方说明。您可以对照该官方文档与本说明来了解如何在ServiceComb框架下使用注解指定Swagger契约的各项属性。
+The official description can be found in the [Swagger Annotation Document] (https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X). You can refer to the official documentation and this guide to learn how to use annotations to specify the properties of a Swagger contract under the ServiceComb framework.
 
-在ServiceComb中，Swagger注解不是必须使用的。当用户使用SpringMVC和JAX-RS的注解来标注微服务方法时，ServiceComb可以根据这些注解的值推断出各微服务方法的契约信息。
+In ServiceComb, Swagger annotations are not required. When a user uses SpringMVC and JAX-RS annotations to annotate microservice methods, ServiceComb can infer the contract information for each microservice method based on the values ​​of these annotations.
 
 ### `@Api`
 
-> `@Api`作用于类级别，在Swagger官方描述中是用于将一个Class标注为一个Swagger资源。但该注解在ServiceComb中不是必须的，ServiceComb可以根据`@RestSchema`和`@RpcSchema`确定需要从哪些类中解析出Swagger契约。<br/>
-ServiceComb当前支持的属性只有tags。
+> `@Api` acts at the class level and is used to mark a Class as a Swagger resource in the official Swagger description. However, this annotation is not required in ServiceComb. ServiceComb can determine which classes need to parse the Swagger contract based on `@RestSchema` and `@RpcSchema`. The only attributes currently supported by ServiceComb are tags.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| tags | string | 设置当前Class下定义的operation的默认tag值 |
+Tags | string | set the default tag value of the operation defined under the current Class |
 
 ### `@SwaggerDefinition`
 
-> 作用于类级别，用于定义一个Swagger资源中的信息。
+> Acts at the class level to define information in a Swagger resource.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| info.title | string | 契约文件标题 |
-| info.description | string | 描述信息 |
-| info.version | string | 契约版本号 |
-| info.termsOfService | string | 服务条款 |
-| info.contact | string | 联系信息，包含name、email、url属性 |
-| info.license | string | 许可证信息，包含name、url属性 |
-| info.extensions | string | 扩展信息 |
-| consumes | string | 接收的请求格式 |
-| produces | string | 返回的应答格式 |
-| schemes | SwaggerDefinition.Scheme | 可选值有`HTTP/HTTPS/WS/WSS/DEFAULT` |
-| tags | `@Tag` | Tag定义，@Tag包含name、description、externalDocs三个属性 |
-| externalDocs | `@externalDocs` | 外部说明文档链接，包含value、url两个属性 |
+| info.title | string | Contract Document Title |
+| info.description | string | Description |
+| info.version | string | contract version number |
+| info.termsOfService | string | Terms of Service |
+| info.contact | string | Contact information, including name, email, url attributes |
+| info.license | string | License information, including name, url attribute |
+| info.extensions | string | Extended Information |
+| consumes | string | Receive Request Format |
+| produces | string | returned response format |
+| schemes | SwaggerDefinition.Scheme | Optional values ​​are `HTTP/HTTPS/WS/WSS/DEFAULT` |
+| tags | `@Tag` | Tag definition, @Tag contains three attributes: name, description, externalDocs |
+| externalDocs | `@externalDocs` | External documentation links, including values ​​and urls |
 
 ### `@ApiOperation`
 
-> 作用于方法级别，用于描述一个Swagger operation。
+> Acts at the method level to describe a Swagger operation.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| value | string | 方法的简要说明，对应于Swagger契约operation的`summary`字段 |
-| notes | string | 详细信息，对应于Swagger契约operation的`description`字段 |
-| tags | string | 标注operation的标签 |
-| code | int | 响应消息的HTTP状态码 |
-| response | Class<?> | 方法返回值类型 |
-| responseContainer | string | 包装返回值的容器类型，可选值为`List`、`Set`、`Map` |
-| responseHeaders | `@ResponseHeader` | 响应消息的HTTP头，ServiceComb支持的属性值为`name`、`response`、`responseContainer` |
-| consumes | string | 指定请求体的数据格式 |
-| produces | string | 指定响应体的数据格式 |
-| protocols | string | 设置可用的协议（schemes），可选值有`http`、`https`、`ws`、`wss`，逗号分隔 |
-| httpMethod | string | 设置HTTP方法 |
+| value | string | A brief description of the method, corresponding to the `summary` field of the Swagger contract operation |
+| notes | string | Details, corresponding to the `description` field of the Swagger contract operation |
+Tags | string | label operation label |
+| code | int | HTTP status code for response messages |
+| response | Class<?> | Method return value type |
+responseContainer | string | The container type that wraps the return value. The optional values ​​are `List`, `Set`, `Map` |
+| ResponseHeaders | `@ ResponseHeader` | HTTP response message header, ServiceComb support attribute value of` name`, `response`,` responseContainer` |
+| Consumes | string | specified data format request body |
+| Produces | string | body in response to the data format specified |
+| Protocols | string | the available protocol (schemes), possible values ​​are `http`,` https`, `ws`,` wss`, separated by commas |
+| httpMethod | string | Set HTTP method |
 
 ### `@ApiImplicitParam`
 
-> 作用于方法级别，用于说明Swagger文档中operation的参数的属性。
+> Acts at the method level, which is used to describe the properties of the parameters of the operation in the Swagger document.
 >
-> **注意**：ServiceComb可以根据代码和SpringMVC、JAX-RS的注解自动推断出参数名称。如果`@ApiImplicitParam`配置的参数名称与自动推断的参数名不同，则则该注解配置的参数将被作为一个新的参数加入到注解所在的operation中；否则将覆盖同名参数的属性。
+> **Note**: ServiceComb can automatically infer parameter names based on code and SpringMVC, JAX-RS annotations. If the parameter name of the `@ApiImplicitParam` configuration is different from the automatically inferred parameter name, then the parameter of the annotation configuration will be added as a new parameter to the operation in which the annotation is located; otherwise, the property of the parameter with the same name will be overwritten.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| name | string | 参数名称 |
-| value | string | 参数说明 |
-| required | boolean | 是否是必填参数 |
-| dataType | string | 参数数据类型 |
-| paramType | string | 参数位置，有效的可选值为path/query/body/header/form |
-| allowableValues | string | 参数的有效值范围 |
-| allowEmptyValue | boolean | 是否允许空值 |
-| allowMultiple | boolean | 是否允许多个值（若为true，则可以将参数作为数组） |
-| collectionFormat | string | 以何种格式指定参数数组，当前ServiceComb支持的值为`csv/multi` |
-| defaultValue | string | 参数默认值 |
-| example | string | 一个非body参数的示例值 |
-| format | string | 允许用户自定义数据格式，详情参见Swagger官方文档 |
+| name | string | parameter name |
+| value | string | Parameter Description |
+| required | boolean | Is this a required parameter |
+| dataType | string | Parameter Data Type |
+| paramType | string | parameter location, valid optional value is path/query/body/header/form |
+| allowableValues ​​| string | Range of valid values ​​for |
+| allowEmptyValue | boolean | Whether to allow null values ​​|
+| allowMultiple | boolean | Whether to allow multiple values ​​(if true, parameters can be used as an array) |
+| collectionFormat | string | In which format the parameter array is specified, the current ServiceComb support value is `csv/multi` |
+| defaultValue | string | parameter default |
+| example | string | Example value for a non-body parameter |
+| format | string | Allows users to customize the data format. See the Swagger official documentation for details.
 
 ### `@ApiImplicitParams`
 
-> `@ApiImplicitParams`作用于方法、类级别，用于批量指定多个`@ApiImplicitParam`。
+> `@ApiImplicitParams` acts on methods, class levels, and is used to batch specify multiple `@ApiImplicitParam`.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| value | `@ApiImplicitParam` | 参数定义 |
+| value | `@ApiImplicitParam` | Parameter definition |
 
 ### `@ApiResponse`
 
-> 用于描述返回消息的HTTP状态码所表达的含义。通常`@ApiOperation`可以表示一个正常情况返回消息的HTTP状态码，其他情形下的HTTP状态码由本注解描述。根据Swagger官方文档的描述，本注解不应该直接用于方法级别，而应该被包含在`@ApiResponses`中。
+> Used to describe the meaning of the HTTP status code of the returned message. Usually `@ApiOperation` can represent the HTTP status code of a normal return message. In other cases, the HTTP status code is described by this note. According to the Swagger official documentation, this annotation should not be used directly at the method level, but should be included in `@ApiResponses`.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| code | int | 返回消息的HTTP状态码 |
-| message | string | 返回值的说明信息 |
-| response | Class<?> | 返回值的类型 |
-| responseContainer | string | 返回值的包装容器，可选值为`List/Set/Map` |
-| responseHeaders | @ResponseHeader | 描述一组返回消息的HTTP头，ServiceComb支持的`@ResponseHeader`的属性有`name`、`description`、`response`、`responseContainer` |
+| code | int | Return the HTTP status code of the message |
+| message | string | Description of the return value |
+| response | Class<?> | Type of return value |
+| responseContainer | string | The wrapper for the return value, with an optional value of `List/Set/Map` |
+| responseHeaders | @ResponseHeader | Describes a set of HTTP headers that return messages. The properties of `@ResponseHeader` supported by ServiceComb are `name`, `description`, `response`, `responseContainer` |
 
 ### `@ApiResponses`
 
-> 作用于方法、类级别，用于指定和说明一组返回值。
+> Acts on methods, class levels, to specify and specify a set of return values.
 
-| 属性 | 类型 | 说明 |
+| Attribute | Type | Description |
 | :--- | :------ | :--- |
-| value | `@ApiResponse` | 返回消息说明 |
+| value | `@ApiResponse` | Return to message description |
