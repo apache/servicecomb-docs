@@ -1,30 +1,32 @@
-## 场景描述
+## Scene Description
 
-进行服务发现的时候，开发者需要了解本微服务能够发现那些其他服务的实例。ServiceComb提供了分层次的实例隔离。
+When doing service discovery, developers need to understand that the microservice can discover instances of those other services. ServiceComb provides hierarchical instance isolation.
 
-# 微服务实例分层管理
+# Microservices instance hierarchical management
 
-要了解实例间的隔离层次，首先需要了解ServiceComb定义的一个体系完备的微服务系统结构：
+To understand the isolation level between instances, you first need to understand a well-established microservice system structure defined by ServiceComb:
 
 ![](/assets/sc-meta.png)
 
-在微服务系统结构中，顶层是“项目”，在项目下分为多个租户，租户中包含多个应用，而每个应用又包含多个环境，即测试和生产环境可以分开。在某个特定应用的特定环境中，包含多个微服务，而一个微服务又可以同时存在多个版本。以上，是所有静态元数据的范畴，某个特定服务的特定版本则包含多个在运行时注册上来的微服务实例，因为服务实例的信息在运行时随着系统的伸缩、故障等原因是动态变化的，所以服务实例的路由信息又为动态数据。通过分层管理微服务的这些数据，也就自然而然的实现了实例之间的逻辑隔离。
+In the microservice system structure, the top layer is the “project”, which is divided into multiple tenants under the project. The tenant contains multiple applications, and each application contains multiple environments, that is, the test and production environments can be separated.
+In a particular environment of a particular application, there are multiple microservices, and one microservice can have multiple versions at the same time.
+The above is the scope of all static metadata. A specific version of a particular service contains multiple microservice instances registered at runtime, because the information of the service instance is dynamic at runtime because of system scaling, failure, etc. The change, so the routing information of the service instance is again dynamic data.
+By hierarchically managing these data for microservices, this is natural to achieve logical isolation between instances.
+# isolation level description
 
-# 隔离层次说明
+ServiceComb supports custom hierarchical configuration to meet the hierarchical management requirements of users. The following is the specific configuration instructions.
 
-ServiceComb支持自定义分层配置，满足用户的实例分层管理需求，以下是具体配置说明。
+* Application ID
 
-* 应用ID
+Defined by APPLICATIOIN\_ID, the default value is 'default'. When a microservice discovers an instance, it can only be discovered by consumers under the same APPLICATIOIN\_ID by default.
 
-通过APPLICATIOIN\_ID来定义，缺省值为default。微服务在发现实例的时候，缺省只能够被相同APPLICATIOIN\_ID下的消费者发现。
+* Domain name
 
-* Domain名称
+Defined by servicecomb.config.client.domainName, the default value is 'default'. As a micro service provider, it is used to indicate the tenant information that it belongs to. When a microservice finds an instance, it can only be discovered by consumers under the same tenant.
 
-通过servicecomb.config.client.domainName来定义，缺省值为default。作为微服务提供者，用于表明自身所属租户信息。微服务在发现实例的时候，只能被相同租户下的消费者发现。
+* Data Center Information
 
-* 数据中心信息
-
-数据中心包括3个属性：servicecomb.datacenter.name， servicecomb.datacenter.region, servicecomb.datacenter.availableZone。数据中心信息不提供隔离能力，微服务可以发现其他数据中心的实例。但是可以通过启用实例亲和性，来优先往指定的区域或者Zone发消息：
+The data center consists of three attributes: servicecomb.datacenter.name, servicecomb.datacenter.region, servicecomb.datacenter.availableZone. Data center information does not provide isolation capabilities, and microservices can discover instances of other data centers. However, you can prioritize sending messages to a specified zone or zone by enabling instance affinity:
 
 ```
 servicecomb:
@@ -34,11 +36,11 @@ servicecomb:
     availableZone: my-Zone
 ```
 
-这样配置后，客户端在路由的时候，会优先将请求转发到zone/region都相同的实例，然后是region相同，但zone不相同的实例，都不相同的时候，则按照路由规则选择一个。亲和性不是逻辑隔离，只要实例之间网络是联通的，那么都有可能访问到；如果网络不通，则会访问失败。
+After this configuration, when the client routes, it will forward the request to the same instance with the same zone/region. Then, if the instances with the same region but different zones are different, select one according to the routing rule. Affinity is not logical isolation. As long as the network between the instances is connected, it is possible to access it; if the network is unreachable, the access will fail.
 
-* 环境信息
+* Environmental information
 
-在yaml文件里通过service\_description.environment来配置，同时支持通过环境变量SERVICECOMB\_ENV配置，仅支持以下枚举值 development,testing,acceptance,production，缺省值为""\(空\)。微服务在发现实例的时候，缺省只能够被相同environment下的消费者发现。
+It is configured in the yaml file by 'service\_description.environment'. It is also supported by the environment variable 'SERVICECOMB\_ENV'. It only supports the following enumeration : 'development', 'testing', 'acceptance', 'production'. The default value is ""\(empty\). When a microservice discovers an instance, it can only be discovered by consumers under the same environment by default.
 
 ```
 service_description:
