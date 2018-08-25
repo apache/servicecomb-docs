@@ -1,27 +1,26 @@
-## 使用RestTemplate开发服务消费者
-RestTemplate是Spring提供的RESTful访问接口，ServiceComb提供该接口的实现类用于服务的调用。
+## Using RestTemplate to develop service consumers
+RestTemplate is a RESTful access interface provided by Spring. ServiceComb provides an implementation class for this interface for service calls.
 
-## 使用AsynRestTemplate开发服务消费者
-AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 restTemplate 类似，只是这里以异步的形式进行服务的调用。
+## Using AsynRestTemplate to develop service consumers
+The AsyncRestTemplate development method allows users to make service calls asynchronously. The specific business process is similar to restTemplate, except that the service is called asynchronously.
 
-## 使用透明RPC方式开发服务消费者
+## Using a transparent RPC approach to develop service consumers
 
-透明RPC开发模式允许用户通过简单的java interface像本地调用一样进行服务调用。
+The transparent RPC development model allows users to make service calls like a local call through a simple java interface.
 
-## 使用服务契约
-当服务消费者调用服务提供者的服务时，需要注册服务契约。消费者有两种方式获取提供者的服务契约，一种是从服务的提供方离线获取契约文件，手工配置到项目中；另一种是从服务中心自动下载契约。
+## Using a service contract
+When a service consumer invokes a service provider's service, a service contract needs to be registered. Consumers have two ways to obtain the provider's service contract. One is to obtain the contract file offline from the provider of the service and manually configure it into the project; the other is to automatically download the contract from the service center.
 
-## 调用控制
+## Call Control
 
-### 实例级故障隔离
-实例级故障隔离功能允许在微服务的部分实例调用失败时，停止向故障实例发送请求，从而达到隔离故障实例的功能。
+### Instance level fault isolation
+The instance-level fault isolation feature allows the ability to isolate a failed instance by stopping the sending of a request to the failed instance when a partial instance call to the microservice fails.
 
-### 熔断策略
-熔断策略是对ServiceComb熔断功能的设置，用户通过配置熔断策略可以指定在何种条件下ServiceComb框架将终止发送请求。
+### Fuse strategy
+The fuse strategy is the setting of the ServiceComb fuse function. The user can specify the conditions under which the ServiceComb framework will terminate the send request by configuring the fuse policy.
 
-### 限流策略
-用户在consumer端使用限流策略，可以限制发往指定微服务的请求的频率。
+### Current limiting strategy
+The user uses the traffic limiting policy on the consumer side to limit the frequency of requests sent to the specified microservice.
 
-### 故障注入
-用户在consumer端使用故障注入，可以设置发往指定微服务的请求的时延和错误及其触发概率。
-
+### Fault injection
+The user uses fault injection on the consumer side to set the delay and error of the request to the specified microservice and its trigger probability.
