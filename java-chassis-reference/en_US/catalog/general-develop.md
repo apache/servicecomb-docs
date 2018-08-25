@@ -1,81 +1,81 @@
-## 访问服务中心  
-系统通过服务中心实现服务之间的发现。服务启动过程中，会向服务中心进行注册。在调用其他服务的时候，会从服务中心查询其他服务的实例信息，比如访问地址、使用的协议以及其他参数。服务中心支持使用PULL和PUSH两种模式通知实例变化。
+## Access Service Center
+The system realizes the discovery between services through the service center. During the service startup process, the service center is registered. When calling other services, the service center will query the instance information of other services, such as the access address, the protocol used, and other parameters. The service center supports the use of PULL and PUSH modes to notify instance changes.
 
 
-## 使用动态配置
-ServiceComb提供了分层次的配置机制。按照优先级，分为：
-• 配置中心（动态配置）
-• Java System Property（-D参数）
-• 环境变量
-• 配置文件，microservice.yaml。microservice.yaml文件从classpath扫描，可以允许存在很多份。通过servicecomb-config-order指定优先级。
+## Using dynamic configuration
+ServiceComb provides a hierarchical configuration mechanism. According to the priority, it is divided into:
+• Configuration Center (dynamic configuration)
+• Java System Property (-D parameter)
+• Environmental variables
+• Configuration file, microservice.yaml. The microservice.yaml file is scanned from the classpath and can be allowed to exist in many copies. Specify the priority by servicecomb-config-order.
 
-## 应用性能监控
- 一、Metrics介绍  
- 二、统计项汇总  
- 三、使用方法  
-
-
-## 微服务调用链  
-微服务架构解决了很多单体应用带来的问题，但同时也需要我们付出额外的代价。由于网络的不稳定性带来的请求处理延迟就是代价之一。  
-
-在单体应用中，所有模块都在同一个进程中运行，所以并没有模块间互通的问题。但微服务架构中，服务间通过网络沟通，因此我们不得不处理和网络有关的 问题，例如：延迟、超时、网络分区等。  
-
-另外，随着业务的扩展服务增多，我们很难洞察数据如何在蛛网般复杂的服务结构中流转。我们如何才能有效的监控网络延迟并且可视化服务中的数据流转呢？  
-
-分布式调用链追踪用于有效地监控微服务的网络延时并可视化微服务中的数据流转。  
-
-## 自定义调用链打点
-分布式调用链追踪提供了服务间调用的时序信息，但服务内部的链路调用信息对开发者同样重要，如果能将两者合二为一，就能提供更完整的调用链，更容易定位错误和潜在性能问题。
-  
-## 本地开发和测试  
-本小节介绍如何在开发者本地进行消费者/提供者应用的开发调试。开发服务提供者请参考3 开发服务提供者章节，开发服务消费者请参考4 开发服务消费者。服务提供者和消费提供者均需要连接到在远程的服务中心，为了本地微服务的开发和调试，本小节介绍了两种搭建本地服务中心的方法进行本地微服务调试：  
+## Application Performance Monitoring
+ 1. The introduction of Metrics
+ 2. The summary of statistical items
+ 3. The usage
 
 
-## Http Filter 
-某些场景中，业务使用http而不是https，作为网络传输通道，此时为了防止被伪造或篡改请求，需要提供consumer、producer之间对http码流的签名功能。
+## Micro Service Call Chain
+The microservices architecture solves the problems of many single applications, but it also requires us to pay extra. Request processing latency due to network instability is one of the costs.
 
- 
-## 文件上传  
-文件上传，当前支持在vertx rest通道和servlet rest中使用。  
-文件上传使用标准的http form格式，可与浏览器的上传直接对接。  
+In a single application, all modules run in the same process, so there is no inter-module interworking problem. However, in the micro-service architecture, services communicate through the network, so we have to deal with network-related issues such as delays, timeouts, network partitions, and so on.
 
-## 文件下载  
-文件下载，当前在vertx rest通道和servlet rest中可用。
+In addition, as the business expands its services, it is difficult to see how data flows through a spider-like complex service structure. How can we effectively monitor network latency and visualize data flow in services?
+
+Distributed call chain tracking is used to effectively monitor network latency for microservices and visualize data flow in microservices.
+
+## Custom call chain management
+Distributed call chain tracking provides timing information for calls between services, but the link call information inside the service is equally important to the developer. If you can combine the two into one, you can provide a more complete call chain, which is easier to locate. Errors and potential performance issues.
+  
+## Local development and testing
+This section describes how to develop and debug consumer/provider applications locally on the developer side. For development service providers, please refer to the section 3 Development Service Providers. For development service consumers, please refer to 4 Development Service Consumers. Both the service provider and the consumer provider need to connect to the remote service center. For the development and debugging of local microservices, this section describes two ways to set up a local service center for local microservices debugging:
+
+
+## Http Filter
+In some scenarios, the service uses http instead of https as the network transmission channel. In order to prevent the falsification or tampering request, the signature function of the http code stream between the consumer and the producer needs to be provided.
+
+ 
+## File Upload 
+File upload, currently supported in vertx rest channel and servlet rest.
+File uploads use the standard http form format, which interfaces directly with the browser's upload.
+
+## Download Document 
+File downloads are currently available in the vertx rest channel and servlet rest.
 
 
 ## Reactive
-简单同步模式、嵌套同步调用、纯Reactive机制、混合Reactive机制之间的对比及说明。
+Comparison and description between simple synchronization mode, nested synchronous call, pure Reactive mechanism, and hybrid Reactive mechanism.
 
 
-## DNS自定义配置
-用户使用域名连接华为公有云或者三方系统时，需要使用到域名解析系统。在不同的系统、不同的框架使用的域名解析机制都可能不太一样。所以我们有必要提供一个统一的配置入口，以便开发运维人员可以自定义DNS解析机制，而不完全受制于系统配置。  
+## DNS Custom Configuration
+When a user uses a domain name to connect to a Huawei public cloud or a three-party system, you need to use the domain name resolution system. The domain name resolution mechanisms used in different systems and different frameworks may be different. Therefore, it is necessary to provide a unified configuration entry so that development and operation personnel can customize the DNS resolution mechanism without being completely subject to system configuration.
 
-## 代理设置
-作为一名开发者，在公司开发环境，可能是通过公司代理网络接入到因特网。如果调试服务时还必须依赖网上资源，比如直接连接华为共有云服务中心，那么就必须配置代理。
-
-
-## 框架上报版本号
-为方便治理，使用ServiceComb进行开发，会将当前使用的ServiceComb版本号上报至服务中心，并且支持其他框架集成ServiceComb时上报其他框架的版本号。
-
-## 跨应用调用
-应用是微服务实例隔离层次中的一层，一个应用包含多个微服务。默认情况下，只允许同应用的微服务实例相互调用。
+## Proxy settings
+As a developer, in a company development environment, it is possible to access the Internet through a corporate agent network. If you must also rely on online resources when debugging services, such as directly connecting to Huawei's shared cloud service center, you must configure the agent.
 
 
-## 定制序列化和反序列化方法
-由于HTTP协议的非安全性，在网络中传输的数据能轻易被各种抓包工具监听。在实际应用中，业务对应用或服务间传输的敏感数据有较高的安全要求，这类数据需要特别的加密保护（业务不同对算法要求不同），这样即使内容被截获，也可以保护其中的敏感数据不被轻易获取。
+## Frame report version number
+In order to facilitate the management, using ServiceComb for development, the currently used ServiceComb version number will be reported to the service center, and the version number of other frameworks will be reported when other frameworks integrate ServiceComb.
+
+## Cross-application call
+An application is a layer in the microservice instance isolation hierarchy, and an application contains multiple microservices. By default, only microservice instances of the same application are allowed to call each other.
 
 
-## 使用Context传递控制消息
-ServiceComb提供了Context在微服务之间传递数据。Context是key/value对，只能够使用String类型的数据。由于Context会序列化为json格式并通过HTTP Header传递，因此也不支持ASCII之外的字符，其他字符需要开发者先自行编码再传递。Context在一次请求中，会在请求链上传递，不需要重新设置。access log的trace id等功能都基于这个特性实现的。
+## Custom Serialization and Deserialization Methods
+Due to the non-security of the HTTP protocol, data transmitted over the network can be easily monitored by various packet capture tools. In practical applications, services have high security requirements for sensitive data transmitted between applications or services. Such data requires special encryption protection (different services have different algorithm requirements), so that even if the content is intercepted, it can protect Sensitive data is not easily obtained.
 
 
-## 返回值序列化扩展
-当前REST通道返回值支持application/json和text/plain两种格式，支持开发人员扩展和重写，服务提供者通过produces声明可提供序列化能力，服务消费者通过请求的Accept头指明返回值序列化方式，默认返回application/json格式的数据。
+## Using Context to pass control messages
+ServiceComb provides a Context to pass data between microservices. Context is a key/value pair and can only use data of type String. Since the Context is serialized into the json format and passed through the HTTP header, characters other than ASCII are not supported. Other characters require the developer to encode and pass the code. The Context is passed on the request chain in a single request and does not need to be reset. Functions such as the trace id of the access log are implemented based on this feature.
 
 
-## CORS机制
-跨域资源共享(CORS, Cross-Origin Resource Sharing)允许Web服务器进行跨域访问控制，使浏览器可以更安全地进行跨域数据传输。
+## return value serialization extension
+The current REST channel return value supports both application/json and text/plain formats, supports developer extensions and rewrites, service providers provide serialization capabilities through producer declarations, and service consumers specify return value serialization through the request's Accept header. By default, the data in application/json format is returned.
 
 
-## 获取熔断与实例隔离告警事件信息
-在微服务运行期间熔断或实例隔离状态发生变化时，需要监听到相关事件，获取相关信息并进行处理
+## CORS mechanism
+Cross-Origin Resource Sharing (CORS) allows Web servers to perform cross-domain access control, enabling browsers to more securely transfer data across domains.
+
+
+## Obtaining the fuse and instance isolation alarm event information
+When the microservice is running or the instance isolation status changes, you need to listen to related events, get relevant information and process it.
