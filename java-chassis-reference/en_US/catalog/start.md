@@ -1,15 +1,14 @@
-### [术语表](/start/terminology.html)
- 
+### [Glossary] (/start/terminology.html)
 
-### [微服务系统架构](/start/architecture.html) 
+### [Micro Service System Architecture] (/start/architecture.html)
 
-### [安装本地开发环境](/build-provider/definition/service-definition.html)
-• 服务定义信息是微服务的身份标识，它定义了服务从属于哪个应用，以及名字和版本。服务定义信息中也可以有扩展信息，用于定义服务的属性元数据。
- 
+### [Install local development environment] (/build-provider/definition/service-definition.html)
+• Service definition information is the identity of the microservice, which defines which application the service belongs to, as well as the name and version. The service definition information may also have extensive information for defining attribute metadata of the service.
+ 
 
-### [开发第一个微服务](/start/first-sample.html) 
+### [Developing the first microservice] (/start/first-sample.html)
 
-开发者可以通过两种方式快速构建一个项目：  
+Developers can quickly build a project in two ways:
 
-• 下载samples项目。建议把整个项目都下载下来，按照例子 SpringMVC 或者 JAX RS进行初始化配置。  
-• 使用archetypes生成项目  
+• Download the samples project. It is recommended to download the entire project and initialize it according to the example SpringMVC or JAX RS.
+• Generate projects with archetypes
