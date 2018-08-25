@@ -1,13 +1,13 @@
-## 场景描述
+## Scene Description
 
-用户通过简单的配置即可启用Http2进行通信，提高性能。
+Users can enable Http2 to communicate and improve performance through simple configuration.
 
-## 外部服务通信配置
+## External Service Communication Configuration
 
-与外部服务通信相关的配置写在microservice.yaml文件中。
+The configuration related to external service communication is written in the microservice.yaml file.
 
-* 启用h2\(Http2 + TLS\)进行通信  
-  服务端在配置服务监听地址时，可以通过在地址后面追加`?sslEnabled=true`开启TLS通信，具体介绍见[使用TLS通信](../../security/tls.md)章节。然后再追加`&protocol=http2`启用h2通信。示例如下：
+* Enable h2\(Http2 + TLS\) for communication
+   When configuring the service listening address, the server can enable TLS communication by appending `?sslEnabled=true` to the address. For details, see the section [Using TLS Communication] (../../security/tls.md). Then add `&protocol=http2` to enable h2 communication. An example is as follows:
 
   ```yaml
   servicecomb:
@@ -17,8 +17,8 @@
       address: 0.0.0.0:7070?sslEnabled=true&protocol=http2
   ```
 
-* 启用h2c\(Http2 without TLS\)进行通信  
-  服务端在配置服务监听地址时，可以通过在地址后面追加`?protocol=http2`启用h2c通信。示例如下：
+* Enable h2c\(Http2 without TLS\) for communication
+   When the server configures the service listening address, the server can enable h2c communication by appending `?protocol=http2` to the address. An example is as follows:
 
   ```yaml
   servicecomb:
@@ -27,8 +27,7 @@
     highway:
       address: 0.0.0.0:7070?protocol=http2
   ```
-
-* 客户端会通过从服务中心读取服务端地址中的配置来使用http2进行通信。
+* The client will communicate using http2 by reading the configuration in the server address from the service center.
 
 
 
