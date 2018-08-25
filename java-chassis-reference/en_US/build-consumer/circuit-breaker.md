@@ -1,9 +1,8 @@
-# 熔断策略
+## Circuit Break Policy
+### Scenario
 
-## 场景描述
+Circuit brake policy can configure ServiceComb fallback capability, you can configure conditions under which service will stop send request after circuit break policy configured.
 
-熔断策略是对ServiceComb熔断功能的设置，用户通过配置熔断策略可以指定在何种条件下ServiceComb框架将终止发送请求。
+### Configuration
 
-## 配置说明
-
-熔断作为异常反应机制是降级策略的一部分，相关概念还有隔离和容错。三者的关系以及配置方式参见[降级策略](/build-provider/configuration/downgrade-strategy.md)。
+Circuit break is part of fallback policy when a service request is abnormal, relevant concept such as isolation and fault tolerance please refer to [fallback policy](/build-provider/configuration/downgrade-strategy.md)。
