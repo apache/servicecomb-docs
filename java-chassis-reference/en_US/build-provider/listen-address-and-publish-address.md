@@ -1,45 +1,44 @@
-# 服务监听地址和发布地址
+# Service listening address and publishing address
 
-### 概念阐述
+### Concept Description
 
-在JavaChassis中，服务的监听地址和发布地址是两个独立的概念，可以独立配置：
+In JavaChassis, the listening address and publishing address of the service are two independent concepts that can be configured independently:
 
-* 监听地址：指微服务实例启动时监听的地址。该配置项决定了可以通过哪些IP访问此服务。
-* 发布地址：指微服务实例注册到服务中心的地址。其他的微服务实例会通过服务中心获取此实例的信息，根据发布地址访问此服务实例，所以该配置项决定了其他服务实际上会使用哪个IP访问此服务。
+* Listening address: refers to the address that the microservice instance listens to when it starts. This configuration item determines which IPs can be accessed by this IP.
+* Publish Address: refers to the address where the microservice instance is registered to the service center. Other microservice instances will obtain information about this instance through the service center and access the service instance based on the publication address, so this configuration item determines which IP other services actually use to access the service.
 
-### 场景描述
+### Scene Description
 
-用户通过配置服务的监听地址和发布地址来确定服务实例监听的IP和其他服务实例访问本实例时请求的IP。
+The user determines the IP address that the service instance listens to and the IP address requested by other service instances when accessing the instance by configuring the listening address and the publishing address of the service.
 
-### 配置说明
+### Configuration instructions
 
-服务监听地址的配置项是`servicecomb.rest.address`和`servicecomb.highway.address`，分别对应rest传输方式和highway传输方式的监听地址。两者的配置规则相同，以下仅以`servicecomb.rest.address`作为说明。  
-服务发布地址的配置项是`servicecomb.service.publishAddress`，该地址**可以不配置**。不配置此项时JavaChassis会根据特定的规则选取发布地址。
+The configuration items of the service listening address are `servicecomb.rest.address` and `servicecomb.highway.address`, which respectively correspond to the listening address of the rest transmission mode and the highway transmission mode. The configuration rules for both are the same. The following only uses `servicecomb.rest.address` as an explanation.
+The configuration item of the service publishing address is `servicecomb.service.publishAddress`, which can be configured without **. When this item is not configured, JavaChassis will select the publishing address according to the specific rules.
 
-**表1 服务发布地址生效规则**
+**Table 1 Service Release Address Effective Rules**
 
-| 规则编号 | 监听地址配置 | 发布地址配置 | 实际生效的发布地址 |
+| Rule Number | Listening Address Configuration | Publishing Address Configuration | Effective Delivery Address |
 | :--- | :--- | :--- | :--- |
 | 1 | 127.0.0.1 | - | 127.0.0.1 |
-| 2 | 0.0.0.0 | - | 选取一张网卡的IP地址作为发布地址。<br/>要求该地址不能是通配符地址、回环地址或广播地址 |
-| 3 | 具体IP | - | 与监听地址一致 |
-| 4 | * | 具体IP | 与发布地址配置项一致 |
-| 5 | * | "{网卡名}" | 指定网卡名的IP，注意需要加上引号和括号 |
+| 2 | 0.0.0.0 | - | Select the IP address of a network card as the publishing address. Require that the address cannot be a wildcard address, loopback address, or broadcast address |
+| 3 | Specific IP | - | Consistent with the listening address |
+| 4 | * | Specific IP | Consistent with the published address configuration item |
+| 5 | * | "{NIC name}" | Specify the IP of the NIC name, note the need to put quotation marks and brackets |
+> **Note: **
+> - The address actually listened to by the service instance is always consistent with the listening address configuration item.
+> - When using the NIC name to configure the publishing address, you need to use double quotation marks to wrap the NIC name placeholder, otherwise the parsing configuration will be reported.
+> - The NIC name must be the NIC that the host exists.
 
-> **说明：**
-> - 服务实例实际监听的地址始终与监听地址配置项保持一致。
-> - 使用网卡名配置发布地址时，要求使用双引号包裹住网卡名占位符，否则会造成解析配置报错。
-> - 网卡名必须是主机存在的网卡。
+### Sample Code
 
-### 示例代码
-
-microservice.yaml文件的配置示例如下：
+An example of the configuration of the microservice.yaml file is as follows:
 ```yaml
 servicecomb:
   service:
-    publishAddress: "{eth0}" # 注册到服务中心的发布地址会是eth0网卡的IP
+    publishAddress: "{eth0}" # The publishing address, registered to the service center, will be the IP of the eth0 network card
   rest:
-    address: 0.0.0.0:8080 # 监听主机的全部网卡IP
+    address: 0.0.0.0:8080 # Monitor all NIC IPs of the hos
   highway:
-    address: 0.0.0.0:7070 # 监听主机的全部网卡IP
+    address: 0.0.0.0:7070 # Listen to all NIC IPs of the host
 ```
