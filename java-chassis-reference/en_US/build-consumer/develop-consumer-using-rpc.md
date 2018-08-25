@@ -1,15 +1,4 @@
----
-title: "Develop with RPC"
-lang: en
-ref: develop-with-rpc
-permalink: /users/develop-with-rpc/
-excerpt: "Develop with RPC"
-last_modified_at: 2017-08-15T15:01:43-04:00
-redirect_from:
-  - /theme-setup/
----
-
-{% include toc %}
+# Develop with RPC
 ## Concept Description
 
 The RPC development mode allows you to add annotations on the microservice APIs to generate the service provider agent. In this case, you can call microservices.
