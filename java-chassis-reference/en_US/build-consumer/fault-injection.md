@@ -1,6 +1,6 @@
-## Scene Description
-
-The user uses fault injection on the consumer side to set the delay and error of the request to the specified microservice and its trigger probability.
+## Fault Injection
+### Scenario
+The user via fault injection on the consumer side to set the delay and error of the request to the specified microservice and its trigger probability.
 
 ## Precautions
 
