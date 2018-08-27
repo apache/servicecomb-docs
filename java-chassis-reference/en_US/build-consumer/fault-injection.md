@@ -1,14 +1,14 @@
-## 场景描述
+## Scene Description
 
-用户在consumer端使用故障注入，可以设置发往指定微服务的请求的时延和错误及其触发概率。
+The user uses fault injection on the consumer side to set the delay and error of the request to the specified microservice and its trigger probability.
 
-## 注意事项
+## Precautions
 
-延迟注入请求的延迟时间统一为毫秒级别
+The delay time for delay injection requests is unified to the millisecond level.
 
-## 配置说明
+## Configuration instructions
 
-故障注入配置在microservice.yaml文件中，相关配置项见下表。要开启服务消费者端的故障注入，还需要在处理链中配置消费端故障注入handler，配置示例如下：
+The fault injection configuration is in the microservice.yaml file. The related configuration items are shown in the following table. To enable fault injection in the service consumer, you need to configure the consumer fault injection handler in the processing chain. The configuration example is as follows:
 
 ```yaml
 servicecomb:
@@ -18,28 +18,28 @@ servicecomb:
         default: loadbalance,fault-injection-consumer
 ```
 
-故障注入配置项说明
+Fault injection configuration item description
 
-\[scope\]代表故障注入的生效范围，可配置值包括全局配置\_global，或指定微服务的服务名\[ServiceName\]。
+\[scope\] represents the effective scope of the fault injection. The configurable value includes the global configuration \_global or the service name of the microservice \[ServiceName\].
 
-\[protocol\]代表使用的通信协议，可配置值包括rest或highway。
+\[protocol\] represents the communication protocol used, and configurable values ​​include rest or highway.
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
+| Configuration Item | Default Value | Range of Value | Required | Meaning |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].delay.fixedDelay | 无 | \(0,9223372036854775807\]，长整形 | 否 | Consumer端发送延迟注入请求的延迟时间 | 目前时间单位是毫秒 |
-| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送延迟注入请求的触发概率 |  |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].delay.fixedDelay | 无 | \(0,9223372036854775807\]，长整形 | 否 | Consumer端发送到对应schema的延迟注入请求的延迟时间 | 支持schema级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送到对应schema的延迟注入请求的触发概率 | 支持schema级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].delay.fixedDelay | 无 | \(0,9223372036854775807\]，长整形 | 否 | Consumer端发送到对应operation的延迟注入请求的延迟时间 | 支持operation级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送到对应operation的延迟注入请求的触发概率 | 支持operation级别的配置 |
-| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].abort.httpStatus | 无 | \(100,999\]，整形 | 否 | Consumer端发送错误注入请求的http错误码 |  |
-| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送错误注入请求的触发概率 |  |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].abort.httpStatus | 无 | \(100,999\]，整形 | 否 | Consumer端发送到对应schema的错误注入请求的http错误码 | 支持schema级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送到对应schema的错误注入请求的触发概率 | 支持schema级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].abort.httpStatus | 无 | \(100,999\]，整形 | 否 | Consumer端发送到对应operation的错误注入请求的http错误码 | 支持operation级别的配置 |
-| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100\]，整形 | 否 | Consumer端发送到对应operation的错误注入请求的触发概率 | 支持operation级别的配置 |
+| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].delay.fixedDelay | None | \(0,9223372036854775807\], Long Shaping | No | Consumer Send Delay Injection Request Delay time | current time unit is milliseconds |
+| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100\], Shaping | No | Trigger Probability of Sending Delay Injection Requests by Consumers | |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].delay.fixedDelay | None | \(0,9223372036854775807\], Long Shaping| No | Delay time for delay injection request sent by the consumer to the corresponding schema | Support for schema level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100\],Plastic| No| Consumer Trigger probability of a delayed injection request sent by the end to the corresponding schema | Support for schema level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].delay.fixedDelay | None | \(0 ,9223372036854775807\],long shaping| no|delay time of delay injection request sent by the consumer to the corresponding operation | support operation level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].delay.percent | 100 | \(0,100 \], shaping|no| trigger probability of delay injection request sent by the consumer to the corresponding operation | support operation level configuration |
+| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].abort.httpStatus | None | \(100,999\], Shaping | No | The http error sent by the Consumer to send an error injection request Code| |
+| servicecomb.governance.Consumer.\[scope\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100\], Shaping | No | Trigger Probability of Sending Error Injection Requests by Consumers | |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].abort.httpStatus | None | \(100,999\],Plastic| No| Consumer Http error code sent by the end to the corresponding schema error injection request | Support schema level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100\],Plastic| No| Consumer Trigger probability of error injection request sent by the end to the corresponding schema | Support schema level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].abort.httpStatus | None | \(100,999 \], shaping | No | http error code sent by the consumer to the error injection request of the corresponding operation | Support operation level configuration |
+| servicecomb.governance.Consumer.\[ServiceName\].schemas.\[schema\].operations.\[operation\].policy.fault.protocols.\[protocol\].abort.percent | 100 | \(0,100 \], shaping | No | Trigger probability of error injection request sent by the consumer to the corresponding operation | Support operation level configuration |
 
-## 示例代码
+## Sample Code
 
 ```
 servicecomb:
@@ -72,6 +72,3 @@ servicecomb:
                           httpStatus: 421
                           percent: 100
 ```
-
-
-
