@@ -42,8 +42,8 @@ You can see that the tags used are mostly the same as Spring MVC. But there are 
 
 1. Replace RestController with RestSchema
 
-2. Need to display the declaration @RequestMapping
+2. Declare @RequestMapping explicitly.
 
 If the business code is not a new development but based on the development of Spring MVC, now the java chassis is based on the transformation, but also need to pay attention to the disabling of the DispatcherServlet, and its related features will no longer take effect.
 
-In the following sections, the differences between the two in Spring MVC mode are also detailed.
+In the following sections, about web JAVA application mode and web development mode,  we'll introduce some details of the differences in Spring MVC mode.
