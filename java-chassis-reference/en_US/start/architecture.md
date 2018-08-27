@@ -1,6 +1,6 @@
 # Java Chassis Architecture
 ## Basic Framework
-![ServiceComb Model](/assets/images/servicecomb_mode_en.png){: .align-center}
+![ServiceComb Model](/assets/images/servicecomb_mode_en.png)
 
 ## Purpose
 
