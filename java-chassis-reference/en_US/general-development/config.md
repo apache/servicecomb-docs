@@ -1,38 +1,38 @@
-# 使用动态配置
+# Using dynamic configuration
 
-ServiceComb提供了分层次的配置机制。按照优先级，分为：
-* 配置中心（动态配置）
-* Java System Property（-D参数）
-* 环境变量
-* 配置文件，microservice.yaml。microservice.yaml文件从classpath扫描，可以允许存在很多份。通过servicecomb-config-order指定优先级。
+ServiceComb provides a hierarchical configuration mechanism. According to the priority, it is divided into:
+* Configuration Center (dynamic configuration)
+* Java System Property (-D parameter)
+* Environmental variables
+* Configuration file, microservice.yaml. The microservice.yaml file is scanned from the classpath and can be allowed to exist in many copies. Specify the priority by servicecomb-config-order.
 
-配置文件默认是classpath下的microservice.yaml, 但是可以通过环境变量传入其他文件，可以设置的环境变量为：
+The configuration file defaults to microservice.yaml under the classpath, but can be passed to other files through environment variables. The environment variables that can be set are:
 
-|变量|描述|
+|Variable|Description|
 |---|---|
-|servicecomb.configurationSource.additionalUrls|配置文件的列表，以,分隔的多个包含具体位置的完整文件名|
-|servicecomb.configurationSource.defaultFileName|默认配置文件名|
+|servicecomb.configurationSource.additionalUrls|List of configuration files, separated by multiple full file names containing specific locations |
+|servicecomb.configurationSource.defaultFileName|Default configuration file name|
 
-动态配置的默认实现是config-cc客户端，对接配置中心，配置项如下：
+The default implementation of the dynamic configuration is the config-cc client, which is connected to the configuration center. The configuration items are as follows:
 
-|变量|描述|
+|Variable|Description|
 |---|---|
-|servicecomb.config.client.refreshMode|应用配置的刷新方式，0为config-center主动push，1为client周期pull，默认为0|
-|servicecomb.config.client.refreshPort|config-center推送配置的端口|
-|servicecomb.config.client.tenantName|应用的租户名称|
-|servicecomb.config.client.serverUri|config-center访问地址，http(s)://{ip}:{port}，以,分隔多个地址(可选，当cse.config.client.regUri配置为空时该配置项才会生效)|
+|servicecomb.config.client.refreshMode|Application configuration refresh mode, 0 is config-center active push, 1 is client cycle pull, default is 0|
+|servicecomb.config.client.refreshPort|config-center push configured port|
+|servicecomb.config.client.tenantName|Application tenant name|
+|servicecomb.config.client.serverUri|config-center access address, http(s)://{ip}:{port}, to separate multiple addresses (optional, when cse.config.client.regUri is configured as This configuration item will take effect when empty))|
 
-## 在程序中获取配置信息
+## Get configuration information in the program
 
-开发者使用一致的API获取配置，不区分配置的存储路径：
+Developers use a consistent API to get the configuration, regardless of the configured storage path:
 ```
 DynamicDoubleProperty myprop = DynamicPropertyFactory.getInstance().getDoubleProperty("trace.handler.sampler.percent", 0.1);
 ```
 
-具体方法可参考[API DOC](https://netflix.github.io/archaius/archaius-core-javadoc/com/netflix/config/DynamicPropertyFactory.html)
+For details, please refer to [API DOC] (https://netflix.github.io/archaius/archaius-core-javadoc/com/netflix/config/DynamicPropertyFactory.html)
 
-## 处理配置变更
-可以注册callback处理配置变更：
+## Handling configuration changes
+You can register for a callback to handle configuration changes:
 ```
  myprop.addCallback(new Runnable() {
       public void run() {
@@ -41,8 +41,8 @@ DynamicDoubleProperty myprop = DynamicPropertyFactory.getInstance().getDoublePro
   });
 ```
 
-## 进行配置项映射
-有些情况下，我们要屏蔽我们使用的一些开源组件的配置并给用户提供我们自己的配置项。在这种情况下，可以通过classpath下的config.yaml进行映射定义：
+## Performing configuration item mapping
+In some cases, we want to block the configuration of some of the open source components we use and provide our users with their own configuration items. In this case, you can define the mapping through config.yaml under the classpath:
 ```
 registry:
   client:
@@ -50,4 +50,4 @@ registry:
       defaultZone: eureka.client.serviceUrl.defaultZone
 ```
 
-定义映射后，在配置装载的时候框架会默认进行映射，把以我们定义的配置项映射为开源组件可以认的配置项。
+After the mapping is defined, the framework maps by default when the configuration is loaded, and the configuration items defined by us are mapped to the configuration items that the open source component can recognize.
