@@ -1,5 +1,5 @@
-# 服务能力开放
+# Open service capacity
 
-大量的微服务能力需要通过网关开放给用户、其他外部系统访问。网关一方面扮演着汇集用户请求的作用，同时还会扮演认证、鉴权、流量控制、防攻击的用途。同时，由于网关是一个汇聚点，容易形成业务的瓶颈，通常还会采用多级网关机制，最外层的网关提供主备以及简单的请求转发功能，中间层的实现鉴权等功能，多实例部署。常见的可以用于网关的技术和服务包括LVS、Nginx、Zuul等。
+A large number of micro-service capabilities need to be opened to users and other external systems through the gateway. On the one hand, the gateway plays the role of collecting user requests, and also plays the role of authentication, authentication, flow control, and anti-attack. At the same time, because the gateway is a convergence point, it is easy to form a bottleneck of the service. Usually, a multi-level gateway mechanism is adopted. The external gateway provides the master and backup as well as the simple request forwarding function, and the middle layer implements authentication and other functions. Deploy. Common technologies and services that can be used for gateways include LVS, Nginx, Zuul, and others.
 
-ServiceComb 也提供了自己的网关服务Edge Service。Edge Service内建了强大的路由策略，支持接口级别的兼容性转发（灰度发布），内嵌ServiceComb治理能力，并支持非常灵活的扩展机制。
+ServiceComb also provides its gateway service, Edge Service. The Edge Service has built-in powerful routing policies, supports interface-level compatibility forwarding (grayscale publishing), embedded ServiceComb governance capabilities, and supports very flexible extension mechanisms.
