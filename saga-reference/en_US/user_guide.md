@@ -1,6 +1,4 @@
 # Saga User Guide
-[![ZH doc](https://img.shields.io/badge/document-中文-blue.svg)](user_guide_zh.md)
-
 ## Prerequisites
 You will need:
 1. [JDK 1.8][jdk]
