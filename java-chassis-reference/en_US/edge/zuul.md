@@ -1,134 +1,131 @@
-# 使用zuul做边缘服务
+# Using zuul for edge services
 
-## 概念阐述
+## Concept Description
 
-### API Gateway：
+### API Gateway:
 
-API Gateway是一个服务器，也可以说是进入系统的唯一节点。API Gateway封装内部系统的架构，并且提供API给各个客户端。
+The API Gateway is a server or a unique node that enters the system. The API Gateway encapsulates the architecture of the internal system and provides APIs to individual clients.
 
 ### Zuul
 
-Zuul是Netflix的基于JVM的路由器和服务器端负载均衡器，可以使用Zuul进行以下操作：
+Zuul is Netflix's JVM-based router and server-side load balancer, which can be used by Zuul to:
 
-* 认证
-* 洞察
-* 压力测试
-* 金丝雀测试
-* 动态路由
-* 服务迁移
-* 负载脱落
-* 安全
-* 静态相响应处理
-* 主动/被动流量管理
+* Certification
+* Insight
+* pressure test
+* Canary Test
+* Dynamic routing
+* Service migration
+* Load shedding
+* Safety
+* Static phase response processing
+* Active / passive traffic management
 
-本小节主要介绍在SpringBoot应用中使用Zuul做API Gateway。关于Zuul的详细功能介绍请参考文档[路由器和过滤器：Zuul](https://springcloud.cc/spring-cloud-dalston.html#_router_and_filter_zuul)。
+This section focuses on using Zuul as an API Gateway in SpringBoot applications. For detailed functions of Zuul, please refer to the document [router and filter: Zuul] (https://springcloud.cc/spring-cloud-dalston.html#_router_and_filter_zuul).
 
-## 场景描述
+## Scene Description
 
-Zuul做API Gateway，即建立一个Zuul Proxy应用，在该Proxy应用中统一定义所有的微服务访问入口，通过使用不同的前缀\(stripped\)来区分各个微服务。本小节通过建立一个ZuulProxy SpringBoot应用来演示Zuul的API Gateway功能。
+Zuul is the API Gateway, which is to establish a Zuul Proxy application. All the microservice access portals are defined in the Proxy application, and different microservices are distinguished by using different prefixes (stripped\). This section demonstrates Zuul's API Gateway functionality by creating a ZuulProxy SpringBoot application.
 
-## 注意事项
+## Precautions
 
-本小节介绍的ZuulProxy和ZuulServer等demo都是基于SpringBoot和ServiceComb框架的应用，具体请参考[在Spring Boot中使用java chassis](/using-java-chassis-in-spring-boot.md)。
+The demos such as ZuulProxy and ZuulServer described in this section are based on SpringBoot and ServiceComb frameworks. For details, please refer to [using java chassis in Spring Boot] (/using-java-chassis-in-spring-boot.md).
 
-## 启动Zuul Proxy
+## Launching Zuul Proxy
 
-本节介绍如何启动一个zuul proxy应用作为API Gateway。步骤如下：
+This section describes how to launch a zuul proxy application as an API Gateway. Proceed as follows:
 
-* **步骤 1**在pom文件中添加依赖：
+* **Step 1**Add a dependency to the pom file:
 
 ```xml
-<dependency> 
-  <groupId>org.springframework.cloud</groupId>  
-  <artifactId>spring-cloud-starter-zuul</artifactId> 
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-zuul</artifactId>
 </dependency>
-<dependency> 
-  <groupId>org.springframework.cloud</groupId>  
-  <artifactId>spring-cloud-starter-ribbon</artifactId> 
-</dependency><dependency> 
-  <groupId>org.springframework.cloud</groupId>  
-  <artifactId>spring-cloud-starter-hystrix</artifactId> 
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-ribbon</artifactId>
+</dependency><dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-hystrix</artifactId>
 </dependency>
-<dependency> 
-  <groupId>org.apache.servicecomb</groupId>  
-  <artifactId>spring-boot-starter-discovery</artifactId> 
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>spring-boot-starter-discovery</artifactId>
 </dependency>
 ```
 
-* **步骤 2**在SpringBoot主类添加注解：
+* **Step 2**Add annotations to the SpringBoot main class:
 
 ```java
 @SpringBootApplication
 @EnableServiceComb
-@EnableZuulProxy//新增注解
+@EnableZuulProxy//Additional annotations
 public class ZuulMain{
-    public static void main(String[] args) throws Exception{
-　　    SpringApplication.run(ZuulMain.class, args);
-    }
+    public static void main(String[] args) throws Exception{
+        SpringApplication.run(ZuulMain.class, args);
+    }
 }
 ```
 
-* **步骤 3**在application.yml文件中定义路由策略：
+* **Step 3** Define the routing policy in the application.yml file:
 
 ```yaml
-server: 
-  port: 8754 #api gateway服务端口
-zuul: 
-  routes: #路由策略
-    discoveryServer: /myServer/** #路由规则
+server:
+  port: 8754 #api gateway service port
+zuul:
+  routes: #route strategy
+    discoveryServer: /myServer/** #route rule
 ```
 
-红色的配置项表示可以根据实际开发环境进行配置。关于zuul.routers的路由策略的详细定义规则，请参考官方文献：[路由器和过滤器：Zuul](https://springcloud.cc/spring-cloud-dalston.html#_router_and_filter_zuul)，可更细粒度地对路由进行控制。
+The red configuration item indicates that it can be configured according to the actual development environment. For detailed definition rules of the routing policy of zuul.routers, please refer to the official literature: [router and filter: Zuul] (https://springcloud.cc/spring-cloud-dalston.html#_router_and_filter_zuul), which can be more finely Control the route.
 
-* **步骤 4**在microservice.yaml定义微服务属性：
+* **Step 4** Define microservice properties in microservice.yaml:
 
 ```yaml
-APPLICATION_ID: discoverytest #服务ID
-service_description: 
-  name: discoveryGateway #服务名称
-  version: 0.0.2 #服务版本号
-servicecomb: 
-  service: 
-    registry: 
-      address:  http://127.0.0.1:30100            #服务注册中心地址
- rest: 
-   address: 0.0.0.0:8082                         #微服务端口，可不写
+APPLICATION_ID: discoverytest #service ID
+service_description:
+  name: discoveryGateway #service name
+  version: 0.0.2 #service version number
+servicecomb:
+  service:
+    Registry:
+      Address: http://127.0.0.1:30100 #Service registry address
+ rest:
+   address: 0.0.0.0:8082 # Service port, can not write
 ```
 
-* **步骤 5　**Run ZuulMain Application
+* **Step 5 **Run ZuulMain Application
 
-## 使用Zuul Proxy
+## Using Zuul Proxy
 
-在使用zuul做的API Gateway前，首先要启动在zuul.routers中定义的微服务提供者。
+Before using the API Gateway made by Zuul, you must first start the microservice provider defined in zuul.routers.
 
-开发服务提供者，开按流程请参考3 开发服务提供者。在微服务microservice.yaml文件中需注意以下两点：
+To develop a service provider, please refer to 3 Development Service Provider for the opening process. Pay attention to the following two points in the microservice.yaml file:
 
-* APPLICATION\_ID需要于zuul proxy中定义的保持一致。
+* APPLICATION\_ID needs to be consistent in the definition defined in the zuul proxy.
 
-* service\_description.name需要于zuul.routers中相对应。
+* service\_description.name needs to correspond to zuul.routers.
 
-示例如下：
+An example is as follows:
 
 ```yaml
-APPLICATION_ID: discoverytest #与zuul proxy一致
-service_description: 
-  name: discoveryServer #服务名称，与zuul.routers对应
-  version: 0.0.2
-servicecomb: 
-  service: 
-    registry: 
-      address: http://127.0.0.1:30100                #服务注册中心地址
-rest: 
-  address: 0.0.0.0:8080
+APPLICATION_ID: discoverytest # is consistent with zuul proxy
+service_description:
+  name: discoveryServer #service name, corresponding to zuul.routers
+  version: 0.0.2
+servicecomb:
+  service:
+    registry:
+      address: http://127.0.0.1:30100 #Service registry address
+rest:
+  address: 0.0.0.0:8080
 ```
 
-API Gateway的访问入口为：[http://127.0.0.1:8754](http://127.0.0.1:8754)，所有在zuul.routers中定义的服务都可通过这个访问入口进行代理访问，访问规则如下：
+The API Gateway access is: [http://127.0.0.1:8754] (http://127.0.0.1:8754), all services defined in zuul.routers can be accessed through this access portal, access The rules are as follows:
 
 [http://127.0.0.1:8754/myServer/\*\*\*](http://127.0.0.1:8754/myServer/***)
 
-这表示，Http调用[http://127.0.0.1:8754/myServer/\*\*\*](http://127.0.0.1:8754/myServer/***)，会转到discoveryServer服务（例如："/myServer/101"跳转到discoveryServer 服务下的"/101"）
+This means that Http calls [http://127.0.0.1:8754/myServer/\*\*\*] (http://127.0.0.1:8754/myServer/***) and will go to the discoveryServer service (for example: "/myServer/101" jumps to "/101" under the discoveryServer service)
 
-> 如果在服务中心同时存在多个discoveryServer服务\(版本不同\),zuul默认采用Ribbon策略对请求进行转发。
-
-
-
+> If there are multiple discoveryServer services in the service center (version is different), zuul uses the Ribbon policy to forward requests.
