@@ -1,6 +1,6 @@
 # 开发指南
 
-这个章节是关于如何基于实现微服务发现功能，你可以找到更多细节 [here](/server/core/swagger/v3.yaml)
+这个章节是关于如何基于实现微服务发现功能
 
 ## Micro-service注册
 ```bash

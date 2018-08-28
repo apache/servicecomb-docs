@@ -1,7 +1,6 @@
 # Development Guide
 
-This chapter is about how to implement the feature of micro-service discovery with ServiceCenter,
-and you can get more detail at [here](/server/core/swagger/v3.yaml)
+This chapter is about how to implement the feature of micro-service discovery with ServiceCenter.
 
 ## Micro-service registration
 ```bash
