@@ -1,15 +1,15 @@
-# 使用Edge Service做边缘服务
+# Using Edge Service for Edge Services
 
-Edge Service是ServiceComb提供的JAVA网关服务。Edge Service作为整个微服务系统对外的接口，向最终用户提供服务，接入RESTful请求，转发给内部微服务。Edge Service以开发框架的形式提供，开发者可以非常简单的搭建一个Edge Service服务，通过简单的配置就可以定义路由转发规则。同时Edge Service支持强大的扩展能力，服务映射、请求解析、加密解密、鉴权等逻辑都可以通过扩展实现。
+Edge Service is the JAVA gateway service provided by ServiceComb. As the external interface of the entire microservice system, the Edge Service provides services to end users, accesses RESTful requests, and forwards them to internal microservices. The Edge Service is provided in the form of a development framework. Developers can easily build an Edge Service service and define routing and forwarding rules with a simple configuration. At the same time, Edge Service supports powerful expansion capabilities, and services such as service mapping, request parsing, encryption and decryption, and authentication can be extended.
 
-Edge Service本身也是一个微服务，需遵守所有微服务开发的规则。其本身可以部署为多实例，前端使用负载均衡装置进行负载分发；也可以部署为主备，直接接入用户请求。开发者可以根据Edge Service承载的逻辑和业务访问量、组网情况来规划。
+The Edge Service itself is also a microservice that is subject to all microservice development rules. It can be deployed as a multi-instance, and the front-end uses a load balancing device for load distribution. It can also be deployed as a master and backup, and directly access user requests. Developers can plan according to the logic and service access and networking conditions carried by the Edge Service.
 
-## 开发Edge Service服务
-开发Edge Service和开发一个普通的微服务步骤差不多，开发者可以从导入[ServiceComb Edge Service Demo](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/demo/demo-edge)入手。从头搭建项目包含如下几个步骤：
+## Developing Edge Service
+Developing Edge Service is similar to developing a normal microservice. Developers can import [ServiceComb Edge Service Demo] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/demo/demo -edge) Start. Building a project from scratch involves the following steps:
 
-* 配置依赖关系
+* Configure dependencies
 
-在项目中加入edge-core的依赖，就可以启动Edge Service的功能。Edge Service在请求转发的时候，会经过处理链，因此还可以加入相关的处理链的模块的依赖，下面的实例增加的负载均衡的处理链，这个是必须的。
+By adding edge-core dependencies to your project, you can start the Edge Service. When the Edge Service requests forwarding, it will go through the processing chain, so it can also join the dependencies of the relevant processing chain modules. The following example adds the load balancing processing chain. This is a must.
 ```
 <dependency>
   <groupId>org.apache.servicecomb</groupId>
@@ -21,9 +21,9 @@ Edge Service本身也是一个微服务，需遵守所有微服务开发的规�
 </dependency>
 ```
 
-* 定义启动类
+* Define the startup class
 
-和开发普通微服务一样，可以通过加载Spring的方式将服务拉起来。
+Just like developing a normal microservice, you can pull the service by loading Spring.
 ```
 public class EdgeMain {
   public static void main(String[] args) throws Exception {
@@ -33,9 +33,8 @@ public class EdgeMain {
 }
 ```
 
-* 增加配置文件microservie.yaml
-
-Edge Service本身也是一个微服务，遵循微服务查找的规则，自己也会进行注册。注意APPLICAIONT_ID与需要转发的微服务相同。在下面的配置中，指定了Edge Service监听的地址，处理链等信息。其中auth处理链是DEMO项目中自定义的处理链，用于实现认证。同时auth服务本身，不经过这个处理链，相当于不鉴权。
+* Increase the configuration file microservie.yaml
+The Edge Service itself is also a microservice that follows the rules of microservice lookup and will register itself. Note that APPLICAIONT_ID is the same as the microservice that needs to be forwarded. In the following configuration, the address that the Edge Service listens to, the processing chain, and so on are specified. The auth processing chain is a custom processing chain in the DEMO project for implementing authentication. At the same time, the auth service itself, without going through this processing chain, is equivalent to not authenticating.
 ```
 APPLICATION_ID: edge
 service_description:
@@ -55,18 +54,18 @@ servicecomb:
           auth: loadbalance
 ```
 
-## 工作流程
-Edge Service的工作流程如下，蓝色背景部分在Eventloop线程中执行，黄色背景部分：
-  * 如果工作于reactive模式，则直接在Eventloop线程执行
-  * 如果工作于线程池模式，则在线程池的线程中执行
+## work process
+The workflow of the Edge Service is as follows, the blue background part is executed in the Eventloop thread, and the yellow background part:
+   * If working in reactive mode, execute directly in the Eventloop thread
+   * If working in thread pool mode, execute in the thread pool thread
 ![](/assets/workFlow.png)
 
-## 定制路由规则
-使用Edge Service的核心工作是配置路由规则。场景不同，规则也不同。
-路由规则由一系列AbstractEdgeDispatcher组成。Edge Service提供了几个常见的Dispatcher，通过配置即可启用，如果这些Dispatcher不满足业务场景需要，还可以自定义。
+## Custom routing rules
+The core job of using the Edge Service is to configure routing rules. The rules are different, and the rules are different.
+A routing rule consists of a series of AbstractEdgeDispatchers. The Edge Service provides several common Dispatchers that can be enabled through configuration. If these Dispatchers do not meet the needs of the business scenario, they can be customized.
 
-### 使用DefaultEdgeDispatcher
-DefaultEdgeDispatcher是一个非常简单、容易管理的Dispatcher，使用这个Dispatcher，用户不用动态管理转发规则，应用于实际的业务场景非常方便，这个也是推荐的一种管理机制。它包含如下几个配置项：
+### Using DefaultEdgeDispatcher
+DefaultEdgeDispatcher is a very simple and easy to manage Dispatcher. With this Dispatcher, users do not need to manage forwarding rules dynamically. It is very convenient to apply to actual business scenarios. This is also a recommended management mechanism. It contains the following configuration items:
 ```
 servicecomb:
   http:
@@ -79,28 +78,28 @@ servicecomb:
           prefixSegmentCount: 1
 ```
 
-常见的这些配置项的示例及含义如下:
-* [prefix=rest;withVersion=true;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;prefixSegmentCount=3]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/abc，，请求可能转发到任意微服务实例。
+Examples and meanings of these common configuration items are as follows:
+* [prefix=rest;withVersion=true;prefixSegmentCount=1] The URL provided by the microservice xService is: /xService/v1/abc, the address accessed by the Edge is /rest/xService/v1/abc, and the request is only forwarded to [1.0 .0-2.0.0) version of the microservice instance.
+* [prefix=rest;withVersion=true;prefixSegmentCount=2] The URL provided by the microservice xService is: /v1/abc, the address accessed by the Edge is /rest/xService/v1/abc, and the request is only forwarded to [1.0.0] -2.0.0) version of the microservice instance.
+* [prefix=rest;withVersion=true;prefixSegmentCount=3] The URL provided by the microservice xService is: /abc, the address accessed by Edge is /rest/xService/v1/abc, and the request is forwarded only to [1.0.0-2.0] .0) version of the microservice instance.
+* [prefix=rest;withVersion=false;prefixSegmentCount=1] The URL provided by the microservice xService is: /xService/v1/abc, the address accessed by the Edge is /rest/xService/v1/abc, and the request may be forwarded to any micro Service instance.
+* [prefix=rest;withVersion=false;prefixSegmentCount=2] The URL provided by the microservice xService is: /v1/abc, the address accessed by Edge is /rest/xService/v1/abc, and the request may be forwarded to any microservice. Example.
+* [prefix=rest;withVersion=false;prefixSegmentCount=2] The URL provided by the microservice xService is: /abc, the address accessed by the Edge is /rest/xService/abc, and the request may be forwarded to any microservice instance.
 
-withVersion配置项提供了客户端灰度规则，可以让客户端指定访问的服务端版本。Edge Service还包含根据接口兼容性自动路由的功能，请求会转发到包含了该接口的实例。假设某微服务，兼容规划为所有高版本必须兼容低版本，部署了以下版本实例：
+The withVersion configuration item provides a client grayscale rule that allows the client to specify which server version to access. The Edge Service also includes the ability to route based on interface compatibility automatically, and requests are forwarded to instances that contain the interface. Assume that a microservice, compatibility plan for all high versions must be compatible with the lower version, deploy the following version of the instance:
 
-* 1.0.0，提供了operation1
+* 1.0.0, provides operation1
 
-* 1.1.0，提供了operation1、operation2
+* 1.1.0, provided operation1, operation2
 
-Edge Service在转发operation1时，会自动使用1.0.0+的规则来过滤实例
+When Edge Service forwards operation1, it automatically uses the rule of 1.0.0+ to filter the instance.
 
-Edge Service在转发operation2时，会自动使用1.1.0+的规则来过滤实例
+When Edge Service forwards operation2, it automatically uses the rules of 1.1.0+ to filter instances.
 
-以上过程用户不必做任何干预，全自动完成，以避免将新版本的operation转发到旧版本的实例中去。
+The above process does not require any intervention and is fully automated to avoid forwarding the new version of the operation to the instance of the old version.
 
-### 使用URLMappedEdgeDispatcher
-URLMappedEdgeDispatcher允许用户配置URL和微服务的映射关系。使用它可以非常灵活的定义哪些URL转发到哪些微服务。它包含如下几个配置项：
+### Using URLMappedEdgeDispatcher
+URLMappedEdgeDispatcher allows users to configure mappings between URLs and microservices. It is very flexible to define which URLs are forwarded to which microservices. It contains the following configuration items:
 ```
 servicecomb:
   http:
@@ -121,50 +120,50 @@ servicecomb:
               versionRule: 2.0.0-3.0.0
 ```
 
-businessV1配置项表示的含义是将请求路径为/usr/business/v1/.*的请求，转发到business这个微服务，并且只转发到版本号为1.0.0-2.0.0的实例（不含2.0.0）。转发的时候URL为/business/v1/.*。path使用的是JDK的正则表达式，可以查看Pattern类的说明。prefixSegmentCount表示前缀的URL Segment数量，前缀不包含在转发的URL路径中。有三种形式的versionRule可以指定。2.0.0-3.0.0表示版本范围，含2.0.0，但不含3.0.0；2.0.0+表示大于2.0.0的版本，含2.0.0；2.0.0表示只转发到2.0.0版本。2，2.0等价于2.0.0。
+The meaning of the businessV1 configuration item is that the request with the request path of /usr/business/v1/.* is forwarded to the microservice of business and only forwarded to the instance with version number 1.0.0-2.0.0 (excluding 2.0). .0). The URL when forwarding is /business/v1/.*. Path uses the JDK regular expression, and you can view the description of the Pattern class. prefixSegmentCount indicates the number of URL segments of the prefix, and the prefix is not included in the forwarded URL path. Three forms of versionRule can be specified. 2.0.0-3.0.0 indicates the version range, including 2.0.0, but does not contain 3.0.0; 2.0.0+ indicates a version greater than 2.0.0, including 2.0.0; 2.0.0 means forwarding only to 2.0.0 version. 2, 2.0 is equivalent to 2.0.0.
 
-从上面的配置可以看出，URLMappedEdgeDispatcher也支持客户端灰度。当然配置项会比DefaultEdgeDispatcher多。URLMappedEdgeDispatcher支持通过配置中心动态的修改配置，调整路由规则。
+As can be seen from the above configuration, URLMappedEdgeDispatcher also supports client grayscale. Of course, there will be more configuration items than DefaultEdgeDispatcher. The URLMappedEdgeDispatcher supports dynamic configuration modification of the configuration center to adjust routing rules.
 
-### 自定义Dispatcher
+### Custom Dispatcher
 
-自定义Dispatcher包含两个步骤：
+Customizing the Dispatcher involves two steps:
 
-1. 实现AbstractEdgeDispatcher
-2. 通过SPI发布：增加文件META-INF/services/org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher，并写入实现类
+1. Implement AbstractEdgeDispatcher
+2. Release via SPI: add the file META-INF/services/org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher and write the implementation class
 
-详细的代码细节可以参考下面的章节"DEMO功能说明"。开发者也可以参考DefaultEdgeDispatcher等代码来定义自己的Dispatcher。
+Detailed code details can be found in the following section "DEMO Functional Description". Developers can also refer to the Code such as DefaultEdgeDispatcher to define their Dispatcher.
 
-### 进行认证鉴权和其他业务处理
+### Perform authentication and other business processing
 
-通过Edge Servie工作流程可以看出，可以通过多种方式来扩展Edge Service的功能，包括Dispatcher、HttpServerFilter、Handler、HttpClientFilter等。比较常用和简单的是通过Handler来扩展。DEMO里面展示了如何通过Handler扩展来实现鉴权。详细的代码细节可以参考下面的章节"DEMO功能说明"。
+Through the Edge Service workflow, you can see that the Edge Service features can be extended in a variety of ways, including Dispatcher, HttpServerFilter, Handler, HttpClientFilter, and more. More common and straightforward is to extend through Handler. DEMO shows how to implement authentication through Handler extensions. Detailed code details can be found in the following section "DEMO Functional Description".<Paste>
 
-## 部署示例
+## Deployment example
 
 ![](/assets/deployment.png)
 
-## 工作模式
+## Operating mode
 
-### reactive \(默认\)
+###reactive \(default\)
 
-Edge Service默认工作于高性能的reactive模式，此模式要求工作于Edge Service转发流程中的业务代码不能有任何的阻塞操作，包括不限于：
+The Edge Service works by default in the high-performance reactive mode. This mode requires that the business code working in the Edge Service forwarding process cannot have any blocking operations, including:
 
-* 远程同步调用，比如同步查询数据库、同步调用微服务，或是同步查询远程缓存等等
+* Remote synchronization calls, such as an asynchronous query database, synchronous call microservices, or synchronous query remote cache, etc.
 
-* 任何的sleep调用
+* any sleep call
 
-* 任何的wait调用
+* any wait call
 
-* 超大的循环
+* Oversized loop
 
-Edge Service的底层是基于netty的vertx，以上约束即是netty的reactive模式约束。
+The underlying Edge Service is based on netty's vertx. The above constraint is netty's reactive mode constraint.
 
 ![](/assets/reactive.png)
 
-### 线程池
+### Thread Pool
 
-如果业务模型无法满足reactive要求，则需要使用线程池模式。
+If the business model cannot meet the reactive requirements, you need to use the thread pool mode.
 
-此时需要在Edge Service的microservice.yaml中配置：
+In this case, you need to configure it in the microservice.yaml of the Edge Service:
 
 ```
 servicecomb:
@@ -172,107 +171,107 @@ servicecomb:
     default: servicecomb.executor.groupThreadPool
 ```
 
-这里的servicecomb.executor.groupThreadPool是ServiceComb内置的默认线程池对应的spring bean的beanId；业务可以定制自己的线程池，并声明为一个bean，其beanId也可以配置到这里。
+Here servicecomb.executor.groupThreadPool is the beanId of the spring bean corresponding to the default thread pool built into ServiceComb; the service can customize its thread pool and declare it as a bean whose beanId can also be configured here.
 
 ![](/assets/threadPool.png)
 
-## DEMO功能说明
+## DEMO Function Description
 
-请参考github上的edge service demo：
+Please refer to the edge service demo on GitHub:
 
 [https://github.com/ServiceComb/ServiceComb-Java-Chassis/tree/master/demo/demo-edge](https://github.com/ServiceComb/ServiceComb-Java-Chassis/tree/master/demo/demo-edge)
 
-该demo包含以下工程：
+The demo contains the following projects:
 
-* authentication：微服务：鉴权服务器
+* authentication: microservice: authentication server
 * edge-service
-* hiboard-business-1.0.0微服务：business，1.0.0版本，operation add
-* hiboard-business-1.1.0微服务：business，1.1.0版本，operation add/dec
-* hiboard-business-2.0.0微服务：business，2.0.0版本，operation add/dec
-* hiboard-consumer作为一个普通的httpclient，而不是servicecomb consumer
-* hiboard-model非微服务，仅仅是一些公共的model
+* hiboard-business-1.0.0 microservices: business, version 1.0.0, operation add
+* hiboard-business-1.1.0 microservices: business, version 1.1.0, operation add/dec
+* hiboard-business-2.0.0 microservices: business, version 2.0.0, operation add/dec
+* hiboard-consumer as a normal httpclient, not a servicecomb consumer
+* hiboard-model non-micro service, just some public models
 
-通过edge-service访问微服务business的不同版本，并确认是由正确的实例处理的。
+Access different versions of microservices through edge-service and confirm that the correct instance handles them.
 
-### 1.注册Dispatcher
+### 1.Register Dispatcher
 
-实现接口org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher，或从org.apache.servicecomb.edge.core.AbstractEdgeDispatcher继承，实现自己的dispatcher功能。
+Implement the interface org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher, or inherit from org.apache.servicecomb.edge.core.AbstractEdgeDispatcher to implement your own dispatcher function.
 
-实现类通过java标准的SPI机制注册到系统中去。
+The implementation class is registered to the system through the Java standard SPI mechanism.
 
-Dispatcher需要实现2个方法：
+Dispatcher needs to implement 2 methods:
 
 * ### getOrder
 
-Dispatcher需要向vertx注入路由规则，路由规则之间是有优先级顺序关系的。
+Dispatcher needs to inject routing rules into vertx, and routing rules have a priority order relationship.
 
-系统中所有的Dispatcher按照getOrder的返回值按从小到大的方式排序，按顺序初始化。
+All Dispatchers in the system are sorted according to the return value of getOrder from small to large and initialized in order.
 
-如果2个Dispatcher的getOrder返回值相同，则2者的顺序不可预知。
+If the GetOrder return values the two Dispatchers are the same, the order of the two is unpredictable.
 
 * ### init
 
-init方法入参为vertx框架中的io.vertx.ext.web.Router，需要通过该对象实现路由规则的定制。
+The init method is included in the io.vertx.ext.web.The router in the vertx framework. You need to customize the routing rules through this object.
 
-可以指定满足要求的url，是否需要处理cookie、是否需要处理body、使用哪个自定义方法处理收到的请求等等
+You can specify the url that meets the requirements, whether you need to process the cookie, whether you need to handle the body, which custom method to use to process the received request, etc.
 
-更多路由规则细节请参考vertx官方文档：[vertx路由机制](http://vertx.io/docs/vertx-web/java/#_routing_by_exact_path)
+For more details on routing rules, please refer to the official vertx documentation: [vertx routing mechanism] (http://vertx.io/docs/vertx-web/java/#_routing_by_exact_path)
 
-_提示：_
+_prompt:_
 
-_多个Dispatcher可以设置路由规则，覆盖到相同的url。_
+_ Multiple Dispatchers can set routing rules to cover the same url. _
 
-_假设Dispatcher A和B都可以处理同一个url，并且A优先级更高，则：_
+_Assuming Dispatcher A and B can both handle the same url, and A has a higher priority, then: _
 
-* _如果A处理完，既没应答，也没有调用RoutingContext.next\(\)，则属于bug，本次请求挂死了_
+* _ If A is processed, neither responding nor calling RoutingContext.next\(\), it is a bug, this request is hanged _
 
-* _如果A处理完，然后调用了RoutingContext.next\(\)，则会将请求转移给B处理_
+* _ If A is processed and then calling RoutingContext.next\(\), the request will be transferred to B.
 
-### 2.转发请求
+### 2. Forwarding request
 
-注册路由时，指定了使用哪个方法来处理请求（下面使用onRequest来指代该方法），在onRequest中实现转发逻辑。
+When registering a route, it specifies which method is used to process the request (the following method is used to refer to the method), and the forwarding logic is implemented in the onRequest.
 
-方法原型为：
+The method prototype is:
 
 ```
 void onRequest(RoutingContext context)
 ```
 
-系统封装了org.apache.servicecomb.edge.core.EdgeInvocation来实现转发功能，至少需要准备以下参数：
+The system encapsulates org.apache.servicecomb.edge.core.EdgeInvocation to implement forwarding. At least the following parameters need to be prepared:
 
-* microserviceName，业务自行制定规则，可以在url传入，或是根据url查找等等
+* microserviceName, the business makes its own rules, can be passed in the url, or according to the url search, etc.
 
-* context，即onRequest的入参
+* context, that is, the input of onRequest
 
-* path，转发目标的url
+* path, the url of the forwarding target
 
-* httpServerFilters，Dispatcher父类已经初始化好的成员变量
+* httpServerFilters, the Dispatcher parent class has initialized member variables
 
 ```
- EdgeInvocation edgeInvocation = new EdgeInvocation();
- edgeInvocation.init(microserviceName, context, path, httpServerFilters);
- edgeInvocation.edgeInvoke();
+  EdgeInvocation edgeInvocation = new EdgeInvocation();
+  edgeInvocation.init(microserviceName, context, path, httpServerFilters);
+  edgeInvocation.edgeInvoke();
 ```
 
-edgeInvoke调用内部，会作为ServiceComb标准consumer去转发调用。
+The edgeInvoke call is internally called and will be forwarded as a ServiceComb standard consumer.
 
-作为标准consumer，意味着ServiceComb所有标准的治理能力在这里都是生效的。
+As a standard consumer, it means that the governance capabilities of all ServiceComb standards are valid here.
 
-### 3.设置兼容规则
+### 3. Setting compatibility rules
 
-不同的业务可能有不同的兼容规划，servicecomb默认的兼容规则，要求所有新版本兼容旧版本。如果满足这个要求，则不必做任何特殊的设置。
+Different services may have different compatibility plans, servicecomb default compatibility rules, and all new versions are required to be compatible with the old version. If this requirement is met, no special settings need to be made.
 
-还有一种典型的规划：
+There is also a typical plan:
 
-* 1.0.0-2.0.0内部兼容，url为/microserviceName/v1/….的形式
+* 1.0.0-2.0.0 is internally compatible, url is in the form of /microserviceName/v1/....
 
-* 2.0.0-3.0.0内部兼容，url为/microserviceName/v2/….的形式
+* 2.0.0-3.0.0 is internally compatible, url is in the form of /microserviceName/v2/....
 
-  ……
+   ......
 
-各大版本之间不兼容
+Incompatible between major versions
 
-此时，开发人员需要针对EdgeInvocation设置兼容规则：
+At this point, the developer needs to set compatibility rules for EdgeInvocation:
 
 ```
 private CompatiblePathVersionMapper versionMapper = new CompatiblePathVersionMapper();
@@ -282,19 +281,19 @@ private CompatiblePathVersionMapper versionMapper = new CompatiblePathVersionMap
 edgeInvocation.setVersionRule(versionMapper.getOrCreate(pathVersion).getVersionRule());
 ```
 
-versionMapper的作用是将v1或是v2这样的串，转为1.0.0-2.0.0或2.0.0-3.0.0这样的兼容规则。
+The role of versionMapper is to convert a string such as v1 or v2 to a compatibility rule such as 1.0.0-2.0.0 or 2.0.0-3.0.0.
 
-**注意：**
+**note:**
 
-接口不兼容会导致非常多的问题。java chassis要求高版本服务兼容低版本服务，只允许增加接口不允许删除接口。在增加接口后，必须增加微服务的版本号。在开发阶段，接口变更频繁，开发者往往忘记这个规则。当这个约束被打破的时候，需要清理服务中心微服务的信息，并重启微服务和Edge Service\(以及依赖于该微服务的其他服务\)。否则可能出现请求转发失败等情况。
+Incompatible interfaces can cause many problems. The java chassis requires that the higher version of the service is compatible with the lower version of the service, and only allows the addition of the interface to not allow the interface to be deleted. After adding an interface, you must increase the version number of the microservice. In the development phase, interfaces change frequently, and developers often forget this rule. When this constraint is broken, you need to clean up the service center microservices information and restart the microservices and Edge Service\ (and other services that depend on the microservices). Otherwise, the request forwarding failure may occur.
 
-### 4.鉴权
+### 4.Authentication
 
-Edge Service是系统的边界，对于很多请求需要执行鉴权逻辑。
+The Edge Service is the boundary of the system and requires authentication logic for many requests.
 
-基于标准的ServiceComb机制，可以通过handler来实现这个功能。
+Based on the standard ServiceComb mechanism, this function can be implemented by the handler.
 
-最简单的示意代码如下：
+The simplest code is as follows:
 
 ```
 public class AuthHandler implements Handler {
@@ -318,11 +317,11 @@ public class AuthHandler implements Handler {
 }
 ```
 
-Auth表示是鉴权微服务提供的接口，Invoker.createProxy\("auth", "auth", Auth.class\)是透明RPC开发模式中consumer的底层api，与@ReferenceRpc是等效，只不过不需要依赖spring bean机制。
+Auth is the interface provided by the authentication microservice. Invoker.createProxy\("auth", "auth", Auth.class\) is the underlying api of the consumer in the transparent RPC development mode, which is equivalent to @ReferenceRpc, but not Need to rely on the spring bean mechanism.
 
-Auth接口完全由业务定义，这里只是一个示例。
+The business completely defines the Auth interface, but here is just an example.
 
-Handler开发完成后，配置到edge service的microservice.yaml中：
+After the Handler development is complete, configure it into the microservice.yaml of the edge service:
 
 ```
 servicecomb:
@@ -334,5 +333,4 @@ servicecomb:
           auth: ……
 ```
 
-这个例子，表示转发请求给所有的微服务都必须经过鉴权，但是调用鉴权微服务时不需要鉴权。
-
+In this example, it means that the forwarding request to all microservices must be authenticated, but authentication is not required when calling the authentication microservice.
