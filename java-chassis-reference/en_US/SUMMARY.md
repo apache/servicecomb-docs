@@ -70,7 +70,7 @@
   * [Packaged in WEB container mode] (packaging/web-container.md)
 * [Micro Service Security] (catalog/security.md)
   * [Communicate using TLS] (security/tls.md)
-  * [Use RSA certification] (security/shi-yong-rsa-ren-zheng.md)
+  * [Use RSA certification] (security/rsa.md)
 * [Use java chassis in Spring Boot] (using-java-chassis-in-spring-boot.md)
   * [Provided component description] (using-java-chassis-in-spring-boot/components-for-spring-boot.md)
   * [JAVA application development steps] (using-java-chassis-in-spring-boot/java-application.md)
