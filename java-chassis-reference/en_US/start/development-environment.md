@@ -1,6 +1,6 @@
 # Prepare the local development environment
 
-The tools required to install the development environment include JDK, Maven, Eclipse, and IDEA. If you already have these development tools installed, skip this section.
+JDK, Maven, Eclipse, and IDEA is required. If you already have these development tools installed, skip this section.
 
 ## JDK version and installation steps
 
