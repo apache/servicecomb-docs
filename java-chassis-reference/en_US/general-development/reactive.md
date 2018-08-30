@@ -46,7 +46,7 @@ According to the characteristics of this process, you can see the following resu
 
 * To increase the processing power, only increase the number of threads in the Executor, and the operating system can not increase the number of threads indefinitely. The benefit of increasing the number of threads is a parabolic model. After a specific critical value, the system handles The ability will drop, and this threshold will not be too big.
 
-* This phenomenon is exacerbated when the remote synchronization operation is required multiple times in the business logic.
+* When the remote synchronization operation is required multiple times in the business logic, the problem will be bigger than before.
 
 ## "Error" optimization for nested synchronous calls:
 
@@ -145,7 +145,7 @@ The cse.executor.groupThreadPool here is the default thread pool built into serv
 
 * Consumer:
 
-  * Whether the consumer uses reactive and producer how to achieve, there is no connection
+  * Whether the consumer uses reactive and producer how to implement, there is no connection
 
   * Currently only supports transparent RPC mode, using JDK native CompletableFuture to carry this function
 
