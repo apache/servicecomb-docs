@@ -59,8 +59,7 @@ public ResponseEntity<Resource> resource() {
 
 因为InputStream不一定表示文件下载，所以需要通过swagger annotation（@ApiResponse）标识这是一个文件下载场景
 
-有的场景下，资源并不保存在本地，比如保存在OBS云服务中，而OBS资源是以InputStream方式输出的
-
+有的场景下，资源并不保存在本地
 ```
 return ResponseEntity
     .ok()
