@@ -14,7 +14,7 @@ servicecomb:
     passwd: yourpassword #password
 ```
 
-**Note: Currently only supports connection service center, configuration center, service kanban support agent. If you connect other three-party services, you can read this configuration, configure the agent yourself, vertx httpclient supports proxy settings, for example: **
+**Note: Currently only supports connection service center, configuration center support agent. If you connect other three-party services, you can read this configuration, configure the agent yourself, vertx httpclient supports proxy settings, for example: **
 
 ```java
     HttpClientOptions httpClientOptions = new HttpClientOptions();

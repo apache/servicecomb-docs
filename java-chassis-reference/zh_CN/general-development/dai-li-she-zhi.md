@@ -14,7 +14,7 @@ servicecomb:
     passwd: yourpassword    #密码
 ```
 
-**注意：当前仅支持连接服务中心、配置中心、服务看板支持代理，如果对接其他三方服务，可以读取这个配置，自行配置代理，vertx httpclient支持代理设置，例如：**
+**注意：当前仅支持连接服务中心、配置中心支持代理，如果对接其他三方服务，可以读取这个配置，自行配置代理，vertx httpclient支持代理设置，例如：**
 
 ```java
     HttpClientOptions httpClientOptions = new HttpClientOptions();
