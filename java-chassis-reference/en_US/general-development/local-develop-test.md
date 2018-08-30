@@ -7,13 +7,13 @@ This section describes how developers can locally develop and commission consume
 
 * Starting Local Service Center [Mock mechanism](#section960893593759)。
 
-### Local debugging by setting up environmental information 
+### Local debugging by setting up environmental information
 
 Service center is an important component in the microservice architecture, and is used for managing, registering, and detecting metadata and instance metadata. The logic relationship between the service center and microservice provider/consumer is as follows:![](../assets/images/local_develop_test_en.png)
 
 ## Starting Local ServiceCenter
 
-* **Step 1** Starting local service center 
+* **Step 1** Starting local service center
 
 1. run in executable files  
 
@@ -21,13 +21,13 @@ Service center is an important component in the microservice architecture, and i
      <li data-toggle="tab" class="active"><a data-toggle="tab" href="#windows">Windows</a></li>
      <li data-toggle="tab"><a data-toggle="tab" href="#linux">Linux</a></li>
    </ul>
-   
+
    <div class="tab-content">
      <div id="windows" class="tab-pane active" markdown="1">
     (1) Download the [Service Registry Executable Compressor] (http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center/1.0.0-m1/apache-servicecomb- Incubating-service-center-1.0.0-m1-windows-amd64.tar.gz)  
     (2) Extract to the current folder  
     (3) Go to the unzipped directory and double-click to run the **start-service-center.bat** file.  
-  
+
       </div>
       <div id="linux" class="tab-pane fade" markdown="1">
     1) Download the Service Registry executable file archive and extract it  
@@ -49,21 +49,21 @@ Service center is an important component in the microservice architecture, and i
 
 2. Run as Docker  
 
-```bash
+ ```bash
 Docker pull servicecomb/service-center
 Docker run -d -p 30100:30100 servicecomb/service-center:latest
-```
+ ```
 
 * **Step 2 ** After starting the local service center, configure the ServerCenter address and port in the service provider/consumer's microservice.yaml file. Example code:
 
-```yaml
+ ```yaml
 Servicecomb:
   Service:
     Registry:
       Address:
         #Service Center address and port
         Http://127.0.0.1:30100
-```
+ ```
 
 * **Step 3 **Development service provider/consumer, launch microservices for local testing.
 
@@ -87,7 +87,7 @@ Similarly, because the Mock cannot cross processes, the consumer cannot dynamica
 
 * **Step 1** Create a new local service center definition file, assuming the name is registry.yaml, the content example is as follows:
 
-```yaml
+ ```yaml
 localserv:
   - id: "100"
     version: "0.0.1"
@@ -98,15 +98,15 @@ localserv:
       - endpoints:
         - rest://localhost:8080
         - highway://localhost:7070
-```
+ ```
 * **Step 2**consumer local deployment contract file
 
-Reference: [Define Service Contract] (https://docs.servicecomb.io/java-chassis/zh_CN/build-provider/define-contract.html)
+ Reference: [Define Service Contract] (https://docs.servicecomb.io/java-chassis/zh_CN/build-provider/define-contract.html)
 * **Step 3** In the consumer main function, declare the ServiceComb engine before starting:
 
-```java
+ ```java
 　　System.setProperty("local.registry.file", "/path/registry.yaml");
-```
+ ```
 
 The second parameter of setProperty fills in the absolute path of the registry.yaml system on the disk, pay attention to distinguish the corresponding path separator in different systems.
 
@@ -117,14 +117,14 @@ If you need to change the version every time, it is very unfriendly to the user,
 However, if  consumer client has already called the service before the restart, the consumer client needs to be restarted to get the latest schema. For example, A -> B, B interface has been modified and restarted, then A is still using B last schema at this time, the call may be wrong, so as to avoid unknown exceptions, A also needs to restart. There are three ways to set it up, Recommended method 1  
 
 * Method 1: Set by the JVM startup parameter   
-**-Dinstance_description.environment=development**
+**-Dservice_description.environment=development**
 
 * Method 2: Specify by microservice.yaml configuration file
 
 ```yaml
-instance_description:
+service_description:
   environment: development
 ```
 
-* Method 3: Specify by environment variable (only for Windowns system), such as the following settings under Eclipse
+* Method 3: Specify by environment variable (only for Windows system), such as the following settings under Eclipse
 ![](../assets/env.PNG)
