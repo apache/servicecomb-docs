@@ -40,7 +40,7 @@ consumer端指定微服务名称调用provider的时候，需要加上provider�
     @RpcReference(schemaId = "hello", microserviceName = "helloApp:helloProvider")
     private Hello hello;
   ```
-  调用方式和调用同应用下的微服务相同：
+  跨应用调用与同应用下调用微服务的方式相同：
   ```java
     hello.sayHello("ServiceComb");
   ```
