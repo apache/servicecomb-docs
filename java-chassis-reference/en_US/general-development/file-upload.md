@@ -14,7 +14,7 @@ Springmvc development mode:
 
 * Supports servlet-defined javax.servlet.http.Part type, also supports org.springframework.web.multipart.MultipartFile type
 
-* The two datatype functions are consistent, and the underlying part of MultipartFile is also Part
+* The two datatype functions are consistent, and MultipartFile is also base on Part type
 
 * Two data types can be mixed, for example, the first parameter is Part and the second parameter is MultipartFile
 
