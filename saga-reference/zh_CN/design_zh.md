@@ -1,5 +1,4 @@
 # Saga Pack 设计文档
-[![EN doc](https://img.shields.io/badge/document-English-blue.svg)](design.md)
 ## 概览
 Pack中包含两个组件，即 **alpha** 和 **omega**。
 * alpha充当协调者的角色，主要负责对事务的事件进行持久化存储以及协调子事务的状态，使其得以最终与全局事务的状态保持一致。

@@ -1,6 +1,5 @@
-## 以standalone模式打包
-一个Standalone的容器，以简单的Main加载Spring启动，因为服务通常不需要Tomcat/JBoss等Web容器的特性，没必要用Web容器去加载服务。微框架提供了standalone部署运行模式，服务容器只是一个简单的Main方法，并加载一个简单的Spring容器，用于暴露服务。
+## Packaged in standalone mode
+A Standalone container that loads Spring with a simple Main method, because the service usually does not require the properties of a Web container such as Tomcat/JBoss, and there is no need to use the Web container to load the service. The microframework provides a standalone deployment run mode. The service container is just a simple Main method and loads a simple Spring container to expose the service.
 
-## 以WEB容器模式打包
-如果需要将该微服务加载到web容器中启动运行时，需要新建一个servlet工程包装一下，该servlet工程，根据需要，可以不写或写少量的引导代码即可。
-
+## Packaged in WEB container mode
+If you need to load the microservice into the web container to start the runtime, you need to create a new servlet project wrapper. The servlet project, if necessary, can not write or write a small amount of boot code.

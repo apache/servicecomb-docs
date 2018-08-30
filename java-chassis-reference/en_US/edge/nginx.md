@@ -1,105 +1,104 @@
-# 使用confd和Nginx做边缘服务
+# Using confd and Nginx for edge services
 
-## 概念阐述
+## Concept Description
 
 ### **confd**
 
-confd是一个轻量级的配置管理工具，源码地址：[https://github.com/kelseyhightower/confd](https://github.com/kelseyhightower/confd)，它可以将配置信息存储在etcd、consul、dynamodb、redis以及zookeeper等。confd定期会从这些存储节点pull最新的配置，然后重新加载服务，完成配置文件的更新。
+Confd is a lightweight configuration management tool, source code: [https://github.com/kelseyhightower/confd] (https://github.com/kelseyhightower/confd), which stores configuration information in etcd, Consul, dynamodb, redis, and zookeeper. Confd periodically pulls the latest configuration from these storage nodes, then reloads the service and completes the configuration file update.
 
 ### **Nginx**
 
-Nginx \(engine x\)是一个高性能的HTTP和反向代理服务器，具有负载均衡的功能。详情请参考[http://www.nginx.cn/doc/](http://www.nginx.cn/doc/)。本小节介绍的服务主要使用到的是Nginx的http代理功能。
+Nginx \(engine x\) is a high-performance HTTP and reverse proxy server with load balancing capabilities. For details, please refer to [http://www.nginx.cn/doc/] (http://www.nginx.cn/doc/). The services introduced in this section mainly use the Nginx http proxy function.
 
-## 场景描述
+## Scene Description
 
-本小节介绍的技术是使用nginx+confd做边缘服务，同时可以对接Java Chassis微服务框架中的服务中心，从服务中心中拉去服务信息通过confd动态更新nginx的配置。
+The technology introduced in this section is to use nginx+confd as the edge service. At the same time, you can dock the service center in the Java Chassis microservices framework, and pull the service information from the service center to dynamically update the nginx configuration through confd.
 
-使用nginx+confd动态反向代理的实现步骤可参考文章[http://www.cnblogs.com/Anker/p/6112022.html](http://www.cnblogs.com/Anker/p/6112022.html)，本节主要介绍confd如何对接Java Chassis框架的服务中心。
+The implementation steps of using nginx+confd dynamic reverse proxy can be found in the article [http://www.cnblogs.com/Anker/p/6112022.html] (http://www.cnblogs.com/Anker/p/6112022. Html), this section mainly introduces how confd docks the service center of the Java Chassis framework.
 
-## 对接服务中心
+## Docking Service Center
 
-本节介绍的技术核心在于如何使得confd获取到服务中心的服务信息，服务中心开放了以下接口供外部调用：
+The core of the technology introduced in this section is how to make confd get the service information of the service center. The service center opens the following interfaces for external calls:
 
-### **方法一：http调用**
+### **Method one: http call **
 
-服务中心开放http接口均需要添加租户头部信息：“X-Tenant-Name:tenantName”，tenameName为租户名，默认为default，例如"X-Tenant-Name:default"。
+The service provider open http interface needs to add the tenant header information: "X-Tenant-Name:tenantName", and the tenameName is the tenant name. The default is default, for example, "X-Tenant-Name: default".
 
-* 检查服务中心健康状态
+* Check the health status of the service center
 
-  ```
-   GET 127.0.0.1:30100/health
-  ```
+  ```
+   GET 127.0.0.1:30100/health
+  ```
 
-* 获取所有微服务信息
+* Get all micro service information
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/microservices
-  ```
+  ```
+   GET 127.0.0.1:30100/registry/v3/microservices
+  ```
 
-* 获取指定id的微服务信息
+* Get the microservice information of the specified id
 
-> 1. 首先根据微服务信息获取serviceId
+> 1. First get the serviceId based on the microservice information
 >
->    ```
->    GET 127.0.0.1:30100/registry/v3/existence?type=microservice&appId={appId}&serviceName={serviceName}&version={version}
->    ```
+> ```
+> GET 127.0.0.1:30100/registry/v3/existence?type=microservice&appId={appId}&serviceName={serviceName}&version={version}
+> ```
 >
-> 2. 根据上述接口返回的serviceId获取微服务完整信息
+2. 2. Obtain the microservice complete information according to the serviceId returned by the above interface.
 >
->    GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}
+> GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}
 
-* 获取指定微服务的所有实例信息
+* Get all instance information for the specified microservice
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}/instances
+  ```
+   GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}/instances
 
-   需要在header中添加："X-ConsumerId:{serviceId}"。
-  ```
+   Need to add in the header: "X-ConsumerId: {serviceId}".
+  ```
 
-* 查找微服务实例信息
+* Find micro service instance information
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/instances?appId={appId}&serviceName={serviceName}&version={version}
+  ```
+   GET 127.0.0.1:30100/registry/v3/instances?appId={appId}&serviceName={serviceName}&version={version}
 
-   需要在header中添加: "X-ConsumerId:{serviceId}"。
-  ```
+   Need to add in the header: "X-ConsumerId: {serviceId}".
+  ```
 
 
-#### 注意：在实际开发中请访问实际的service-center访问地址，并将上述url中{}的变量替换成具体值，http返回的数据均为json格式
+#### Note: In actual development, please visit the actual service-center access address, and replace the variable of {} in the above url with a specific value. The data returned by http is in json format.
 
-### **方法二：使用servicecomb开源代码接口**
+### **Method 2: Use servicecomb open source code interface**
 
-在开发微服务应用，只需要调用servicecomb框架代码中的工具类RegistryUtil.java中提供的接口，即可获取服务中心的信息，接口描述如下：
+In the development of microservices applications, you only need to call the interface provided in the tool class RegistryUtil.java in the servicecomb framework code to get the information of the service center. The interface description is as follows:
 
-* 获取所有微服务信息  
+* Get all micro service information
 
-  ```java
-  List<Microservice> getAllMicroservices();
-  ```
+  ```java
+  List<Microservice> getAllMicroservices();
+  ```
 
-* 获取微服务唯一标识  
+* Get the microservice unique identifier
 
-  ```java
-  String getMicroserviceId(String appId, String microserviceName, String versionRule);
-  ```
+  ```java
+  String getMicroserviceId(String appId, String microserviceName, String versionRule);
+  ```
 
-* 根据微服务唯一标识查询微服务静态信息  
+* Query microservice static information based on microservice unique identifier
 
-  ```java
-  Microservice getMicroservice(String microserviceId);
-  ```
+  ```java
+  Microservice getMicroservice(String microserviceId);
+  ```
 
-* 根据多个微服务唯一标识查询所有微服务实例信息  
+* Query all micro service instance information based on multiple microservice unique identifiers
 
-  ```java
-  List<MicroserviceInstance> getMicroserviceInstance(String consumerId, String providerId);
-  ```
+  ```java
+  List<MicroserviceInstance> getMicroserviceInstance(String consumerId, String providerId);
+  ```
 
-* 按照app+interface+version查询实例endpoints信息  
+* Query instance endpoints information by app+interface+version
 
-  ```java
-  List<MicroserviceInstance> findServiceInstance(String consumerId, String appId, String serviceName,String versionRule);
-  ```
+  ```java
+  List<MicroserviceInstance> findServiceInstance(String consumerId, String appId, String serviceName, String versionRule);
+  ```
 
-通过上述http接口可获取到服务中心的微服务和其实例的信息，从而通过confd动态更新nginx配置。
-
+Through the above http interface, information about the microservices of the service center and its instances can be obtained, thereby dynamically updating the nginx configuration through confd.

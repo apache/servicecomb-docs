@@ -1,5 +1,5 @@
-##使用TLS通信  
-用户通过简单的配置即可启用TLS通信，以保障数据的传输安全。  
+##Using TLS communication
+Users can enable TLS communication through simple configuration to ensure data transmission security.
 
-## 使用RSA认证  
-用户通过简单的配置即可启用服务间RSA认证，以保障服务接口的安全性。详细介绍参考公钥认证  
+## Use RSA certification
+Users can enable RSA authentication between services through simple configuration to ensure the security of the service interface. Detailed reference to public key authentication
