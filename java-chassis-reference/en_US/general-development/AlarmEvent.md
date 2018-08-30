@@ -1,11 +1,11 @@
-# Get the fuse and instance isolation alarm events
+# Get warning event from Circuit Breaker or Instance Isolation.
 
-## Scene Description
-* When the microservice is running or the instance isolation status changes, you need to listen to related events, get relevant information and process it.
+## Senario
+* When the microservice is running, Circuit Breaker or the instance isolation status changes, you need to listen to related events, get relevant information and handle it.
 
 ## Use Reference
 
-* Monitor blown events
+* Monitor CircuitBreaker events
 ```
 Object receiveEvent = new Object() {
   @Subscribe
