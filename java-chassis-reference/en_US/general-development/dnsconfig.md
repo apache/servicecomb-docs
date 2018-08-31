@@ -1,5 +1,5 @@
 ## Scenario
-When a user uses a domain name to connect to a public cloud or a three-party system, you need to use the domain name resolution system. The domain name resolution mechanisms used in different systems and different frameworks may be different. Therefore, it is necessary to provide a unified configuration entry so that development and operation personnel can customize the DNS resolution mechanism without being completely subject to system configuration.
+When a user uses a domain name to connect to a public cloud or a third-party system, you need to use the domain name resolution DNS system. The DNS used in different systems and different frameworks may be different. Therefore, it is necessary to provide a unified configuration entry so that development and operation personnel can customize the DNS resolution mechanism without being completely subject to system configuration.
 
 ## DNS Configuration
 
