@@ -1,18 +1,17 @@
-# 开发第一个微服务
+# Develop the first microservice
+Developers can quickly build a project in two ways:
 
-开发者可以通过两种方式快速构建一个项目：
+* Download the samples project. It is recommended to download the entire project, according to the example [SpringMVC] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample) or [JAX RS] (https: //github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample) Initialize the configuration.
 
-* 下载samples项目。建议把整个项目都下载下来，按照例子[ SpringMVC ](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)或者 [JAX RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)进行初始化配置。
+* Generate projects using archetypes
 
-* 使用archetypes生成项目
-
-开始之前，开发者需要先选择熟悉的开发方式，目前有3种方式可供选择：
+Before you start, developers need to choose a familiar development method. There are currently 3 ways to choose:
 * Spring MVC
 * JAX RS
 * RPC
 
-他们对应的samples项目分别是：
-* [Spring MVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)
-* [JAX RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
+Their corresponding samples project are:
+* [Spring MVC] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)
+* [JAX RS] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
 * [RPC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/pojo-sample)
-* 或者使用[archetypes](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/archetypes)
+* Or use [archetypes] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/archetypes)
