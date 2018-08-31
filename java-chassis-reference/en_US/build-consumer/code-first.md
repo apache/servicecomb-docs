@@ -1,16 +1,16 @@
-## 场景描述
+## Scene Description
 
-服务消费者可以不用显式地将契约存放在项目目录中，当程序启动时，ServiceComb框架会自动根据microservice.yaml文件中配置的服务提供者的微服务名称和版本号，从服务中心拉取契约信息。
+Service consumers can store contracts in the project directory without having to explicitly do so, and when the program starts, the ServiceComb framework automatically pulls the contract information from the service center based on the microservice name and version number of the service provider configured in the microservice.yaml file.
 
-## 涉及API
+## Involving API
 
-使用隐式契约可用于RestTemplate、透明RPC两种服务消费者开发模式，使用RestTemplate的开发方式参见4.3 使用RestTemplate开发服务消费者。
+The use of implicit contracts can be used for both RestTemplate and transparent RPC service development models. For the development method using RestTemplate, see 4.3 Developing Service Consumers with RestTemplate.
 
-## 示例代码
+## Sample Code
 
-本小节以透明RPC开发模式为例展示如何使用隐式契约开发服务消费者。
+This section shows how to develop service consumers using implicit contracts, using transparent RPC development patterns as an example.
 
-服务消费者的示例代码如下：
+The sample code for the service consumer is as follows:
 
 ```java
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import org.apache.servicecomb.samples.common.schema.models.Person;
 public class CodeFirstConsumerMain {
   @RpcReference(microserviceName = "codefirst", schemaId = "codeFirstHello")
   private static Hello hello;
-  
+
   public static void main(String[] args) throws Exception {
     init();
     System.out.println(hello.sayHi("Java Chassis"));
@@ -40,4 +40,5 @@ public class CodeFirstConsumerMain {
 }
 ```
 
-在以上代码中，服务消费者已经取得了服务提供者的服务接口Hello，并在代码中声明一个Hello类型的成员。通过在hello上使用RPCReference注解指明微服务名称和schemaId，ServiceComb框架可以在程序启动时从服务中心获取到对应的服务提供者实例信息，并且生成一个代理注入到hello中，用户可以像调用本地类一样调用远程服务。
+In the code above, the service consumer has taken the service interface Hello of the service provider and declared a Hello type member in the code. By using the RPCReference annotation on hello to specify the microservice name and schemaId, the ServiceComb framework can be in
+When the program starts, the corresponding service provider instance information is obtained from the service center and a proxy is generated to be injected into the hello. The user can invoke the remote service as if it were a local class.

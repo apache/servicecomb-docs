@@ -1,4 +1,4 @@
-## Index
+# Index
 
 * [Design](design.md)
 

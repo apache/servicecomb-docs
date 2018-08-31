@@ -1,12 +1,12 @@
-使用JAVA方式集成，为Spring Boot应用增加了一个高效的HTTP服务器和REST开发框架。这种方式集成非常简单。只需要在项目中引入相关依赖，并且使用@EnableServiceComb标签即可。
+Using JAVA integration, an efficient HTTP server and REST development framework has been added for Spring Boot applications. This way of integration is very simple. Just introduce the relevant dependencies into the project and use the @EnableServiceComb annotation.
 
-本项目[代码示例](https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-simple)
+This project [code example] (https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-simple)
 
 
 
-* 引入依赖
+* Introducing dependencies
 
-依赖关系中增加spring-boot-starter-provider，即可引入java chassis的核心功能。引入hibernate-validator的目的是spring boot会检测validation-api的实现类，检测不到会无法启动。
+Add the spring-boot-starter-provider to the dependency to introduce the core functions of the java chassis. The purpose of introducing hibernate-validator is that spring boot will detect the implementation class of validation-api, and it will not start if it is not detected.
 
 ```
 <dependencyManagement>
@@ -38,10 +38,9 @@
 ```
 
 
+* Enable the core functions of java chassis
 
-* 启用java chassis的核心功能
-
-在启动类前面增加@EnableServiceComb即可。
+Add @EnableServiceComb in front of the startup class.
 
 ```
 @SpringBootApplication
@@ -54,18 +53,17 @@ public class WebsiteMain {
 ```
 
 
-
-通过以上配置，就可以完整使用java chassis提供的所有功能，使用java chassis开发REST服务，并开启各种治理功能。
-
-
-
-* 配置微服务
-
-通过microservice.yaml文件可以定制微服务的信息，包括应用名称、微服务名称、监听的地址和端口等。
+With the above configuration, you can fully use all the functions provided by the java chassis, use the java chassis to develop REST services, and open various governance functions.
 
 
 
-集成java chassis后，可以通过它的方式开发REST接口：
+* Configure microservices
+
+The microservice.yaml file allows you to customize the microservice information, including the application id, microservice name, listener address and port.
+
+
+
+After integrating java chassis, you can develop REST interface through it:
 
 ```
 @RestSchema(schemaId = "hello")
@@ -80,7 +78,4 @@ public class HelloService {
 
 
 
-然后可以通过：http://localhost:9093/hello?name=world来访问。
-
-
-
+Then you can access it by http://localhost:9093/hello?name=world.

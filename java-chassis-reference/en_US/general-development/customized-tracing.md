@@ -1,25 +1,25 @@
-## 概念阐述
+## Concept Description
 
-分布式调用链追踪提供了服务间调用的时序信息，但服务内部的链路调用信息对开发者同样重要，如果能将两者合二为一，就能提供更完整的调用链，更容易定位错误和潜在性能问题。
+Distributed call chain tracking provides timing information for calls between services, but the link call information inside the service is equally important to the developer. If you can combine the two into one, you can provide a more complete call chain, which is easier to locate. Errors and potential performance issues.
 
-## 前提条件
+## Prerequisites
 
-* 使用自定义打点功能需要首先配置并启用Java Chassis微服务调用链。
+* Using the custom dot function requires first configuring and enabling the Java Chassis microservice call chain.
 
-## 注意事项
+## Precautions
 
-* 使用`@Span`注释的自定义打点功能只支持和Java Chassis调用请求同一线程的方法调用。
-* 添加`@Span`注释的方法必须是Spring管理的Bean，否则需要按这里[提到的方法](https://stackoverflow.com/questions/41383941/load-time-weaving-for-non-spring-beans-in-a-spring-application)配置。
+* The custom dot function using the `@Span` annotation only supports method calls that are requesting the same thread as the Java Chassis call.
+* The method to add the `@Span` annotation must be a Spring-managed bean, otherwise you need to press the [Methods mentioned] (https://stackoverflow.com/questions/41383941/load-time-weaving-for-non-spring -beans-in-a-spring-application) configuration.
 
-## 自定义调用链打点
+## Custom call chain management
 
-该功能集成了Zipkin，提供`@Span`注释为需要追踪的方法自定义打点。Java Chassis将自动追踪所有添加`@Span`注释的方法，把每个方法的本地调用信息与服务间调用信息连接起来。
+This feature integrates Zipkin and provides the `@Span` annotation for custom tracking of methods that need to be tracked. Java Chassis will automatically track all methods that add `@Span` annotations, linking the local call information of each method to the call information between services.
 
-## 使用步骤:
+## Steps for usage:
 
-### 添加依赖
+### Adding dependencies
 
-基于 ServiceComb Java Chassis 的微服务只需要添加如下依赖到 pom.xml：
+Microservices based on ServiceComb Java Chassis only need to add the following dependency to pom.xml:
 
 ```xml
     <dependency>
@@ -28,9 +28,9 @@
     </dependency>
 ```
 
-### 启用自定义打点功能 {#配置追踪处理和数据收集}
+### Enable custom management function {#Configure tracking processing and data collection}
 
-在应用入口或Spring配置类上添加`@EnableZipkinTracing`注释：
+Add the `@EnableZipkinTracing` annotation to the application portal or Spring configuration class:
 
 ```java
 @SpringBootApplication
@@ -42,9 +42,9 @@ public class ZipkinSpanTestApplication {
 }
 ```
 
-### 定制打点
+### Customized management
 
-在需要定制打点的方法上添加`@Span`注释：
+Add the `@Span` annotation to the method that requires custom management:
 
 ```java
 @Component
@@ -63,23 +63,23 @@ public class SlowRepoImpl implements SlowRepo {
 }
 ```
 
-就这样，通过使用`@Span`注释，我们启动了基于 Zipkin 的自定义打点功能。
+In this way, by using the `@Span` annotation, we started the Zipkin-based custom management function.
 
-## 定制上报的数据
+## Customized reported data
 
-通过自定义打点上报的调用链包含两条数据：
+The call chain that is escalated by custom management contains two pieces of data:
 
-* **span name** 默认为当前注释的方法全名。
-* **call.path** 默认为当前注释的方法签名。
+* **span name** defaults to the full name of the method currently being annotated.
+* **call.path** defaults to the method signature of the current annotation.
 
-例如，上述例子`SlowRepoImp`里上报的数据如下：
+For example, the data reported in the above example `SlowRepoImp` is as follows:
 
 | key | value |
 | :--- | :--- |
 | span name | crawl |
 | call.path | public abstract java.lang.String org.apache.servicecomb.tests.tracing.SlowRepo.crawl\(\) throws java.lang.InterruptedException |
 
-如果需要定制上报的数据内容，可以传入自定义的参数：
+If you need to customize the reported data content, you can pass in the custom parameters:
 
 ```java
   public static class CustomSpanTask {
@@ -89,6 +89,3 @@ public class SlowRepoImpl implements SlowRepo {
     }
   }
 ```
-
-
-

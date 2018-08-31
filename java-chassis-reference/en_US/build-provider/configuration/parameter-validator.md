@@ -1,10 +1,10 @@
-## 场景描述
+## Scene Description
 
-用户在provider端使用参数效验，可以对相应的参数输入要求预先进行设置，在接口实际调用前进行效验处理，达到控制参数输入标准的效果。
+The user uses the parameter validation on the provider client, and can set the corresponding parameter input requirements in advance, and perform the effect processing before the interface is actually called to achieve the effect of the control parameter input standard.
 
-## 配置说明
+## Configuration instructions
 
-* 添加swagger-invocation-validator的pom依赖：
+* Add the pom dependency of swagger-invocation-validator:
 
   ```xml
   <dependency>
@@ -13,12 +13,11 @@
   </dependency>
   ```
 
-* 在需要验证的代码上按照JSR 349规范添加验证器注解，如@NotNull，@Min，@Max等。
+* Add validator annotations to the code that requires validation according to the JSR 349 specification, such as @NotNull, @Min, @Max, etc.
 
-## 示例代码
+## Sample Code
 
-* 接口参数验证
-
+* Interface parameter verification
 ```java
 @RestSchema(schemaId = "validator")
 @Path("/validator")
@@ -48,9 +47,9 @@ public class Validator {
 }
 ```
 
-* bean类验证
+* bean class validation
 
-需要在传入的Student对象前加@Valid，如上图sayHello\(@Valid Student student\)方法。
+You need to add @Valid in front of the incoming Student object, as shown in the figure above, sayHello\(@Valid Student student\).
 
 ```java
 public class Student {
@@ -77,18 +76,17 @@ public class Student {
   }
 }
 ```
+## Custom return exception
 
-## 自定义返回异常
+* The default parameter validation parameter ParameterValidator has implemented the interface ProducerInvokeExtension to handle the required parameter validation in accordance with the JSR 349 specification.
 
-* 默认的参数效验器ParameterValidator已经实现了接口ProducerInvokeExtension，按照JSR 349规范处理所需的参数验证。
+   If any parameter validation fails, the default error is BAD\_REQUEST\(400, "Bad Request"\).
 
-  如果任何参数验证失败，缺省错误是BAD\_REQUEST\(400, "Bad Request"\)。
+   Return error support for custom extensions, using the SPI mechanism.
 
-  返回错误支持自定义扩展，使用SPI机制。
+* You can customize the returned error information by implementing the interface ExceptionToResponseConverter, taking the ConstraintViolationExceptionToResponseConverter as an example.
 
-* 可以通过实现接口ExceptionToResponseConverter来自定义返回的错误信息，以ConstraintViolationExceptionToResponseConverter为例。
-
-  1. 实现ExceptionToResponseConverter接口，重写方法，其中getOrder方法的返回结果表示该验证器的优先级，值越小优先级越高。
+   1. Implement the ExceptionToResponseConverter interface, override the method, where the return result of the getOrder method indicates the priority of the validator. The smaller the value, the higher the priority.
 
      ```java
      public class ConstraintViolationExceptionToResponseConverter
@@ -110,7 +108,6 @@ public class Student {
      }
      ```
 
-  2. 在META-INF下的services文件夹增加一个文件，以所实现接口x.x.x.ExceptionToResponseConverter\(带包名\)为名，以具体实现类x.x.x.ConstraintViolationExceptionToResponseConverter\(带包名\)为内容。
-
+  2. Add a file in the services folder under META-INF, with the implementation interface x.x.x.ExceptionToResponseConverter\ (with package name\) as the name, and the concrete implementation class x.x.x.ConstraintViolationExceptionToResponseConverter\ (with package name\) as the content.
 
 

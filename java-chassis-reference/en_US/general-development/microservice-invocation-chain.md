@@ -1,62 +1,59 @@
-## 概念阐述
+## Concept Description
 
-微服务架构解决了很多单体应用带来的问题，但同时也需要我们付出额外的代价。由于网络的不稳定性带来的请求处理延迟就是代价之一。
+The microservices architecture solves the problems of many single applications, but it also requires us to pay extra. Request processing latency due to network instability is one of the costs.
 
-在单体应用中，所有模块都在同一个进程中运行，所以并没有模块间互通的问题。但微服务架构中，服务间通过网络沟通，因此我们不得不处理和网络有关的 问题，例如：延迟、超时、网络分区等。
+In a single application, all modules run in the same process, so there is no inter-module interworking problem. However, in the micro-service architecture, services communicate through the network, so we have to deal with network-related issues such as delays, timeouts, network partitions, and so on.
 
-另外，随着业务的扩展服务增多，我们很难洞察数据如何在蛛网般复杂的服务结构中流转。我们如何才能有效的监控网络延迟并且可视化服务中的数据流转呢？
+Also, as the business expands its services, it is difficult to see how data flows through a spider-like complex service structure. How can we effectively monitor network latency and visualize data flow in services?
 
-**分布式调用链追踪**用于有效地监控微服务的网络延时并可视化微服务中的数据流转。
+**Distributed Call Chain Tracking** is used to monitor network latency for microservices effectively and visualize data flow in microservices.
 
 ## Zipkin
 
-> [Zipkin](http://zipkin.io/)是一个分布式调用链追踪系统。 它能帮助用户收集时序数据用以定位微服务中的延迟问题，它同时管理追踪数据的收集 和查询。Zipkin 的设计基于 Google [Dapper paper](http://research.google.com/pubs/pub36356.html)。
+> [Zipkin] (http://zipkin.io/) is a distributed call chain tracking system. It helps users collect time series data to locate latency issues in microservices, and it also manages the collection and query of trace data. Zipkin's design is based on Google [Dapper paper] (http://research.google.com/pubs/pub36356.html).
 
-ServiceComb 集成了 Zipkin 提供自动调用链追踪能力，如此一来用户只需要专注实现其业务需求。
+ServiceComb integrates Zipkin to provide automatic call chain tracking capabilities so that users only need to focus on their business needs.
 
-## 使用步骤:
+## Steps for usage:
 
-### 添加依赖
+### Adding dependencies
 
-基于 ServiceComb Java Chassis 的微服务只需要添加如下依赖到 pom.xml：
+Microservices based on ServiceComb Java Chassis only need to add the following dependency to pom.xml:
 
 ```xml
-<dependency>   
+<dependency>
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>handler-tracing-zipkin</artifactId>
 </dependency>
 ```
 
-如果微服务是基于 Spring Cloud + Zuul 的 API 网关，例如 workshop demo 中的 manager service ，我们还需要加入如下的额外依赖：
+If the microservice is based on Spring Cloud + Zuul's API gateway, such as the manager service in the workshop demo, we also need to add the following additional dependencies:
 
 ```xml
-<dependency>    
+<dependency>
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>spring-cloud-zuul-zipkin</artifactId>
 </dependency>
 ```
 
-### 配置追踪处理和数据收集 {#配置追踪处理和数据收集}
+### Configuring Tracking Processing and Data Collection {#Configuration Tracking Processing and Data Collection}
 
-在microservice.yaml文件中设置追踪处理器和数据收集服务地址
+Set the tracking processor and data collection service address in the microservice.yaml file
 
 ```yaml
-  servicecomb: 
-    handler: 
-      chain: 
-        Consumer: 
+  servicecomb:
+    handler:
+      chain:
+        Consumer:
           default: tracing-consumer
-        Provider: 
+        Provider:
           default: tracing-provider
-  servicecomb: 
-    tracing: 
-      collector: 
+  servicecomb:
+    tracing:
+      collector:
         address: http://zipkin.servicecomb.io:9411
 ```
 
-就这样，在加了两个配置项，没改动一行代码的情况下，我们启动了基于 Zipkin 和 Java chassis 的分布式调用链追踪的功能。
+In this way, with the addition of two configuration items and no changes to one line of code, we started the distributed call chain tracking function based on Zipkin and Java chassis.
 
-**注意 **如果项目中的其他依赖也引入了 zipkin （例如 Spring Cloud），可能导致 zipkin 版本不一致而运行出错，这时需要在项目 pom 中声明 zipkin 版本。
-
-
-
+**Note **If other dependencies in the project also introduce a zipkin (such as Spring Cloud), which may cause the zipkin version to be inconsistent and run incorrectly, you need to declare the zipkin version in the project pom.
