@@ -1,27 +1,4 @@
-# REST over Servlet
-REST over Servlet对应使用web容器部署运行，需要新建一个servlet工程将微服务包装起来，打成war包，加载到web容器中启动运行。
-## 对外发布的Path
-当微服务部署到web容器中时，相对于独立运行，会涉及到web root以及servlet url pattern对url的改变。  
-对于传统开发框架而言，需要consumer感知对方的完整url；比如web root为/mywebapp，url pattern为/rest，业务级path为/application，则consumer代码必须通过/mywebapp/rest/application来访问。  
-这将导致一旦部署方式发生变化，比如从web容器变成standalone运行，则consumer或是producer必须修改代码来适配这个变化。  
-
-建议使用ServiceComb的部署解耦特性，无论是consumer，还是producer，在代码中都不要感知web root以及url pattern，这样ServiceComb在运行时，会自动适配producer实例的web root以及url pattern。  
-
-对于一些遗留系统改造，用户期望继续使用restTemplate.getForObject("cse://serviceName/mywebapp/rest/application"...)，这个时候，用户必须将接口定义的path定位为: /mywebapp/rest/application，例如：
-```
-@RestSchema(schemaId = "test")
-@RequestMapping(path = "/mywebapp/rest/application")
-```
-
-尽管如此，仍然推荐使用部署形态无关的方式来编码，可以减少后续由于部署形态变化，带来的修改代码问题。
-## maven依赖
-```xml
-<dependency>
-    <groupId>org.apache.servicecomb</groupId>
-    <artifactId>transport-rest-servlet</artifactId>
-</dependency>
-```
-
+## REST over Servlet
 ## 配置说明  
 与servlet机制配合，涉及到以下几个概念：
 * 启动spring context  
@@ -186,17 +163,4 @@ RestServlet工作于异步模式，根据servlet 3.0的标准，整条工作链�
   <async-supported>true</async-supported>
 </filter>
 ```
-
-## **配置项**
-
-REST over Servlet在microservice.yaml文件中的配置项见表3-9。
-
-表1-1 REST over Servlet配置项说明
-
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.rest.address | 0.0.0.0:8080 | - | 否 | 服务监听地址 | 必须配置为与web容器监听地址相同的地址 |
-| servicecomb.rest.server.timeout | 3000 | - | 否 | 超时时间 | 单位为毫秒 |
-| servicecomb.rest.servlet.urlPattern | 无 |  | 否 | 用于简化servlet+servlet mapping配置 | 只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
-
 

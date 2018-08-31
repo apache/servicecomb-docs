@@ -1,21 +1,18 @@
-## 概念阐述
+# Application Boot-up Process  
 
-服务提供者的启动过程分为初始化Log4j、bean加载（包括配置加载）和服务注册三部分。
+The startup process of a service provider includes initializing Log4j, loading bean(including its parameters), and registering service.
 
-* 初始化Log4j
+* Initialize Log4j:
 
-`Log4jUtils`默认会从`classpath\*:config/base/log4j.properties`和`classpath\*:config/log4j.properties`两个路径读取log4j配置并合并，将其传递给Log4j的`PropertyConfigurator`方法初始化Log4j。如果优先级最高的配置文件是在磁盘上，且其所在目录有写权限，则将合并的配置输出到该目录，以便于维护时观察生效的参数。
+   By default, Log4jUtils merges the log4j configurations from classpath\*:config/base/log4j.properties and classpath\*:config/log4j.properties, then transfer them to log4j's PropertyConfigurator method to initialize it. If the configuration file with the highest priority is stored on the disk directory with write permission, the combined configuration will be saved to this location to view which parameters take effect during maintenance.
 
-* bean加载
+* Load the bean.
 
-`BeanUtils`默认会从`classpath\*:META-INF/spring/\*.bean.xml`路径加载配置文件，并将其传递给Spring框架的`ClassPathXmlApplicationContext`完成应用上下文加载。在这个过程中会加载foundation-config模块的bean，完成配置加载。
+   By default `BeanUtils`  loads the configuration file from the `classpath\*:META-INF/spring/\*.bean.xml` Path and transfer the configuration to `ClassPathXmlApplicationContext` of the Spring framework to load the context. In this process, ```BeanUtils``` loads the bean of the foundation-config module.
 
-* 服务注册
+* Register the microservice.
 
-在Spring context加载完成后，`org.apache.servicecomb.core.CseApplicationListener`会加载handler配置、加载provider的schema信息，最后将微服务信息注册到服务中心。
+     When Spring context is loaded, 'org.apache.servicecomb.core.CseApplicationListener' will load the handlers configurations and providers' schema info, then register the microservice in the Service Center.
 
-> **说明：**  
-> ServiceComb的配置项分为三个层次：配置中心、环境变量、本地文件，三者优先级依次递减，高优先级中的配置项覆盖低优先级同名配置项。存放在配置中心的配置项可以在运行时修改。
-
-
-
+> **NOTE:**
+> ServiceComb have three level of configuration items: configuration center, environment variables, and local files, listed in descending order by priority. If configuration items with the same name exist, the one in the highest level overwrites others. Configuration items stored in the configuration center can be modified during running.

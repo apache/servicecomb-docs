@@ -1,46 +1,46 @@
-## 配置说明
+## REST over Vertx
+### Configuration
 
-REST over Vertx通信通道对应使用standalone部署运行模式，可直接通过main函数拉起。main函数中需要初始化日志和加载服务配置，代码如下：
+The REST over Vertx communication channel uses the standalone running mode that can be started using the main function. In the main function, you need to initialize logs and load service configuration. The code is as follow:
 
 ```java
+import org.apache.servicecomb.foundation.common.utils.BeanUtils;
+import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
+
 public class MainServer {
-    public static void main(String[] args) throws Exception {
-        Log4jUtils.init();//日志初始化
-        BeanUtils.init(); // Spring bean初始化
-    }
+  public static void main(String[] args) throws Exception {
+  　Log4jUtils.init();//Log initialization
+  　BeanUtils.init(); // Spring bean initialization
+  }
 }
 ```
 
-使用REST over Vertx网络通道需要在maven pom文件中添加如下依赖：
+To use the REST over Vertx communication channel, you need to add the following dependencies in the maven pom.xml file:
 
 ```xml
 <dependency>
-    <groupId>org.apache.servicecomb</groupId>
-    <artifactId>transport-rest-vertx</artifactId>
+　　<groupId>org.apache.servicecomb</groupId>
+　　<artifactId>transport-rest-vertx</artifactId>
 </dependency>
 ```
 
-REST over Vertx通道在microservice.yaml文件中有以下配置项：
+Configuration items that need to be set in the microservice.yaml file are described as follows:
 
-表1-1 REST over Vertx配置项说明
+Table 2 Configuration items of REST over Vertx
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.rest.address | 0.0.0.0:8080 | - | 否 | 服务监听地址 | 仅服务提供者需要配置 |
-| servicecomb.rest.server.thread-count | 1 | - | 否 | 服务端线程数 | 仅服务提供者需要配置 |
-| servicecomb.rest.server.connection-limit | Integer.MAX_VALUE | - | 否 | 允许客户端最大连接数 | 仅服务提供者需要配置 |
-| servicecomb.rest.server.connection.idleTimeoutInSeconds | 60 | - | 否 | 服务端连接闲置超时时间 | 闲置连接会被回收 |
-| servicecomb.rest.client.thread-count | 1 | - | 否 | 客户端网络线程数 | 仅服务消费者需要配置 |
-| servicecomb.rest.client.connection.maxPoolSize | 5 | - | 否 | 每个连接池的最大连接数 | 连接数=网络线程数\*连接池个数\*连接池连接数 |
-| servicecomb.rest.client.connection.idleTimeoutInSeconds | 30 | - | 否 | 连接闲置时间 | 闲置连接会被回收 |
-| servicecomb.rest.client.connection.keepAlive | true | - | 否 | 是否使用长连接 |  |
-| servicecomb.request.timeout | 30000 | - | 否 | 请求超时时间 |  |
-| servicecomb.references.\[服务名\].transport | rest |  | 否 | 访问的transport类型 | 仅服务消费者需要配置 |
-| servicecomb.references.\[服务名\].version-rule | latest | - | 否 | 访问实例的版本号 | 仅服务消费者需要配置支持latest，1.0.0+，1.0.0-2.0.2，精确版本。详细参考服务中心的接口描述。 |
+| Configuration Item                       | Default Value | Value Range | Mandatory | Description                              | Remark                                   |
+| :--------------------------------------- | :------------ | :---------- | :-------- | :--------------------------------------- | :--------------------------------------- |
+| servicecomb.rest.address                         | 0.0.0.0:8080  | -           | No        | Specifies the server listening IP address. | Only service providers require this parameter. |
+| servicecomb.rest.server.thread-count             | 1             | -           | No        | Specifies the number of server threads.  | Only service providers require this parameter. |
+| servicecomb.rest.client.thread-count             | 1             | -           | No        | Specifies the number of client network threads. | Only service consumers require this parameter. |
+| servicecomb.rest.client.connection-pool-per-thread | 1             | -           | No        | Specifies the number of connection pools in each client thread. | Only service consumers require this parameter. |
+| servicecomb.request.timeout                      | 30000         | -           | No        | Specifies the request timeout duration.  |                                          |
+| servicecomb.references.\[服务名\].transport         | rest          |             | No        | Specifies the accessed transport type.   | Only service consumers require this parameter. |
+| servicecomb.references.\[服务名\].version-rule      | latest        | -           | No        | Specifies the version of the accessed instance. | Only service consumers require this parameter. You can set it to latest, a version range such as 1.0.0+ or 1.0.0-2.0.2, or a specific version number. For details, see the API description of the service center. |
 
-## 示例代码
+### Sample Code
 
-microservice.yaml文件中的配置示例：
+An example of the configuration in the microservice.yaml file for REST over Vertx is as follows:
 
 ```yaml
 servicecomb:
@@ -52,6 +52,3 @@ servicecomb:
       transport: rest
       version-rule: 0.0.1
 ```
-
-
-
