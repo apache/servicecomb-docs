@@ -1,4 +1,4 @@
-# Delivery Messages throw Context
+# Delivery Messages through Context
 
 ServiceComb provides a Context to delivery data between microservices. Context is a key/value pair and can only use data of type String. Since the Context is serialized into the Json format and passed through the HTTP header, characters other than ASCII are not supported. Other characters require the developer to encode and pass the code. The Context is passed on the request chain in a single request and does not need to be reset. The functions such as trace id of [access log](../build-provider/access-log-configuration.md) are implemented based on this feature.
 
