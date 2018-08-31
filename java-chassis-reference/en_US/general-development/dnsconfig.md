@@ -1,41 +1,39 @@
-## 场景描述
+## Scenario
+When a user uses a domain name to connect to a public cloud or a third-party system, you need to use the domain name resolution DNS system. The DNS used in different systems and different frameworks may be different. Therefore, it is necessary to provide a unified configuration entry so that development and operation personnel can customize the DNS resolution mechanism without being completely subject to system configuration.
 
-用户使用域名连接华为公有云或者三方系统时，需要使用到域名解析系统。在不同的系统、不同的框架使用的域名解析机制都可能不太一样。所以我们有必要提供一个统一的配置入口，以便开发运维人员可以自定义DNS解析机制，而不完全受制于系统配置。
+## DNS Configuration
 
-## DNS配置
-
-DNS配置项写在microservice.yaml文件中，支持统一制定证书，也可以添加tag进行更细粒度的配置，有tag的配置会覆盖全局配置，配置格式如下：
+The DNS configuration item is written in the microservice.yaml file. It supports the unified development of certificates. It can also add tags for more fine-grained configuration. The tag configuration overrides the global configuration. The configuration format is as follows:
 
 ```
 addressResolver.[tag].[property]
 ```
 
-常见的tag如下表：   
+The common tags are as follows:
 
-| 项目 | tag |
+| Project | tag |
 | :--- | :--- |
-| 服务中心 | sc.consumer |
-| 配置中心 | cc.consumer |
-| 看板中心 | mc.consumer |
-| 用户自定义 | self.tag |
+| Service Center | sc.consumer |
+| Configuration Center | cc.consumer |
+| User Defined | self.tag |
 
-各个properties详细说明（设置Vertx DNS解析）    
+The detailed description of each property (Set Vertx DNS resolution)
 
 ``` yaml
 addressResolver:
-  servers: 8.8.8.8,8.8.4.4   #对应Linux /etc/resolv.conf的nameserver,DNS服务器地址，支持配置多个，以逗号隔开
-  ndots: 1                   #对应linux /etc/resolv.conf里面的options: ndots, 作用就是如果给的域名里面包含的点的个数少于该阈值，那么DNS解析的时候就会默认加上searchDomains的值，这个必须和searchDomains搭配使用，Linux默认为1，华为公有云PAAS（包含容器）默认是4
-  searchDomains: a,b,c       #对应linux /etc/resolv.conf里面的search，和ndots搭配使用，如果当前域名的点个数少于设置值，解析时就会把这些值添加到域名后面一起解析，比如ndots设置的为4，当前域名为servicecomb.cn-north-1.myhwclouds.com，只有三个点，那么解析的时候就会自动加上servicecomb.cn-north-1.myhwclouds.com.a去解析，没解析出来在用servicecomb.cn-north-1.myhwclouds.com.b，直到能最后解析出来
-  optResourceEnabled: true   #optional record is automatically included in DNS queries
-  cacheMinTimeToLive: 0      #最小缓存时间
-  cacheMaxTimeToLive: 10000  #最大缓存时间
-  cacheNegativeTimeToLive: 0 #DNS解析失败后，下次重试的等待时间
-  queryTimeout: 5000         #查询超时时间
-  maxQueries: 4              #查询次数
-  rdFlag: true               #设置DNS递归查询
-  rotateServers: true        #设置是否支持轮询
+  servers: 8.8.8.8, 8.8.4.4 #corresponds to the nameserver of Linux /etc/resolv.conf, the DNS server address, supports multiple configurations, separated by commas
+  ndots: 1 # corresponds to the options in linux /etc/resolv.conf: ndots, the role is that if the number of points contained in the domain name is less than the threshold, then DNS resolution will be added by default to the value of searchDomains. This must be used in conjunction with searchDomains.  
+  searchDomains: a, b, c # Corresponding to the search in linux /etc/resolv.conf, and ndots, if the number of points in the current domain name is less than the set value, these values will be added to the domain name and parsed together when parsing, for example, the ndots is set to 4. The current domain name is servicecomb.cn-north-1.myhwclouds.com, only three points. Then the servicecomb.cn-north-1.myhwclouds.com.a will be automatically parsed when parsing, not parsed out. Servicecomb.cn-north-1.myhwclouds.com.b until it can be finally parsed
+  optResourceEnabled: true #optional record is automatically included in DNS queries
+  cacheMinTimeToLive: 0 #minimum cache time
+  cacheMaxTimeToLive: 10000 #Maximum cache time
+  cacheNegativeTimeToLive: 0 #DNS resolving failure time after the next retry
+  queryTimeout: 5000 #Query timeout
+  maxQueries: 4 #Query times
+  rdFlag: true #Set DNS recursive query
+  rotateServers: true #Set whether to support polling
 ```
-## 示例
+##example
 
 ```java
 VertxOptions vertxOptions = new VertxOptions();
@@ -45,6 +43,6 @@ Vertx vertx = VertxUtils.getOrCreateVertxByName("registry", vertxOptions);
 HttpClientOptions httpClientOptions = createHttpClientOptions();
 ClientPoolManager<HttpClientWithContext> clientMgr = new ClientPoolManager<>(vertx, new HttpClientPoolFactory(httpClientOptions));
 clientMgr.findThreadBindClientPool().runOnContext(httpClient -> {
-    // do some http request
+    // do some http request
 });
 ```

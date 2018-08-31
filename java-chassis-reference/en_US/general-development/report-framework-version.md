@@ -1,59 +1,54 @@
-## 概念阐述
+## Concept Description
 
-为方便治理，使用ServiceComb进行开发，会将当前使用的ServiceComb版本号上报至服务中心，并且支持其他框架集成ServiceComb时上报其他框架的版本号。
+To facilitate the management, using ServiceComb for development, the currently used ServiceComb version number will be reported to the service center, and the version number of other frameworks will be reported when other frameworks integrate ServiceComb.
 
-## 示例代码
+## Sample Code
 
 
-步骤1 首先实现开源框架ServiceComb的Versions接口，实现该接口下的loadVersion方法，即可将版本名称和版本号作为键值对返回
+Step 1 First, implement the Versions interface of the open source framework ServiceComb, implement the loadVersion method under the interface, and return the version name and version number as key-value pairs.
 
 ```
 public class MyVersion implements Versions{
-  @Override
-  public Map<String, String> loadVersion() {
-    Map<String, String> map = new HashMap<>();
-    map.put("My", this.getClass().getPackage().getImplementationVersion());
-    return map;
-  }
+  @override
+  public Map<String, String> loadVersion() {
+    Map<String, String> map = new HashMap<>();
+    map.put("My", this.getClass().getPackage().getImplementationVersion());
+    return map;
+  }
 }
 ```
 
-步骤2 为了使用SPI机制让该返回对象被ServiceComb读取到，需要在META-INF中增加services文件夹，并在其中增加一个文件，以所实现接口x.x.x.Versions\(带包名\)为名，以具体实现类x.x.x.CseVersion\(带包名\)为内容
+Step 2 To use the SPI mechanism to make the returned object read by ServiceComb, you need to add the services folder in META-INF and add a file to it, with the name of the interface xxxVersions\ (with package name\). Take the concrete implementation class xxxCseVersion\ (with package name\) as the content
 
-当服务注册到ServiceCenter时，会携带所有版本号信息
+When the service is registered to the ServiceCenter, it will carry all version number information.
 
 ```
 {
-  "serviceId": "xxx",
-  "appId": "xxx",
-  "registerBy": "SDK",
-  "framework": {
-    "name": "servicecomb-java-chassis",
-    "version": "My:x.x.x;ServiceComb:x.x.x"
-  } 
+  "serviceId": "xxx",
+  "appId": "xxx",
+  "registerBy": "SDK",
+  "framework": {
+    "name": "servicecomb-java-chassis",
+    "version": "My:x.x.x;ServiceComb:x.x.x"
+  }
 }
 ```
 
-* 备注
+* Remarks
 
-上报的版本号可以自定义，也可以从pom或jar包的MANIFEST.MF里读取，如果使用.class.getPackage\(\).getImplementationVersion\(\)从MANIFEST.MF获取版本号，则需要在pom文件中把maven-jar-plugin的archive元素addDefaultImplementationEntries和addDefaultSpecificationEntries设置为true
+The reported version number can be customized, or it can be read from the MANIFEST.MF of the pom or jar package. If you use .class.getPackage\(\).getImplementationVersion\(\) to get the version number from MANIFEST.MF, you need to Set the maven-jar-plugin archive elements addDefaultImplementationEntries and addDefaultSpecificationEntries to true in the pom file.
 
 ```
 <plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-jar-plugin</artifactId>
-  <configuration>
-    <archive>
-      <manifest>
-        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-      </manifest>
-    </archive>
-  </configuration>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-jar-plugin</artifactId>
+  <configuration>
+    <archive>
+      <manifest>
+        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+      </manifest>
+    </archive>
+  </configuration>
 </plugin>
 ```
-
-
-
-
-

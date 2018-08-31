@@ -16,7 +16,7 @@ Both HttpClientFilter and HttpServerFilter allow multiple loads:
 
 * If getOrder returns the same value, the corresponding instance order is randomly determined
 
-Whether it is request or response, read the body stream, use getBodyBytes\ (\), the return value may be null (such as the scene called get), if not null, the corresponding stream length, Obtain through getBodyBytesLength\ (\ ).
+Whether it is request or response, read the body stream, use getBodyBytes\ (\), the return value may be null (such as scenario of getting an invocation), if not null, the corresponding stream length, Obtain through getBodyBytesLength\ (\ ).
 
 # 2.HttpClientFilter
 
@@ -87,10 +87,10 @@ The input parameter is the metadata corresponding to the request, and the servic
 
 ## 3.3 afterReceiveRequest
 
-After receiving the request, the signature is calculated according to the URL, header, query, and code stream, and compared with the signature in the header. If the signature is incorrect, a Response is directly constructed as the return value. As long as the NULL is not returned, the framework will interrupt the other HttpClientFilter. Call.
+After receiving the request, the signature is calculated according to the URL, header, query, and code stream, and compared with the signature in the header. If the signature is incorrect, a Response is directly constructed as the return value. As long as the NULL is not returned, the framework will interrupt the other HttpClientFilter Call.
 
 ## 3.4 beforeSendResponse
 
 Before sending a response, the signature is calculated according to the header and the stream and set to the header.
 
-Because the invocation has not yet been constructed, the call flow has gone wrong, so the invocation may be null.<Paste>
+Because the invocation has not yet been constructed, the call flow has gone wrong, so the invocation may be null.

@@ -1,22 +1,22 @@
-## 场景描述
+## Scenario
 
-由于HTTP协议的非安全性，在网络中传输的数据能轻易被各种抓包工具监听。在实际应用中，业务对应用或服务间传输的敏感数据有较高的安全要求，这类数据需要特别的加密保护（业务不同对算法要求不同），这样即使内容被截获，也可以保护其中的敏感数据不被轻易获取。
+Due to the non-security of the HTTP protocol, data transmitted over the network can be easily monitored by various packet capture tools. In practical applications, services have high security requirements for sensitive data transmitted between applications or services. Such data requires special encryption protection (different services have different algorithm requirements) so that even if the content is intercepted, it can protect. Sensitive data is not easily obtained.
 
-## 解决方法
+## Solution
 
-服务间的通信离开不序列化和反序列化，对于上述的场景，使用jackson类库提供的 @JsonSerialize 和 @JsonDeserialize 注解功能，对敏感数据定制序列化和反序列化方法，并在定制化的方法中实现加解密功能。
+The communication between services leaves unserialized and deserialized. For the above scenario, the @JsonSerialize and @JsonDeserialize annotation functions provided by the jackson class library are used to customize the serialization and deserialization methods for sensitive data, and in a customized method. Implement encryption and decryption functions.
 
-注解描述参考：在 [https://github.com/FasterXML/jackson-databind/wiki](https://github.com/FasterXML/jackson-databind/wiki) 中查找对应版本的Javadocs
+Annotation descriptive reference: Find the corresponding version of Javadocs in [https://github.com/FasterXML/jackson-databind/wiki] (https://github.com/FasterXML/jackson-databind/wiki)
 
-## 示例
+##example
 
-1.对 Person 对象中的 name 属性，通过注解设定使用特定的序列化和反序列化方法。注：此处演示如何使用，不涉及加解密相关。
+1. Use the specific serialization and deserialization methods for annotations by setting the name property in the Person object. Note: This shows how to use it, not related to encryption and decryption.
 
 ```
 public class Person {
   private int usrId;
 
-  //指定数据 name 使用特定的序列化和反序列化方法
+  // Specify data name using a specific serialization and deserialization method
   @JsonSerialize(using = SecretSerialize.class)
   @JsonDeserialize(using = SecretDeserialize.class)
   private String name;
@@ -47,35 +47,32 @@ public class Person {
 }
 ```
 
-2.定义 SecretSerialize 类 和 SecretDeserialize 类，并重写其方法
+2. Define the SecretSerialize class and the SecretDeserialize class and override their methods
 
 ```
 public class SecretSerialize extends JsonSerializer<String> {
 
-  //重写 name 的序列化方法，可在此实现用户定制的加解密或其他操作
+  // Rewrite the serialization method of a name, where you can implement custom encryption or decryption or other operations
   @Override
   public void serialize(String value, JsonGenerator gen, SerializerProvider serializers)
       throws IOException, JsonProcessingException {
-    //在数据 name 后增加4个特定字符
+    // Add 4 specific characters after the data name
     value = value + " &#@";
 
-    //执行序列化操作
+    // Perform serialization operations
     gen.writeString(value);
   }
 }
 
 public class SecretDeserialize extends JsonDeserializer<String> {
 
-  //重写 name 的反序列化方法，与serialize序列化方法匹配，按用户定制的规则获取真实数据
+  // Rewrite the deserialization method of a name, match the serialize serialization method, get the real data according to the rules customized by the user
   @Override
   public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-    //获取反序列化数据，除去4个特定字符，获取真实的 name
+    // Get the deserialized data, remove 4 specific characters, get the real name
     String value = p.getValueAsString();
     value = value.substring(0, value.length() - 4);
     return value;
   }
 }
 ```
-
-
-

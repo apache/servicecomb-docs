@@ -9,7 +9,7 @@ This section describes how developers can locally develop and commission consume
 
 ### Local debugging by setting up environmental information
 
-Service center is an important component in the microservice architecture, and is used for managing, registering, and detecting metadata and instance metadata. The logic relationship between the service center and microservice provider/consumer is as follows:![](../assets/images/local_develop_test_en.png)
+The Service Center is an important component in the microservice architecture, this is used in managing and handle: registering and discovering, for service metadata and service instance metadata. The logic relationship between the service center and microservice provider/consumer is as follows:![](../assets/images/local_develop_test_en.png)
 
 ## Starting Local ServiceCenter
 

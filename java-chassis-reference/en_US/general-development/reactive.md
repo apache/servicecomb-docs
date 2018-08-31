@@ -1,6 +1,6 @@
-## 简单同步模式的Producer：
+## Simple Synchronization Mode Producer:
 
-示例代码：
+Sample code:
 
 ```java
 @GetMapping(path = "/hello/{name}")
@@ -9,19 +9,19 @@ public String hello(@PathVariable(name = "name") String name){
 }
 ```
 
-与此对应的处理流程如下：
+The corresponding processing flow is as follows:
 
 ![](/assets/reactive/normalSync.png)
 
-这是传统典型的工作模型，核心思想是不阻塞网络线程，将业务放在独立的线程中处理（为了简化表达，executor中只画一个线程）
+This is the traditional typical working model. The core idea is not to block network threads, and to put the business in a separate thread (to simplify the expression, only one thread is drawn in the executor)
 
-一般情况下，此模式问题不大。
+In general, this mode is not a big problem.
 
-## 嵌套同步调用：
+## Nested synchronous call:
 
-不是所有的业务都是简单处理一下，就可以直接应答，可能还需要调用其他微服务.
+Not all services are handled simply, you can respond directly, you may need to call other microservices.
 
-示例代码：
+Sample code:
 
 ```java
 public interface Intf{
@@ -34,45 +34,45 @@ public String hello(@PathVariable(name = "name") String name){
 }
 ```
 
-与此对应的处理流程如下：
+The corresponding processing flow is as follows:
 
 ![](/assets/reactive/nestedSync.png)
 
-根据这个流程的特点，可以看到会产生以下结果：
+According to the characteristics of this process, you can see the following results:
 
-* 因为是同步调用，在“Other microservices”未应答之前“Microservice A”的调用线程一直处于阻塞等待状态，不处理任何其他事务
+* Because it is a synchronous call, the calling thread of "Microservice A" is always in the blocking wait state before "Other microservices" is not answered, and does not process any other transactions.
 
-* 当Executor中所有线程都在等待远程应答时，所有新的请求都只能在Queue中排队，得不到处理，此时整个系统相当于停止工作了
+* When all threads in the Executor are waiting for a remote response, all new requests can only be queued in the Queue and cannot be processed. At this point, the entire system is equivalent to stop working.
 
-* 要增加处理能力，只能增加Executor中的线程数，而操作系统并不能无限地增加线程数，事实上增加线程数带来的收益是一个抛物线模型，超出一定的临界值后，系统的处理能力其实会下降，而这个临界值并不会太大
+* To increase the processing power, only increase the number of threads in the Executor, and the operating system can not increase the number of threads indefinitely. The benefit of increasing the number of threads is a parabolic model. After a specific critical value, the system handles The ability will drop, and this threshold will not be too big.
 
-* 当业务逻辑中，需要多次进行远程同步操作时，会更加恶化这个现象
+* When the remote synchronization operation is required multiple times in the business logic, the problem will be bigger than before.
 
-## 嵌套同步调用的“错误”优化：
+## "Error" optimization for nested synchronous calls:
 
-针对前一场景，有人会认为将“Invoke producer method”丢进另一个线程池，可以解决问题，包括以下处理方式：
+For the previous scenario, someone would think that throwing the "Invoke producer method" into another thread pool can solve the problem, including the following:
 
-* 在producer method打标注@Async，由AOP负责将对该方法的调用丢进其他线程池去
+* In the producer method, mark @Async, which is responsible for throwing the call to the method into other thread pools.
 
-* 在producer method内部通过业务代码转移线程
+* Transferring threads through business code inside the producer method
 
-形成以下流程：
+Form the following process:
 
 ![](/assets/reactive/wrongSyncOptimization.png)
 
-根据这个流程的特点，可以看到会产生以下结果：
+According to the characteristics of this process, you can see the following results:
 
-* “Invoke producer method”必须立即返回，否则Executor线程还是得不到释放
+* "Invoke producer method" must be returned immediately, otherwise, the Executor thread will not be released
 
-* “Invoke producer method”必须提供一个新的机制告知调用流程自己的返回值，不是最终返回值（当前没有这个机制）
+* "Invoke producer method" must provide a new mechanism to inform the calling process of its return value, not the final return value (currently no such mechanism)
 
-* 虽然Executor线程释放了，但是Customer Executor，其实还是阻塞住，在等待远端应答，整个系统的阻塞状态并没有得到改变；而且还凭空多了一次线程切换
+* Although the Executor thread is released, the Customer Executor is blocked, waiting for the remote response, the blocking state of the entire system has not changed, and there is one more thread switching.
 
-* 该机制看上去，唯一的作用，是释放了executor线程，让executor线程有机会处理其他请求，这相当于隔离仓的概念，处理速度慢的业务不要影响其他业务；但是这个概念serviceComb是可以直接支持的，可以配置指定的业务方法独占全新的executor，这样整个流程就跟“嵌套同步调用”完全一样，流程更简单，而不需要在“Invoke producer method”层次来做这个事情
+* The mechanism seems to have the only effect is to release the executor thread, so that the executor thread has the opportunity to process other requests, which is equivalent to the concept of quarantine, the slow processing of the business does not affect other services; but the concept of serviceComb can be directly Supported, you can configure the specified business method to monopolize the new executor, so that the whole process is the same as the "nested synchronous call", the process is simpler, and you don't need to do this at the "Invoke producer method" level.
 
-## 纯Reactive机制
+## Pure Reactive Mechanism
 
-示例代码：
+Sample code:
 
 ```java
 public interface Intf{
@@ -94,45 +94,45 @@ public CompletableFuture<String> hello(@PathVariable(name = "name") String name)
 }
 ```
 
-与此对应的处理流程如下：
+The corresponding processing flow is as follows:
 
 ![](/assets/reactive/pureReactive.png)
 
-* 与传统流程不同的是，所有功能都在eventloop中执行，并不会进行线程切换
+* Unlike traditional processes, all functions are executed in the eventloop and no thread switching is performed.
 
-* 橙色箭头走完后，对本线程的占用即完成了，不会阻塞等待应答，该线程可以处理其他任务
+* After the orange arrow is finished, the occupation of this thread is completed, and it will not block waiting for response. The thread can handle other tasks.
 
-* 当收到远端应答后，由网络数据驱动开始走红色箭头的应答流程
+* After receiving the remote response, the network data drive starts to take the red arrow response process
 
-* 只要有任务，线程就不会停止，会一直执行任务，可以充分利用cpu资源，也不会产生多余的线程切换，去无谓地消耗cpu。
+* As long as there are tasks, the thread will not stop, the task will be executed all the time, you can make full use of the cpu resources, and will not generate redundant thread switching, to consume the CPU unnecessarily.
 
-因为同步模式下，需要大量的线程来提升并发度，而大量的线程又带来线程切换的额外消耗。
+Because in synchronous mode, a large number of threads are needed to increase the degree of concurrency, and a large number of threads bring additional consumption of thread switching.
 
-测试数据表明，reactive模式，只需要消耗同步模式不到一半的cpu，即可达到或超过同步模式的tps，并且时延更低。
+The test data shows that the reactive mode only needs to consume less than half of the CPU of the synchronous mode. And can reach or exceed the tps of the synchronous mode, and the delay is lower.
 
-## 混合Reactive机制
+## Hybrid Reactive Mechanism
 
-Reactvie要求：所有在eventloop中执行的逻辑，不允许有任何的阻塞动作，包括不限于wait、sleep、巨大循环、同步查询DB等等。
+Reactive requires that all logic executed in the eventloop does not allow any blocking actions, including not limited to wait, sleep, large loops, synchronous query DB, and so on.
 
-serviceComb底层是基于vertx的，vertx生态中有jdbc、mq、zooKeeper等等各种丰富组件的reactive驱动，一般情况下都可以满足要求。
+The bottom of serviceComb is based on vertx. The vertx ecosystem has reactive drivers for various rich components such as JDBC, MQ, zooKeeper, etc. Under normal circumstances, it can meet the requirements.
 
-但是有的场景下，确实有的同步操作无法避免，比如：
+However, in some scenarios, there are indeed some synchronization operations that cannot be avoided, such as:
 
-* 私有的安全加固的redis，只提供了同步驱动
+* Private security hardened redis, only provides synchronous drive
 
-* 较复杂的业务运算
+* More complex business operations
 
-* ……
+* ......
 
-此时，可以将这些同步的逻辑抽取出来放到线程池中去处理，而其他部分仍然使用reactive的流程。
+At this point, the logic of these synchronizations can be extracted and placed in the thread pool for processing, while other parts still use the reactive process.
 
-## 关于reactive的一些说明：
+## Some notes about reactive:
 
-* Producer：
+* Producer:
 
-  * producer是否使用reactive与consumer如何调用，没有任何联系
+  * Whether the producer uses reactive and consumer to call, there is no connection
 
-  * 当operation返回值为CompletableFuture类型时，默认此operation工作于reactive模式，此时如果需要强制此operation工作于线程池模式，需要在microservice.yaml中明确配置；假设某operation，其schemaId为sid，operationId为asyncQuery，则需要进行以下配置：
+  * When the operation return value is the CompletableFuture type, the default operation is in reactive mode. If you need to force this operation to work in thread pool mode, you need to configure it in microservice.yaml explicitly. If an operation, its schemaId is sid, operationId For asyncQuery, you need to do the following:
 
 ```
 servicecomb:
@@ -141,21 +141,18 @@ servicecomb:
       sid.asyncQuery: cse.executor.groupThreadPool
 ```
 
-这里的cse.executor.groupThreadPool是serviceComb内置的默认线程池，用户可以任意指定为自己的定制线程池。
+The cse.executor.groupThreadPool here is the default thread pool built into serviceComb, which can be arbitrarily specified by the user as its custom thread pool.
 
-* Consumer：
+* Consumer:
 
-  * consumer是否使用reactive与producer如何实现，没有任何联系
+  * Whether the consumer uses reactive and producer how to implement, there is no connection
 
-  * 当前只支持透明RPC模式，使用JDK原生的CompletableFuture来承载此功能
+  * Currently only supports transparent RPC mode, using JDK native CompletableFuture to carry this function
 
-    completableFuture的when、then等等功能都可直接使用
+    completableFuture's when, then, etc. can be used directly
 
-    但是completableFuture的async系列功能，其实是另外启线程池来执行功能，不建议使用
+    However, the async series of completableFuture is another thread pool to perform functions. It is not recommended.
 
-    关于RxJava Observable的支持后续会加入
+    Support for RxJava Observable will be added later.
 
-    关于AsyncRestTemplate的支持后续会加入
-
-
-
+    Support for AsyncRestTemplate will be added later.

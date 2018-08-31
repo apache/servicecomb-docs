@@ -57,10 +57,9 @@ public ResponseEntity<Resource> resource() {
 
 ## 4.Download InputStream
 
-Because InputStream does not necessarily mean file downloading, it needs to be identified by swagger annotation (@ApiResponse). This is a file download scenario.
+Because InputStream does not mean file downloading for sure, it needs to be annotated by 'swagger annotation' (@ApiResponse). This is a file download scenario.
 
-In some scenarios, resources are not stored locally, such as in OBS cloud services, and OBS resources are output in InputStream mode.
-
+In some scenarios, resources are not stored locally.
 ```
 return ResponseEntity
     .ok()
@@ -79,7 +78,7 @@ ServiceComb uses java's mime type mechanism for file type determination. If the 
 
 If this does not meet the requirements, assuming the file suffix is, and the expected file type is application/file-xyz, any of the following methods can be resolved:
 
-### 1)Expanding through Java's mime type mechanism
+### 1) Extend via Java's mime type mechanism
 
 In the META-INF directory, create a mime.  Types file with the contents:
 
@@ -149,7 +148,7 @@ org.apache.servicecomb.foundation.vertx.http.ReadStreamPart.saveToFile(File, Ope
 
 note:
 
-* When the ReadStreamPart instance is obtained, the file content is not downloaded. The save series method is called to start reading the file data from the network.
+* When the ReadStreamPart instance is obtained, the file content is not downloaded. The save or other methods is called to start reading the file data from the network.
 
 * If you use saveAsBytes, saveAsString, the data is directly stored in the memory; if the downloaded file is large, there will be a risk of memory explosion.
 
