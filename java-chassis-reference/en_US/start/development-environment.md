@@ -29,7 +29,7 @@ C:\Users\h00407576> java -version
 
 ## Maven installation steps
 
-Maven is a development tool that integrates project management, code compilation, project management and more.
+Maven is a development tool that integrates project management, code compilation and more.
 
 ### **Prerequisites**
 
@@ -64,7 +64,7 @@ f. (Optional) In order to quickly download various dependencies, it is recommend
   </mirror>
 ```
 
-g. Results verification
+g. Verification
 
 Use the mvn -version command to verify that the installation is successful. The windows environment is echoed as follows:
 
