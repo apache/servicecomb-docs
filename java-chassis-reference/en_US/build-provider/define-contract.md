@@ -67,7 +67,7 @@ paths:
           schema:
             type: string
         default:
-          description: returned for a default result
+          description: return a default result
           schema:
             type: string
   /sayhello:
@@ -85,7 +85,7 @@ paths:
           schema:
             type: string
         default:
-          description: returned for a default result
+          description: return a default result
           schema:
             type: string
 definitions:
