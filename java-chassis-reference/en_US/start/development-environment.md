@@ -6,7 +6,7 @@ JDK, Maven, Eclipse, and IDEA is required. If you already have these development
 
 1.JDK version
 
-The JDK version requires 1.8 or more.
+The JDK version requires 1.8 or higher.
 
 2.JDK download
 
