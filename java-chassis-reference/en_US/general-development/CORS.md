@@ -4,7 +4,7 @@
 
 Cross-Origin Resource Sharing (CORS) allows Web servers to perform cross-domain access control, enabling browsers to more securely transfer data across domains.
 
-## Scene Description
+## Scenario
 
 When the user needs to send REST requests from across the browser, the CORS mechanism may be used. The microservices that receive cross-domain requests need to enable CORS support.
 
