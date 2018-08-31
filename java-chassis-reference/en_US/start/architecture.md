@@ -22,6 +22,6 @@ Currently, applications can be developed in Spring MVC, JAX-RS, or transparent R
 | Communication on model | transport-rest-vertx   | Yes              | A development framework running over HTTP, it does not depend on Web containers. Applications are packaged as executable .jar files. |
 | Communication on model | transport-rest-servlet | Yes              | A development framework running on Web container. Applications are packaged as WAR files. |
 | Communication on model | transport-highway      | Yes              | Provides high-performance private communication protocols for Java communication. |
-| Running model          | handler-loadbalance    | Yes              | A load balancing module that provides various routing policies and configurations. It is usually used for Consumer. |
+| Running model          | handler-loadbalance    | Yes              | A load balancing module that provides various routing policies and configurations. It is usually used on the Consumer side. |
 | Running model          | handler-bizkeeper      | Yes              | Provides service governance functions, such as isolation, fallbreak, and fault tolerance. |
 | Running model          | handler-tracing        | Yes              | Invoke tracking chain module, Monitor system integration, Output data of buried point |
