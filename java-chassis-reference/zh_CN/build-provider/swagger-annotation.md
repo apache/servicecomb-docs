@@ -16,12 +16,13 @@ Swagger提供了一套注解用于描述接口契约，用户使用注解，可�
 
 ### `@Api`
 
-> `@Api`作用于类级别，在Swagger官方描述中是用于将一个Class标注为一个Swagger资源。但该注解在ServiceComb中不是必须的，ServiceComb可以根据`@RestSchema`和`@RpcSchema`确定需要从哪些类中解析出Swagger契约。<br/>
-ServiceComb当前支持的属性只有tags。
+> `@Api`作用于类级别，在Swagger官方描述中是用于将一个Class标注为一个Swagger资源。但该注解在ServiceComb中不是必须的，ServiceComb可以根据`@RestSchema`和`@RpcSchema`确定需要从哪些类中解析出Swagger契约。
 
 | 属性 | 类型 | 说明 |
 | :--- | :------ | :--- |
 | tags | string | 设置当前Class下定义的operation的默认tag值 |
+| consumes | string | 指定契约级别的请求体数据格式，可以使用逗号分隔指定多个 |
+| produces | string | 指定契约级别的响应体数据格式，可以使用逗号分隔指定多个 |
 
 ### `@SwaggerDefinition`
 
@@ -59,6 +60,7 @@ ServiceComb当前支持的属性只有tags。
 | produces | string | 指定响应体的数据格式 |
 | protocols | string | 设置可用的协议（schemes），可选值有`http`、`https`、`ws`、`wss`，逗号分隔 |
 | httpMethod | string | 设置HTTP方法 |
+| hidden | boolean | 是否隐藏此方法 |
 
 ### `@ApiImplicitParam`
 
