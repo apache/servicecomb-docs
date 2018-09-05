@@ -16,11 +16,13 @@ In ServiceComb, Swagger annotations are not required. When a user uses SpringMVC
 
 ### `@Api`
 
-> `@Api` acts at the class level and is used to mark a Class as a Swagger resource in the official Swagger description. However, this annotation is not required in ServiceComb. ServiceComb can determine which classes need to parse the Swagger contract based on `@RestSchema` and `@RpcSchema`. The only attributes currently supported by ServiceComb are tags.
+> `@Api` acts at the class level and is used to mark a Class as a Swagger resource in the official Swagger description. However, this annotation is not required in ServiceComb. ServiceComb can determine which classes need to parse the Swagger contract based on `@RestSchema` and `@RpcSchema`.
 
 | Attribute | Type | Description |
 | :--- | :------ | :--- |
-Tags | string | set the default tag value of the operation defined under the current Class |
+| Tags | string | set the default tag value of the operation defined under the current Class |
+| consumes | string | specify the MIME types of request in schema level, separated by commas |
+| produces | string | specify the MIME types of response in schema level, separated by commas |
 
 ### `@SwaggerDefinition`
 
@@ -49,15 +51,16 @@ Tags | string | set the default tag value of the operation defined under the cur
 | :--- | :------ | :--- |
 | value | string | A brief description of the method, corresponding to the `summary` field of the Swagger contract operation |
 | notes | string | Details, corresponding to the `description` field of the Swagger contract operation |
-Tags | string | label operation label |
+| Tags | string | label operation label |
 | code | int | HTTP status code for response messages |
 | response | Class<?> | Method return value type |
-responseContainer | string | The container type that wraps the return value. The optional values ​​are `List`, `Set`, `Map` |
-| ResponseHeaders | `@ ResponseHeader` | HTTP response message header, ServiceComb support attribute value of` name`, `response`,` responseContainer` |
+| responseContainer | string | The container type that wraps the return value. The optional values ​​are `List`, `Set`, `Map` |
+| ResponseHeaders | `@ResponseHeader` | HTTP response message header, ServiceComb support attribute value of` name`, `response`,` responseContainer` |
 | Consumes | string | specified data format request body |
 | Produces | string | body in response to the data format specified |
 | Protocols | string | the available protocol (schemes), possible values ​​are `http`,` https`, `ws`,` wss`, separated by commas |
 | httpMethod | string | Set HTTP method |
+| hidden | boolean | Weather to hide this method |
 
 ### `@ApiImplicitParam`
 
