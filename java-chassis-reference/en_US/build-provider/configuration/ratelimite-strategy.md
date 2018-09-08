@@ -2,19 +2,19 @@
 ## Rate Limiting Policy
 ### Scenario
 
-Users at the provider end can use the rate limiting policy to limit the maximum number of requests sent from a specified microservice per second. 
+Users can set the rate limiting policy in the provider's configuration. By setting the request frequency from a particular micro service, provider can limit the max number of requests per second.
 
-### Precautions
+### Cautions
 
-1. There may be a small different between the rate limit and actual traffic.
-2. The rate limit function at the provider end is for service rather than security purpose. To prevent distributed denial of service(DDos) attacks, you need to take other measures.
-3. Traffic control is a microservice-level rather than process-level function.
+1. There may be a small difference between the rate limit and actual traffic.
+2. The provider's rate limit control is for service rather than security. To prevent distributed denial of service(DDos) attacks, you need to take other measures.
+3. Traffic control is scoped to microservice rather than instance. Consume a consumer microservice has 3 instances, and calls a provider service. After configuring the rate limit policy, the provider won't distinguish which consumer instance makes the request, but take all requests together as the 'consume request' for rate limiting.
 
 ### Configuration
 
-　　Rate limiting policies are configured in the microservice.yaml file. For related configuration items, see Table 2. To enable the rate limiting policy at the provider end, you also need to configure the rate limiting handler on the server in the processing chain and add dependencies in the pom.xml file. 
+Rate limiting policies are configured in the microservice.yaml file. The table below shows all the configuration items. To enable the provider's rate limit policy, you also need to configure the rate limiting handler in the server's handler chain and add dependencies in the pom.xml file. 
 
-　　An example of microservice.yaml file configuration is as follows,
+- An example of rate limit configuration in microservice.yaml:
 
 ```yaml
 servicecomb:
@@ -24,7 +24,7 @@ servicecomb:
         default: qps-flowcontrol-provider
 ```
 
-　　Add dependencies of handler-flowcontrol-qps in the pom.xml file,
+- Add the handler-flowcontrol-qps dependency in the pom.xml file:
 
 ```xml
 <dependency>
@@ -34,12 +34,14 @@ servicecomb:
 </dependency>
 ```
 
-　　**Table2 Configuration items of the QPS rate limit**
+**QPS rate limit configuration items**
 
-| Configuration Item                       | Default Value       | Value Range              | Mandatory | Description                              | Remarks                                  |
-| :--------------------------------------- | :------------------ | :----------------------- | :-------- | :--------------------------------------- | :--------------------------------------- |
-| servicecomb.flowcontrol.Provider.qps.enabled     | true                | true/false               | No        | Specifies whether to enable traffic control  at the provider end. | -                                        |
-| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\] | 2147483647（max int） | \(0,2147483647\]，Integer | No        | Specifies the number of requests allowed per second. | This parameter can only be configured for microservice |
-| servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | (0,2147483647\]，Integer  | No        | Specifies the total number of requests allowed per second at the provider end | If no configuration is set for any specific microservices, this parameter takes effect |
+| Configuration Item                                         | Default Value         | Value Range               | Required | Description                                          | Remarks                                                      |
+| :--------------------------------------------------------- | :-------------------- | :------------------------ | :------- | :--------------------------------------------------- | :----------------------------------------------------------- |
+| servicecomb.flowcontrol.Provider.qps.enabled               | true                  | true/false                | No       | Enable provider's traffic control  or not            | -                                                            |
+| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\] | 2147483647（max int） | \(0,2147483647\]，Integer | No       | Specifies the number of requests allowed per second. | This parameter can be configured to microservice/schema/operation, the latter has a higher priorty |
+| servicecomb.flowcontrol.Provider.qps.global.limit          | 2147483647（max int） | (0,2147483647\]，Integer  | No       | Specifies the provider's total number of requests    | If no configuration is set for any specific microservice, this parameter takes effect |
 
-## 
+> **Notes:**
+>
+> The `ServiceName` in provider's rate limit config is the name of the consumer that calls the provider. While `schema` and `operation` is the provider's own config item. That is, the rate limit policy controls the consumer requests that  call the provider's schema or operation.

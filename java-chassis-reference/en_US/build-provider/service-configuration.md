@@ -8,4 +8,4 @@
 • A fallback policy is used when a service request is abnormal.
 
 ## [Parameter Validation](/build-provider/configuration/parameter-validator.html)
-• Users can set parameter validation rules in the provider's configuration. The rules will validate input parameters when APIs are called, so the parameters can be defined in a specific format.
+• Users can set parameter validation rules in the provider's configuration. The rules will validate input parameters when provider APIs are called, so the parameters can be defined in a specific format.

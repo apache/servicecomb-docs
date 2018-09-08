@@ -38,4 +38,5 @@
 | servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | provider接受请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
 
 > **注意：**
-> provider端限流策略配置中的`ServiceName`指的是调用该provider的consumer，而`shema`、`operation`指的是provider自身的。即provider端限流配置的含义是，限制指定consumer调用本provider的某个schema、operation的流量。
+> provider端限流策略配置中的`ServiceName`指的是调用该provider的consumer，而`schema`、`operation`指的是provider自身的。即provider端限流配置的含义是，限制指定consumer调用本provider的某个schema、operation的流量。
+
