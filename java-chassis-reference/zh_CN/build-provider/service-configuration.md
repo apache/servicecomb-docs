@@ -11,4 +11,3 @@
 
 ## [参数效验](/build-provider/configuration/parameter-validator.html)
 • 用户在provider端使用参数效验，可以对相应的参数输入要求预先进行设置，在接口实际调用前进行效验处理，达到控制参数输入标准的效果。
-
