@@ -1,6 +1,6 @@
 # Parameter Validation
 ## Scenario
-The user uses the parameter validation on the provider client, and can set the corresponding parameter input requirements in advance, and perform the effect processing before the interface is actually called to achieve the effect of the control parameter input standard.
+Users can set parameter validation rules in the provider's configuration. The rules will validate input parameters when provider APIs are called, so the parameters can be defined in a specific format.
 
 ## Configuration instructions
 
@@ -13,7 +13,7 @@ The user uses the parameter validation on the provider client, and can set the c
   </dependency>
   ```
 
-* Add validator annotations to the code that requires validation according to the JSR 349 specification, such as @NotNull, @Min, @Max, etc.
+* Add validator annotations to the code that requires validation by the JSR 349 specification, such as @NotNull, @Min, @Max, etc.
 
 ## Sample Code
 
@@ -49,7 +49,7 @@ public class Validator {
 
 * bean class validation
 
-You need to add @Valid in front of the incoming Student object, as shown in the figure above, sayHello\(@Valid Student student\).
+Add @Valid in front of the incoming Student object, like the method sayHello\(@Valid Student student\) shown above.
 
 ```java
 public class Student {
@@ -78,15 +78,15 @@ public class Student {
 ```
 ## Custom return exception
 
-* The default parameter validation parameter ParameterValidator has implemented the interface ProducerInvokeExtension to handle the required parameter validation in accordance with the JSR 349 specification.
+* The default parameter validator ParameterValidator has implemented the interface ProducerInvokeExtension to handle the required parameter validation with the JSR 349 specification.
 
    If any parameter validation fails, the default error is BAD\_REQUEST\(400, "Bad Request"\).
 
-   Return error support for custom extensions, using the SPI mechanism.
+   Return error can be customized with the SPI mechanism.
 
-* You can customize the returned error information by implementing the interface ExceptionToResponseConverter, taking the ConstraintViolationExceptionToResponseConverter as an example.
+* Developer can customize the returned error information by implementing the interface ExceptionToResponseConverter, taking the ConstraintViolationExceptionToResponseConverter as an example.
 
-   1. Implement the ExceptionToResponseConverter interface, override the method, where the return result of the getOrder method indicates the priority of the validator. The smaller the value, the higher the priority.
+   1. Implement the ExceptionToResponseConverter interface, override the method, the return value of the getOrder method indicates the priority of the validator. The smaller the value, the higher the priority.
 
      ```java
      public class ConstraintViolationExceptionToResponseConverter
@@ -95,12 +95,12 @@ public class Student {
        public Class<ConstraintViolationException> getExceptionClass() {
          return ConstraintViolationException.class;
        }
-
+    
        @Override
        public Response convert(SwaggerInvocation swaggerInvocation, ConstraintViolationException e) {
          return Response.createFail(new InvocationException(Status.BAD_REQUEST, e.getConstraintViolations().toString()));
        }
-
+    
        @Override
        public int getOrder() {
          return -100;
@@ -108,6 +108,4 @@ public class Student {
      }
      ```
 
-  2. Add a file in the services folder under META-INF, with the implementation interface x.x.x.ExceptionToResponseConverter\ (with package name\) as the name, and the concrete implementation class x.x.x.ConstraintViolationExceptionToResponseConverter\ (with package name\) as the content.
-
-
+  2. Add a file in the services folder under META-INF, with the implemented interface x.x.x.ExceptionToResponseConverter(with package name\) as the name, and the implementation class x.x.x.ConstraintViolationExceptionToResponseConverter(with package name\) as the content.
