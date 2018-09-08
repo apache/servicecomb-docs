@@ -16,7 +16,4 @@
 | servicecomb.service.registry.instance.watch | true |  | 否 | 是否采用PUSH模式监听实例变化。为false的时候表示使用PULL模式。 |  |
 | servicecomb.service.registry.autodiscovery | false |  | 否 | 是否自动发现服务中心的地址。当需要配置部分地址，其他地址由配置的服务中心实例发现的时候，开启这个配置。 |  |
 | servicecomb.service.registry.instance.healthCheck.interval | 30 |  | 否 | 心跳间隔。 |  |
-| servicecomb.service.registry.instance.healthCheck.times | 3 |  | 否 | 允许的心跳失败次数。interval \* times决定了实例被自动注销的时间。如果服务中心等待这么长的时间没有收取到心跳，会注销实例。 |  |
-
-
-
+| servicecomb.service.registry.instance.healthCheck.times | 3 |  | 否 | 允许的心跳失败次数。当连续第times+1次心跳仍然失败时则实例被sc下线。即interval \* (times + 1)决定了实例被自动注销的时间。如果服务中心等待这么长的时间没有收取到心跳，会注销实例。 |  |
