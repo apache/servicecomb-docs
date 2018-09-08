@@ -1,44 +1,78 @@
-## Fallback Policy
+## Fallback
+### Concepts
 
-### Concept Description
+A fallback policy is applied when a service request is abnormal.
 
-A fallback policy is used when a service request is abnormal.
+There are three key concepts in fallback: isolation, circuit breaking, and fault tolerance:
 
-There are three key concepts in fallback: isolation, fallbreak, and fault tolerance:
+* **Isolation** is an exception detection mechanism. There are two common "exception"s: timeout and overload, which can be controlled by timeout duration and max concurrent requests.
+* **Circuit breaking** is an exception response mechanism which depends on isolation. Circuit breaking is triggered by the error rate, like the number of bad requests, or the rate of invalid calls.
+* **Fault tolerance** is an exception handling mechanism that depends on circuit breaking. Fault tolerance is called after a circuit breaking is triggered. Users can set the number of fault tolerance calls in the configuration.
 
-* Isolation is an exception detection mechanism. Two common items that need to be detected are timeout duration and the number of concurrent requests.
-* Fallbreak is an exception response mechanism, and it depends on isolation. Fallbreak is triggered based on the error rate. Two common items need to set are the number of requests to collect and error rate.
-* Fault tolerance is an exception handling mechanism that depends on fallbreak. Fault tolerance is called after a fallbreak. For fault tolerance, you need to set the number of fault tolerance call items.
-
-During fallback, if M(the threshold) errors are detected in N requests, the consumer will no longer send requests  and the fault tolerance mechanism will be enabled. The preceding fallback process is accepted in Netflix Hystrix and helps you configure the parameters. Obtain information about the parameter configuration at [https://github.com/Netflix/Hystrix/wiki/Configuration](https://github.com/Netflix/Hystrix/wiki/Configuration). Currently, ServiceComb provides two types of fault tolerance modes: returning null values and throwing exceptions.
+Let's combine the 3 concepts: the **isolation** mechanism detects there are M(the threshold) errors in N requests, the **circuit breaking** is triggered and make sure there are no more requests sent, and then **fault tolerance** method is called. Technically the concept definition is the same with Netflix Hystrix, making it easy to understand the config items(Reference: [Hystrix Configuration]([https://github.com/Netflix/Hystrix/wiki/Configuration](https://github.com/Netflix/Hystrix/wiki/Configuration))). ServiceComb provides 2 fault tolerance methods: returning null values and throwing exceptions.
 
 ### Scenario
 
-By configuring a fallback policy, you can handler microservice exceptions.
+Users configure a fallback policy to handle microservices' exceptions.
 
 ### Configuration
 
-　　Configuration items of fallback policies are as follows:
+Configuration items can be set to be applied to all APIs or a particular method of a microservice.
 
-　　**Table 3 Configuration items of the fallback policy**
+### Configuration Scope
 
-| Configuration Item                       | Default value  | Value Range                   | Mandatory | Description                              | Remarks                                  |
-| :--------------------------------------- | :------------- | :---------------------------- | :-------- | :--------------------------------------- | :--------------------------------------- |
-| servicecomb.isolation.timeout.enabled            | FALSE          | -                             | No        | Specifies whether to enable timeout detection. |                                          |
-| servicecomb.isolation.timeoutInMilliseconds      | 30000          | -                             | No        | Specifies the timeout duration threshold. |                                          |
-| servicecomb.isolation.maxConcurrentRequests      | 10             | -                             | No        | Specifies the maximum number of concurrent requests. |                                          |
-| servicecomb.circuitBreaker.enabled               | TRUE           | -                             | No        | Specifies whether to enable fallbreak.   |                                          |
-| servicecomb.circuitBreaker.forceOpen             | FALSE          | -                             | No        | Specifies that fallbreak is enable regardless of the number of failed requests or the error rate. |                                          |
-| servicecomb.circuitBreaker.forceClosed           | FALSE          | -                             | No        | Specifies that fallbreak can be implemented at any time. | If this parameter and servicecomb.circuitBreaker.forceOpen both need to be configured, servicecomb.circuitBreaker.forceOpen has priority. |
-| servicecomb.circuitBreaker.sleepWindowInMilliseconds | 15000          | -                             | No        | Specifies the duration needed to recover from fallbreak. | After the recovery, the number of failed requests will be recalculated. Note: If the consumer fails to send a request to the provider after the recovery, fallbreak is enabled again. |
-| servicecomb.circuitBreaker.requestVolumeThreshold | 20             | -                             | No        | Specifies the threshold of failed requests sent within 10 seconds. If the threshold is reached, fallbreak is triggered. | Ten seconds will be divided into ten 1 seconds, and the error rate is calculated 1 second later after an error occurred. Therefore, fallbreak can be implemented at least 1 second after the call. |
-| servicecomb.circuitBreaker.errorThresholdPercentage | 50             | -                             | No        | Specifies the threshold of error rate. If the threshold is reached, fallbreak is triggered. |                                          |
-| servicecomb.fallback.enabled                     | TRUE           | -                             | No        | Specifies whether to enable troubleshooting measures after an error occurred. |                                          |
-| servicecomb.fallback.maxConcurrentRequests       | 10             | -                             | No        | Specifies the number of fault tolerance(servicecomb.fallbackpolicy.policy) requests concurrently called. If the value exceeds 10, the measures will no longer be called, and exception are returned. |                                          |
-| servicecomb.fallbackpolicy.policy                | throwexception | returnnulll \| throwexception | No        | Specifies the error handling policies after an error occurred. |                                          |
+- Configuration by type: items can be applied to Providers and Consumers
+- Configuration by scope: items can be applied to a specific microservice, or [x-schema-id+operationId]
 
-**Caution:** Be cautious when setting servicecomb.isolation.timeout.enabled to TRUE, All processes are asynchronously processed in the system, and any error value returned by an intermediate process because the set timeout duration is reached can cause failure of the follow-up processes. Therefore, you are advised to keep the default value FALSE for servicecomb.isolation.timeout.enabled. For timeout duration from the network aspect, you are advised to set servicecomb.request.timeout=30000.
-{: .notice--warning}
+All the items in this chapter can be configured in the following format:
+
+```
+servicecomb.[namespace].[type].[MicroServiceName].[interface name].[property name]
+```
+
+The type can be Consumer or Provider. Specify the [MicroServiceName] to apply configuration to specific microservice. To make the configuration applied to API, we have to specify the API name in the format x-[schema-id+operationId]
+
+The possible Isolation config items are as follows:
+
+```
+servicecomb.isolation.Consumer.timeout.enabled
+servicecomb.isolation.Consumer.DemoService.timeout.enabled
+servicecomb.isolation.Consumer.DemoService.hello.sayHello.timeout.enabled
+servicecomb.isolation.Provider.timeout.enabled
+servicecomb.isolation.Provider.DemoService.timeout.enabled
+servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled
+```
+
+
+
+### Configuration Items
+
+Tips: the items' type' field is omitted in the following table, while items can be applied to both Provider and Consumer.
+
+For Providers, the configuration item should be: servicecomb.isolation.Consumer.timeout.enabled
+
+For Consumers, the conriguration item should be servicecomb.isolation.Provider.timeout.enabled
+
+**Table 1-1 The fallback policy config items**
+
+| Configuration Item                                   | Default value  | Value Range                   | Required | Description                                                  | Tips                                                         |
+| :--------------------------------------------------- | :------------- | :---------------------------- | :------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| servicecomb.isolation.timeout.enabled                | FALSE          | -                             | No       | Enable timeout detection or not.                             |                                                              |
+| servicecomb.isolation.timeoutInMilliseconds          | 30000          | -                             | No       | The timeout duration threshold.                              |                                                              |
+| servicecomb.isolation.maxConcurrentRequests          | 10             | -                             | No       | The maximum number of concurrent requests.                   |                                                              |
+| servicecomb.circuitBreaker.enabled                   | TRUE           | -                             | No       | Enable circuit breaking or not.                              |                                                              |
+| servicecomb.circuitBreaker.forceOpen                 | FALSE          | -                             | No       | Force circuit breaker to be enabled regardless of the number of errors. |                                                              |
+| servicecomb.circuitBreaker.forceClosed               | FALSE          | -                             | No       | Force circuit breaker to be disabled.                        | When forceOpen and forceClose are set at the same time, forceOpen will take effect. |
+| servicecomb.circuitBreaker.sleepWindowInMilliseconds | 15000          | -                             | No       | How long to recover from a circuit breaking.                 | After the recovery, the number of failures will be reset. Note: If the call fails immediately after a recover, the circuit breaker is triggered immediately again. |
+| servicecomb.circuitBreaker.requestVolumeThreshold    | 20             | -                             | No       | The threshold of failed requests within 10 seconds. If the threshold is reached, circuit breaker is triggered. | The 10 seconds duration is splitted evenly into 10 segments for error calculation. The calculation will start after 1 second. So circuit breakers are triggered after at least 1 second. |
+| servicecomb.circuitBreaker.errorThresholdPercentage  | 50             | -                             | No       | The threshold of error rate. If the threshold is reached, circuit breaker is triggered. |                                                              |
+| servicecomb.fallback.enabled                         | TRUE           | -                             | No       | Enable fallback handling or not                              |                                                              |
+| servicecomb.fallback.maxConcurrentRequests           | 10             | -                             | No       | The max number of concurrent fallback(specified by servicecomb.fallbackpolicy.policy) calls. When the threshold is reached, the fallback method is not called by return exception directly. |                                                              |
+| servicecomb.fallbackpolicy.policy                    | throwexception | returnnulll \| throwexception | No       | The fallback policy when errors occurred.                    |                                                              |
+
+**Caution:** Be cautious to set servicecomb.isolation.timeout.enabled to true. All handlers in the handler chain are asynchronously executed, the intermediate handlers' return will make the follow-up handlers processing abandoned. Therefore, we recommend to set servicecomb.isolation.timeout.enabled to be false(by default) and set the network timeout duration servicecomb.request.timeout to 30000.
+
+
 
 ## Sample Code
 
@@ -67,4 +101,4 @@ servicecomb:
 
 > **NOTE:**
 >
-> You need to enable service governance for fallback, The provider handler is `bizkeeper-provider`, and the consumer handler is `bizkeeper-consumer`. If `Consumer:`/`Provider:` was omitted, your configuration would not work, and service governance would be enabled with default configuration. 
+> You need to enable service governance for fallback. The corresponding provider handler  `bizkeeper-provider`, and the consumer handler is `bizkeeper-consumer`.
