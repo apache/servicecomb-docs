@@ -1,5 +1,5 @@
 ## [Load Balancing Policy](/build-provider/configuration/lb-strategy.html)
-• ServiceComb provides a Ribbon-based load balancing solution which can be configured through file. There are different routing policies including random, sequential, or response time weight based policy. [Service Center](https://github.com/apache/incubator-servicecomb-saga)
+• ServiceComb provides a Ribbon-based load balancing solution which can be configured through file. There are different routing policies including random, sequential, policy based on response time weight etc. [Service Center](https://github.com/apache/incubator-servicecomb-saga)
 
 ## [Rate Limiting Policy](/build-provider/configuration/ratelimite-strategy.html) 
 • Users can set the rate limiting policy in the provider's configuration. By setting the request frequency from a particular micro service, provider can limit the max number of requests per second.
