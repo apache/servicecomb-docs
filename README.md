@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apache/incubator-servicecomb-docs.svg?branch=master)](https://travis-ci.org/apache/incubator-servicecomb-docs?branch=master)
+
 # ServiceComb Documents
 This project hosts ServiceComb documents, please check individual sub folders for details.
 
