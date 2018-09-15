@@ -26,11 +26,11 @@ Now we have different lanaguage implementation of Omega
 * C# version of Omega here https://github.com/OpenSagas-csharp/servicecomb-saga-csharp
 
 ## Get Started
-* For ServiceComb Java Chassis application, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-servicecomb-demo/README.md) for details.
-* For Spring applications, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-spring-demo/README.md) for details.
-* For Dubbo applications, please see [Dubbo Demo](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-dubbo-demo/README.md) for details.
-* For TCC with Spring application, please see [Tcc Demo](https://github.com/apache/incubator-servicecomb-saga/saga-demo/tcc-spring-demo/README.md) for details.
-* To debug the applications, please see [Spring Demo Debugging](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-spring-demo#debugging) for details.
+* For ServiceComb Java Chassis application, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md) for details.
+* For Spring applications, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo/README.md) for details.
+* For Dubbo applications, please see [Dubbo Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-dubbo-demo/README.md) for details.
+* For TCC with Spring application, please see [Tcc Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/tcc-spring-demo/README.md) for details.
+* To debug the applications, please see [Spring Demo Debugging](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo#debugging) for details.
 
 ## Build and Run the tests from source
 * Build the source code and run the tests
