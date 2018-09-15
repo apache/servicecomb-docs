@@ -1,129 +1,33 @@
-# Saga 用户指南
-## 准备环境
-1. 安装[JDK 1.8][jdk]
-2. 安装[Maven 3.x][maven]
-3. 安装[Docker][docker]
+# Saga
+Apache ServiceComb (incubating) Saga 是一个微服务应用的数据最终一致性解决方案。
 
-[jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-[maven]: https://maven.apache.org/install.html
-[docker]: https://www.docker.com/get-docker
+## 特性
+* 高可用。支持集群模式。
+* 高可靠。所有的事务事件都持久存储在数据库中。
+* 高性能。事务事件是通过gRPC来上报的，且事务的请求信息是通过Kyro进行序列化和反序列化的。
+* 低侵入。仅需2-3个注解和编写对应的补偿方法即可进行分布式事务。
+* 部署简单。可通过Docker快速部署。
+* 支持前向恢复（重试）及后向恢复（补偿）。
+* 扩展简单。基于Pack架构很容实现多种协调机制。
 
-## 编译
+## 架构
+Saga Pack 架构是由 **alpha** 和 **omega**组成，其中：
+* alpha充当协调者的角色，主要负责对事务进行管理和协调。
+* omega是微服务中内嵌的一个agent，负责对网络请求进行拦截并向alpha上报事务事件。
 
-获取源码：
-```bash
-$ git clone https://github.com/apache/incubator-servicecomb-saga.git
-$ cd incubator-servicecomb-saga
-```
+下图展示了alpha, omega以及微服务三者的关系：
+![Saga Pack 架构](static_files/pack.png)
+在此架构基础中我们除了实现saga协调协议以外，我们还可以很容易实现TCC协调协议。
+详情可浏览[Saga Pack 设计文档](design_zh.md).
 
-Saga可通过以下任一方式进行构建：
-* 只构建可执行文件：
-   ```bash
-   $ mvn clean install -DskipTests
-   ```
-
-* 同时构建可执行文件和docker镜像：
-   ```bash
-   $ mvn clean install -DskipTests -Pdocker
-   ```
-
-* 同时构建可执行文件以及Saga发行包
-   ```bash
-      $ mvn clean install -DskipTests -Prelease
-   ```
-   
-
-在执行以上任一指令后，可在`alpha/alpha-server/target/saga/alpha-server-${version}-exec.jar`中找到alpha server的可执行文件。
-
-## 如何使用
-### 引入Saga的依赖
-```xml
-    <dependency>
-      <groupId>org.apache.servicecomb.saga</groupId>
-      <artifactId>omega-spring-starter</artifactId>
-      <version>${saga.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicecomb.saga</groupId>
-      <artifactId>omega-transport-resttemplate</artifactId>
-      <version>${saga.version}</version>
-    </dependency>
-```
-**注意**: 请将`${saga.version}`更改为实际的版本号。
-
-### 添加Saga的注解及相应的补偿方法
-以一个转账应用为例：
-1. 在应用入口添加 `@EnableOmega` 的注解来初始化omega的配置并与alpha建立连接。
-   ```java
-   @SpringBootApplication
-   @EnableOmega
-   public class Application {
-     public static void main(String[] args) {
-       SpringApplication.run(Application.class, args);
-     }
-   }
-   ```
-
-2. 在全局事务的起点添加 `@SagaStart` 的注解。
-   ```java
-   @SagaStart(timeout=10)
-   public boolean transferMoney(String from, String to, int amount) {
-     transferOut(from, amount);
-     transferIn(to, amount);
-   }
-   ```
-   **注意:** 默认情况下，超时设置需要显式声明才生效。
-
-3. 在子事务处添加 `@Compensable` 的注解并指明其对应的补偿方法。
-   ```java
-   @Compensable(timeout=5, compensationMethod="cancel")
-   public boolean transferOut(String from, int amount) {
-     repo.reduceBalanceByUsername(from, amount);
-   }
- 
-   public boolean cancel(String from, int amount) {
-     repo.addBalanceByUsername(from, amount);
-   }
-   ```
-
-   **注意:** 实现的服务和补偿必须满足幂等的条件。
-
-   **注意:** 默认情况下，超时设置需要显式声明才生效。
-
-   **注意:** 若全局事务起点与子事务起点重合，需同时声明 `@SagaStart` 和 `@Compensable` 的注解。
-
-4. 对转入服务重复第三步即可。
-
-## 如何运行
-1. 运行postgreSQL
-   ```bash
-   docker run -d -e "POSTGRES_DB=saga" -e "POSTGRES_USER=saga" -e "POSTGRES_PASSWORD=password" -p 5432:5432 postgres
-   ```
-
-2. 运行alpha。在运行alpha前，请确保postgreSQL已正常启动。可通过docker或可执行文件的方式来启动alpha。
-   * 通过docker运行：
-      ```bash
-      docker run -d -p 8080:8080 -p 8090:8090 -e "JAVA_OPTS=-Dspring.profiles.active=prd -Dspring.datasource.url=jdbc:postgresql://${host_address}:5432/saga?useSSL=false" alpha-server:${saga_version}
-      ```
-   * 通过可执行文件运行：
-      ```bash
-      java -Dspring.profiles.active=prd -D"spring.datasource.url=jdbc:postgresql://${host_address}:5432/saga?useSSL=false" -jar alpha-server-${saga_version}-exec.jar
-      ```
-
-   **注意**: 请在执行命令前将`${saga_version}`和`${host_address}`更改为实际值。
+同时社区也提供了多种语言的Omega实现:
+* Go语言版本Omega 可参见 https://github.com/jeremyxu2010/matrix-saga-go
+* C#语言版本Omega 可参见 https://github.com/OpenSagas-csharp/servicecomb-saga-csharp
 
 
-   **注意**: 默认情况下，8080端口用于处理omega处发起的gRPC的请求，而8090端口用于处理查询存储在alpha处的事件信息。
-
-
-3. 配置omega。在 `application.yaml` 添加下面的配置项：
-   ```yaml
-   spring:
-     application:
-       name: {application.name}
-   alpha:
-     cluster:
-       address: {alpha.cluster.addresses}
-   ```
-
-然后就可以运行相关的微服务了，可通过访问http://${alpha-server:port}/events 来获取所有的saga事件信息。
+## 快速入门
+* Saga在ServiceComb Java Chassis应用可以参考[出行预订](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-servicecomb-demo/README.md)
+* Saga在Spring应用的用法可参考[出行预订示例](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-spring-demo/README.md)。
+* Saga在Dubbo应用的用法可参考[Dubbo示例](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-dubbo-demo/README.md).
+* TCC在Spring应用的用法可以参考[TCC示例](https://github.com/apache/incubator-servicecomb-saga/saga-demo/tcc-spring-demo/README.md)
+* 示例的的调试方法可以参考[调试Spring示例](https://github.com/apache/incubator-servicecomb-saga/saga-demo/saga-spring-demo#debugging).
