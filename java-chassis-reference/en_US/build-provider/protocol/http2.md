@@ -1,13 +1,14 @@
-## Scene Description
+## Scenario
 
-Users can enable Http2 to communicate and improve performance through simple configuration.
+Users can easily enable Http2 protocol for better performance through configuration.
 
 ## External Service Communication Configuration
 
-The configuration related to external service communication is written in the microservice.yaml file.
+The configuration for external service communication is in the microservice.yaml file.
 
-* Enable h2\(Http2 + TLS\) for communication
-   When configuring the service listening address, the server can enable TLS communication by appending `?sslEnabled=true` to the address. For details, see the section [Using TLS Communication] (../../security/tls.md). Then add `&protocol=http2` to enable h2 communication. An example is as follows:
+* Enable h2\(Http2 + TLS\)
+
+     Append  `?sslEnabled=true` to the listening address to enable  TLS communication on server side. For details, see the section [Using TLS Communication](../../security/tls.md). Then add `&protocol=http2` to enable h2 communication. Here is the sample configuration:
 
   ```yaml
   servicecomb:
@@ -17,8 +18,9 @@ The configuration related to external service communication is written in the mi
       address: 0.0.0.0:7070?sslEnabled=true&protocol=http2
   ```
 
-* Enable h2c\(Http2 without TLS\) for communication
-   When the server configures the service listening address, the server can enable h2c communication by appending `?protocol=http2` to the address. An example is as follows:
+* Enable h2c\(Http2 without TLS\)
+
+     Simply add `?protocol=http2` to enable h2c communication in the server's configuration:
 
   ```yaml
   servicecomb:
@@ -27,7 +29,4 @@ The configuration related to external service communication is written in the mi
     highway:
       address: 0.0.0.0:7070?protocol=http2
   ```
-* The client will communicate using http2 by reading the configuration in the server address from the service center.
-
-
-
+* The client will read the server's address configuration from service center, then communicate with the server by http2 protocol.
