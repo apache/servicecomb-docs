@@ -1,9 +1,44 @@
-## REST over Servlet
-## 配置说明  
-与servlet机制配合，涉及到以下几个概念：
-* 启动spring context  
-  注意以下几种启动方式，是N选1的关系，不要同时使用。  
-  * 不使用springMVC的UI或RestController
+# REST over Servlet
+
+The REST over Servlet mode applications runs in web container. You need to create a new servlet project to wrap the microservices, pack them into war packages, and load them into the web container to run.
+
+## Path for external access
+
+Not like running as a standalone process, when the microservice runs in the web container, the web root and servlet url pattern will be different.
+
+For the traditional development framework, the consumer needs to perceive the complete url of the service; for example, the web root is /mywebapp, the url pattern is /rest, and the business-level path is /application, then consumer must access the service via the url /mywebapp/rest/application.
+
+So when the deployment pattern changes, like from web container to a standalone process, the consumer or producer have to modify the code to adapt to the changes.
+
+It is recommended to use ServiceComb's deployment decoupling feature. Whether it is a consumer or a producer, the application don't perceive the web root and url pattern in the code, while ServiceComb will automatically adapt them for the producer instance at runtime.
+
+For some legacy systems, if users expect to use restTemplate.getForObject("cse://serviceName/mywebapp/rest/application"...) without too many changes, then the path of the interface should be defined as /mywebapp/rest/application:
+
+```
+@RestSchema(schemaId = "test")
+@RequestMapping(path = "/mywebapp/rest/application")
+```
+
+However, it is still recommended to use a deployment-independent way to write the code, which introduces less code modifications when the deployment pattern changes.
+
+## maven dependencies
+
+```xml
+<dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>transport-rest-servlet</artifactId>
+</dependency>
+```
+
+## Configurations
+
+When integrating with servlet, there are a few concepts involved:
+
+- Start spring context  
+  Note the following startup methods cannot be used at the same time, just choose one of them.  
+
+  - Without SpringMVC UI or RestController
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -17,10 +52,13 @@
     </listener>
   </web-app>
   ```
-  其中classpath*:META-INF/spring/*.bean.xml，无论任何情况，都可以不在contextConfigLocation中配置，因为ServiceComb机制会确保加载路径中包含它。  
-  这里仅仅是个示例，表示如果使用者需要定制contextConfigLocation，可以使用这个方法。  
-  
-  * 使用springMVC的UI或RestController，且存在org.apache.servicecomb.transport.rest.servlet.CseDispatcherServlet  
+
+  The classpath*:META-INF/spring/*.bean.xml configured in contextConfigLocation is optional, because the ServiceComb will ensure that it is included in the load path.
+
+  This is just an example to indicate that the user can customize the contextConfigLocation.
+
+  - Use SpringMVC  UI or RestController, and org.apache.servicecomb.transport.rest.servlet.CseDispatcherServlet exists
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -36,10 +74,14 @@
     </servlet-mapping>
   </web-app>
   ```
-    **注意：**  
-    该servlet不是ServiceComb的处理入口，仅仅是UI或RestController的处理入口  
-  * 使用springMVC的UI或RestController，且不存在org.apache.servicecomb.transport.rest.servlet.CseDispatcherServlet  
-    需要继承springMVC的DispatcherServlet，再按CseDispatcherServlet的方式，配置自己的实现类
+
+  **Note**  
+  This servlet is not the processing entry of ServiceComb, but the processing entry of UI or RestController.
+
+  - Use SpringMVC's UI or RestController, and there is no org.apache.servicecomb.transport.rest.servlet.CseDispatcherServlet
+
+    In this case, the application class should inherit SpringMVC's DispatcherServlet, and then configure its implementation classes in CseDispatcherServlet's way.
+
   ```
   @Override
   protected WebApplicationContext createWebApplicationContext(ApplicationContext parent){
@@ -47,11 +89,17 @@
     return super.createWebApplicationContext(parent);
   }
   ```
-* ServiceComb servlet  
-  url pattern根据业务自身规划设置即可，下面的/rest/*仅仅是示例，不是固定值。  
-  url pattern必须以/\*结尾  
-  以下两种声明方式也是多选一的关系，不要同时使用
-  * 标准声明
+
+- ServiceComb servlet  
+
+  The url pattern can be set according to the business logic. The following /rest/* is just an example, not a fixed value.
+
+  Url pattern must end with /*
+
+  The following two declarations types can not be used at the same time.
+
+  - Standard declaration
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -68,15 +116,21 @@
     </servlet-mapping>
   </web-app>
   ```
-  * 快捷声明  
-  在microservice.yaml文件中指定urlPattern，ServiceComb启动时会自动创建RestServlet，并设置相应的urlPattern：
+
+  - Quick declaration 
+
   ```yaml
   servicecomb.rest.servlet.urlPattern: /rest/*
   ```
-  
-## 典型场景配置示例
-* 纯ServiceComb，标准声明  
-  web.xml  
+
+  Specify urlPattern in the microservice.yaml file. When ServiceComb starts, it will automatically create RestServlet and set the corresponding urlPattern.
+
+## Configuration example for typical scenarios 
+
+- Standard declaration in pure ServiceComb mode
+
+  web.xml:  
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -96,8 +150,10 @@
     </servlet-mapping>
   </web-app>
   ```
-* 纯ServiceComb，快捷声明  
+
+- Quick declaration in pure ServiceComb mode 
   web.xml：  
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -107,12 +163,17 @@
     </listener>
   </web-app>
   ```
+
   microservice.yaml：
+
   ```yaml
   servicecomb.rest.servlet.urlPattern: /rest/*
   ```
-* springMVC UI或RestController接入请求，通过ServiceComb作为consumer发送到内部微服务  
-  web.xml：  
+
+- SpringMVC or RestController provide web services, ServiceComb proxy the requests as consumer
+
+  web.xml：
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -128,10 +189,13 @@
     </servlet-mapping>
   </web-app>
   ```
-  microservice.yaml：  
-  不配置servicecomb.rest.address以及servicecomb.rest.servlet.urlPattern  
-* springMVC UI或RestController接入一些请求，同时通过ServiceComb接入另一些请求  
-  web.xml：  
+
+  microservice.yaml：
+  Servicecomb.rest.address and servicecomb.rest.servlet.urlPattern are not configured
+
+- SpringMVC UI/RestController and ServiceComb provide services at the same time
+  web.xml：
+
   ```xml
   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -147,20 +211,37 @@
     </servlet-mapping>
   </web-app>
   ```
+
   microservice.yaml：  
+
   ```yaml
   servicecomb:
     rest:
       servlet:
         urlPattern: /rest/*
       address: 0.0.0.0:8080
-  ```  
-## 使用servlet filter注意事项
-RestServlet工作于异步模式，根据servlet 3.0的标准，整条工作链都必须是异步模式，所以，如果业务在这个流程上增加了servlet filter，也必须将它配置为异步：
+  ```
+
+## Things to notice with servlet filter
+
+RestServlet works in asynchronous mode. According to the servlet 3.0 standard, the entire work chain must be asynchronous. Therefore, the servlet filter should be set to be asynchronous when it's added to the chain:
+
 ```xml
 <filter>
   ......
   <async-supported>true</async-supported>
 </filter>
 ```
+
+## Configuration items
+
+The related items for REST over Servlet in the microservice.yaml are described below:
+
+Table1-1 REST over Servlet Configuration Items
+
+| Configuration Item |Default Value |Range|Required|Description|Remarks                                                         |
+| :---------------------------------- | :----------- | :------- | :------- | :---------------------------------- | :----------------------------------------------------------- |
+| servicecomb.rest.address            | 0.0.0.0:8080 | -        | No       |They service listening address| Should be the same with the web container's listening address|
+| servicecomb.rest.server.timeout     | 3000         | -        | No       | Server timeout                            | In milliseconds                                                 |
+| servicecomb.rest.servlet.urlPattern |            |          | No       | Used to simplify servlet+servlet mapping config | This item is used only when servlet+servlet mapping is not configured in web.xml.The format is:/\* or /path/\*, where path can be nested |
 

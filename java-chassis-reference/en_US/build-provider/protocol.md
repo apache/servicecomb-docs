@@ -1,7 +1,7 @@
 # Communication Protocol
-### Concept Description
+### Concepts
 
-ServiceComb uses two network channels, REST and Highway, both supporting encrypted Transport Layer Security (TLS) transmission. The REST channel releases services in the standard RESTful form. The consumer can send requests using http client.
+ServiceComb uses two network channels, REST and Highway, both support encrypted Transport Layer Security (TLS) transmission. The REST channel provides services in the standard RESTful form. The consumer can call RESTful APIs with http client.
 
 ### Precautions
 
