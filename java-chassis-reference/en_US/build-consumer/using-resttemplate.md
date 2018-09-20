@@ -1,15 +1,19 @@
-# Develop with Rest Template  
-## Concept Description
+# Develop consumer with Rest Template  
+## Concepts
 
-　　Rest Template is a RESTful API provide by the Spring framework.  ServiceComb provides the API for service calling
+Rest Template is a RESTful API provided by the Spring framework.  ServiceComb provides the implementation class for service calling
 
 ## Scenario
 
-　　You can call microservices using your customized URL and the RestTemplate instance provided by ServiceComb regardless of the specific address of the service.
+With ServiceComb's RestTemplate instance, users can call the service with a customized URL without knowing the service's address.
+
+
 
 ## Sample Code
 
-　　Obtain RestTemplate by calling `RestTemplateBuilder.create()`. Then, use the instance and the customized URL to call microservices. The code is as follows:
+The RestTemplate instance is created by the static method  `RestTemplateBuilder.create()`. Then, users can call the microservices with the instance and the customized URL. The code is as follows:
+
+- Sample code for Sprint MVC consumer
 
 ```java
 import org.springframework.stereotype.Component;
@@ -43,10 +47,33 @@ public class SpringmvcConsumerMain {
 }
 ```
 
+- Sample code for JAX RS Consumer:
+
+```java
+@Component
+public class JaxrsConsumerMain {
+
+    public static void main(String[] args) throws Exception {
+        init();
+        // The rest is just like the Spring MVC Consumer sample code, notice that if the provider only accepts GET requests, the consumer should use method getForObject()
+        RestTemplate restTemplate = RestTemplateBuilder.create();
+        String result = restTemplate.getForObject("cse://jaxrs/jaxrshello/saybye", String.class);
+    }
+
+    public static void init() throws Exception {
+        Log4jUtils.init();
+        BeanUtils.init();
+    }
+}
+```
+> NOTE:
+>
+> - The URL should be in format: `cse//microserviceName/path?querystring`. Taking the provider example from [Develop micro service with SpringMVC](/java-chassis-reference/en_US/build-provider/springmvc.md), the micro service's name is `springmvc`, the basePath is `/springmvchello`, then the microserviceName in the URL is `springmvc`, the path to call sayhi is `springmvchello/sayhi`, so the URL for sayhi in the sample is `cse://springmvc/springmvchello/sayhi?name=Java Chassis`, below is the code for the provider:
+
 ```java
 @RestSchema(schemaId = "springmvcHello")
 @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
-//Here, springmvchello in path = "/springmvchello" is the above basePath.
+//这里 path = “/springmvchello” 中的 springmvchello 就是 上述的basePath
 public class SpringmvcHelloImpl implements Hello {
     @Override
     @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
@@ -61,12 +88,15 @@ public class SpringmvcHelloImpl implements Hello {
     }
 }
 ```
-> The following code is microservice.yaml in the resources directory of the springmvc-provider module of the sample project [Spring MVC] (https://github.com/apache/incubator-service comb-java-chassis/tree/master/samples/springmvc-sample)
+
+
+
+> The following configuration is the file `resources/microservice.yaml` of the springmvc-provider module in the [SpringMVC sample](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample):
 
 ```yaml
 APPLICATION_ID: springmvc-sample
 service_description:
-  name: springmvc # 这里就是定义的微服务名称
+  name: springmvc # The name of the micro service
   version: 0.0.2
 servicecomb:
   service:
@@ -86,6 +116,4 @@ cse:
       address: http://127.0.0.1:30100		#service center address
 ```
 
-> NOTE:
-- The URL must be in format of ServiceComb: `cse://microserviceName/path?querystring`. Use the provider defined in [Develop Microservice with SpringMVC](/users/develop-with-springmvc/) as an example. The microservice name is `springmvc`, and its base path is `/springmvchello`, so you should set microserviceName in the URL to  `springmvchello/sayhi` when requesting sayhi. Therefore, the URL for requesting sayhi is  `cse://springmvc/springmvchello/sayhi?name=Java Chassis`.
-- During use of this URL format, the ServiceComb framework will perform internal microservice descovery, fallbreak, and fault tolerance and send the requests to the microservice providers.
+- With the URL format, ServiceComb framework will perform internal microservice descovery, fallback, fault tolerance and send the requests to the microservice providers.

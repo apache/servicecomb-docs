@@ -1,14 +1,14 @@
-# 使用AsynRestTemplate开发服务消费者
+# Develop consumer with AsynRestTemplate
 
-## 概念阐述
+## Concepts
 
-AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 restTemplate 类似，只是这里以异步的形式进行服务的调用。
+AsyncRestTemplate allows users to make asynchronous service calls. The logic is similar to restTemplate, except that the service is called asynchronously.
 
-## 示例代码
+## Sample code
 
-AsyncRestTemplate 实例通过 new CseAsyncRestTemplate（）来创建和获取，再使用该实例通过自定义的 URL 进行服务调用。
+The AsyncRestTemplate instance is created and retrieved via `new CseAsyncRestTemplate()`, which is then used to make service calls through a custom URL.
 
-* Spring MVC 客户端代码示例
+* Spring MVC client sample code
 
 ```java
 
@@ -32,7 +32,7 @@ public class SpringmvcConsumerMain {
         .exchange("cse://springmvc/springmvchello/sayhello", HttpMethod.POST, entity, String.class);
     //    ResponseEntity<String> responseEntity1 = listenableFuture.get();
     //    System.out.println("AsyncRestTemplate Consumer sayHello services: " + responseEntity1.getBody());
-    //设置回调函数
+    // Set the callback function
     listenableFuture.addCallback(
         new ListenableFutureCallback<ResponseEntity<String>>() {
           @Override
@@ -55,7 +55,8 @@ public class SpringmvcConsumerMain {
 
 ```
 
-> 说明 ：
+> Note
 >
-> * URL 的格式和 RestTemplate 一样，具体可以参考 restTemplate
-> * 这里用自定义的 ListenableFuture 类来作为占位符，获取远程调用结束后可能获取的结果。同时也可以自定义回调函数，对可能返回的结果进行分批处理。
+> * The URL format is the same with RestTemplate, refer to restTemplate for details
+> * The custom ListenableFuture class is the placeholder to get the results from the remote call. Users can also customize the callback function to process the return results in batches.
+
