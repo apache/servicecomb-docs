@@ -14,6 +14,8 @@ servicecomb:
     passwd: yourpassword    #密码
 ```
 
+有些用户需要通过加密保护密码信息。可以通过实现SPI扩展来实现。需要扩展的SPI接口名称为：org.apache.servicecomb.foundation.common.encrypt.Encryption，实现decode接口即可。
+
 **注意：当前仅支持连接服务中心、配置中心支持代理，如果对接其他三方服务，可以读取这个配置，自行配置代理，vertx httpclient支持代理设置，例如：**
 
 ```java
