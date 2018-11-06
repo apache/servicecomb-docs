@@ -14,7 +14,7 @@ servicecomb:
     passwd: yourpassword #password
 ```
 
-Configure password using encryption is supported using SPI. The SPI intrface is org.apache.servicecomb.foundation.common.encrypt.Encryption. Users can implement decode interface.
+Configure password using encryption is supported by using SPI. The SPI intrface is org.apache.servicecomb.foundation.common.encrypt.Encryption. Users can implement customer decode interface.
 
 **Note: Currently only supports connection service center, configuration center support agent. If you connect other three-party services, you can read this configuration, configure the agent yourself, vertx httpclient supports proxy settings, for example: **
 
