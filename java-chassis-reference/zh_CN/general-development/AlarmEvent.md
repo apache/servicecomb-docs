@@ -13,7 +13,7 @@ Object receiveEvent = new Object() {
     //Get information from circutBreakerEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
 * 监听实例隔离事件
 ```
@@ -23,7 +23,7 @@ Object receiveEvent = new Object() {
     //Get information from isolationServerEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
 * 两个事件均监听
 ```
@@ -33,5 +33,5 @@ Object receiveEvent = new Object() {
     //Get information from alarmEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
