@@ -13,7 +13,7 @@ Object receiveEvent = new Object() {
     //Get information from circutBreakerEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
 * Listen for instance isolation events
 ```
@@ -23,7 +23,7 @@ Object receiveEvent = new Object() {
     //Get information from isolationServerEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
 * Both events are monitored
 ```
@@ -33,5 +33,5 @@ Object receiveEvent = new Object() {
     //Get information from alarmEvent
     }
   };
-circutBreakerEventNotifier.eventBus.register(receiveEvent);
+EventManager.getEventBus().register(receiveEvent);
 ```
