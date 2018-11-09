@@ -38,6 +38,7 @@
     * [熔断策略](build-consumer/circuit-breaker.md)
     * [限流策略](build-consumer/flow-control.md)
     * [故障注入](build-consumer/fault-injection.md)
+  * [调用第三方REST服务](build-consumer/3rd-party-service-invoke.md)
 * [通用开发](catalog/general-develop.md)
   * [访问服务中心](general-development/visit-sc.md)
   * [使用动态配置](general-development/config.md)

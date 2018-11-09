@@ -38,6 +38,7 @@
     * [Circuit Breaker](build-consumer/circuit-breaker.md)
     * [Flow Control](build-consumer/flow-control.md)
     * [Fault Injection](build-consumer/fault-injection.md)
+  * [Invoke 3rd-party REST services](build-consumer/3rd-party-service-invoke.md)
 * [General Development](catalog/general-develop.md)
   * [Access Service Center](general-development/visit-sc.md)
   * [Using Dynamic Configuration](general-development/config.md)
