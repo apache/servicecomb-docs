@@ -1,5 +1,5 @@
 # Saga
-Apache ServiceComb (incubating) Saga is an eventually data consistency solution for micro-service applications.
+Apache ServiceComb Saga is an eventually data consistency solution for micro-service applications.
 
 ## Features
 * High availability. The coordinator is stateless and thus can have multiple instances.
@@ -26,11 +26,11 @@ Now we have different lanaguage implementation of Omega
 * C# version of Omega here https://github.com/OpenSagas-csharp/servicecomb-saga-csharp
 
 ## Get Started
-* For ServiceComb Java Chassis application, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md) for details.
-* For Spring applications, please see [Booking Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo/README.md) for details.
-* For Dubbo applications, please see [Dubbo Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-dubbo-demo/README.md) for details.
-* For TCC with Spring application, please see [Tcc Demo](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/tcc-spring-demo/README.md) for details.
-* To debug the applications, please see [Spring Demo Debugging](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo#debugging) for details.
+* For ServiceComb Java Chassis application, please see [Booking Demo](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md) for details.
+* For Spring applications, please see [Booking Demo](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-spring-demo/README.md) for details.
+* For Dubbo applications, please see [Dubbo Demo](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-dubbo-demo/README.md) for details.
+* For TCC with Spring application, please see [Tcc Demo](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/tcc-spring-demo/README.md) for details.
+* To debug the applications, please see [Spring Demo Debugging](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-spring-demo#debugging) for details.
 
 ## Build and Run the tests from source
 * Build the source code and run the tests
@@ -40,9 +40,9 @@ Now we have different lanaguage implementation of Omega
 * Build the source demo docker images and run the accept tests
    ```bash
       $ mvn clean install -Pdemo,docker
-   ```   
+   ```
 * Current Saga code supports Spring Boot 1.x and Spring Boot 2.x at the same time, saga uses Spring Boot 1.x by default, you can use *-Pspring-boot-2* to switch Spring Boot version to 2.x.
 Since Spring Boot supports JDK9 since 2.x, if you want to build and run test the Saga with JDK9 or JDK10, you need to use the spring-boot-2 profile.
    ```bash
       $ mvn clean install -Pdemo,docker,spring-boot-2
-   ```   
+   ```

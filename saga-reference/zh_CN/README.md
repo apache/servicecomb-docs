@@ -1,5 +1,5 @@
 # Saga
-Apache ServiceComb (incubating) Saga 是一个微服务应用的数据最终一致性解决方案。
+Apache ServiceComb Saga 是一个微服务应用的数据最终一致性解决方案。
 
 ## 特性
 * 高可用。支持集群模式。
@@ -26,11 +26,11 @@ Saga Pack 架构是由 **alpha** 和 **omega**组成，其中：
 
 
 ## 快速入门
-* Saga在ServiceComb Java Chassis应用可以参考[出行预订](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md)
-* Saga在Spring应用的用法可参考[出行预订示例](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo/README.md)。
-* Saga在Dubbo应用的用法可参考[Dubbo示例](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-dubbo-demo/README.md).
-* TCC在Spring应用的用法可以参考[TCC示例](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/tcc-spring-demo/README.md)
-* 示例的的调试方法可以参考[调试Spring示例](https://github.com/apache/incubator-servicecomb-saga/tree/master/saga-demo/saga-spring-demo#debugging).
+* Saga在ServiceComb Java Chassis应用可以参考[出行预订](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md)
+* Saga在Spring应用的用法可参考[出行预订示例](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-spring-demo/README.md)。
+* Saga在Dubbo应用的用法可参考[Dubbo示例](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-dubbo-demo/README.md).
+* TCC在Spring应用的用法可以参考[TCC示例](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/tcc-spring-demo/README.md)
+* 示例的的调试方法可以参考[调试Spring示例](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-spring-demo#debugging).
 
 ## 编译和运行代码
 * 编译代码并且运行相关的单元测试
