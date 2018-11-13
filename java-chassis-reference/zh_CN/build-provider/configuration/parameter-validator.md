@@ -86,13 +86,13 @@ public class Student {
 
   返回错误支持自定义扩展，使用SPI机制。
 
-* 可以通过实现接口ExceptionToResponseConverter来自定义返回的错误信息，以ConstraintViolationExceptionToResponseConverter为例。
+* 可以通过实现接口ExceptionToProducerResponseConverter来自定义返回的错误信息，以ConstraintViolationExceptionToProducerResponseConverter为例。
 
-  1. 实现ExceptionToResponseConverter接口，重写方法，其中getOrder方法的返回结果表示该验证器的优先级，值越小优先级越高。
+  1. 实现ExceptionToProducerResponseConverter接口，重写方法，其中getOrder方法的返回结果表示该验证器的优先级，值越小优先级越高。
 
      ```java
-     public class ConstraintViolationExceptionToResponseConverter
-         implements ExceptionToResponseConverter<ConstraintViolationException> {
+     public class ConstraintViolationExceptionToProducerResponseConverter
+         implements ExceptionToProducerResponseConverter<ConstraintViolationException> {
        @Override
        public Class<ConstraintViolationException> getExceptionClass() {
          return ConstraintViolationException.class;
@@ -110,7 +110,7 @@ public class Student {
      }
      ```
 
-  2. 在META-INF下的services文件夹增加一个文件，以所实现接口x.x.x.ExceptionToResponseConverter\(带包名\)为名，以具体实现类x.x.x.ConstraintViolationExceptionToResponseConverter\(带包名\)为内容。
+  2. 在META-INF下的services文件夹增加一个文件，以所实现接口x.x.x.ExceptionToProducerResponseConverter\(带包名\)为名，以具体实现类x.x.x.ConstraintViolationExceptionToProducerResponseConverter\(带包名\)为内容。
 
 
 
