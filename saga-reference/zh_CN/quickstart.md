@@ -2,6 +2,21 @@
 Apache ServiceComb Pack QuickStart
 saga-servicecomb-demo中的Saga代码解读
 
+
+
+* 为了更好的学习Apache ServiceComb Pack，我们设定一个实际需要分布式一致性的业务场景来方便理解，场景中：预定服务、租车订单服务、和酒店订单服务没有依赖关系，可以并行处理，但对于我们的客户来说，只在所有预订成功后一次付费更加友好。 那么这三个服务的事务关系可以用下图表示：
+[github](https://github.com/apache/servicecomb-saga/tree/master/saga-demo/saga-servicecomb-demo/README.md)
+
+![Saga demo背景](static_files/pack_demo.png)
+
+## Pack Event 介绍
+SagaStartedEvent 保存整个saga请求，其中包括多个事务/补偿请求
+TxStartedEvent 保存对应事务请求
+TXEndedEvent 保存对应事务请求及其回复
+TxAbortedEvent 保存对应事务请求和失败的原因
+TxCompensatedEvent 保存对应补偿请求及其回复
+SagaEndedEvent 标志着saga事务请求的结束，不需要保存任何内容
+
 ## 全局事务执行过程
 
 在SagaStartAnnotationProcessor
@@ -62,6 +77,7 @@ Annotation被触发
 2 调用preIntercept发送TxStartedEvent 开始事务   
 3 postIntercept 发送 TxEndedEvent 事务结束执行  
 
+### 首先Spring Bean会初始化TransactionAspect并调用CompensableInterceptor实例
 ### 在CompensableInterceptor中
 * AlphaResponse调用TxStartedEvent
 * postIntercept发送TxEndedEvent
