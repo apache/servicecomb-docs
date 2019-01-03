@@ -44,7 +44,7 @@ public String fileUpload(@RequestPart(name = "file1") MultipartFile file1, @Requ
 | 配置项 | 默认值 | 取值范围 | 含义 |
 | :--- | :--- | :--- | :--- |
 | servicecomb.uploads.directory | null |  | 上传的临时文件保存在哪个目录，**默认值null表示不支持文件上传** |
-| servicecomb.uploads.maxSize | -1 |  | http body的最大允许大小，默认值-1表示无限制 |
+| servicecomb.uploads.maxSize | -1 |  | http body的最大允许大小，单位byte，默认值-1表示无限制 |
 
 ## Consumer：
 
