@@ -53,7 +53,7 @@ When integrating with servlet, there are a few concepts involved:
   </web-app>
   ```
 
-  The classpath*:META-INF/spring/*.bean.xml configured in contextConfigLocation is optional, because the ServiceComb will ensure that it is included in the load path.
+  The `classpath*:META-INF/spring/*.bean.xml` configured in contextConfigLocation is optional, because the ServiceComb will ensure that it is included in the load path.
 
   This is just an example to indicate that the user can customize the contextConfigLocation.
 
@@ -92,9 +92,9 @@ When integrating with servlet, there are a few concepts involved:
 
 - ServiceComb servlet  
 
-  The url pattern can be set according to the business logic. The following /rest/* is just an example, not a fixed value.
+  The url pattern can be set according to the business logic. The following `/rest/*` is just an example, not a fixed value.
 
-  Url pattern must end with /*
+  Url pattern must end with `/*`
 
   The following two declarations types can not be used at the same time.
 
@@ -239,9 +239,10 @@ The related items for REST over Servlet in the microservice.yaml are described b
 
 Table1-1 REST over Servlet Configuration Items
 
-| Configuration Item |Default Value |Range|Required|Description|Remarks                                                         |
-| :---------------------------------- | :----------- | :------- | :------- | :---------------------------------- | :----------------------------------------------------------- |
-| servicecomb.rest.address            | 0.0.0.0:8080 | -        | No       |They service listening address| Should be the same with the web container's listening address|
-| servicecomb.rest.server.timeout     | 3000         | -        | No       | Server timeout                            | In milliseconds                                                 |
-| servicecomb.rest.servlet.urlPattern |            |          | No       | Used to simplify servlet+servlet mapping config | This item is used only when servlet+servlet mapping is not configured in web.xml.The format is:/\* or /path/\*, where path can be nested |
+| Configuration Item                               |Default Value |Required|Description|
+| :----------------------------------------------- | :----------- | :----- | :-------- |
+| servicecomb.rest.address                         | 0.0.0.0:8080 | No     |The service listening address<br>Should be the same with the web container's listening address|
+| servicecomb.rest.server.timeout                  | -1           | No     |Server aync servlet timeout in milliseconds, suggest set to -1                                |
+| servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | No     |for sync business logic, timeout in milliseconds for waiting in executor queue                |
+| servicecomb.rest.servlet.urlPattern              |              | No     |Used to simplify servlet+servlet mapping config<br>This item is used only when servlet+servlet mapping is not configured in web.xml.The format is:/\* or /path/\*, where path can be nested |
 

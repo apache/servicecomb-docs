@@ -40,7 +40,7 @@ REST over Servlet对应使用web容器部署运行，需要新建一个servlet�
     </listener>
   </web-app>
   ```
-  其中classpath*:META-INF/spring/*.bean.xml，无论任何情况，都可以不在contextConfigLocation中配置，因为ServiceComb机制会确保加载路径中包含它。  
+  其中`classpath*:META-INF/spring/*.bean.xml`，无论任何情况，都可以不在contextConfigLocation中配置，因为ServiceComb机制会确保加载路径中包含它。  
   这里仅仅是个示例，表示如果使用者需要定制contextConfigLocation，可以使用这个方法。  
   
   * 使用springMVC的UI或RestController，且存在org.apache.servicecomb.transport.rest.servlet.CseDispatcherServlet  
@@ -71,8 +71,8 @@ REST over Servlet对应使用web容器部署运行，需要新建一个servlet�
   }
   ```
 * ServiceComb servlet  
-  url pattern根据业务自身规划设置即可，下面的/rest/*仅仅是示例，不是固定值。  
-  url pattern必须以/\*结尾  
+  url pattern根据业务自身规划设置即可，下面的`/rest/*`仅仅是示例，不是固定值。  
+  url pattern必须以`/*`结尾  
   以下两种声明方式也是多选一的关系，不要同时使用
   * 标准声明
   ```xml
@@ -193,10 +193,11 @@ REST over Servlet在microservice.yaml文件中的配置项见表3-9。
 
 表1-1 REST over Servlet配置项说明
 
-| 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.rest.address | 0.0.0.0:8080 | - | 否 | 服务监听地址 | 必须配置为与web容器监听地址相同的地址 |
-| servicecomb.rest.server.timeout | 3000 | - | 否 | 超时时间 | 单位为毫秒 |
-| servicecomb.rest.servlet.urlPattern | 无 |  | 否 | 用于简化servlet+servlet mapping配置 | 只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
+| 配置项                                           | 默认值       | 是否必选 | 含义                                                  |
+| :----------------------------------------------- | :----------- | :------- | :---------------------------------------------------- |
+| servicecomb.rest.address                         | 0.0.0.0:8080 | 否       |服务监听地址<br>必须配置为与web容器监听地址相同的地址  |
+| servicecomb.rest.server.timeout                  | -1           | 否       |异步servlet超时时间, 单位为毫秒<br>建议保持默认值      |
+| servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 否       |在同步线程中排队等待执行的超时时间，单位为毫秒         |
+| servicecomb.rest.servlet.urlPattern              | 无           | 否       | 用于简化servlet+servlet mapping配置<br>只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
 
 
