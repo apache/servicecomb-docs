@@ -8,11 +8,14 @@
 
 开始之前，开发者需要先选择熟悉的开发方式，目前有3种方式可供选择：
 * Spring MVC
-* JAX RS
+* JaxRS
 * RPC
+
+因为透明RPC作为Producer时，不带任何RESTful语义，此时自动生成的契约全是POST方法，且只有BODY参数，不太符合RESTful的通常规则  
+所以建议选择JaxRS或Spring MVC作为Producer开发模式，透明RPC作为Consumer的开发模式。  
 
 他们对应的samples项目分别是：
 * [Spring MVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)
-* [JAX RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
+* [JaxRS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
 * [RPC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/pojo-sample)
 * 或者使用[archetypes](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/archetypes)

@@ -1,15 +1,21 @@
 # Cross App Invocation
-### Concept Description
+## Concept Description
 
 An application is a layer in the microservice instance isolation hierarchy, and an application contains multiple microservices. By default, only microservice instances of the same application are allowed to call each other.
 
-### Scenario
+## Scenario
 
 When a user needs micro-services between different applications to call each other, it is necessary to enable the cross-application calling function.
 
-### Configuration instructions
+## Configuration instructions
 
-To enable cross-application calls, you first need to enable cross-application call configuration in the microservice.yaml file on the provider side. The configuration items are as follows:
+To enable cross-application calls, you first need to enable cross-application call configuration in the microservice.yaml file on the provider side.
+ 
+_Note_:  
+* Need to upgrade the micro service version number to re-register micro service information in the service center
+* Even in the development development environment, you need to upgrade the microservice version number, because in the development environment, only the contract changes, will re-register the contract
+  
+The configuration items are as follows:
 ```yaml
 service_description:
   # other configuration omitted
@@ -19,7 +25,7 @@ service_description:
 
 When the consumer client specifies the microservice name to call the provider, it needs to add the application ID to which the provider belongs, and the format becomes `[appID]:[microserviceName]`.
 
-### Sample Code
+## Sample Code
 
 The example assumes that the application to which the provider belongs is helloApp, the name of the microservice is helloProvider, the application to which the consumer belongs is helloApp2, and the name of the microservice is helloConsumer.
 
