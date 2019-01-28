@@ -1,14 +1,20 @@
-### 概念阐述
+# 跨应用调用
+
+## 概念阐述
 
 应用是微服务实例隔离层次中的一层，一个应用包含多个微服务。默认情况下，只允许同应用的微服务实例相互调用。
 
-### 场景描述
+## 场景描述
 
 当用户需要不同应用间的微服务相互调用时，就需要开启跨应用调用功能。
 
-### 配置说明
+## 配置说明
 
-若要开启跨应用调用，首先需在provider端的microservice.yaml文件开启跨应用调用配置。配置项如下：
+若要开启跨应用调用，首先需在provider端的microservice.yaml文件开启跨应用调用配置。
+注意：  
+* 需要升级微服务版本号，以便在服务中心重新注册微服务信息  
+* 即使是development开发环境，也需要升级微服务版本号，因为development环境下，也只有契约发生变化，才会重新注册契约
+配置项如下：
 ```yaml
 service_description:
   # other configuration omitted
@@ -18,7 +24,7 @@ service_description:
 
 consumer端指定微服务名称调用provider的时候，需要加上provider所属的应用ID，格式变为`[appID]:[microserviceName]`。
 
-### 示例代码
+## 示例代码
 
 示例假设provider所属应用为helloApp，微服务名称为helloProvider；consumer所属应用为helloApp2，微服务名称为helloConsumer。
 
