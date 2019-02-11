@@ -20,12 +20,6 @@
 ## [Developing microservices with JAX-RS](/build-provider/jaxrs.html)
 • ServiceComb supports developers using JAX-RS annotations to develop services using JAX-RS patterns.
 
-## [Using Swagger Annotations](/build-provider/swagger-annotation.html)
-• Swagger provides a set of annotations to describe the interface contract. Users can use annotations to add descriptions of contracts to the code. ServiceComb supports some of these annotations.
-
-## [Using Swagger Annotations](/build-provider/swagger-annotation.html)
-• Swagger provides a set of annotations to describe the interface contract. Users can use annotations to add descriptions of contracts to the code. ServiceComb supports some of these annotations.
-
 ## [Developing microservices with transparent RPC](/build-provider/transparent-rpc.html)
 • The transparent RPC development model is a development model based on interfaces and interfaces. Service developers do not need to use Spring MVC and JAX-RS annotations.
 
