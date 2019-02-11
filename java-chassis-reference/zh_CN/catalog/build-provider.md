@@ -20,12 +20,6 @@
 ## [用JAX-RS开发微服务](/build-provider/jaxrs.html)
 • ServiceComb支持开发者使用JAX-RS注解，使用JAX-RS模式开发服务。
 
-## [使用 Swagger 注解](/build-provider/swagger-annotation.html)
-• Swagger提供了一套注解用于描述接口契约，用户使用注解，可以在代码中增加对于契约的描述信息。ServiceComb支持其中的部分注解。
-
-## [使用 Swagger 注解](/build-provider/swagger-annotation.html)
-• Swagger提供了一套注解用于描述接口契约，用户使用注解，可以在代码中增加对于契约的描述信息。ServiceComb支持其中的部分注解。
-
 ## [用透明RPC开发微服务](/build-provider/transparent-rpc.html)
 • 透明RPC开发模式是一种基于接口和接口实现的开发模式，服务的开发者不需要使用Spring MVC和JAX-RS注解。
 
