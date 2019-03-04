@@ -1,14 +1,6 @@
 ## Access Service Center
 The system realizes the discovery between services through the service center. During the service startup process, the service center is registered. When calling other services, the service center will query the instance information of other services, such as the access address, the protocol used, and other parameters. The service center supports the use of PULL and PUSH modes to notify instance changes.
 
-
-## Using dynamic configuration
-ServiceComb provides a hierarchical configuration mechanism. According to the priority, it is divided into:
-• Configuration Center (dynamic configuration)
-• Java System Property (-D parameter)
-• Environmental variables
-• Configuration file, microservice.yaml. The microservice.yaml file is scanned from the classpath and can be allowed to exist in many copies. Specify the priority by servicecomb-config-order.
-
 ## Application Performance Monitoring
  1. The introduction of Metrics
  2. The summary of statistical items
@@ -35,11 +27,11 @@ This section describes how to develop and debug consumer/provider applications l
 In some scenarios, the service uses http instead of https as the network transmission channel. In order to prevent the falsification or tampering request, the signature function of the http code stream between the consumer and the producer needs to be provided.
 
  
-## File Upload 
+## File Upload
 File upload, currently supported in vertx rest channel and servlet rest.
 File uploads use the standard http form format, which interfaces directly with the browser's upload.
 
-## Download Document 
+## Download Document
 File downloads are currently available in the vertx rest channel and servlet rest.
 
 
