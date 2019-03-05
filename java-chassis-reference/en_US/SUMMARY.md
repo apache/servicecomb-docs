@@ -67,6 +67,7 @@
   * [Thread Model](general-development/thread-model.md)
 * [Configuration](catalog/config.md)
   * [General config](config/general-config.md)
+  * [Configuration injection](config/inject-config.md)
 * [Service Capability Open](edge/open-service.md)
   * [Using Edge Service](edge/by-servicecomb-sdk.md)
   * [Using confd and Nginx as edge services](edge/nginx.md)

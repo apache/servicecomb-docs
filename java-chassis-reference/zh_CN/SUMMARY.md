@@ -67,6 +67,7 @@
   * [线程模型](general-development/thread-model.md)
 * [配置](catalog/config.md)
   * [通用配置说明](config/general-config.md)
+  * [配置注入说明](config/inject-config.md)
 * [服务能力开放](edge/open-service.md)
   * [使用Edge Service做边缘服务](edge/by-servicecomb-sdk.md)
   * [使用confd和Nginx做边缘服务](edge/nginx.md)
