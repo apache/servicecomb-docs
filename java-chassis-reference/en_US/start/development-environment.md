@@ -53,15 +53,39 @@ e. (Optional) Set a local repository path to hold the plug-ins and dependent cop
 
 Here is the path D:\maven\repository. Find the settings.xml file in /conf and set localRepository to D:\maven\repository
 
-f. (Optional) In order to quickly download various dependencies, it is recommended to configure the central repository.
+f. (Optional) In order to quickly download various dependencies, it is recommended to configure the maven repository settings.
 
+In `profiles` element, the content below should be added:
+```xml
+<profile>
+    <id>MyProfile</id>
+    <repositories>
+        <repository>
+            <id>SDK</id>
+            <url>https://repo.huaweicloud.com/repository/maven/huaweicloudsdk/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</profile>
 ```
- <mirror>
-      <id>mirrorId</id>
-      <mirrorOf>*</mirrorOf>
-      <name>Mirror of central repository.</name>
-      <url>http://maven.huaweicse.com/nexus/content/groups/public</url>
-  </mirror>
+In `mirrors` element, the content below should be added:
+```xml
+<mirror>
+    <id>RepoMirror</id>
+    <mirrorOf>*,!SDK</mirrorOf>
+    <url>https://repo.huaweicloud.com/repository/maven/</url>
+</mirror>
+```
+Add `activeProfiles` element as below:
+```xml
+<activeProfiles>
+    <activeProfile>MyProfile</activeProfile>
+</activeProfiles>
 ```
 
 g. Verification

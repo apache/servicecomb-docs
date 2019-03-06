@@ -53,15 +53,39 @@ e.（可选）设置本地仓库路径，用于保存从远程仓库获取的插
 
 这里以路径D:\maven\repository为例。在/conf中找到settings.xml文件，设置localRepository为D:\maven\repository
 
-f. （可选）要想项目能够快速的下载各种依赖，建议配置下中心仓库。
+f. （可选）要想项目能够快速的下载各种依赖，建议配置一下maven仓库地址。
 
+在`profiles`中增加如下配置：
+```xml
+<profile>
+    <id>MyProfile</id>
+    <repositories>
+        <repository>
+            <id>SDK</id>
+            <url>https://repo.huaweicloud.com/repository/maven/huaweicloudsdk/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</profile>
 ```
- <mirror>
-      <id>mirrorId</id>
-      <mirrorOf>*</mirrorOf>
-      <name>Mirror of central repository.</name>
-      <url>http://maven.huaweicse.com/nexus/content/groups/public</url>
-  </mirror>
+在`mirrors`节点中增加如下配置：
+```xml
+<mirror>
+    <id>RepoMirror</id>
+    <mirrorOf>*,!SDK</mirrorOf>
+    <url>https://repo.huaweicloud.com/repository/maven/</url>
+</mirror>
+```
+新增`activeProfiles`配置：
+```xml
+<activeProfiles>
+    <activeProfile>MyProfile</activeProfile>
+</activeProfiles>
 ```
 
 g.结果验证
