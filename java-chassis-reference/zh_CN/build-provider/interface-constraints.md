@@ -41,7 +41,7 @@ ResponseType methodName(RequestType...)
 
 * 抽象的数据结构: java.lang.Object, net.sf.json.JsonObject等
 
-  **备注：** 最新版本可以使用java.lang.Object作为参数和返回值。它的运行时类型可以是int、String、Map等。尽管如此，建议开发者不要使用抽象数据结构，以及第三方提供的非POJO类作为接口的参数和返回值。这些类型包括java.math.BigDecimal、org.joda.time.JodaTime等。这些类型会给开发者带来很大的困扰。比如开发者可能以为BidDecimal会以数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
+  **备注：** 最新版本可以使用java.lang.Object作为参数和返回值。它的运行时类型可以是int、String、Map等。尽管如此，建议开发者不要使用抽象数据结构，以及第三方提供的非POJO类作为接口的参数和返回值。这些类型包括java.math.BigDecimal、org.joda.time.JodaTime等。这些类型会给开发者带来很大的困扰。比如开发者可能以为BigDecimal会以数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
 
 * 接口或者抽象类
   ```java
