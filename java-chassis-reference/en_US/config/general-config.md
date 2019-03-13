@@ -66,7 +66,7 @@ You can register for a callback to handle configuration changes:
 ```
 
 ## Performing configuration item mapping
-In some cases, we want to block the configuration of some of the open source components we use and provide our users with their own configuration items. In this case, you can define the mapping through config.yaml under the classpath:
+In some cases, we want to block the configuration of some of the open source components we use and provide our users with their own configuration items. In this case, you can define the mapping through mapping.yaml under the classpath:
 ```
 registry:
   client:
