@@ -66,7 +66,7 @@ DynamicDoubleProperty myprop = DynamicPropertyFactory.getInstance().getDoublePro
 ```
 
 ## 进行配置项映射
-有些情况下，我们要屏蔽我们使用的一些开源组件的配置并给用户提供我们自己的配置项。在这种情况下，可以通过classpath下的config.yaml进行映射定义：
+有些情况下，我们要屏蔽我们使用的一些开源组件的配置并给用户提供我们自己的配置项。在这种情况下，可以通过classpath下的mapping.yaml进行映射定义：
 ```yaml
 registry:
   client:
