@@ -50,7 +50,7 @@ public ResponseEntity<Resource> resource() {
   return ResponseEntity
       .ok()
       .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename= resource.txt")
+      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=resource.txt")
       .body(resource);
 }
 ```
@@ -64,7 +64,7 @@ In some scenarios, resources are not stored locally.
 return ResponseEntity
     .ok()
     .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename= resource.txt")
+    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=resource.txt")
     .body(stream);
 ```
 
