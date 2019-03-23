@@ -2,11 +2,11 @@
 
 ## 概念阐述
 
-ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着项目 [SpringMVC](https://github.com/apache/servicecomb-java-chassis/tree/master/samples/springmvc-sample)进行详细阅读
+ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着项目 [SpringMVC](https://github.com/apache/servicecomb-java-chassis/tree/master/samples/springmvc-sample) 进行详细阅读
 
 ## 开发示例
 
-### 步骤 1定义服务接口（可选，方便使用RPC方式调用）
+### 步骤1 定义服务接口（可选，方便使用RPC方式调用）
 
 定义接口不是必须的，但是 一个好习惯，可以简化客户端使用RPC方式编写代码。
 
@@ -19,7 +19,7 @@ public interface Hello {
 
 
 
-### 步骤 2实现服务
+### 步骤2 实现服务
 
 使用Spring MVC注解开发业务代码，Hello的服务实现如下。在服务的实现类上打上注解@RestSchema，指定schemaId，schemaId必须保证微服务范围内唯一。
 
@@ -41,7 +41,7 @@ public class SpringmvcHelloImpl implements Hello {
 }
 ```
 
-### 步骤 3发布服务 （可选，默认会扫描main函数所在的package）
+### 步骤3 发布服务 （可选，默认会扫描main函数所在的package）
 
 在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
 
@@ -58,7 +58,7 @@ public class SpringmvcHelloImpl implements Hello {
 </beans>
 ```
 
-### 步骤 4启动provider 服务
+### 步骤4 启动provider 服务
 
 下面的代码使用Log4j作为日志记录器。开发者可以方便使用其他日志框架。
 
@@ -169,7 +169,7 @@ paths:
 
 ## ServiceComb支持的Spring MVC标签说明
 
-ServiceComb支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，而且有不一样的设计目标。CSE的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的HttpServletRequest。ServiceComb没有实现@Controller相关功能, 只实现了@RestController，即通过MVC模式进行页面渲染等功能都是不支持的。
+ServiceComb支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，而且有不一样的设计目标。CSE的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的`HttpServletRequest`。ServiceComb没有实现`@Controller`相关功能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
 
 下面是一些具体差异。
 
@@ -206,7 +206,7 @@ ServiceComb支持使用Spring MVC提供的标签\(org.springframework.web.bind.a
 
 * 服务声明方式
 
-Spring MVC使用@RestController声明服务，而ServiceComb使用@RestSchema声明服务，并且需要显示的使用@RequestMapping声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
+Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
 
 ```
 @RestSchema(schemaId = "hello")
@@ -215,7 +215,10 @@ Spring MVC使用@RestController声明服务，而ServiceComb使用@RestSchema声
 
 Schema是CSE的服务契约，是服务运行时的基础，服务治理、编解码等都基于契约进行。在跨语言的场景，契约也定义了不同语言能够同时理解的部分。
 
-最新版本也支持@RestController声明，等价于@RestSchma(schemaId="服务的class名称")，建议用户使用@RestSchema显示声明schemaId，在管理接口基本的配置项的时候，更加直观。
+最新版本也支持`@RestController`声明，等价于`@RestSchma(schemaId="服务的class名称")`，建议用户使用`@RestSchema`显式声明schemaId，在管理接口基本的配置项的时候，更加直观。
+
+**注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
+`servicecomb.provider.rest.scanRestController=false`以关闭此功能。
 
 * 数据类型支持
 
@@ -240,4 +243,3 @@ ServiceComb在数据类型的支持方面的更多说明，请参考： [接口�
 
 * 其他
 更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
-
