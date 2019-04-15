@@ -5,7 +5,7 @@ ServiceComb supports Spring MVC annotations to define your REST services. The [s
 
 ## Development Example
 
-### Define the service interface （optional）
+### Step1 Define the service interface （optional）
 
 Writing a interface for the REST service make it easy to call the service in client in RPC style.
 
@@ -16,7 +16,9 @@ public interface Hello {
 }
 ```
 
-* **Step 2** Implement the services. Spring MVC is used to describe the development of service code. The implementation of the Hello service is as follow:
+### Step2 Implement the services
+
+The annotations of Spring MVC are used to describe the development of service code. The implementation of the Hello service is as follow:
 
  ```java
 @RestSchema(schemaId = "springmvcHello")
@@ -36,7 +38,7 @@ public class SpringmvcHelloImpl implements Hello {
 }
 ```
 
-### add a component scan （optional）
+### Step3 add a component scan （optional）
 
 create `resources/META-INF/spring` folder and add `springmvcprovider.bean.xml`, add component-scan to specify the bean package. This step is optional. The package where main class located is automatically added.
 
@@ -53,9 +55,9 @@ create `resources/META-INF/spring` folder and add `springmvcprovider.bean.xml`, 
 </beans>
 ```
 
-### Wrtie a main class
+### Step4 Wrtie a main class
 
-This code using log4j as the logger framework. Users can change it to any other favorite logger framework. 
+This code using log4j as the logger framework. Users can change it to any other favorite logger framework.
 
 ```java
 public class SpringmvcProviderMain {
@@ -71,7 +73,7 @@ public class SpringmvcProviderMain {
 
 ### Description
 
-SpringBoot supports to map a bean parameter to HTTP queries. 
+SpringBoot supports to map a bean parameter to HTTP queries.
 ```java
 @RequestMapping("/hello")
 public class HelloService {
@@ -84,11 +86,11 @@ public class HelloService {
 ```
 
 ServiceComb supports this usage too, but has following constraints.
-1. Must not add any mapping annotations, such as @QueryParam
+1. Must not add any mapping annotations, such as `@QueryParam`
 2. Only map to query parameters, headers and forms not supported.
 3. Variables name in POJO definition must be the same as query keys.
 4. Only primitive and String types supported in POJO, add `@JsonIgnore` to other types to ignore it.
-5. In consumer site(e.g RestTemplate), still need to use query parameters, can not use POJO. 
+5. In consumer site(e.g RestTemplate), still need to use query parameters, can not use POJO.
 
 ### Examples
 
@@ -158,12 +160,12 @@ paths:
   ```java
     String result = restTemplate.getForObject(
       "cse://provider-service/hello/sayHello?name=Bob&age=22",
-      String.class); 
+      String.class);
   ```
 
 ## ServiceComb suppoted Spring MVC annotations and differences
 
-ServiceComb supports Spring MVC annotatioins\(org.springframework.web.bind.annotation\) to define REST interfaces, but they are different. ServiceComb do not support @Controller frameworks and only support @RestController frameworks. 
+ServiceComb supports Spring MVC annotatioins\(org.springframework.web.bind.annotation\) to define REST interfaces, but they are different. ServiceComb do not support `@Controller` frameworks and only support `@RestController` frameworks.
 
 * Differences in supported annotations
 
@@ -196,14 +198,16 @@ ServiceComb supports Spring MVC annotatioins\(org.springframework.web.bind.annot
 
 * Define a REST service
 
-Spring MVC using @RestController to define a REST service，ServiceComb using @RestSchema to define a REST service，and path value in @RequestMapping is required.
+Spring MVC using `@RestController` to define a REST service，ServiceComb using `@RestSchema` to define a REST service，and path value in `@RequestMapping` is required.
 
-```
+```java
 @RestSchema(schemaId = "hello")
 @RequestMapping(path = "/")
 ```
 
-@RestController is also supported and equals to @RestSchma(schemaId="class name"). However we suggest using @RestSchemaand define a schemaId，it more convenient when used in configurations.  
+`@RestController` is also supported and equals to `@RestSchma(schemaId="class name")`. However we suggest using `@RestSchema` to define a schemaId，it's more convenient when used in configurations.  
+
+**Cautions**: If the classes with `@RestController` are not expected to be processed by ServiceComb-Java-Chassis and work as REST services, the config item `servicecomb.provider.rest.scanRestController=false` can be specified to disable the feature mentioned above.
 
 * Supported data types
 
@@ -220,7 +224,7 @@ public void postData(@RequestBody Map rawData)
 public void postData(HttpServletRequest rquest)
 ```
 
-ServiceComb need to generate Open API schemas based on definition, and support cross language features, so some of there usage is not supported. 
+ServiceComb need to generate Open API schemas based on definition, and support cross language features, so some of there usage is not supported.
 
 HttpServletRequest，Object is supported in latest version, but they are different. We suggest not using there features if possible.
 
