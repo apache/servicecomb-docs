@@ -8,7 +8,16 @@ table {
     overflow-x: auto;
 }
 
-.metrics-table {
+.metrics-cfg table, .metrics-table {
     border-width: 1px;
     font-size: 8px;
+    table-layout: auto;
+}
+
+.metrics-table th, .metrics-table td {
+    white-space: nowrap;
+}
+
+.metrics-table td:last-child{
+    white-space: normal;
 }

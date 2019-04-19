@@ -79,7 +79,7 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="8">servicecomb.vertx.endpoints</td>
+    <td rowspan="8">servicecomb<br>.vertx<br>.endpoints</td>
     <td>type</td>
     <td>client</td>
     <td></td>
@@ -129,7 +129,7 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="8">servicecomb.vertx.endpoints</td>
+    <td rowspan="8">servicecomb<br>.vertx<br>.endpoints</td>
     <td>type</td>
     <td>server</td>
     <td></td>
@@ -179,14 +179,14 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="11">servicecomb.invocation</td>
+    <td rowspan="11">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>CONSUMER、PRODUCER、EDGE</td>
     <td>是CONSUMER、PRODUCER还是EDGE端的统计</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>调用的方法名</td>
   </tr>
   <tr>
@@ -196,7 +196,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -221,14 +221,14 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="19">servicecomb.invocation</td>
+    <td rowspan="19">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>CONSUMER</td>
     <td>CONSUMER端的统计</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>调用的方法名</td>
   </tr>
   <tr>
@@ -238,7 +238,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -320,14 +320,14 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="17">servicecomb.invocation</td>
+    <td rowspan="17">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>PRODUCER</td>
     <td>PRODUCER端的统计</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>调用的方法名</td>
   </tr>
   <tr>
@@ -337,7 +337,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -412,14 +412,14 @@
     <th>含义</th>
   </tr>
   <tr>
-    <td rowspan="23">servicecomb.invocation</td>
+    <td rowspan="23">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>EDGE</td>
     <td>EDGE的统计</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>调用的方法名</td>
   </tr>
   <tr>
@@ -429,7 +429,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -585,17 +585,21 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
 
 ### 2.配置说明
 
+<div class="metrics-cfg">
+
 | 配置项 | 默认值 | 含义 |
 | :--- | :--- | :--- |
-| `Servicecomb.metrics.window_time`                | 60000 | 统计周期，单位为毫秒<br>TPS、时延等等周期性的数据，每周期更新一次，在周期内获取到的值，实际是上一周期的值 |
-| servicecomb.metrics.latencyDistribution          |       | 时延分布时间段定义，单位为毫秒<br>例如：0,1,10,100,1000<br>表示定义了下列时延段[0, 1),[1, 10),[10, 100),[100, 1000),[1000, ) |
-| servicecomb.metrics.Consumer.invocation.slow.enabled | false | 是否开启Consumer端的慢调用检测<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
-| servicecomb.metrics.Consumer.invocation.slow.msTime | 1000 | 时延超过配置值，则会立即输出日志，记录本次调用的stage耗时信息<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
-| servicecomb.metrics.Provider.invocation.slow.enabled | false | 是否开启Provide端的慢调用检测<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
-| servicecomb.metrics.Provider.invocation.slow.msTime | 1000 | 时延超过配置值，则会立即输出日志，记录本次调用的stage耗时信息<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
-| servicecomb.metrics.prometheus.address | 0.0.0.0:9696 | prometheus监听地址 |
-| servicecomb.metrics.publisher.defaultLog.enabled | false | 是否输出默认的统计日志 |
-| servicecomb.metrics.publisher.defaultLog.endpoints.client.detail.enabled | false | 是否输出每一条client endpoint统计日志，因为跟目标的ip:port数有关，可能会有很多数据，所以默认不输出 |
+| servicecomb.metrics.window_time                | 60000 | 统计周期，单位为毫秒<br>TPS、时延等等周期性的数据，每周期更新一次，在周期内获取到的值，实际是上一周期的值 |
+| servicecomb.metrics<br>.invocation.latencyDistribution          |       | 时延分布时间段定义，单位为毫秒<br>例如：0,1,10,100,1000<br>表示定义了下列时延段[0, 1),[1, 10),[10, 100),[100, 1000),[1000, ) |
+| servicecomb.metrics<br>.Consumer.invocation.slow.enabled | false | 是否开启Consumer端的慢调用检测<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
+| servicecomb.metrics<br>.Consumer.invocation.slow.msTime | 1000 | 时延超过配置值，则会立即输出日志，记录本次调用的stage耗时信息<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
+| servicecomb.metrics<br>.Provider.invocation.slow.enabled | false | 是否开启Provide端的慢调用检测<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
+| servicecomb.metrics<br>.Provider.invocation.slow.msTime | 1000 | 时延超过配置值，则会立即输出日志，记录本次调用的stage耗时信息<br>通过增加后缀.${service}.${schema}.${operation}，可以支持4级优先级定义 |
+| servicecomb.metrics<br>.prometheus.address | 0.0.0.0:9696 | prometheus监听地址 |
+| servicecomb.metrics.publisher.defaultLog<br>.enabled | false | 是否输出默认的统计日志 |
+| servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | 是否输出每一条client endpoint统计日志，因为跟目标的ip:port数有关，可能会有很多数据，所以默认不输出 |
+
+</div>
 
 ### 3.慢调用检测
   开启慢调用检测后，如果存在慢调用，则会立即输出相应日志：
