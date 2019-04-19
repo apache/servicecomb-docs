@@ -79,7 +79,7 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="8">servicecomb.vertx.endpoints</td>
+    <td rowspan="8">servicecomb<br>.vertx<br>.endpoints</td>
     <td>type</td>
     <td>client</td>
     <td></td>
@@ -129,7 +129,7 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="8">servicecomb.vertx.endpoints</td>
+    <td rowspan="8">servicecomb<br>.vertx<br>.endpoints</td>
     <td>type</td>
     <td>server</td>
     <td></td>
@@ -179,14 +179,14 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="11">servicecomb.invocation</td>
+    <td rowspan="11">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>CONSUMER、PRODUCER、EDGE</td>
     <td>Is the CONSUMER, PRODUCER or EDGE side statistics</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>Method name called</td>
   </tr>
   <tr>
@@ -196,7 +196,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -221,14 +221,14 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="19">servicecomb.invocation</td>
+    <td rowspan="19">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>CONSUMER</td>
     <td>Statistics on the CONSUMER side</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>Method name called</td>
   </tr>
   <tr>
@@ -238,7 +238,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -320,14 +320,14 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="17">servicecomb.invocation</td>
+    <td rowspan="17">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>PRODUCER</td>
     <td>Statistics on the PRODUCER side</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>Method name called</td>
   </tr>
   <tr>
@@ -337,7 +337,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -412,14 +412,14 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td rowspan="23">servicecomb.invocation</td>
+    <td rowspan="23">servicecomb<br>.invocation</td>
     <td>role</td>
     <td>EDGE</td>
     <td>EDGE statistics</td>
   </tr>
   <tr>
     <td>operation</td>
-    <td>${microserviceName}.${schemaId}.${operationName}</td>
+    <td>${microserviceName}<br>.${schemaId}<br>.${operationName}</td>
     <td>Method name called</td>
   </tr>
   <tr>
@@ -429,7 +429,7 @@
   </tr>
   <tr>
     <td>status</td>
-    <td>http status code<td>
+    <td>http status code</td>
     <td></td>
   </tr>
   <tr>
@@ -588,17 +588,21 @@ _Note: Please change the version field to the actual version number; if the vers
 
 ### 2. Configuration instructions
 
+<div class="metrics-cfg">
+
 | Configuration Item | Default | Meaning |
 | :--- | :--- | :--- |
-| `servicecomb.metrics.window_time` | 60000 | Statistical period, in milliseconds<br>TPS, delay, etc. Periodic data, updated once per cycle, the value obtained in the cycle, actually the value of the previous cycle |
-| servicecomb.metrics.latencyDistribution |       | The latency distribution time period definition in milliseconds<br>for example:0,1,10,100,1000<br>indicates that the following latency scopes are defined: [0, 1),[1, 10),[10, 100),[100, 1000),[1000, ) |
-| servicecomb.metrics.Consumer.invocation.slow.enabled | false | Whether to enable slow call detection on the Consumer side<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
-| servicecomb.metrics.Consumer.invocation.slow.msTime | 1000 | If the latency exceeds the configured value, the log will be output immediately, and the time consumption information of the stage called this time will be recorded.<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
-| servicecomb.metrics.Provider.invocation.slow.enabled | false | Whether to enable slow call detection on the Provider side<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
-| servicecomb.metrics.Provider.invocation.slow.msTime | 1000 | If the latency exceeds the configured value, the log will be output immediately, and the time consumption information of the stage called this time will be recorded.<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
-| servicecomb.metrics.prometheus.address | 0.0.0.0:9696 | prometheus listen address |
-| servicecomb.metrics.publisher.defaultLog.enabled | false | Whether to output the default statistics log |
-| servicecomb.metrics.publisher.defaultLog.endpoints.client.detail.enabled | false | Whether to output each client endpoint statistics log, because it is related to the target ip:port number, there may be a lot of data, so the default is not output|
+| servicecomb.metrics.window_time | 60000 | Statistical period, in milliseconds<br>TPS, delay, etc. Periodic data, updated once per cycle, the value obtained in the cycle, actually the value of the previous cycle |
+| servicecomb.metrics<br>.invocation.latencyDistribution |       | The latency distribution time period definition in milliseconds<br>for example:0,1,10,100,1000<br>indicates that the following latency scopes are defined: [0, 1),[1, 10),[10, 100),[100, 1000),[1000, ) |
+| servicecomb.metrics<br>.Consumer.invocation.slow.enabled | false | Whether to enable slow call detection on the Consumer side<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
+| servicecomb.metrics<br>.Consumer.invocation.slow.msTime | 1000 | If the latency exceeds the configured value, the log will be output immediately, and the time consumption information of the stage called this time will be recorded.<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
+| servicecomb.metrics<br>.Provider.invocation.slow.enabled | false | Whether to enable slow call detection on the Provider side<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
+| servicecomb.metrics<br>.Provider.invocation.slow.msTime | 1000 | If the latency exceeds the configured value, the log will be output immediately, and the time consumption information of the stage called this time will be recorded.<br>Level 4 priority definitions can be supported by adding the suffix .${service}.${schema}.${operation} |
+| servicecomb.metrics<br>.prometheus.address | 0.0.0.0:9696 | prometheus listen address |
+| servicecomb.metrics.publisher.defaultLog<br>.enabled | false | Whether to output the default statistics log |
+| servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | Whether to output each client endpoint statistics log, because it is related to the target ip:port number, there may be a lot of data, so the default is not output|
+
+</div>
 
 ### 3.慢调用检测
   After slow call detection is enabled, if there is a slow call, the corresponding log will be output immediately:
