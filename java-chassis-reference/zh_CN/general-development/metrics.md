@@ -585,7 +585,7 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
 
 ### 2.配置说明
 
-<div class="metrics-cfg">
+<div class="metrics-cfg"></div>
 
 | 配置项 | 默认值 | 含义 |
 | :--- | :--- | :--- |
@@ -598,8 +598,6 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
 | servicecomb.metrics<br>.prometheus.address | 0.0.0.0:9696 | prometheus监听地址 |
 | servicecomb.metrics.publisher.defaultLog<br>.enabled | false | 是否输出默认的统计日志 |
 | servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | 是否输出每一条client endpoint统计日志，因为跟目标的ip:port数有关，可能会有很多数据，所以默认不输出 |
-
-</div>
 
 ### 3.慢调用检测
   开启慢调用检测后，如果存在慢调用，则会立即输出相应日志：

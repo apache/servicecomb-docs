@@ -588,7 +588,7 @@ _Note: Please change the version field to the actual version number; if the vers
 
 ### 2. Configuration instructions
 
-<div class="metrics-cfg">
+<div class="metrics-cfg"></div>
 
 | Configuration Item | Default | Meaning |
 | :--- | :--- | :--- |
@@ -601,9 +601,7 @@ _Note: Please change the version field to the actual version number; if the vers
 | servicecomb.metrics<br>.prometheus.address | 0.0.0.0:9696 | prometheus listen address |
 | servicecomb.metrics.publisher.defaultLog<br>.enabled | false | Whether to output the default statistics log |
 | servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | Whether to output each client endpoint statistics log, because it is related to the target ip:port number, there may be a lot of data, so the default is not output|
-
-</div>
-
+  
 ### 3.慢调用检测
   After slow call detection is enabled, if there is a slow call, the corresponding log will be output immediately:
 ```
