@@ -8,9 +8,9 @@ table {
     overflow-x: auto;
 }
 
-.metrics-cfg table, .metrics-table {
+.metrics-cfg+table, .metrics-table {
     border-width: 1px;
-    font-size: 8px;
+    font-size: 12px;
     table-layout: auto;
 }
 
