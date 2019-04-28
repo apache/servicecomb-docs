@@ -47,6 +47,25 @@ Table 1-1 Configuration items for REST over Vertx
 | servicecomb.rest.client.connection.compression         | false                                          | Wether the client support compression          |
 | servicecomb.rest.client.maxHeaderSize                  | 8192                                           | The max header size of the response the client can process, unit is Byte |
 
+### Supplementary Explanation
+
+* The connection amount under extreme condition
+  Assumption:
+  * servicecomb.rest.client.thread-count = 8
+  * servicecomb.rest.client.connection.maxPoolSize = 5
+  * there are 10 instances of microservice A  
+
+  In terms of client side, under the extreme condition:
+  * for a client instance invoking microservice A, there are up to 400 connections.(`8 * 5 * 10 = 400`)
+  * if this client instance is also invoking another microservice B, and there are 10 instances of microservice B, then there are another 400 connections, and 800 connections in total.
+
+  In terms of server side, under the extreme condition:
+  * a client instance establishes up to 40 connections to a server instance.(`8 * 5 = 40`)
+  * `n` client instances establish up to `40 * n` connections to a server instance.
+
+  To improve performance, larger connection pools are needed. While the larger connection pools means the more connections. When the microservice instance scale reaches hundreds, some instances may handle tens of thousands of connections. Therefore, the developers need to make reasonable planning according to the actual condition.
+  The planning of HTTP1.1 may be relatively complex, and sometimes there is no proper solution, in which case the [http2](transports/http2.md) is recommended.
+
 ## Sample Code
 
 An example of the configuration in the microservice.yaml file for REST over Vertx:
