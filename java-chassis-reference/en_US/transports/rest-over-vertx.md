@@ -32,15 +32,20 @@ Table 1-1 Configuration items for REST over Vertx
 | Configuration Item                                     | Default Value                                  | Description                                    |
 | :----------------------------------------------------- | :--------------------------------------------- | :--------------------------------------------- |
 |servicecomb.rest.address                                |                                                |listening address, empty for not listen, just a rest client |
-|servicecomb.rest.server.connection-limit                |Integer.MAX_VALUE                               |Max allowed client connections                  | 
+|servicecomb.rest.server.connection-limit                |Integer.MAX_VALUE                               |Max allowed client connections                  |
 |servicecomb.rest.server.thread-count                    |[verticle-count](/transports/verticle-count.md) |rest server verticle instance count(Deprecated) |
 |servicecomb.rest.server.verticle-count                  |[verticle-count](/transports/verticle-count.md) |rest server verticle instance count             |
 |servicecomb.rest.server.connection.idleTimeoutInSeconds |60                                              |Timeout for server's idle connection, The idle connections will be closed |
+| servicecomb.rest.server.compression                    | false                                          | Wether the server support compression          |
+| servicecomb.rest.server.maxInitialLineLength           | 4096                                           | The max initial line length of the request the server can process, unit is Byte |
+| servicecomb.rest.server.maxHeaderSize                  | 32768                                          | The max header size of the request the server can process, unit is Byte |
 |servicecomb.rest.client.thread-count                    |[verticle-count](/transports/verticle-count.md) |rest client verticle instance count(Deprecated) |
 |servicecomb.rest.client.verticle-count                  |[verticle-count](/transports/verticle-count.md) |rest client verticle instance count             |
 |servicecomb.rest.client.connection.maxPoolSize          |5                                               |The maximum number of connections in each connection pool for an IP:port combination |
 |servicecomb.rest.client.connection.idleTimeoutInSeconds |30                                              |Timeout for client's idle connection, The idle connections will be closed |
 |servicecomb.rest.client.connection.keepAlive            |true                                            |Whether to use long connections                 |
+| servicecomb.rest.client.connection.compression         | false                                          | Wether the client support compression          |
+| servicecomb.rest.client.maxHeaderSize                  | 8192                                           | The max header size of the response the client can process, unit is Byte |
 
 ## Sample Code
 
@@ -56,4 +61,3 @@ servicecomb:
       transport: rest
       version-rule: 0.0.1
 ```
-
