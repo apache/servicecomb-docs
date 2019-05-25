@@ -9,7 +9,7 @@ DiscoveryTree's logic is more complex, its processing progress is as below:
 
 Load balancing can be configured in the Consumer processing chain, the handler name is loadbalance, as follows:
 
-```
+```yaml
 servicecomb:
   handler:
     chain:
@@ -18,7 +18,7 @@ servicecomb:
 ```
 
 POM dependence:
-```
+```xml
  <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>handler-loadbalance</artifactId>
@@ -43,30 +43,34 @@ This rule is enabled by default. If it is not needed, set servicecomb.loadbalanc
 
 ## Routing and forwarding by instance attributes
 Users can specify the properties of microservice instances in microservice.yaml, or by calling service center APIs.
-```
+```yaml
 instance_description:
   properties:
-    tag: mytag
+    tags:
+      tag_key: tag_value
 ```
 
 Consumers can specify provider instances' attributes to determine which instances to call.
-```
+```yaml
 servicecomb:
   loadbalance:
-    myservice:
+    # Here the "provider" means the config items below only take effect on the service named "provider"
+    # In cross-app invocation, the AppID should be prefixed, like "AppIDOfProvider:provider"
+    provider:
       transactionControl:
         options:
-          tag: mytag
+          tags:
+            tag_key: expected_tag_value
 ```
-The above configuration shows that only myservice instances with the tag attribute mytag are called.
+The above configuration shows that only the instances of "provider" with the tag attribute `tag_key:expected_tag_value` are called.
 
 This rule needs to be configured separately for each service. Global rule for all services is not supported.
 
-This rule is enabled by default, it can be disabled by setting servicecomb.loadbalance.filter.instanceProperty.enabled to false. The instance attributes based routing policy is implemented in InstancePropertyDiscoveryFilter.
+This rule is enabled by default, it can be disabled by setting `servicecomb.loadbalance.filter.instanceProperty.enabled` to false. The instance attributes based routing policy is implemented in `InstancePropertyDiscoveryFilter`.
 
 ## Instance isolation
 Developers can configure instance-isolated parameters to temporarily drop access to the wrong instance, improving system reliability and performance. Below are the configuration items and default values:
-```
+```yaml
 servicecomb:
   loadbalance:
     isolation:
@@ -74,10 +78,10 @@ servicecomb:
       errorThresholdPercentage: 0
       enableRequestThreshold: 5
       singleTestTime: 60000
-      continuousFailureThreshold: 2
+      continuousFailureThreshold: 5
 ```
 
-The interval of isolation calculation is 1 minute. According to the above configuration, in 1 minute, if the total number of requests is greater than 5, and more than 2 consecutive  errors occur, the instance is isolated. 
+The interval of isolation calculation is 1 minute. According to the above configuration, in 1 minute, if the total number of requests is greater than 5, and more than 2 consecutive  errors occur, the instance is isolated.
 
 The default value of errorThresholdPercentage is 0, indicates that the rule is ommited. The item should be a integer less than 100, for example 20, then within 1 minutes, if the total number of request is greater than 5 and [1] error rate is greater than 20% or [2] more than 2 consecutive  errors occur, is instance is isolated.
 
@@ -94,7 +98,7 @@ The default instance state detection mechanism is to send a telnet instruction, 
 2. Configure SPI: Add META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing, the content is the full path of the implementation class
 
 Developers can configure different isolation policies for different microservices. Just add a service name to the configuration item, for example:
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice:
@@ -110,7 +114,7 @@ This rule is enabled by default and can be turned off by setting servicecomb.loa
 
 ## Configuring route rules
 Developers can specify load balancing policies through configuration items.
-```
+```yaml
 servicecomb:
   loadbalance:
     strategy:
@@ -118,7 +122,7 @@ servicecomb:
 ```
 
 Developers can configure policies for different microservices by adding a service name, for example:
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice:
@@ -130,7 +134,7 @@ Each policy has some specific configuration items.
 
 * SessionStickiness
 
-```
+```yaml
 servicecomb:
   loadbalance:
     SessionStickinessRule:
@@ -140,7 +144,7 @@ servicecomb:
 
 ## Set retry strategy
 The load balancing module also supports the policy retry.
-```
+```yaml
 servicecomb:
   loadbalance:
     retryEnabled: false
@@ -148,7 +152,7 @@ servicecomb:
     retryOnSame: 0
 ```
 Retry is not enabled by default. Developers can set different strategies for different services:
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice：

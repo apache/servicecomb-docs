@@ -8,7 +8,7 @@ DiscoveryTree的逻辑比较复杂，可以通过下面的处理流程了解其�
 ![](/assets/loadbalance-001.png)
 
 负载均衡适用于Consumer处理链，名称为loadbalance，示例如下：
-```
+```yaml
 servicecomb:
   handler:
     chain:
@@ -17,7 +17,7 @@ servicecomb:
 ```
 
 POM依赖：
-```
+```xml
  <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>handler-loadbalance</artifactId>
@@ -42,30 +42,32 @@ servicecomb:
 
 ## 根据实例属性进行路由转发
 微服务可以指定实例的属性。实例属性可以在microservice.yaml中指定，也可以通过服务中心的API进行修改。
-```
+```yaml
 instance_description:
   properties:
-    tag: mytag
+    tags:
+      tag_key: tag_value
 ```
 
 消费者可以指定消费具备某些属性的实例，不访问其他实例
-```
+```yaml
 servicecomb:
   loadbalance:
-    myservice:
+    provider:   # 这里表示配置对名为"provider"的服务生效，如果是跨应用调用，则还需要加上AppID，如"AppIDOfProvider:provider"
       transactionControl:
         options:
-          tag: mytag
+          tags:
+            tag_key: expected_tag_value
 ```
-上面的配置表示只访问myservice所有实例中tag属性为mytag的实例。
+上面的配置表示只访问myservice所有实例中`tag_key`属性为`expected_tag_value`的实例。
 
 该规则需要给每个服务单独配置，未配置表示不启用该规则，不支持对于所有服务的全局配置。
 
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.instanceProperty.enabled进行关闭。根据实例属性进行路由转发功能在InstancePropertyDiscoveryFilter实现。
+该规则默认启用，如果不需要使用，可以通过`servicecomb.loadbalance.filter.instanceProperty.enabled`进行关闭。根据实例属性进行路由转发功能在`InstancePropertyDiscoveryFilter`实现。
 
 ## 实例隔离功能
 开发者可以配置实例隔离的参数，以暂时屏蔽对于错误实例的访问，提升系统可靠性和性能。下面是其配置项和缺省值
-```
+```yaml
 servicecomb:
   loadbalance:
     isolation:
@@ -73,7 +75,7 @@ servicecomb:
       errorThresholdPercentage: 0
       enableRequestThreshold: 5
       singleTestTime: 60000
-      continuousFailureThreshold: 2
+      continuousFailureThreshold: 5
 ```
 
 隔离的统计周期是1分钟。按照上面的配置，在1分钟内，如果请求总数大于5，并且连续错误超过2次，那么就会将实例隔离。
@@ -91,7 +93,7 @@ servicecomb:
 2. 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing，内容为实现类的全名
 
 开发者可以针对不同的微服务配置不一样的隔离策略。只需要给配置项增加服务名，例如：
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice:
@@ -107,7 +109,7 @@ servicecomb:
 
 ## 配置路由规则
 开发者可以通过配置项指定负载均衡策略。
-```
+```yaml
 servicecomb:
   loadbalance:
     strategy:
@@ -115,7 +117,7 @@ servicecomb:
 ```
 
 开发者可以针对不同的微服务配置不一样的策略，只需要给配置项增加服务名，例如：
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice:
@@ -127,7 +129,7 @@ servicecomb:
 
 * SessionStickiness
 
-```
+```yaml
 servicecomb:
   loadbalance:
     SessionStickinessRule:
@@ -137,7 +139,7 @@ servicecomb:
 
 ## 设置重试策略
 负载均衡模块还支持配置失败重试的策略。
-```
+```yaml
 servicecomb:
   loadbalance:
     retryEnabled: false
@@ -145,7 +147,7 @@ servicecomb:
     retryOnSame: 0
 ```
 缺省情况未启用重试。同时也支持对不同的服务设置特殊的策略：
-```
+```yaml
 servicecomb:
   loadbalance:
     myservice：
