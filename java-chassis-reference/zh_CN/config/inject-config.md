@@ -59,7 +59,7 @@ public class ConfigNoAnnotation {
 将配置属性注入到无`@InjectProperties`和`@InjectProperty`注解的对象上:
 
 ```Java
-ConfigNoAnnotation config = new ConfigObjectFactory().create(ConfigNoAnnotation.class);
+ConfigNoAnnotation config = priorityPropertyManager.createConfigObject(ConfigNoAnnotation.class);
 ```
 
 将配置属性注入到有`@InjectProperties`和`@InjectProperty`注解的对象上：
@@ -75,12 +75,17 @@ ConfigNoAnnotation config = new ConfigObjectFactory().create(ConfigNoAnnotation.
   2.  root.l1-2
 
 ```Java
-ConfigWithAnnotation config = new ConfigObjectFactory().create(ConfigWithAnnotation.class,
+ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigWithAnnotation.class,
         "key", "k",
         "low-list", Arrays.asList("low-1", "low-2"),
         "high-list", Arrays.asList("high-1", "high-2"),
 		"full-list", Arrays.asList("l1-1", "l1-2")
 		);
+```
+
+最后不管是有无注解的属性注入，都要显示的回收对象
+```Java
+priorityPropertyManager.unregisterConfigObject(config)
 ```
 
 ## 参考

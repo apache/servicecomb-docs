@@ -63,7 +63,7 @@ We can execute injection with the following sample code：
 Inject configuration properties into objects without `InjectProperties` and `InjectProperty` annotations:
 
 ```Java
-ConfigNoAnnotation config = new ConfigObjectFactory().create(ConfigNoAnnotation.class);
+ConfigNoAnnotation config = priorityPropertyManager.createConfigObject(ConfigNoAnnotation.class);
 ```
 
 Inject configuration properties into objects annotated with `InjectProperties` and `InjectProperty`:
@@ -79,12 +79,17 @@ Inject configuration properties into objects annotated with `InjectProperties` a
   2.  root.l1-2
 
 ```Java
-ConfigWithAnnotation config = new ConfigObjectFactory().create(ConfigWithAnnotation.class,
+ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigWithAnnotation.class,
         "key", "k",
         "low-list", Arrays.asList("low-1", "low-2"),
         "high-list", Arrays.asList("high-1", "high-2"),
 		"full-list", Arrays.asList("l1-1", "l1-2")
 		);
+```
+
+Last displayed empty object and empty cache
+```Java
+priorityPropertyManager.unregisterConfigObject(config)
 ```
 
 ## Reference resources
