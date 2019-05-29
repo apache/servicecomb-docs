@@ -63,7 +63,7 @@ We can execute injection with the following sample code：
 Inject configuration properties into objects without `InjectProperties` and `InjectProperty` annotations:
 
 ```Java
-ConfigNoAnnotation config = priorityPropertyManager.createConfigObject(ConfigNoAnnotation.class);
+ConfigNoAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager().createConfigObject(ConfigNoAnnotation.class);
 ```
 
 Inject configuration properties into objects annotated with `InjectProperties` and `InjectProperty`:
@@ -79,7 +79,7 @@ Inject configuration properties into objects annotated with `InjectProperties` a
   2.  root.l1-2
 
 ```Java
-ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigWithAnnotation.class,
+ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager().createConfigObject(ConfigWithAnnotation.class,
         "key", "k",
         "low-list", Arrays.asList("low-1", "low-2"),
         "high-list", Arrays.asList("high-1", "high-2"),
@@ -87,7 +87,8 @@ ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigW
 		);
 ```
 
-Last displayed empty object and empty cache
+Finally, whether it is an annotation injection or not, you must explicitly reclaim the configuration injection object.
+
 ```Java
 priorityPropertyManager.unregisterConfigObject(config)
 ```

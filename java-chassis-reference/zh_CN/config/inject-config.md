@@ -59,7 +59,7 @@ public class ConfigNoAnnotation {
 将配置属性注入到无`@InjectProperties`和`@InjectProperty`注解的对象上:
 
 ```Java
-ConfigNoAnnotation config = priorityPropertyManager.createConfigObject(ConfigNoAnnotation.class);
+ConfigNoAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager().createConfigObject(ConfigNoAnnotation.class);
 ```
 
 将配置属性注入到有`@InjectProperties`和`@InjectProperty`注解的对象上：
@@ -75,7 +75,7 @@ ConfigNoAnnotation config = priorityPropertyManager.createConfigObject(ConfigNoA
   2.  root.l1-2
 
 ```Java
-ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigWithAnnotation.class,
+ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager().createConfigObject(ConfigWithAnnotation.class,
         "key", "k",
         "low-list", Arrays.asList("low-1", "low-2"),
         "high-list", Arrays.asList("high-1", "high-2"),
@@ -83,7 +83,7 @@ ConfigWithAnnotation config = priorityPropertyManager.createConfigObject(ConfigW
 		);
 ```
 
-最后不管是有无注解的属性注入，都要显示的回收对象
+最后不管是有无注解的属性注入，都要显式地回收配置注入对象
 ```Java
 priorityPropertyManager.unregisterConfigObject(config)
 ```
