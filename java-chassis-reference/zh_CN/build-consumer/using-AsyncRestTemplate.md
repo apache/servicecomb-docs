@@ -2,7 +2,7 @@
 
 ## 概念阐述
 
-AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 restTemplate 类似，只是这里以异步的形式进行服务的调用。
+AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 RestTemplate 类似，只是这里以异步的形式进行服务的调用。
 
 ## 示例代码
 
