@@ -11,7 +11,7 @@ Developers can configure service center clusters addresses, connection parameter
 ### Table 1-1 Accessing Common Configuration Items in the Configuration Center
 
 | Configuration Item | Reference / Default | Value Range | Required | Meaning |
-| :--- | :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- |
 | servicecomb.service.registry.address | http://127.0.0.1:30100 | | Yes | Service center address information, you can configure multiple, separated by commas. | |
 | servicecomb.service.registry.instance. Watch | true | | No | Whether to monitor instance changes in PUSH mode. When it is false, it means using PULL mode. | |
 | servicecomb.service.registry. Autodiscovery | false | | No | Whether to automatically discover the address of the service center. This configuration is enabled when a partial address needs to be configured, and other addresses are discovered by the configured service center instance. | |
@@ -22,5 +22,5 @@ Developers can configure service center clusters addresses, connection parameter
 | servicecomb.service.registry.client.timeout.request | 30000 |  | Request timeout in milliseconds |  |  |
 | servicecomb.service.registry.client.timeout.idle | 60 |  | Connection idle timeout in milliseconds |  |  |
 | servicecomb.service.registry.client.timeout.heartbeat | 3000 |  | Heartbeat request timeout in milliseconds |  |  |
-
+| servicecomb.service.registry.client.instances | 1 |  | No | the account of verticle instances that Service Registry Client had been deployed |  |  |
 
