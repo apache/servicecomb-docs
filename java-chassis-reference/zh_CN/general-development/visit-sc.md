@@ -1,4 +1,4 @@
-## 概念阐述
+ ## 概念阐述
 
 系统通过[服务中心](https://github.com/apache/servicecomb-service-center)实现服务之间的发现。服务启动过程中，会向服务中心进行注册。在调用其他服务的时候，会从服务中心查询其他服务的实例信息，比如访问地址、使用的协议以及其他参数。服务中心支持使用PULL和PUSH两种模式通知实例变化。
 
@@ -22,4 +22,4 @@
 | servicecomb.service.registry.client.timeout.request | 30000 |  | 请求超时时间 | 单位毫秒 |  |
 | servicecomb.service.registry.client.timeout.idle | 60 |  | 连接闲置超时时间 | 单位秒 |  |
 | servicecomb.service.registry.client.timeout.heartbeat | 3000 |  | 心跳超时时间 | 单位毫秒 |  |
-
+| servicecomb.service.registry.client.instances | 1 |  | 否 | Service Registry客户端Verticle部署实例的个数 |  |
