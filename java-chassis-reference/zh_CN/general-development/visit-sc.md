@@ -23,3 +23,5 @@
 | servicecomb.service.registry.client.timeout.idle | 60 |  | 连接闲置超时时间 | 单位秒 |  |
 | servicecomb.service.registry.client.timeout.heartbeat | 3000 |  | 心跳超时时间 | 单位毫秒 |  |
 | servicecomb.service.registry.client.instances | 1 |  | 否 | Service Registry客户端Verticle部署实例的个数 |  |
+| servicecomb.service.registry.client.eventLoopPoolSize | 4 |  | 否 | Service Registry客户端Event Loop线程池大小 |  |
+| servicecomb.service.registry.client.workerPoolSize | 4 |  | 否 | Service Registry客户端Worker线程池大小 |  |

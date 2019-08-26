@@ -23,4 +23,5 @@ Developers can configure service center clusters addresses, connection parameter
 | servicecomb.service.registry.client.timeout.idle | 60 |  | Connection idle timeout in milliseconds |  |  |
 | servicecomb.service.registry.client.timeout.heartbeat | 3000 |  | Heartbeat request timeout in milliseconds |  |  |
 | servicecomb.service.registry.client.instances | 1 |  | No | the account of verticle instances that Service Registry Client had been deployed |  |  |
-
+| servicecomb.service.registry.client.eventLoopPoolSize | 4 |  | No | the size of Service Registry client Event Loop pool size |  |
+| servicecomb.service.registry.client.workerPoolSize | 4 |  | No | the size of Service Registry client worker pool size |  |
