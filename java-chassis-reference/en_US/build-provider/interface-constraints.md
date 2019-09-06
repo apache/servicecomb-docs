@@ -8,7 +8,7 @@ For example:
 ```java
 public Person query(String id);
 public Object query(String id);
-public class Person {String name;}
+public Person query(String name);
 ```
 
 Obviously, if API 1 is called, we know that an ID parameter of String type needs to be transferred. The returned value is of Person type, which contains a string-typed name parameter. If API 2 is called, we do not know how to process the returned value, and need to refer to documents provided by the service provider. API 2 is developed in the perspective of RPC developers.
