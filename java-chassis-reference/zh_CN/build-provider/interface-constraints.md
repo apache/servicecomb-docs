@@ -9,7 +9,7 @@ ServiceComb-Java-Chassis建议接口定义遵循一个简单的原则：接口�
 ```java
 public Person query(String id);
 public Object query(String id);
-public class Person {String name;}
+public Person query(String name);
 ```
 
 显然调用接口一，我们知道要传递一个String类型的id参数，返回值是一个Person类型，Person里面存在String类型的name参数。调用接口二，我们不知道怎么处理返回值，必须参考服务提供者的文档说明。这个视角是熟练的RPC开发者的视角。
