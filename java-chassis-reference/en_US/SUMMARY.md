@@ -79,7 +79,7 @@
   * [Using TLS](security/tls.md)
   * [Using RSA certification](security/rsa.md)
 * [Using java chassis in Spring Boot](using-java-chassis-in-spring-boot.md)
-  * [Provided component description](using-java-chassis-in-spring-boot/components-for-spring-boot.md)
+  * [spring boot starter for java-chassis](using-java-chassis-in-spring-boot/components-for-spring-boot.md)
   * [JAVA application development](using-java-chassis-in-spring-boot/java-application.md)
   * [Web development method development](using-java-chassis-in-spring-boot/web-application.md)
   * [The difference between JAVA application method and Web development method](using-java-chassis-in-spring-boot/diff-between-java-web.md)

@@ -1,27 +1,27 @@
 Web开发方式和JAVA应用方式的开发步骤基本类似。
 
-本项目[代码示例](https://github.com/huaweicse/servicecomb-java-chassis-samples/tree/master/spring-boot-web)
-
-
 主要有如下区别：
 
 * JAVA应用方式基于spring-boot-starter，而Web开发方式基于spring-boot-starter-web。
 
-* JAVA应用方式依赖spring-boot-starter-provider，而Web开发方式依赖spring-boot-starter-transport。spring-boot-starter-web已经携带了hibernate-validator，不需要额外依赖。
-
-* 在启动函数中，Web开发方式可以通过声明
+* Web开发方式通过@EnableServiceComb会启用org.apache.servicecomb.transport.rest.servlet.RestServlet, 可以通过声明
 
 ```
 @SpringBootApplication(exclude=DispatcherServletAutoConfiguration.class)
 ```
 
-来关闭org.springframework.web.servlet.DispatcherServlet，通过@EnableServiceComb会启用org.apache.servicecomb.transport.rest.servlet.RestServlet。虽然排除DispatcherServlet不是必须的，但是大多数场景一个微服务里面存在多个REST框架都不是很好的主意，会造成很多使用上的误解。
+来关闭org.springframework.web.servlet.DispatcherServlet。虽然排除DispatcherServlet不是必须的，但是大多数场景一个微服务里面存在多个REST框架都不是很好的主意，容易误用。
 
-* 在microservice.yaml文件中通过配置项servicecomb.rest.servlet.urlPattern来指定RestServlet的URL根路径。并且配置项servicecomb.rest.address里面的监听端口，必须和tomcat监听的端口保持一致（默认是8080，可以通过application.yml中增加server.port修改）
+***注意：*** 有些spring boot版本在加上这个配置以后，启动会失败。也可以不关闭DispatcherServlet，而是将他们指定为不同的URL前缀，让这两个Servlet共存。这种方式在一些历史遗留系统改造，必须使用DispatcherServlet发布REST接口的场景非常有用。
 
+```
+## DispatcherServlet path
+server.servlet.path: /ui
+## RestServlet path
+servicecomb.rest.servlet.urlPattern: /api/*
+```
 
-
-
+* 通过配置项servicecomb.rest.servlet.urlPattern来指定RestServlet的URL根路径。并且配置项servicecomb.rest.address里面的监听端口，必须和tomcat监听的端口保持一致（默认是8080，可以通过application.yml中增加server.port修改）
 
 集成java chassis后，可以通过它的方式开发REST接口：
 

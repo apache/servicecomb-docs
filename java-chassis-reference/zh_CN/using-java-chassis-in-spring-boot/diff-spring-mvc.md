@@ -1,4 +1,6 @@
-java chassis支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，而且有不一样的设计目标。java chassis的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的HttpServletRequest。下面是一些显著的差别。
+# Spring MVC开发习惯的差异
+
+java chassis支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，而且有不一样的设计目标。java chassis的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的HttpServletRequest。java-chassis支持的Spring MVC标签是spring boot的子集， 下面是一些显著的差别。
 
 * 服务声明方式
 
@@ -26,48 +28,11 @@ public void postData(@RequestBody Map rawData)
 public void postData(HttpServletRequest rquest)
 ```
 
-上面的类型在java chassis都不提供支持。因为java chassis会根据接口定义生成契约，从上面的接口定义，如果不结合实际的实现代码或者额外的开发文档说明，无法直接生成契约。也就是站在浏览器的REST视角，不知道如何在body里面构造消息内容。
+java chassis不支持上诉类型。因为java chassis会根据接口定义生成契约，从上面的接口定义，如果不结合实际的实现代码或者额外的开发文档说明，无法直接生成契约。
 
-为了支持快速开发，java chassis的数据类型限制也在不停的扩充，比如支持HttpServletRequest，但是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在的使用场景下，尽可能使用契约能够描述的类型，让代码阅读性更好。
+为了支持快速开发，java chassis的数据类型限制也在不停的扩充，比如支持HttpServletRequest，但是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在的使用场景下，尽可能使用契约能够描述的类型，让代码阅读性更好。此外，spring针对DispatcherServlet做了大量的扩展，这些扩展对于java-chassis的RestDispatcher是不适用的。
 
-java chassis在数据类型的支持方面的更多说明，请参考"支持的数据类型"章节。
+java chassis 在Spring MVC方面的更多开发支持，可以参考[用SpringMVC 开发微服务](../build-provider/springmvc.md)。
 
-* 常用标签支持
 
-下面是java chassis对于Spring MVC常用标签的支持情况。
-
-| 标签名称 | 是否支持 | 说明 |
-| :--- | :--- | :--- |
-| RequestMapping | 是 |  |
-| GetMapping | 是 |  |
-| PutMapping | 是 |  |
-| PostMapping | 是 |  |
-| DeleteMapping | 是 |  |
-| PatchMapping | 是 |  |
-| RequestParam | 是 |  |
-| CookieValue | 是 |  |
-| PathVariable | 是 |  |
-| RequestHeader | 是 |  |
-| RequestBody | 是 | 目前支持application/json，plain/text |
-| RequestPart | 是 | 用于文件上传的场景，对应的标签还有Part、MultipartFile |
-| ResponseBody | 否 | 返回值缺省都是在body返回 |
-| ResponseStatus | 否 | 可以通过ApiResponse指定返回的错误码 |
-| RequestAttribute | 否 | Servlet协议相关的标签 |
-| SessionAttribute | 否 | Servlet协议相关的标签 |
-| MatrixVariable | 否 |  |
-| ModelAttribute | 否 |  |
-| ControllerAdvice | 否 |  |
-| CrossOrigin | 否 |  |
-| ExceptionHandler | 否 |  |
-| InitBinder | 否 |  |
-
-* 其他
-
-不支持在GET方法中使用POJO对象进行参数映射
-
-比如：public void getOperation\(Person p\)
-
-不支持在GET方法中使用Map映射所有可能的参数
-
-比如：public void getOperation\(Map&lt;String,String&gt; p\)
 
