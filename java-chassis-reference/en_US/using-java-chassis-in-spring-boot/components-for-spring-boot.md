@@ -1,29 +1,154 @@
-For Spring Boot, Spring Cloud, the following components are provided:
+# spring boot starter for java-chassis
 
-* spring-boot-starter-configuration
+java-chassis provide different starters for spring boot. 
 
-Access the configuration center. When you need to use the Configuration Center as a dynamic configuration management tool in Spring Boot and Spring Cloud applications, you need dependence of them.
+## java-chassis 2.0.0 and above with spring boot 2.0 and above [example](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/metrics-extend-healthcheck)
 
+* java-chassis-spring-boot-starter-standalone
 
+For standalone applications:
 
-* spring-boot-starter-registry
+POM dependency：
 
-Access to the service center. When you need to use the service center as a service registration and discovery management tool in Spring Boot and Spring Cloud applications, you need dependence of them.
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+    </dependency>
+  </dependencies>
+```
 
+* java-chassis-spring-boot-starter-servlet
 
+For web applications:
 
-* spring-boot-starter-discovery
+POM dependency：
 
-Adapt to the Spring Cloud's DiscoveryClient interface. When using @EnableDiscoveryClient in Spring Cloud, you need dependence of them.
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-spring-boot-starter-servlet</artifactId>
+    </dependency>
+  </dependencies>
+```
 
+dependency management for applications：
 
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+## java-chassis 1.3.0 and above with spring boot 2.0 and above [example](https://github.com/apache/servicecomb-samples/tree/1.3.0/dependency_management/springboot2)
+
+* spring-boot2-starter-standalone
+
+For standalone applications:
+
+POM dependency：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot2-starter-standalone</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+* spring-boot2-starter-servlet
+
+For web applications:
+
+POM dependency：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot2-starter-servlet</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+dependency management for applications：
+
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies-springboot2</artifactId>
+        <version>1.3.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+## java-chassis 1.3.0 and above with spring boot 1.0 and above [example](https://github.com/apache/servicecomb-samples/tree/1.3.0/dependency_management/springboot1)
 
 * spring-boot-starter-provider
 
-Enable the core functionality of java chassis via @EnableServiceComb in Spring Boot. This feature can be used for "JAVA application mode" and "Web development mode". In the "Web development mode", the web environment is disabled by spring.main.web-environment=false. Therefore, this module is mainly to solve the problem of "JAVA application mode".
+For standalone applications:
 
+POM dependency：
 
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot-starter-provider</artifactId>
+    </dependency>
+  </dependencies>
+```
 
 * spring-boot-starter-transport
 
-Enable the core functionality of the java chassis via @EnableServiceComb in Spring Boot and enable the RestServlet for the java chassis. Used in "Web development mode".
+For web applications:
+
+POM dependency：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot-starter-transport</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+dependency management for applications：
+
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies-springboot1</artifactId>
+        <version>1.3.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- spring boot 1.5.14.RELEASE use a low version of validation-api, must override it -->
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>2.0.0.Final</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+

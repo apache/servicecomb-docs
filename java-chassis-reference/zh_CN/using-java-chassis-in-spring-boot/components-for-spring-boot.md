@@ -1,30 +1,154 @@
-针对Spring Boot、Spring Cloud，提供了如下几个组件：
+# java-chassis 提供的spring boot starter说明
 
-* spring-boot-starter-configuration
+java-chassis提供了spring-boot-starter，方便在spring boot中集成java-chassis。由于早期命名没考虑规范性，在使用这些starter之前，需要注意区分使用的java-chassis版本和spring boot版本。
 
-接入配置中心。当需要在Spring Boot、Spring Cloud应用中，使用配置中心作为动态配置管理工具的时候，需要依赖。
+## java-chassis 2.0.0 以上 + spring boot 2.0以上 [例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/metrics-extend-healthcheck)
 
+* java-chassis-spring-boot-starter-standalone
 
+"JAVA应用方式"使用。
 
-* spring-boot-starter-registry
+POM依赖：
 
-接入服务中心。当需要在Spring Boot、Spring Cloud应用中，使用服务中心作为服务注册、发现管理工具的时候，需要依赖。
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+    </dependency>
+  </dependencies>
+```
 
+* java-chassis-spring-boot-starter-servlet
 
+"Web开发方式"使用。
 
-* spring-boot-starter-discovery
+POM依赖：
 
-适配Spring Cloud的DiscoveryClient接口。当在Spring Cloud中使用@EnableDiscoveryClient时，需要依赖。
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-spring-boot-starter-servlet</artifactId>
+    </dependency>
+  </dependencies>
+```
 
+两种方式的dependency management配置如下：
 
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+## java-chassis 1.3.x + spring boot 2.0 [例子](https://github.com/apache/servicecomb-samples/tree/1.3.0/dependency_management/springboot2)
+
+* spring-boot2-starter-standalone
+
+"JAVA应用方式"使用。
+
+POM依赖：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot2-starter-standalone</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+* spring-boot2-starter-servlet
+
+"Web开发方式"使用。
+
+POM依赖：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot2-starter-servlet</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+两种方式的dependency management配置如下：
+
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies-springboot2</artifactId>
+        <version>1.3.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+## java-chassis 1.3.x + spring boot 1.0 [例子](https://github.com/apache/servicecomb-samples/tree/1.3.0/dependency_management/springboot1)
 
 * spring-boot-starter-provider
 
-在Spring Boot中通过@EnableServiceComb启用java chassis的核心功能。这个功能可以用于“JAVA应用方式”和”Web开发方式“。 在”Web开发方式”中，通过spring.main.web-environment=false禁用了Web环境。因此，这个模块主要是解决”JAVA应用方式“的问题。
+"JAVA应用方式"使用。
 
+POM依赖：
 
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot-starter-provider</artifactId>
+    </dependency>
+  </dependencies>
+```
 
 * spring-boot-starter-transport
 
-在Spring Boot中通过@EnableServiceComb启用java chassis的核心功能，并启用java chassis的RestServlet。用于” Web开发方式“。
+"Web开发方式"使用。
+
+POM依赖：
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>spring-boot-starter-transport</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+两种方式的dependency management配置如下：
+
+```
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.servicecomb</groupId>
+        <artifactId>java-chassis-dependencies-springboot1</artifactId>
+        <version>1.3.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- spring boot 1.5.14.RELEASE use a low version of validation-api, must override it -->
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>2.0.0.Final</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
 
