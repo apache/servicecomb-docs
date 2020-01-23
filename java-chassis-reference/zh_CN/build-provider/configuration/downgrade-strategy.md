@@ -46,7 +46,7 @@ servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled
 
 ### 配置项列表
 
-注意：在下面的表格里面，全部省略MicroServiceName。未特殊说明，配置项都支持Provider和Consumer。
+注意：在下面的表格里面，全部省略type和MicroServiceName。未特殊说明，配置项都支持Provider和Consumer。
 
 例如：对于服务消费者，需要配置为：servicecomb.isolation.Consumer.timeout.enabled
 
@@ -56,18 +56,18 @@ servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled
 
 | 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.isolation.[type].timeout.enabled | FALSE | - | 否 | 是否启用超时检测 |  |
-| servicecomb.isolation.[type].timeoutInMilliseconds | 30000 | - | 否 | 超时时间阈值 |  |
-| servicecomb.isolation.[type].maxConcurrentRequests | 10 | - | 否 | 最大并发数阈值 |  |
-| servicecomb.circuitBreaker.[type].enabled | TRUE | - | 否 | 是否启用熔断措施 |  |
-| servicecomb.circuitBreaker.[type].forceOpen | FALSE | - | 否 | 不管失败次数，都进行熔断 |  |
-| servicecomb.circuitBreaker.[type].forceClosed | FALSE | - | 否 | 任何时候都不熔断 | 当与forceOpen同时配置时，forceOpen优先。 |
-| servicecomb.circuitBreaker.[type].sleepWindowInMilliseconds | 15000 | - | 否 | 熔断后，多长时间恢复 | 恢复后，会重新计算失败情况。注意：如果恢复后的调用立即失败，那么会立即重新进入熔断。 |
-| servicecomb.circuitBreaker.[type].requestVolumeThreshold | 20 | - | 否 | 10s内统计错误发生次数阈值，超过阈值则触发熔断 | 由于10秒还会被划分为10个1秒的统计周期，经过1s中后才会开始计算错误率，因此从调用开始至少经过1s，才会发生熔断。 |
-| servicecomb.circuitBreaker.[type].errorThresholdPercentage | 50 | - | 否 | 错误率阈值，达到阈值则触发熔断 |  |
-| servicecomb.fallback.[type].enabled | TRUE | - | 否 | 是否启用出错后的故障处理措施 |  |
-| servicecomb.fallback.[type].maxConcurrentRequests | 10 | - | 否 | 并发调用容错处理措施（servicecomb.fallbackpolicy.policy）的请求数，超过这个值则不再调用处理措施，直接返回异常 |  |
-| servicecomb.fallbackpolicy.[type].policy | throwexception | returnull \| throwexception | 否 | 出错后的处理策略 |  |
+| servicecomb.isolation.timeout.enabled | FALSE | - | 否 | 是否启用超时检测 |  |
+| servicecomb.isolation.timeoutInMilliseconds | 30000 | - | 否 | 超时时间阈值 |  |
+| servicecomb.isolation.maxConcurrentRequests | 10 | - | 否 | 最大并发数阈值 |  |
+| servicecomb.circuitBreaker.enabled | TRUE | - | 否 | 是否启用熔断措施 |  |
+| servicecomb.circuitBreaker.forceOpen | FALSE | - | 否 | 不管失败次数，都进行熔断 |  |
+| servicecomb.circuitBreaker.forceClosed | FALSE | - | 否 | 任何时候都不熔断 | 当与forceOpen同时配置时，forceOpen优先。 |
+| servicecomb.circuitBreaker.sleepWindowInMilliseconds | 15000 | - | 否 | 熔断后，多长时间恢复 | 恢复后，会重新计算失败情况。注意：如果恢复后的调用立即失败，那么会立即重新进入熔断。 |
+| servicecomb.circuitBreaker.requestVolumeThreshold | 20 | - | 否 | 10s内统计错误发生次数阈值，超过阈值则触发熔断 | 由于10秒还会被划分为10个1秒的统计周期，经过1s中后才会开始计算错误率，因此从调用开始至少经过1s，才会发生熔断。 |
+| servicecomb.circuitBreaker.errorThresholdPercentage | 50 | - | 否 | 错误率阈值，达到阈值则触发熔断 |  |
+| servicecomb.fallback.enabled | TRUE | - | 否 | 是否启用出错后的故障处理措施 |  |
+| servicecomb.fallback.maxConcurrentRequests | 10 | - | 否 | 并发调用容错处理措施（servicecomb.fallbackpolicy.policy）的请求数，超过这个值则不再调用处理措施，直接返回异常 |  |
+| servicecomb.fallbackpolicy.policy | throwexception | returnull \| throwexception | 否 | 出错后的处理策略 |  |
 
 > **小心**：  
 > 谨慎使用servicecomb.isolation.timeout.enabled=true。因为系统处理链都是异步执行，中间处理链的返回，会导致后面处理链的逻辑处理效果丢失。尽可能将servicecomb.isolation.timeout.enabled保持默认值false，并且正确设置网络层超时时间servicecomb.request.timeout=30000。
