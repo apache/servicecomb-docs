@@ -17,7 +17,6 @@
 <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>metrics-core</artifactId>
-  <version>1.2.0</version>
 </dependency>
 ```
 如果与prometheus集成，则还需要加入依赖
@@ -25,7 +24,6 @@
 <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>metrics-prometheus</artifactId>
-  <version>1.2.0</version>
 </dependency>
 ```
 
