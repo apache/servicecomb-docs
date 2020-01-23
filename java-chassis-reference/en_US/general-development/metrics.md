@@ -18,7 +18,6 @@
 <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>metrics-core</artifactId>
-  <version>1.2.0</version>
 </dependency>
 ```
 If integrate with prometheus, also need to add dependencies.
@@ -26,7 +25,6 @@ If integrate with prometheus, also need to add dependencies.
 <dependency>
   <groupId>org.apache.servicecomb</groupId>
   <artifactId>metrics-prometheus</artifactId>
-  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -48,7 +46,7 @@ _Note: Please change the version field to the actual version number; if the vers
 | servicecomb.metrics.publisher.defaultLog<br>.enabled | false | Whether to output the default statistics log |
 | servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | Whether to output each client endpoint statistics log, because it is related to the target ip:port number, there may be a lot of data, so the default is not output|
   
-### 3.慢调用检测
+### 3. Slow call detection
   After slow call detection is enabled, if there is a slow call, the corresponding log will be output immediately:
 ```
 2019-04-02 23:01:09,103[WARN][pool-7-thread-74][5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
@@ -481,7 +479,7 @@ will get json data in the following format:
   </tr>
 </table>
 
-### 7. invocation producer stage时延 
+### 7. invocation producer stage latency
 <table class="metrics-table">
   <tr>
     <th>Name</th>
