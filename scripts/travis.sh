@@ -28,18 +28,27 @@ if [ "$1" == "script" ]; then
   gitbook build service-center-reference docs/service-center
   git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
   if [ "$TRAVIS_BRANCH" == "master" ]; then
+    mkdir servicecomb-java-chassis-doc/temp
+    cp -r servicecomb-java-chassis-doc/docs/java-chassis/1.x servicecomb-java-chassis-doc/temp
+    rm -r servicecomb-java-chassis-doc/docs/*
     cp -r docs/ servicecomb-java-chassis-doc/
+    cp -r servicecomb-java-chassis-doc/temp/1.x docs/ servicecomb-java-chassis-doc/java-chassis
+    rm -r servicecomb-java-chassis-doc/temp
   elif [ "$TRAVIS_BRANCH" == "java-chassis-1.x" ]; then
-    cp -r docs/java-chassis servicecomb-java-chassis-doc/java-chassis/1.x
+    rm -r servicecomb-java-chassis-doc/docs/java-chassis/1.x/*
+    cp -r docs/java-chassis/* servicecomb-java-chassis-doc/docs/java-chassis/1.x
   else
     exit 1
   fi
 elif [ "$1" == "after_success" ]; then
-  cd servicecomb-java-chassis-doc
-  git checkout -b master
-  git add docs
-  git commit -m "Publish gitbook docs"
-  git push https://$DEPLOY_TOKEN@$PUSH_TARGET_URL master
+  if [ -z $DEPLOY_TOKEN ]; then
+    echo "PR release if ignored"
+  else
+    cd servicecomb-java-chassis-doc
+    git add docs
+    git commit -m "Publish gitbook docs"
+    git push https://$DEPLOY_TOKEN@$PUSH_TARGET_URL master
+  fi
 else 
   exit 1
 fi
