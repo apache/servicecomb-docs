@@ -1,8 +1,9 @@
-before_install:
+install:
   - chmod +x scripts/travis.sh
-script: scripts/travis.sh install
-after_success:
-  script: scripts/travis.sh deploy
+script: 
+  - scripts/travis.sh script
+after_success: 
+  - scripts/travis.sh after_success
 branches:
  only:
   - master

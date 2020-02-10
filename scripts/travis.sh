@@ -21,7 +21,7 @@ echo "start building servicecomb-docs."
 echo "env TRAVIS_BRANCH=$TRAVIS_BRANCH"
 echo "env PARAM1=$1"
 
-if [ "$1" == "install" ]; then
+if [ "$1" == "script" ]; then
   npm install gitbook-cli -g
   gitbook build java-chassis-reference docs/java-chassis
   gitbook build saga-reference docs/saga
@@ -34,7 +34,7 @@ if [ "$1" == "install" ]; then
   else
     exit 1
   fi
-elif [ "$1" == "deploy" ]; then
+elif [ "$1" == "after_success" ]; then
   cd servicecomb-java-chassis-doc
   git checkout -b master
   git add docs
