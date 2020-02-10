@@ -86,5 +86,6 @@
 * [处理链参考](references-handlers/intruduction.md)
   * [负载均衡](references-handlers/loadbalance.md)
   * [公钥认证](references-handlers/publickey.md)
+* [1.x迁移2.x指南](upgrading/1_to_2.md)
 * [常见问题](question-and-answer/question_answer.md)
   * [微服务接口兼容常见问题](question-and-answer/interface-compatibility.md)
