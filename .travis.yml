@@ -3,6 +3,8 @@ script:
   - gitbook build java-chassis-reference docs/java-chassis
   - gitbook build saga-reference docs/saga
   - gitbook build service-center-reference docs/service-center
+  - git checkout -B java-chassis-1.x
+  - gitbook build java-chassis-reference docs/java-chassis/1.x
   - git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
 after_success:
   - cp -r docs/ servicecomb-java-chassis-doc/
