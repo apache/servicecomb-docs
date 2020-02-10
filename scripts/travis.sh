@@ -30,11 +30,15 @@ if [ "$1" == "script" ]; then
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     mkdir servicecomb-java-chassis-doc/temp
     cp -r servicecomb-java-chassis-doc/docs/java-chassis/1.x servicecomb-java-chassis-doc/temp
+    ls -l servicecomb-java-chassis-doc/temp
+    ls -l servicecomb-java-chassis-doc/temp/1.x
     rm -r servicecomb-java-chassis-doc/docs/java-chassis/*
     rm -r servicecomb-java-chassis-doc/docs/saga/*
     rm -r servicecomb-java-chassis-doc/docs/service-center/*
     cp -r docs/ servicecomb-java-chassis-doc/
-    cp -r servicecomb-java-chassis-doc/temp/1.x servicecomb-java-chassis-doc/java-chassis
+    cp -r servicecomb-java-chassis-doc/temp/1.x servicecomb-java-chassis-doc/docs/java-chassis
+    ls -l servicecomb-java-chassis-doc/docs/java-chassis
+    ls -l servicecomb-java-chassis-doc/docs/java-chassis/1.x
     rm -r servicecomb-java-chassis-doc/temp
   elif [ "$TRAVIS_BRANCH" == "java-chassis-1.x" ]; then
     rm -r servicecomb-java-chassis-doc/docs/java-chassis/1.x/*
