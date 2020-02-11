@@ -33,18 +33,13 @@ if [ "$1" == "script" ]; then
 
   git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
   if [ "$TRAVIS_BRANCH" == "master" ]; then
-    mkdir servicecomb-java-chassis-doc/temp
-    cp -r servicecomb-java-chassis-doc/docs/java-chassis/1.x servicecomb-java-chassis-doc/temp
-    ls -l servicecomb-java-chassis-doc/temp
-    ls -l servicecomb-java-chassis-doc/temp/1.x
-    rm -r servicecomb-java-chassis-doc/docs/java-chassis/*
+    rm -r servicecomb-java-chassis-doc/docs/java-chassis/zh_CN/*
+    rm -r servicecomb-java-chassis-doc/docs/java-chassis/en_US/*
     rm -r servicecomb-java-chassis-doc/docs/saga/*
     rm -r servicecomb-java-chassis-doc/docs/service-center/*
     cp -r docs/ servicecomb-java-chassis-doc/
-    cp -r servicecomb-java-chassis-doc/temp/1.x servicecomb-java-chassis-doc/docs/java-chassis
     ls -l servicecomb-java-chassis-doc/docs/java-chassis
     ls -l servicecomb-java-chassis-doc/docs/java-chassis/1.x
-    rm -r servicecomb-java-chassis-doc/temp
   else
     exit 1
   fi
