@@ -23,9 +23,6 @@ echo "env PARAM1=$1"
 echo "env CUR_DIR=$CUR_DIR"
 
 if [ "$1" == "script" ]; then
-  npm install gitbook-cli -g
-  pip install mkdocs
-
   gitbook build saga-reference docs/saga
   gitbook build service-center-reference docs/service-center
   cd $CUR_DIR/java-chassis-reference/zh_CN

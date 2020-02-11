@@ -18,7 +18,6 @@ nav:
     - Service listening address and publishing address: build-provider/listen-address-and-publish-address.md
     - Thread pool: build-provider/thread-pool.md
     - Service Configuration: 
-        - Load Balancing Policy: build-provider/configuration/lb-strategy.md
         - Rate Limiting Policy: build-provider/configuration/ratelimite-strategy.md
         - Fallback Policy: build-provider/configuration/downgrade-strategy.md
         - Parameter Validator: build-provider/configuration/parameter-validator.md
