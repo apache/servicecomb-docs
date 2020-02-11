@@ -77,17 +77,22 @@ nav:
     - Using TLS: security/tls.md
     - Using RSA certification: security/rsa.md
 - Using java chassis in Spring Boot: 
+    - Intruductions: using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md
     - spring boot starter for java-chassis: using-java-chassis-in-spring-boot/components-for-spring-boot.md
     - JAVA application development: using-java-chassis-in-spring-boot/java-application.md
     - Web development method development: using-java-chassis-in-spring-boot/web-application.md
     - The difference between JAVA application method and Web development method: using-java-chassis-in-spring-boot/diff-between-java-web.md
     - The difference in Spring MVC mode: using-java-chassis-in-spring-boot/diff-spring-mvc.md
 - Handlers reference: 
+    - Intruductions: references-handlers/intruduction.md
     - Load Balancing: references-handlers/loadbalance.md
     - Public key authentication: references-handlers/publickey.md
 - FAQ: 
+    - 'Q & A' : question-and-answer/question_answer.md
+    - 'FAQ' : question-and-answer/faq.md
     - Micro Service Interface Compatibility FAQ: question-and-answer/interface-compatibility.md
 
 theme: readthedocs
-default: ['en']
-plugins: ['search']
+plugins: 
+    - search:
+        lang: en
