@@ -1,16 +1,10 @@
-script:
-  - npm install gitbook-cli -g
-  - gitbook build java-chassis-reference docs/java-chassis
-  - gitbook build saga-reference docs/saga
-  - gitbook build service-center-reference docs/service-center
-  - git clone --depth=10 --branch=master https://$PUSH_TARGET_URL servicecomb-java-chassis-doc
-after_success:
-  - cp -r docs/ servicecomb-java-chassis-doc/
-  - cd servicecomb-java-chassis-doc
-  - git checkout -b master
-  - git add docs
-  - git commit -m "Publish gitbook docs"
-  - git push https://$DEPLOY_TOKEN@$PUSH_TARGET_URL master
+install:
+  - chmod +x scripts/travis.sh
+script: 
+  - scripts/travis.sh script
+after_success: 
+  - scripts/travis.sh after_success
 branches:
  only:
   - master
+  - java-chassis-1.x

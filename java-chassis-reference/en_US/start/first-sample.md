@@ -1,20 +1,24 @@
 # Develop the first microservice
-Developers can quickly build a project in two ways:
-
-* Download the samples project. It is recommended to download the entire project, according to the example [SpringMVC] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample) or [JAX RS] (https: //github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample) Initialize the configuration.
-
-* Generate projects using archetypes
 
 Before you start, developers need to choose a familiar development method. There are currently 3 ways to choose:
 * Spring MVC
 * JaxRS
 * RPC
 
-Because transparent RPC acts as a Producer without any RESTful semantics, the automatically generated contracts are all POST methods, and only the BODY parameters are not in line with the usual rules of RESTful.  
-Therefore, it is recommended to choose JaxRS or Spring MVC as the Producer development mode, and transparent RPC as the developer development mode.
+Developers can quickly build a project in following ways:
 
-Their corresponding samples project are:
-* [Spring MVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)
-* [JaxRS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
-* [RPC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/pojo-sample)
-* Or use [archetypes](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/archetypes)
+* Download the samples project. [servicecomb-samples](https://github.com/apache/servicecomb-samples) provides many samples in hand.
+
+  * [Spring MVC Sample](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample)
+  * [JaxRS Sample](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample)
+  * [POJO Sample](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/pojo-sample)
+
+* Generate projects using archetypes
+
+  Maven provide archetypes to generate projects. Java-chassis implements many types of archetypes, see [LINK](https://github.com/apache/servicecomb-java-chassis/tree/master/archetypes) for details.
+
+* Generate projects using ServiceComb Spring Initializer
+
+  ServiceComb Spring Initializer is an graphic user interface to generate projects. See [LINK](http://start.servicecomb.io/)
+  
+  

@@ -1,21 +1,24 @@
 # 开发第一个微服务
 
-开发者可以通过两种方式快速构建一个项目：
+开始之前，开发者需要选择熟悉的开发方式，目前有3种方式可供选择：
+* Spring MVC
+* JaxRS
+* POJO
 
-* 下载samples项目。建议把整个项目都下载下来，按照例子[ SpringMVC ](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)或者 [JAX RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)进行初始化配置。
+Spring MVC和JaxRS适合REST接口开发。 POJO是通常说的RPC，适合于进行内部接口开发。java-chassis允许在一个微服务里面混合使用上述开发方式，并且可以使用完全一致的方式，比如RestTemplate或者POJO的方式访问不同类型的服务，所以开始之前，可以根据熟悉程度，选择任意一种开发方式即可。java-chassis的开发方式和通信方式是完全解耦的，因此不同的开发方式并没有性能上的差异。
+
+开发者可以通过如下方式快速构建一个项目：
+
+* 下载samples项目。java-chassis提供了大量的示例代码，这些示例代码可以通过[servicecomb-samples](https://github.com/apache/servicecomb-samples)获取。
+
+  * [Spring MVC例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample)
+  * [JaxRS例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample)
+  * [POJO例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/pojo-sample)
 
 * 使用archetypes生成项目
 
-开始之前，开发者需要先选择熟悉的开发方式，目前有3种方式可供选择：
-* Spring MVC
-* JaxRS
-* RPC
+  archetypes是maven提供的一种机制，对于使用maven的用户，可以在项目里面配置插件，生成项目。java-chassis提供了多个archetypes供开发者使用，详细参考[链接](https://github.com/apache/servicecomb-java-chassis/tree/master/archetypes)
 
-因为透明RPC作为Producer时，不带任何RESTful语义，此时自动生成的契约全是POST方法，且只有BODY参数，不太符合RESTful的通常规则  
-所以建议选择JaxRS或Spring MVC作为Producer开发模式，透明RPC作为Consumer的开发模式。  
+* 使用脚手架生成项目
 
-他们对应的samples项目分别是：
-* [Spring MVC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)
-* [JaxRS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)
-* [RPC](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/pojo-sample)
-* 或者使用[archetypes](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/archetypes)
+  脚手架提供了一个图形化向导，通过向导可以快速构建项目，参考[链接](http://start.servicecomb.io/)。
