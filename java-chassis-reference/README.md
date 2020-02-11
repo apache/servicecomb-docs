@@ -10,9 +10,9 @@
   4. 提交PR
 
 * 发布/查看  
-  1. 参考[GitBook安装指南](https://github.com/GitbookIO/gitbook/blob/master/docs/setup.md),安装gitbook  
-  2. 发布：gitbook build . ../docs
-  3. 本地查看：gitbook serve . ../docs
+  1. 参考[MkDocs安装指南](https://www.mkdocs.org/#installation),安装MkDocs  
+  2. 发布： mkdocs build -d ../docs
+  3. 本地查看：mkdocs serve
 
 ## This project is the servicecomb-java-chassis developers guide
 
@@ -25,9 +25,9 @@
   4. Submit PR
 
 * Publish  
-  1. see [GitBook installation guide](https://github.com/GitbookIO/gitbook/blob/master/docs/setup.md)  
-  2. publish using command：gitbook build . ../docs
-  3. for local reading：gitbook serve . ../docs
+  1. see [MkDocs installation guide](https://www.mkdocs.org/#installation) 
+  2. publish using command：mkdocs build -d ../docs
+  3. for local reading：mkdocs serve
 
 
 
