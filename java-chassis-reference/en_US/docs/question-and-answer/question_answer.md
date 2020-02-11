@@ -272,3 +272,9 @@ Consumer: loadbalance, tracing-consumer, sla-consumer, bizkeeper-consumer
 Provider: tracing-provider, sla-provider, bizkeeper-provider
 
 This order is sufficient for most scenarios and is not easy to cause errors.
+
+# Problem: the meaning of config item servicecomb.uploads.maxSize in file uploading
+
+config item: servicecomb.uploads.maxSize
+
+meaning: The maximum allowable size of http body in bytes, the default value of -1 means unlimited.
