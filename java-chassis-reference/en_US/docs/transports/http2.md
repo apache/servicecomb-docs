@@ -10,7 +10,7 @@ The configuration for external service communication is in the microservice.yaml
 
 * Enable h2\(Http2 + TLS\)
 
-     Append  `sslEnabled=true` to the listening address to enable  TLS communication on server side. For details, see the section [Using TLS Communication](../../security/tls.md). Then add `protocol=http2` to enable h2 communication. Here is the sample configuration:
+     Append  `sslEnabled=true` to the listening address to enable  TLS communication on server side. For details, see the section [Using TLS Communication](../security/tls.md). Then add `protocol=http2` to enable h2 communication. Here is the sample configuration:
 
   ```yaml
   servicecomb:

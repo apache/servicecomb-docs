@@ -64,7 +64,7 @@ Table 1-1 Configuration items for REST over Vertx
   * `n` client instances establish up to `40 * n` connections to a server instance.
 
   To improve performance, larger connection pools are needed. While the larger connection pools means the more connections. When the microservice instance scale reaches hundreds, some instances may handle tens of thousands of connections. Therefore, the developers need to make reasonable planning according to the actual condition.
-  The planning of HTTP1.1 may be relatively complex, and sometimes there is no proper solution, in which case the [http2](transports/http2.md) is recommended.
+  The planning of HTTP1.1 may be relatively complex, and sometimes there is no proper solution, in which case the [http2](http2.md) is recommended.
 
 ## Sample Code
 
