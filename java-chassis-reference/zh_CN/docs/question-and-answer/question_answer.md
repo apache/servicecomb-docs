@@ -273,3 +273,9 @@ Consumer: loadbalance, tracing-consumer, sla-consumer, bizkeeper-consumer
 Provider: tracing-provider, sla-provider, bizkeeper-provider
 
 这种顺序能够满足大多数场景，并且不容易出现不可理解的错误。
+
+# 问题描述： 文件上传中配置项最大请求大小的含义
+
+配置项： servicecomb.uploads.maxSize
+
+含义： 请求体中允许的最大字节数，默认值为-1，表示没有限制。
