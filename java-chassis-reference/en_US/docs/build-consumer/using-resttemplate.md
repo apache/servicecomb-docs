@@ -68,7 +68,7 @@ public class JaxrsConsumerMain {
 ```
 > NOTE:
 >
-> - The URL should be in format: `cse//microserviceName/path?querystring`. Taking the provider example from [Develop micro service with SpringMVC](/java-chassis-reference/en_US/build-provider/springmvc.md), the micro service's name is `springmvc`, the basePath is `/springmvchello`, then the microserviceName in the URL is `springmvc`, the path to call sayhi is `springmvchello/sayhi`, so the URL for sayhi in the sample is `cse://springmvc/springmvchello/sayhi?name=Java Chassis`, below is the code for the provider:
+> - The URL should be in format: `cse//microserviceName/path?querystring`. Taking the provider example from [Develop micro service with SpringMVC](../build-provider/springmvc.md), the micro service's name is `springmvc`, the basePath is `/springmvchello`, then the microserviceName in the URL is `springmvc`, the path to call sayhi is `springmvchello/sayhi`, so the URL for sayhi in the sample is `cse://springmvc/springmvchello/sayhi?name=Java Chassis`, below is the code for the provider:
 
 ```java
 @RestSchema(schemaId = "springmvcHello")

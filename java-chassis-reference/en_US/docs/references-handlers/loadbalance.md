@@ -37,7 +37,7 @@ servicecomb:
 
 Consumers compare their own data center information and providers' information, preferentially forward the request to the provider instance in the same region and availableZone; if the target instance is not available, it forwards request to the instance in the same region; if the target still does not exist, it forwards requests to other instances.
 
-The region and availableZone here are general concepts, users can determine their business meanings to apply them to resource-isolated scenarios. See [Logical isolation relationships between microservice instances](/build-provider/definition/isolate-relationship.md) for more details of the isolation.
+The region and availableZone here are general concepts, users can determine their business meanings to apply them to resource-isolated scenarios. See [Logical isolation relationships between microservice instances](../build-provider/definition/isolate-relationship.md) for more details of the isolation.
 
 This rule is enabled by default. If it is not needed, set servicecomb.loadbalance.filter.zoneaware.enabled to false. Data center information isolation is implemented in ZoneAwareDiscoveryFilter.
 

@@ -239,7 +239,7 @@ ServiceComb会根据接口定义生成契约，从上面的接口定义，如果
 
 为了支持快速开发，ServiceComb的数据类型限制也在不停的扩充，比如支持HttpServletRequest，Object等。但是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在ServiceComb的使用场景下，尽可能使用契约能够描述的类型，让代码阅读性更好。
 
-ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](/build-provider/interface-constraints.md)
+ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
 
 * 其他
 更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。

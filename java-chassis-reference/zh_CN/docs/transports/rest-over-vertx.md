@@ -29,15 +29,15 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | 配置项                                                  | 默认值                                          | 含义                                          |
 | :------------------------------------------------------ | :---------------------------------------------- | :-------------------------------------------- |
 | servicecomb.rest.address                                |                                                 | 服务监听地址，不配置表示不监听                |
-| servicecomb.rest.server.thread-count                    | [verticle-count](/transports/verticle-count.md) | rest server verticle实例数（Deprecated）      |
-| servicecomb.rest.server.verticle-count                  | [verticle-count](/transports/verticle-count.md) | rest server verticle实例数                    |
+| servicecomb.rest.server.thread-count                    | [verticle-count](verticle-count.md) | rest server verticle实例数（Deprecated）      |
+| servicecomb.rest.server.verticle-count                  | [verticle-count](verticle-count.md) | rest server verticle实例数                    |
 | servicecomb.rest.server.connection-limit                | Integer.MAX_VALUE                               | 允许客户端最大连接数                          |
 | servicecomb.rest.server.connection.idleTimeoutInSeconds | 60                                              | 服务端连接闲置超时时间，超时连接会被释放      |
 | servicecomb.rest.server.compression                     | false                                           | 服务端是否支持启用压缩                        |
 | servicecomb.rest.server.maxInitialLineLength            | 4096                                            | 服务端接收请求的最大 initial line 长度，单位字节 |
 | servicecomb.rest.server.maxHeaderSize                   | 32768                                           | 服务端接收请求的最大header长度，单位字节      |
-| servicecomb.rest.client.thread-count                    | [verticle-count](/transports/verticle-count.md) | rest client verticle实例数（Deprecated）      |
-| servicecomb.rest.client.verticle-count                  | [verticle-count](/transports/verticle-count.md) | rest client verticle实例数                    |
+| servicecomb.rest.client.thread-count                    | [verticle-count](verticle-count.md) | rest client verticle实例数（Deprecated）      |
+| servicecomb.rest.client.verticle-count                  | [verticle-count](verticle-count.md) | rest client verticle实例数                    |
 | servicecomb.rest.client.connection.maxPoolSize          | 5                                               | 对一个IP:port组合，在每个连接池中的最大连接数 |
 | servicecomb.rest.client.connection.idleTimeoutInSeconds | 30                                              | 连接闲置时间，超时连接会被释放                |
 | servicecomb.rest.client.connection.keepAlive            | true                                            | 是否使用长连接                                |

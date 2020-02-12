@@ -31,7 +31,7 @@ servicecomb:
 
 ### 手工配置服务契约
 
-服务消费者的开发者在线下拿到服务提供者的契约，配置到消费者工程的特定目录下。服务契约在项目中的存放目录与[定义服务契约](/build-provider/define-contract.md)的配置说明部分相同。
+服务消费者的开发者在线下拿到服务提供者的契约，配置到消费者工程的特定目录下。服务契约在项目中的存放目录与[定义服务契约](../build-provider/define-contract.md)的配置说明部分相同。
 
 microservice目录下的每一个目录代表一个微服务，微服务目录下的每一个yaml文件代表一个schema契约，文件名就是schemaId。applications目录下存放需要指明appId的服务契约，用于跨app调用等场景。目录结构如下所示：
 

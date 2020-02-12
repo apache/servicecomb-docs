@@ -6,4 +6,4 @@
 
 ## 配置说明
 
-熔断作为异常反应机制是降级策略的一部分，相关概念还有隔离和容错。三者的关系以及配置方式参见[降级策略](/build-provider/configuration/downgrade-strategy.md)。
+熔断作为异常反应机制是降级策略的一部分，相关概念还有隔离和容错。三者的关系以及配置方式参见[降级策略](../build-provider/configuration/downgrade-strategy.md)。
