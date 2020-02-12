@@ -94,4 +94,6 @@ nav:
     - 微服务接口兼容常见问题: question-and-answer/interface-compatibility.md
 
 theme: readthedocs
-plugins: []
+plugins:
+    - search:
+          lang: en
