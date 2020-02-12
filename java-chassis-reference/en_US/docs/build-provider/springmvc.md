@@ -228,4 +228,4 @@ ServiceComb need to generate Open API schemas based on definition, and support c
 
 HttpServletRequest，Object is supported in latest version, but they are different. We suggest not using there features if possible.
 
-please refer to [API Constraints](/build-provider/interface-constraints.md) for data type supports.
+please refer to [API Constraints](interface-constraints.md) for data type supports.

@@ -23,10 +23,10 @@ Table 1-1 Highway configuration items
 | :------------------------------------------ | :---------------------------------------------- | :----------------------------------------------- | 
 | servicecomb.highway.address                 |                                                 |The address that the server listens, empty for not listen, just a highway client|
 | servicecomb.highway.server.connection-limit | Integer.MAX_VALUE                               |Allow client maximum connections                  |
-| servicecomb.highway.server.thread-count     | [verticle-count](/transports/verticle-count.md) |highway server verticle instance count(Deprecated)|
-| servicecomb.highway.server.verticle-count   | [verticle-count](/transports/verticle-count.md) |highway server verticle instance count            |
-| servicecomb.highway.client.thread-count     | [verticle-count](/transports/verticle-count.md) |highway client verticle instance count(Deprecated)|
-| servicecomb.highway.client.verticle-count   | [verticle-count](/transports/verticle-count.md) |highway client verticle instance count(Deprecated)|
+| servicecomb.highway.server.thread-count     | [verticle-count](verticle-count.md) |highway server verticle instance count(Deprecated)|
+| servicecomb.highway.server.verticle-count   | [verticle-count](verticle-count.md) |highway server verticle instance count            |
+| servicecomb.highway.client.thread-count     | [verticle-count](verticle-count.md) |highway client verticle instance count(Deprecated)|
+| servicecomb.highway.client.verticle-count   | [verticle-count](verticle-count.md) |highway client verticle instance count(Deprecated)|
 ## Sample code
 
 An example of the Highway configuration in the microservice.yaml:

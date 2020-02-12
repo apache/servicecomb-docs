@@ -29,7 +29,7 @@ Zuul is the API Gateway, which is to establish a Zuul Proxy application. All the
 
 ## Precautions
 
-The demos such as ZuulProxy and ZuulServer described in this section are based on SpringBoot and ServiceComb frameworks. For details, please refer to [using java chassis in Spring Boot] (/using-java-chassis-in-spring-boot.md).
+The demos such as ZuulProxy and ZuulServer described in this section are based on SpringBoot and ServiceComb frameworks. For details, please refer to [using java chassis in Spring Boot] (using-java-chassis-in-spring-boot.md).
 
 ## Launching Zuul Proxy
 

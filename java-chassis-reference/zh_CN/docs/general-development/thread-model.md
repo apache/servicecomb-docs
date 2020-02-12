@@ -13,6 +13,6 @@
 ![](../assets/reactive-thread-model.png)
 
 线程相关配置：  
-* [REST over Vertx](/transports/rest-over-vertx.md)
-* [Highway](/transports/highway-rpc.md)
-* [同步模式下服务端业务线程池](/build-provider/thread-pool.md)
+* [REST over Vertx](../transports/rest-over-vertx.md)
+* [Highway](../transports/highway-rpc.md)
+* [同步模式下服务端业务线程池](../build-provider/thread-pool.md)

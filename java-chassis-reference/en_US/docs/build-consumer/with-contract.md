@@ -32,7 +32,7 @@ servicecomb:
 
 ### Manually Configure Contracts
 
-When providers' contracts are obtained from off-line,  they should be put into the specific directory of the consumer project. The directory is the one mentioned in the configuration description [Service Contract](/java-chassis-reference/en_US/build-provider/define-contract.md).
+When providers' contracts are obtained from off-line,  they should be put into the specific directory of the consumer project. The directory is the one mentioned in the configuration description [Service Contract](../build-provider/define-contract.md).
 
 Each directory under the microservices directory indicates a microservice, and each yaml file under the microservice directory represents a contract schema. The file name is the schemaId. The contracts stored in application folder should specify the appId for cross application access. The directory tree is as follows:
 

@@ -29,7 +29,7 @@ Zuul做API Gateway，即建立一个Zuul Proxy应用，在该Proxy应用中统�
 
 ## 注意事项
 
-本小节介绍的ZuulProxy和ZuulServer等demo都是基于SpringBoot和ServiceComb框架的应用，具体请参考[在Spring Boot中使用java chassis](/using-java-chassis-in-spring-boot.md)。
+本小节介绍的ZuulProxy和ZuulServer等demo都是基于SpringBoot和ServiceComb框架的应用，具体请参考[在Spring Boot中使用java chassis](using-java-chassis-in-spring-boot.md)。
 
 ## 启动Zuul Proxy
 

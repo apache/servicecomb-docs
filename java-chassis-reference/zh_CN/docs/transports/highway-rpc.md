@@ -23,10 +23,10 @@ Highway通道在microservice.yaml文件中的配置项如下表所示：
 | :--------------------------------------------- | :---------------------------------------------- | :---------------------------------------- |
 | servicecomb.highway.address                    |                                                 | 服务监听地址，不配置表示不监听            |
 | servicecomb.highway.server.connection-limit    | Integer.MAX_VALUE                               | 允许客户端最大连接数                      |
-| servicecomb.highway.server.thread-count        | [verticle-count](/transports/verticle-count.md) | highway server verticle实例数(Deprecated) |
-| servicecomb.highway.server.verticle-count      | [verticle-count](/transports/verticle-count.md) | highway server verticle实例数             |
-| servicecomb.highway.client.thread-count        | [verticle-count](/transports/verticle-count.md) | highway client verticle实例数(Deprecated) |
-| servicecomb.highway.client.verticle-count      | [verticle-count](/transports/verticle-count.md) | highway client verticle实例数             |
+| servicecomb.highway.server.thread-count        | [verticle-count](verticle-count.md) | highway server verticle实例数(Deprecated) |
+| servicecomb.highway.server.verticle-count      | [verticle-count](verticle-count.md) | highway server verticle实例数             |
+| servicecomb.highway.client.thread-count        | [verticle-count](verticle-count.md) | highway client verticle实例数(Deprecated) |
+| servicecomb.highway.client.verticle-count      | [verticle-count](verticle-count.md) | highway client verticle实例数             |
 
 ## 示例代码
 
