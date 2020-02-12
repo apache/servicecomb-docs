@@ -5,7 +5,7 @@
 ServiceComb提供了非常强大的负载均衡能力。它的核心包括两部分，第一部分是DiscoveryTree，通过将微服务实例根据接口兼容性、数据中心、实例状态等分组，DiscoveryFilter是其主要组成部分；第二部分是基于Ribbon的负载均衡方案，支持随机、顺序、基于响应时间的权值等多种负载均衡路由策略IRule，以及可以支持Invocation状态的ServerListFilterExt。
 
 DiscoveryTree的逻辑比较复杂，可以通过下面的处理流程了解其处理过程。
-![](/assets/loadbalance-001.png)
+![](../assets/loadbalance-001.png)
 
 负载均衡适用于Consumer处理链，名称为loadbalance，示例如下：
 ```yaml

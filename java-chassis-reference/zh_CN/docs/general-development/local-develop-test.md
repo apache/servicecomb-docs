@@ -9,7 +9,7 @@
 * 通过设置环境信息方便本地调试
 
 服务中心是微服务框架中的重要组件，用于服务元数据以及服务实例元数据的管理和处理注册、发现。服务中心与微服务提供/消费者的逻辑关系下图所示：  
-![](/start/develop-test.png)
+![](../start/develop-test.png)
 
 ## 启动本地服务中心
 
@@ -120,4 +120,4 @@ service_description:
  ```
 
 * 方法3：通过环境变量来指定（仅限于Windows系统），比如在Eclipse下面进行如下设置
-![](/assets/env.PNG)
+![](../assets/env.PNG)

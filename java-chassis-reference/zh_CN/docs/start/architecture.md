@@ -1,6 +1,6 @@
 # 微服务系统架构
 
-## ![](/start/architecture.png)框架概述
+## ![](architecture.png)框架概述
 
 ## **主要设计意图**
 

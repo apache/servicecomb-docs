@@ -5,7 +5,7 @@
 ServiceComb provides very powerful load balancing capabilities, which consists of two core parts. The first part DiscoveryTree, whose core part is DiscoveryFilter, groups microservice instances by their interface compatibility, data center, status, etc. The second part is the load balancing scheme based on Ribbon, which supports various load balancing policies(IRule) include random, sequential, response time-based weights, and ServerListFilterExt which is based on Invocation state.
 
 DiscoveryTree's logic is more complex, its processing progress is as below:
-![](/assets/loadbalance-001.png)
+![](../assets/loadbalance-001.png)
 
 Load balancing can be configured in the Consumer processing chain, the handler name is loadbalance, as follows:
 

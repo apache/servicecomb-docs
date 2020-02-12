@@ -58,7 +58,7 @@ servicecomb:
 The workflow of the Edge Service is as follows, the blue background part is executed in the Eventloop thread, and the yellow background part:
    * If working in reactive mode, execute directly in the Eventloop thread
    * If working in thread pool mode, execute in the thread pool thread
-![](/assets/workFlow.png)
+![](../assets/workFlow.png)
 
 ## Custom routing rules
 The core job of using the Edge Service is to configure routing rules. The rules are different, and the rules are different.
@@ -139,7 +139,7 @@ Through the Edge Service workflow, you can see that the Edge Service features ca
 
 ## Deployment example
 
-![](/assets/deployment.png)
+![](../assets/deployment.png)
 
 ## Operating mode
 
@@ -157,7 +157,7 @@ The Edge Service works by default in the high-performance reactive mode. This mo
 
 The underlying Edge Service is based on netty's vertx. The above constraint is netty's reactive mode constraint.
 
-![](/assets/reactive.png)
+![](../assets/reactive.png)
 
 ### Thread Pool
 
@@ -173,7 +173,7 @@ servicecomb:
 
 Here servicecomb.executor.groupThreadPool is the beanId of the spring bean corresponding to the default thread pool built into ServiceComb; the service can customize its thread pool and declare it as a bean whose beanId can also be configured here.
 
-![](/assets/threadPool.png)
+![](../assets/threadPool.png)
 
 ## DEMO Function Description
 

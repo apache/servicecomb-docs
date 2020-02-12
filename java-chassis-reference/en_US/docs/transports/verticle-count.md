@@ -18,6 +18,6 @@
 ## The relationship between Eventloop and verticle instances:  
 Assuming the CPU is 2, vertx creates 2 * CPU by default, ie 4 Eventloop threads.  
 Assuming the configuration server verticle count and client verticle count are both 3, then:  
-![](/assets/eventloop-and-verticle.png)  
+![](../assets/eventloop-and-verticle.png)  
 Because it is not allowed to perform any blocking action in the Eventloop, combined with the above figure, we can know that when the CPU is fully utilized, it is meaningless to add the verticle instance.  
 Users are advised to combine their actual scenarios to test and summarize the appropriate configuration values.

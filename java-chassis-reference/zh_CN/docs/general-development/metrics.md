@@ -1,6 +1,6 @@
 # 一、Metrics介绍
 
-![](/assets/metrics/logicDiagram.png)
+![](../assets/metrics/logicDiagram.png)
 
 1. 基于[netflix spectator](https://github.com/Netflix/spectator)
 2. Foundation-metrics通过SPI机制加载所有MetricsInitializer实现，实现者可以通过MetricsInitializer中的getOrder规划执行顺序，order数字越小，越先执行。

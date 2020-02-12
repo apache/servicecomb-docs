@@ -11,7 +11,7 @@ public String hello(@PathVariable(name = "name") String name){
 
 与此对应的处理流程如下：
 
-![](/assets/reactive/normalSync.png)
+![](../assets/reactive/normalSync.png)
 
 这是传统典型的工作模型，核心思想是不阻塞网络线程，将业务放在独立的线程中处理（为了简化表达，executor中只画一个线程）
 
@@ -36,7 +36,7 @@ public String hello(@PathVariable(name = "name") String name){
 
 与此对应的处理流程如下：
 
-![](/assets/reactive/nestedSync.png)
+![](../assets/reactive/nestedSync.png)
 
 根据这个流程的特点，可以看到会产生以下结果：
 
@@ -58,7 +58,7 @@ public String hello(@PathVariable(name = "name") String name){
 
 形成以下流程：
 
-![](/assets/reactive/wrongSyncOptimization.png)
+![](../assets/reactive/wrongSyncOptimization.png)
 
 根据这个流程的特点，可以看到会产生以下结果：
 
@@ -96,7 +96,7 @@ public CompletableFuture<String> hello(@PathVariable(name = "name") String name)
 
 与此对应的处理流程如下：
 
-![](/assets/reactive/pureReactive.png)
+![](../assets/reactive/pureReactive.png)
 
 * 与传统流程不同的是，所有功能都在eventloop中执行，并不会进行线程切换
 

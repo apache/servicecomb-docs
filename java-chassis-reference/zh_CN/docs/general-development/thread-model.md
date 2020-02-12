@@ -6,11 +6,11 @@
 
 ## 同步模式下的线程模型
 
-![](/assets/sync-thread-model.png)
+![](../assets/sync-thread-model.png)
 
 ## reactive模式下的线程模型
 
-![](/assets/reactive-thread-model.png)
+![](../assets/reactive-thread-model.png)
 
 线程相关配置：  
 * [REST over Vertx](/transports/rest-over-vertx.md)

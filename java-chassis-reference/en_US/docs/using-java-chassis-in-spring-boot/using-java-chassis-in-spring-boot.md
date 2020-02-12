@@ -18,13 +18,13 @@
 
 * JAVA应用方式
 
-![](/assets/using-java-chassis-in-spring-boot-002.png)
+![](../assets/using-java-chassis-in-spring-boot-002.png)
 
 这种集成方式相对简单，相当于直接将java chassis通过Spring Boot应用拉起，不涉及任何改造和变化。
 
 * Web开发方式
 
-![](/assets/using-java-chassis-in-spring-boot-001.png)
+![](../assets/using-java-chassis-in-spring-boot-001.png)
 
 该集成方式的本质是将Spring MVC的DispatcherServlet替换为java chassis的RestServlet。
 

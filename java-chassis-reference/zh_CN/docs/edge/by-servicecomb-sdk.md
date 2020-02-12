@@ -59,7 +59,7 @@ servicecomb:
 Edge Service的工作流程如下，蓝色背景部分在Eventloop线程中执行，黄色背景部分：
   * 如果工作于reactive模式，则直接在Eventloop线程执行
   * 如果工作于线程池模式，则在线程池的线程中执行
-![](/assets/workFlow.png)
+![](../assets/workFlow.png)
 
 ## 定制路由规则
 使用Edge Service的核心工作是配置路由规则。场景不同，规则也不同。
@@ -140,7 +140,7 @@ businessV1配置项表示的含义是将请求路径为/usr/business/v1/.*的请
 
 ## 部署示例
 
-![](/assets/deployment.png)
+![](../assets/deployment.png)
 
 ## 工作模式
 
@@ -158,7 +158,7 @@ Edge Service默认工作于高性能的reactive模式，此模式要求工作于
 
 Edge Service的底层是基于netty的vertx，以上约束即是netty的reactive模式约束。
 
-![](/assets/reactive.png)
+![](../assets/reactive.png)
 
 ### 线程池
 
@@ -174,7 +174,7 @@ servicecomb:
 
 这里的servicecomb.executor.groupThreadPool是ServiceComb内置的默认线程池对应的spring bean的beanId；业务可以定制自己的线程池，并声明为一个bean，其beanId也可以配置到这里。
 
-![](/assets/threadPool.png)
+![](../assets/threadPool.png)
 
 ## DEMO功能说明
 

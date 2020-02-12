@@ -11,7 +11,7 @@ public String hello(@PathVariable(name = "name") String name){
 
 The corresponding processing flow is as follows:
 
-![](/assets/reactive/normalSync.png)
+![](../assets/reactive/normalSync.png)
 
 This is the traditional typical working model. The core idea is not to block network threads, and to put the business in a separate thread (to simplify the expression, only one thread is drawn in the executor)
 
@@ -36,7 +36,7 @@ public String hello(@PathVariable(name = "name") String name){
 
 The corresponding processing flow is as follows:
 
-![](/assets/reactive/nestedSync.png)
+![](../assets/reactive/nestedSync.png)
 
 According to the characteristics of this process, you can see the following results:
 
@@ -58,7 +58,7 @@ For the previous scenario, someone would think that throwing the "Invoke produce
 
 Form the following process:
 
-![](/assets/reactive/wrongSyncOptimization.png)
+![](../assets/reactive/wrongSyncOptimization.png)
 
 According to the characteristics of this process, you can see the following results:
 
@@ -96,7 +96,7 @@ public CompletableFuture<String> hello(@PathVariable(name = "name") String name)
 
 The corresponding processing flow is as follows:
 
-![](/assets/reactive/pureReactive.png)
+![](../assets/reactive/pureReactive.png)
 
 * Unlike traditional processes, all functions are executed in the eventloop and no thread switching is performed.
 
