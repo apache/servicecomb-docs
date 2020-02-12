@@ -27,7 +27,7 @@ If the business has special requirements, you can specify to use a custom global
 ## ServiceComb built-in thread pool  
 In a general thread pool, all threads share a task queue. In this case, all network threads need to apply for the same queue to join the queue. All threads in the thread pool need to grab the task from the same queue. Throughput scenarios, which can lead to competitive conflicts and create performance bottlenecks  
 Therefore, in order to improve performance, ServiceComb's built-in thread pool is actually a wrapper of real thread pools, allowing multiple sets of thread pools to be configured inside, and each network thread is bound to a set of thread pools to reduce contention conflicts.  
-![](/assets/producer-default-executor.png)
+![](../assets/producer-default-executor.png)
 
 * Before version 1.2.0  
 

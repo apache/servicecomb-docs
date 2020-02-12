@@ -1,6 +1,6 @@
 # First, the introduction of Metrics
 
-![](/assets/metrics/logicDiagram.png)
+![](../assets/metrics/logicDiagram.png)
 
 1. Based on [netflix spectator](https://github.com/Netflix/spectator)
 2. Foundation-metrics loads all MetricsInitializer implementations via the SPI mechanism. Implementers can use the getOrder in the MetricsInitializer to plan the execution order. The smaller the order number, the earlier it will be executed.

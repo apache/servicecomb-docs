@@ -66,6 +66,7 @@ nav:
     - General config: config/general-config.md
     - Configuration injection: config/inject-config.md
 - Service Capability Open: 
+    - Intruductions: edge/open-service.md
     - Using Edge Service: edge/by-servicecomb-sdk.md
     - Using confd and Nginx as edge services: edge/nginx.md
     - Use zuul as edge services: edge/zuul.md

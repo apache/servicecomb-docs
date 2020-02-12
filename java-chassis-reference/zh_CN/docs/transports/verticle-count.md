@@ -18,6 +18,6 @@
 ## Eventloop与verticle实例的关系：  
 假设CPU为2，则vertx默认创建2 * CPU， 即4个Eventloop线程  
 假设配置server verticle count和client verticle count均为3，则：  
-![](/assets/eventloop-and-verticle.png)  
+![](../assets/eventloop-and-verticle.png)  
 因为在Eventloop中不允许执行任何阻塞动作，再结合上图，我们可以知道，当充分利用了CPU之后，再增加verticle实例是没有意义的  
 建议使用者结合自己的实际场景，测试总结出合适的配置值

@@ -66,6 +66,7 @@ nav:
     - 通用配置说明: config/general-config.md
     - 配置注入说明: config/inject-config.md
 - 服务能力开放:
+    - 介绍: edge/open-service.md
     - 使用Edge Service做边缘服务: edge/by-servicecomb-sdk.md
     - 使用confd和Nginx做边缘服务: edge/nginx.md
     - 使用zuul做边缘服务: edge/zuul.md

@@ -2,11 +2,11 @@
 
 ## Threading model in synchronous mode
 
-![](/assets/sync-thread-model.png)
+![](../assets/sync-thread-model.png)
 
 ## Threading model in reactive mode
 
-![](/assets/reactive-thread-model.png)
+![](../assets/reactive-thread-model.png)
 
 Thread related configuration：  
 * [REST over Vertx](/build-provider/protocol/rest-over-vertx.md)
