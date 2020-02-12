@@ -49,7 +49,7 @@ _Note: Please change the version field to the actual version number; if the vers
 ### 3. Slow call detection
   After slow call detection is enabled, if there is a slow call, the corresponding log will be output immediately:
 ```
-2019-04-02 23:01:09,103[WARN][pool-7-thread-74][5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
+2019-04-02 23:01:09,103\[WARN]\[pool-7-thread-74]\[5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
   http method: GET
   url        : /v1/syncQuery/{id}/
   server     : highway://192.168.0.152:7070?login=true

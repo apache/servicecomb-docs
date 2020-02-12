@@ -3,9 +3,9 @@
 
 This section describes how developers can locally develop and commission consumer and provider applications. Both service providers and consumers need to connect to the remote service center. Two methods of building Local  ServiceCenter for local microservice commissioning are as follows:
 
-* Starting [Local Service Center](#section2945986191314)。
+* Starting [Local Service Center](#starting-local-servicecenter).
 
-* Starting Local Service Center [Mock mechanism](#section960893593759)。
+* Starting Local Service Center [Mock mechanism](#mock-mechanism-start-service-center).
 
 ### Local debugging by setting up environmental information
 

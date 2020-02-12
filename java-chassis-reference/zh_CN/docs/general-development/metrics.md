@@ -47,8 +47,9 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
 
 ### 3.慢调用检测
   开启慢调用检测后，如果存在慢调用，则会立即输出相应日志：
+
 ```
-2019-04-02 23:01:09,103[WARN][pool-7-thread-74][5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
+2019-04-02 23:01:09,103\[WARN]\[pool-7-thread-74]\[5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
   http method: GET
   url        : /v1/syncQuery/{id}/
   server     : highway://192.168.0.152:7070?login=true
@@ -65,6 +66,7 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
     client filters response: 0.2 ms
     handlers response      : 0.0 ms (SlowInvocationLogger.java:121)
 ```
+
   其中5ca37935c00ff2c7-350076是${traceId}-${invocationId}的结构，在log4j2或logback的输出格式中通过%marker引用
 
 ### 4.通过RESTful访问

@@ -1,2 +1,8 @@
 /.idea
 /target
+
+# IntelliJ, based on http://devnet.jetbrains.net/docs/DOC-1186
+.idea/
+*.iml
+*.ipr
+*.iws
