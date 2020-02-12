@@ -2,7 +2,7 @@
 
 java-chassis provide different starters for spring boot. 
 
-## java-chassis 2.0.0 and above with spring boot 2.0 and above [example](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/metrics-extend-healthcheck)
+## java-chassis 2.0.0 and above with spring boot 2.0 and above [example](https://github.com/apache/servicecomb-samples/tree/master/porter_springboot)
 
 * java-chassis-spring-boot-starter-standalone
 

@@ -2,7 +2,7 @@
 
 java-chassis提供了spring-boot-starter，方便在spring boot中集成java-chassis。由于早期命名没考虑规范性，在使用这些starter之前，需要注意区分使用的java-chassis版本和spring boot版本。
 
-## java-chassis 2.0.0 以上 + spring boot 2.0以上 [例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/metrics-extend-healthcheck)
+## java-chassis 2.0.0 以上 + spring boot 2.0以上 [例子](https://github.com/apache/servicecomb-samples/tree/master/porter_springboot)
 
 * java-chassis-spring-boot-starter-standalone
 
