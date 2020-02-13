@@ -3,6 +3,7 @@
 ## Configuration source hierarchical relationship
 
 ServiceComb provides a hierarchical configuration mechanism. According to the priority, it is divided as below(the former is higher):
+
 * Configuration Center (dynamic configuration)
 * Java System Property (-D parameter)
 * Environmental variables

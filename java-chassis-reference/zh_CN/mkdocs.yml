@@ -47,8 +47,7 @@ nav:
     - 自定义调用链打点: general-development/customized-tracing.md
     - 本地开发和测试: general-development/local-develop-test.md
     - Http Filter: general-development/http-filter.md
-    - 文件上传: general-development/file-upload.md
-    - 文件下载: general-development/file-download.md
+    - 文件上传下载: general-development/upload-download.md
     - Reactive: general-development/reactive.md
     - DNS自定义配置: general-development/dnsconfig.md
     - 代理设置: general-development/dai-li-she-zhi.md
