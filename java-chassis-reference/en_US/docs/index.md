@@ -9,6 +9,7 @@ For other versions, please check the following table.
 
 | version | link |
 | :--- | :--- |
-| latest(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)|
+| latest(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)| github pages | 
+| latest(2.0.0) | [中文](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| gitee pages |
 | 1.3.0 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)|
 | 1.2.1 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)|
