@@ -9,8 +9,9 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 开发者可以通过下面的链接获取其他版本的帮助文档。
 
-| 版本| 链接 |
-| :--- | :--- |
-| 最新(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)|
-| 1.3.0 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)|
-| 1.2.1 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)|
+| 版本| 链接 | 说明 |
+| :--- | :--- | :--- |
+| 最新(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)| github pages, 适合国外用户|
+| 最新(2.0.0) | [中文](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| gitee pages， 适合国内用户|
+| 1.3.0 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |
+| 1.2.1 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |

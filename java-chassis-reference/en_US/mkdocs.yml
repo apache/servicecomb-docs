@@ -1,6 +1,7 @@
 site_name: ServiceComb Java Chassis Developers Guide
 
 nav:
+- Introduction : index.md
 - Getting Started: 
     - Glossary: start/terminology.md
     - Architecture: start/architecture.md
