@@ -5,7 +5,7 @@
 ### 处理链配置
 处理链分为Consumer和Provider，分别配置如下：
 
-```
+```yaml
 servicecomb:
   handler:
     chain:
@@ -13,13 +13,13 @@ servicecomb:
         default: qps-flowcontrol-consumer,loadbalance
       Provider: 
         default: qps-flowcontrol-provider
- ```
+```
 
 通过名字配置处理链，可以根据需要调整处理链的顺序，配置在前面的处理链先执行。
 
 上述配置指定目标微服务缺省处理链，开发者还可以对特定的微服务配置不同的处理链，比如：
 
-```
+```yaml
 servicecomb:
   handler:
     chain:
@@ -36,7 +36,7 @@ servicecomb:
 
 * 实现Handler接口
 
-```
+```java
 public class AuthHandler implements Handler {
   @Override
   public void handle(Invocation invocation, AsyncResponse asyncResponse) throws Exception {
@@ -59,7 +59,7 @@ public class AuthHandler implements Handler {
 
 * 增加*.handler.xml文件，给Handler取一个名字
 
-```
+```xml
 <config>
   <handler id="auth"
     class="org.apache.servicecomb.authentication.gateway.AuthHandler" />
@@ -68,7 +68,7 @@ public class AuthHandler implements Handler {
 
 * 在microservice.yaml中启用新增加的处理链
 
-```
+```yaml
 servicecomb:
   handler:
     chain:

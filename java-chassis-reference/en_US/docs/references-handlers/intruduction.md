@@ -12,7 +12,7 @@ servicecomb:
         default: qps-flowcontrol-consumer,loadbalance
       Provider: 
         default: qps-flowcontrol-provider
- ```
+```
 
 We can also enable different handlers for each microservice, 
 
