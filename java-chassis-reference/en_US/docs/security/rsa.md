@@ -8,47 +8,43 @@ Detailed introduction [public key authentication] (../references-handlers/public
 
 * Add dependencies in pom.xml:
 
-  ```
+```
    <dependency>
       <groupId>org.apache.servicecomb</groupId>
       <artifactId>handler-publickey-auth</artifactId>
     </dependency>
-  ```
+```
 
 * Added to the processing chain in microservice.yaml
 
-  ```
-  servicecomb:
-   ......
-   handler:
+```
+servicecomb:
+  handler:
     chain:
-     Consumer:
-      default: auth-consumer
-   ......
-  ```
+      Consumer:
+        default: auth-consumer
+```
 
 ## Provider Configuration
 
 * Add dependencies in pom.xml:
 
-  ```
-   <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>handler-publickey-auth</artifactId>
-    </dependency>
-  ```
+```
+<dependency> 
+  <groupId>org.apache.servicecomb</groupId> 
+  <artifactId>handler-publickey-auth</artifactId> 
+</dependency>
+```
 
 * Added to the processing chain in microservice.yaml
 
-  ```
-  servicecomb:
-   ......
-   handler:
+```
+servicecomb:
+  handler:
     chain:
-     Provider:
-      default: auth-provider
-   ......
-  ```
+      Provider:
+        default: auth-provider
+```
 
 
 
