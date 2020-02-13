@@ -3,6 +3,7 @@
 ## 配置源层级
 
 ServiceComb提供了分层次的配置机制。按照优先级从高到低，分为：
+
 * 配置中心（动态配置）
 * Java System Property（-D参数）
 * 环境变量

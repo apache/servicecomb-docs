@@ -1,6 +1,7 @@
 # Develop the first microservice
 
 Before you start, developers need to choose a familiar development method. There are currently 3 ways to choose:
+
 * Spring MVC
 * JaxRS
 * RPC
