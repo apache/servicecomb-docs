@@ -76,12 +76,9 @@ nav:
 - 微服务安全: 
     - 使用TLS通信: security/tls.md
     - 使用RSA认证: security/shi-yong-rsa-ren-zheng.md
-- 在Spring Boot中使用java chassis: 
-    - 介绍: using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md
-    - 提供的spring boot starter说明: using-java-chassis-in-spring-boot/components-for-spring-boot.md
-    - JAVA应用方式开发步骤: using-java-chassis-in-spring-boot/java-application.md
-    - Web开发方式开发步骤: using-java-chassis-in-spring-boot/web-application.md
-    - Spring MVC开发习惯的差异: using-java-chassis-in-spring-boot/diff-spring-mvc.md
+- 专题文章:
+    - 在Spring Boot中使用java chassis: using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md
+    - 使用 inspector 模块查看契约: featured-topics/using-inspector.md
 - 处理链参考: 
     - 处理链介绍: references-handlers/intruduction.md
     - 负载均衡: references-handlers/loadbalance.md
