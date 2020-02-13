@@ -11,8 +11,8 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 | 版本| 链接 | 说明 |
 | :--- | :--- | :--- |
-| 最新(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)| 由github pages托管, 适合国外用户|
-| 最新(2.0.0) | [中文](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由gitee pages托管， 适合国内用户|
-| 最新(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| 由coding托管， 适合国内用户|
+| 最新(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)| 由github pages托管 |
+| 最新(2.0.0) | [中文](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由gitee pages托管，适合中国用户|
+| 最新(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| 由coding托管，适合中国用户|
 | 1.3.0 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |
 | 1.2.1 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |

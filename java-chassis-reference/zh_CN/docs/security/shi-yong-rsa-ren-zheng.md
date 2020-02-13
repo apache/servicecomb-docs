@@ -8,47 +8,43 @@
 
 * 在pom.xml中增加依赖：
 
-  ```
-   <dependency> 
-      <groupId>org.apache.servicecomb</groupId> 
-      <artifactId>handler-publickey-auth</artifactId> 
-    </dependency>
-  ```
+```
+<dependency> 
+  <groupId>org.apache.servicecomb</groupId> 
+  <artifactId>handler-publickey-auth</artifactId> 
+</dependency>
+```
 
 * 在microservice.yaml中添加进处理链
 
-  ```
-  servicecomb:
-   ......
-   handler:
+```
+servicecomb:
+  handler:
     chain:
-     Consumer:
-      default: auth-consumer
-   ......
-  ```
+      Consumer:
+        default: auth-consumer
+```
 
 ## Provider配置
 
 * 在pom.xml中增加依赖：
 
-  ```
-   <dependency> 
-      <groupId>org.apache.servicecomb</groupId> 
-      <artifactId>handler-publickey-auth</artifactId> 
-    </dependency>
-  ```
+```
+<dependency> 
+  <groupId>org.apache.servicecomb</groupId> 
+  <artifactId>handler-publickey-auth</artifactId> 
+</dependency>
+```
 
 * 在microservice.yaml中添加进处理链
 
-  ```
-  servicecomb:
-   ......
-   handler:
+```
+servicecomb:
+  handler:
     chain:
-     Provider:
-      default: auth-provider
-   ......
-  ```
+      Provider:
+        default: auth-provider
+```
 
 
 
