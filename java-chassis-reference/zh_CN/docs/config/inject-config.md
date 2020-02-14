@@ -1,6 +1,11 @@
-# 配置注入
-ServiceComb提供将配置属性注入到Java对象字段的特性，并提供通配符支持。
-Java对象可以是一个Java Bean，或是一个拥有public字段的类。
+# 配置注入机制
+
+配置注入提供了一种简单的管理大量复杂配置的机制，开发者不需要使用 DynamicPropertyFactory 逐个读取配置项，增加配置监听，
+而是定义一个简单的 JAVA Bean， 定义这个 Bean 的属性对应的配置项， 当配置信息变化的时候， Bean 的属性会自动刷新，极大
+的简化了用户管理大量复杂配置的复杂度。 
+
+Bean 属性对应的配置项名称支持通配符， 一个属性可以关联若干配置项，可以声明这些配置项的优先级。 Java对象可以是一个
+Java Bean，或是一个拥有public字段的类。
 
 ## 配置注入对象
 我们首先设计两个Java类用于注入配置属性，分别用来演示不使用注解和使用注解的场景。
@@ -65,17 +70,20 @@ ConfigNoAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager()
 将配置属性注入到有`@InjectProperties`和`@InjectProperty`注解的对象上：
 
 * 将名称为root.k.value的配置属性注入到一个ConfigWithAnnotation对象的intValue字段
+
 * ConfigWithAnnotation对象的longValue字段按以下顺序查找已配置的配置属性进行注入:
   1.  root.low-1.a.high-1.b
   2.  root.low-1.a.high-2.b
   3.  root.low-2.a.high-1.b
   4.  root.low-2.a.high-2.b
+
 * ConfigWithAnnotation对象的floatValue字段按以下顺序查找已配置的配置属性进行注入:
   1.  root.l1-1
   2.  root.l1-2
 
 ```Java
-ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager().createConfigObject(ConfigWithAnnotation.class,
+ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager()
+  .createConfigObject(ConfigWithAnnotation.class,
         "key", "k",
         "low-list", Arrays.asList("low-1", "low-2"),
         "high-list", Arrays.asList("high-1", "high-2"),
@@ -83,10 +91,10 @@ ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager
 		);
 ```
 
-最后不管是有无注解的属性注入，都要显式地回收配置注入对象
+如果配置实例是临时的，需要显式地回收配置注入对象。 
+
 ```Java
 priorityPropertyManager.unregisterConfigObject(config)
 ```
 
-## 参考
-示例代码请参考： https://github.com/apache/servicecomb-java-chassis/blob/master/foundations/foundation-config/src/test/java/org/apache/servicecomb/config/inject/TestConfigObjectFactory.java
+更多关于配置注入的用法，建议下载 java-chassis 的源码， 查看 TestConfigObjectFactory 类里面的示例。

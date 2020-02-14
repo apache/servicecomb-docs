@@ -63,9 +63,9 @@ nav:
     - 异常处理: general-development/error-handling.md
     - 微服务实例间多环境隔离: general-development/multienvironment.md
     - 线程模型: general-development/thread-model.md
-- 配置: 
+- 管理服务配置:
     - 通用配置说明: config/general-config.md
-    - 配置注入说明: config/inject-config.md
+    - 配置注入机制: config/inject-config.md
 - 服务能力开放:
     - 介绍: edge/open-service.md
     - 使用Edge Service做边缘服务: edge/by-servicecomb-sdk.md
