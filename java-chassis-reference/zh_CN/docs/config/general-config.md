@@ -1,5 +1,8 @@
 # 通用配置说明
 
+应用程序一般通过配置文件、环境变量等管理配置信息。微服务架构对统一配置提出了更高的要求，很多配置信息需要在不启停服务的
+情况下实现动态修改。 java-chassis 对不同的配置源进行了抽象， 开发者可以不关心配置项具体的配置源，采用统一的接口读取配置。
+
 ## 配置源层级
 
 ServiceComb提供了分层次的配置机制。按照优先级从高到低，分为：
@@ -11,7 +14,10 @@ ServiceComb提供了分层次的配置机制。按照优先级从高到低，分
 
 ### 配置文件
 
-配置文件默认是classpath下的microservice.yaml文件。ServiceComb-Java-Chassis启动时会从classpath的各个jar包、磁盘目录中加载microservice.yaml文件，并将这些文件合并为一份microservice.yaml配置。位于磁盘上的microservice.yaml文件优先级高于jar包中的microservice.yaml文件，用户还可以通过在配置文件中指定`servicecomb-config-order`来指定优先级。
+配置文件默认是classpath下的microservice.yaml文件。ServiceComb-Java-Chassis启动时会从classpath的各个jar包、磁盘
+目录中加载microservice.yaml文件，并将这些文件合并为一份microservice.yaml配置。位于磁盘上的microservice.yaml
+文件优先级高于jar包中的microservice.yaml文件。用户还可以通过在配置文件中指定`servicecomb-config-order`来指定优先级，
+如果不同路径下的 microservice.yaml 包含一样的配置项，文件中 `servicecomb-config-order` 值大的配置项会覆盖值小的配置项。
 
 > Tips：由于磁盘上的microservice.yaml文件优先级较高，我们可以在打包时在服务可执行jar包的classpath里加上`.`目录，这样就可以在服务jar包所在的目录里放置一份microservice.yaml来覆盖jar包内的配置文件。
 
@@ -36,15 +42,127 @@ servicecomb:
 
 ### 配置中心（动态配置）
 
-动态配置的默认实现是config-cc客户端，对接配置中心，配置项如下：
+配置中心是微服务架构下一个非常重要的中间件，通过配置中心用户可以增加和删除配置信息，配置信息会通过不同的通知机制（通常包括
+PULL 和 PUSH）， 将配置的变化推送到微服务实例。 java-chassis 运行用户使用不同的配置中心， 目前支持用户使用如下几种配置中心：
+
+* 华为云配置中心
+
+华为云配置中心是华为云CSE产品的一个部件，java-chassis 最早使用这个配置配置。 对接这个配置中心的代码在 config-cc 模块实现。
+可以从[轻量化微服务引擎](https://cse-bucket.obs.myhwclouds.com/LocalCSE/Local-CSE-1.0.3.zip)下载本地使用的版本。也可以
+直接访问华为云 [ServiceStage](https://console.huaweicloud.com/servicestage) 产品，使用在线的版本。
+
+使用华为云配置中心，需要在项目中引入如下依赖：
+
+```xml
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>config-cc</artifactId>
+</dependency>
+```
+
+然后在配置文件 microservice.yaml 中增加如下配置项：
+
+```yaml
+servicecomb:
+  config:
+    client:
+      serverUri: http://127.0.0.1:30113
+      refreshMode: 0
+      refresh_interval: 5000
+      refreshPort: 30114
+```
+
+华为云配置中心的其他配置项含义如下：
 
 |配置项名|描述|
 |---|---|
 |servicecomb.config.client.refreshMode|应用配置的刷新方式，`0`为config-center主动push，`1`为client周期pull，默认为`0`|
 |servicecomb.config.client.refreshPort|config-center推送配置的端口|
 |servicecomb.config.client.tenantName|应用的租户名称|
-|servicecomb.config.client.serverUri|config-center访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址(可选，当`cse.config.client.regUri`配置为空时该配置项才会生效)|
+|servicecomb.config.client.serverUri|config-center访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
 |servicecomb.config.client.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为30000|
+
+* 使用 servicecomb-kie
+
+[servicecomb-kie](https://github.com/apache/servicecomb-kie) 是全新设计的配置中心。 从 2.0.0 版本开始， java-chassis 支持使用 servicecomb-kie。 
+servicecomb-kie 的安装指导可以参考官网文档。 在 java-chassis 中使用 servicecomb-kie， 需要引入下面的依赖：
+
+```xml
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>config-kie</artifactId>
+</dependency>
+```
+
+然后在配置文件 microservice.yaml 中增加如下配置项：
+
+```yaml
+servicecomb:
+  kie:
+    serverUri: http://127.0.0.1:30110
+    refresh_interval: 5000
+    firstRefreshInterval: 5000
+    domainName: default
+```
+
+servicecomb-kie 的配置项及其含义如下：
+
+|配置项名|描述|
+|---|---|
+|servicecomb.kie.domainName| 区域名称，默认为default |
+|servicecomb.kie.serverUri|servicecomb-kie访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
+|servicecomb.kie.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为3000|
+|servicecomb.kie.firstRefreshInterval|pull模式下启动过程中首次刷新时间间隔，单位为毫秒，默认值为3000|
+
+* 使用 nacos
+
+[nacos](https://github.com/alibaba/nacos) 是 alibaba 提供的配置中心。 java-chassis 从 2.0.0 版本支持 nacos。 
+nacos的下载安装请参考官网介绍。 
+
+使用nacos，需要在项目中引入如下依赖：
+
+```xml
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>config-nacos</artifactId>
+</dependency>
+```
+
+然后在配置文件 microservice.yaml 中增加如下配置项：
+
+```yaml
+servicecomb:
+  nacos:
+    serverUri: http://127.0.0.1:8848
+    group: DEFAULT_GROUP
+    dataId: example
+```
+
+* 使用 Apollo
+
+[Apollo](https://github.com/ctripcorp/apollo) 是携程框架部门研发的分布式配置中心。 Apollo的下载安装请参考官网介绍。 
+
+```xml
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>config-apollo</artifactId>
+</dependency>
+```
+
+然后在配置文件 microservice.yaml 中增加如下配置项：
+
+```yaml
+apollo:
+  config:
+    serverUri: http://127.0.0.1:8070
+    serviceName: apollo-test
+    env: DEV
+    clusters: test-cluster
+    namespace: application
+    token: xxx
+    refreshInterval: 30
+    firstRefreshInterval: 0
+```
 
 ## 在程序中读取配置信息
 
