@@ -1,4 +1,4 @@
-# 示例项目：porter
+# Java-Chassis 入门指南 - 开发 porter 应用
 
 示例项目包含如下章节：
 

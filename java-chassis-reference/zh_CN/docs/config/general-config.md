@@ -43,11 +43,11 @@ servicecomb:
 ### 配置中心（动态配置）
 
 配置中心是微服务架构下一个非常重要的中间件，通过配置中心用户可以增加和删除配置信息，配置信息会通过不同的通知机制（通常包括
-PULL 和 PUSH）， 将配置的变化推送到微服务实例。 java-chassis 运行用户使用不同的配置中心， 目前支持用户使用如下几种配置中心：
+PULL 和 PUSH）， 将配置的变化推送到微服务实例。 java-chassis 允许用户使用不同的配置中心， 目前支持用户使用如下几种配置中心：
 
 * 华为云配置中心
 
-华为云配置中心是华为云CSE产品的一个部件，java-chassis 最早使用这个配置配置。 对接这个配置中心的代码在 config-cc 模块实现。
+华为云配置中心是华为云CSE产品的一个部件，java-chassis 最早使用它作为配置中心。 对接这个配置中心的代码在 config-cc 模块实现。
 可以从[轻量化微服务引擎](https://cse-bucket.obs.myhwclouds.com/LocalCSE/Local-CSE-1.0.3.zip)下载本地使用的版本。也可以
 直接访问华为云 [ServiceStage](https://console.huaweicloud.com/servicestage) 产品，使用在线的版本。
 
