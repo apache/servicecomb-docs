@@ -81,6 +81,7 @@ nav:
 - 专题文章:
     - 在Spring Boot中使用java chassis: using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md
     - 使用 inspector 模块查看契约: featured-topics/using-inspector.md
+    - 新功能介绍系列文章: featured-topics/features.md
 - 处理链参考: 
     - 处理链介绍: references-handlers/intruduction.md
     - 负载均衡: references-handlers/loadbalance.md
