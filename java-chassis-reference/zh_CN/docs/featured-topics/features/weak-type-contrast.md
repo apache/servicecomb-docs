@@ -201,6 +201,6 @@ InvokerUtils.syncInvoke("springmvc", "weakSpringmvc", "differentName", args);
 存在用户需要感知的变更。 对于 `HIGHWAY` 通信模式， 由于底层采用 ProtoBuffer 编码， 而 ProtoBuffer 天然就是一种
 强类型契约的编解码过程， java-chassis 为了支持弱类型契约， 做了大量努力， 在一些边界条件处理上与弱类型契约存在
 变更，两个版本的编解码是不兼容的，需要同时升级提供者和消费者。 在编码方式上，差异主要体现在对于缺省值的处理，对于
-`null` 的处理等问题上， 详细参考[1.x迁移2.x指南](../../upgrading/1_to_2.md) 。
+`null` 的处理等问题上， 详细参考[1.3.0 升级 2.0.0指导](../upgrading/1_3_0T2_0_0.md) 。
 
  

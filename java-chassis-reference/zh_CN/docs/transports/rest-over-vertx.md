@@ -45,21 +45,22 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | servicecomb.rest.client.maxHeaderSize                   | 8192                                            | 客户端接收响应的最大header长度，单位字节      |
 
 ### 补充说明
-* 极限连接数计算  
-  假设:  
-  * servicecomb.rest.client.thread-count配置为8
+* 极限连接数计算 
+ 
+假设:  
+  * servicecomb.rest.client.verticle-count配置为8
   * servicecomb.rest.client.connection.maxPoolSize配置为5
   * 微服务A有10个实例  
 
-  站在client的角度，在极限情况下：
+站在client的角度，在极限情况下：
   * 一个client调用微服务A，最多会建立400条连接。（`8 * 5 * 10 = 400`）  
   * 假设该client还需要调用微服务B，微服务B，也有10个实例，则最多再建立400条连接，共800条连接
 
-  站在server的角度，在极限情况下：
+站在server的角度，在极限情况下：
   * 一个client最多向一个server建立40条连接。(`8 * 5 = 40`)  
   * `n`个client最多会向一个server建立`40 * n`条连接
 
-  为了提高性能，需要尽量使用更大的连接池，但是更大的连接池又可能会导致连接数暴涨，当微服务实例规模达到百级别时，有的进程可能需要管理几万条连接，业务需要根据实际业务规模进行合理的规划。  
+为了提高性能，需要尽量使用更大的连接池，但是更大的连接池又可能会导致连接数暴涨，当微服务实例规模达到百级别时，有的进程可能需要管理几万条连接，业务需要根据实际业务规模进行合理的规划。  
   http1.1的规划相对复杂，并且有的场景几乎无解，建议切换为[http2](http2.md)。
 
 ## 示例代码
