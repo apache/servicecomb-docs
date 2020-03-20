@@ -26,43 +26,38 @@ Nginx \(engine x\)是一个高性能的HTTP和反向代理服务器，具有负�
 
 * 检查服务中心健康状态
 
-  ```
-   GET 127.0.0.1:30100/health
-  ```
+```
+GET 127.0.0.1:30100/health
+```
 
 * 获取所有微服务信息
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/microservices
-  ```
+```
+GET 127.0.0.1:30100/registry/v3/microservices
+```
 
 * 获取指定id的微服务信息
 
-> 1. 首先根据微服务信息获取serviceId
->
->    ```
->    GET 127.0.0.1:30100/registry/v3/existence?type=microservice&appId={appId}&serviceName={serviceName}&version={version}
->    ```
->
-> 2. 根据上述接口返回的serviceId获取微服务完整信息
->
->    GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}
+    * 首先根据微服务信息获取serviceId
+
+            GET 127.0.0.1:30100/registry/v3/existence?type=microservice&appId={appId}&serviceName={serviceName}&version={version}
+
+    * 根据上述接口返回的serviceId获取微服务完整信息
+
+            GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}
 
 * 获取指定微服务的所有实例信息
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}/instances
-
+        GET 127.0.0.1:30100/registry/v3/microservices/{serviceId}/instances
+        
    需要在header中添加："X-ConsumerId:{serviceId}"。
-  ```
 
 * 查找微服务实例信息
 
-  ```
-   GET 127.0.0.1:30100/registry/v3/instances?appId={appId}&serviceName={serviceName}&version={version}
-
+        GET 127.0.0.1:30100/registry/v3/instances?appId={appId}&serviceName={serviceName}&version={version}
+        
    需要在header中添加: "X-ConsumerId:{serviceId}"。
-  ```
+
 
 
 #### 注意：在实际开发中请访问实际的service-center访问地址，并将上述url中{}的变量替换成具体值，http返回的数据均为json格式
@@ -73,33 +68,24 @@ Nginx \(engine x\)是一个高性能的HTTP和反向代理服务器，具有负�
 
 * 获取所有微服务信息  
 
-  ```java
-  List<Microservice> getAllMicroservices();
-  ```
+        List<Microservice> getAllMicroservices();
 
 * 获取微服务唯一标识  
 
-  ```java
-  String getMicroserviceId(String appId, String microserviceName, String versionRule);
-  ```
+        String getMicroserviceId(String appId, String microserviceName, String versionRule);
 
 * 根据微服务唯一标识查询微服务静态信息  
 
-  ```java
-  Microservice getMicroservice(String microserviceId);
-  ```
+        Microservice getMicroservice(String microserviceId);
 
 * 根据多个微服务唯一标识查询所有微服务实例信息  
 
-  ```java
-  List<MicroserviceInstance> getMicroserviceInstance(String consumerId, String providerId);
-  ```
+        List<MicroserviceInstance> getMicroserviceInstance(String consumerId, String providerId);
 
 * 按照app+interface+version查询实例endpoints信息  
 
-  ```java
-  List<MicroserviceInstance> findServiceInstance(String consumerId, String appId, String serviceName,String versionRule);
-  ```
+        List<MicroserviceInstance> findServiceInstance(String consumerId, String appId, String serviceName,String versionRule);
+
 
 通过上述http接口可获取到服务中心的微服务和其实例的信息，从而通过confd动态更新nginx配置。
 
