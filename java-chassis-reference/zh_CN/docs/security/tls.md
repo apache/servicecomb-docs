@@ -9,26 +9,23 @@
 * 服务中心、配置中心TLS通信配置  
   微服务与服务中心、配置中心的连接可以通过将http改为https启用TLS通信，配置示例如下：
 
-  ```yaml
-  servicecomb:
-    service:
-      registry:
-        address: https://127.0.0.1:30100
-    config:
-      client:
-        serverUri: https://127.0.0.1:30103
-  ```
+        servicecomb:
+          service:
+            registry:
+              address: https://127.0.0.1:30100
+          config:
+            client:
+              serverUri: https://127.0.0.1:30103
+
 
 * 服务提供者启用TLS通信  
   服务提供者在配置服务监听地址时，可以通过在地址后面追加`?sslEnabled=true`开启TLS通信，示例如下：
 
-  ```yaml
-  servicecomb:
-    rest:
-      address: 0.0.0.0:8080?sslEnabled=true
-    highway:
-      address: 0.0.0.0:7070?sslEnabled=true
-  ```
+        servicecomb:
+          rest:
+            address: 0.0.0.0:8080?sslEnabled=true
+          highway:
+            address: 0.0.0.0:7070?sslEnabled=true
 
 ## 证书配置
 
@@ -37,6 +34,7 @@
 ```
 ssl.[tag].[property]
 ```
+
 常见的tag如下表：   
 
 | 项目 | tag |
@@ -78,6 +76,7 @@ ssl.[tag].[property]
 ## 示例代码
 
 microservice.yaml文件中启用TLS通信的配置示例如下：
+
 ```yaml
 servicecomb:
   service:

@@ -24,12 +24,10 @@ POM依赖：
 
 * 在pom.xml中增加依赖：
 
-  ```
-   <dependency> 
-      <groupId>org.apache.servicecomb</groupId> 
-      <artifactId>handler-publickey-auth</artifactId> 
-    </dependency>
-  ```
+        <dependency> 
+           <groupId>org.apache.servicecomb</groupId> 
+           <artifactId>handler-publickey-auth</artifactId> 
+         </dependency>
 
 ## 配置黑白名单
 
