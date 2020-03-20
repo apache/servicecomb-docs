@@ -1,0 +1,25 @@
+# 通用功能开发
+
+* [访问服务中心](visit-sc.md)
+* [应用性能监控](metrics.md)
+* [微服务调用链](microservice-invocation-chain.md)
+* [自定义调用链打点](customized-tracing.md)
+* [本地开发和测试](local-develop-test.md)
+* [Http Filter](http-filter.md)
+* [文件上传下载](upload-download.md)
+* [Reactive](reactive.md)
+* [DNS自定义配置](dnsconfig.md)
+* [代理设置](dai-li-she-zhi.md)
+* [框架上报版本号](report-framework-version.md)
+* [跨应用调用](cross-app-invocation.md)
+* [定制序列化和反序列化方法](secret-field.md)
+* [使用Context传递控制消息](context.md)
+* [返回值序列化扩展](produceprocess.md)
+* [CORS机制](CORS.md)
+* [获取熔断与实例隔离告警事件信息](AlarmEvent.md)
+* [优雅停机](shutdown.md)
+* [异常处理](error-handling.md)
+* [微服务实例间多环境隔离](multienvironment.md)
+* [线程模型](thread-model.md)
+
+    
