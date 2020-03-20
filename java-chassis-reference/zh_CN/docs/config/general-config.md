@@ -102,6 +102,7 @@ servicecomb:
     serverUri: http://127.0.0.1:30110
     refresh_interval: 5000
     firstRefreshInterval: 5000
+    enableLongPolling: true
     domainName: default
 ```
 
@@ -111,8 +112,9 @@ servicecomb-kie 的配置项及其含义如下：
 |---|---|
 |servicecomb.kie.domainName| 区域名称，默认为default |
 |servicecomb.kie.serverUri|servicecomb-kie访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
-|servicecomb.kie.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为3000|
-|servicecomb.kie.firstRefreshInterval|pull模式下启动过程中首次刷新时间间隔，单位为毫秒，默认值为3000|
+|servicecomb.kie.refresh_interval|interval pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为3000|
+|servicecomb.kie.firstRefreshInterval|interval pull模式下启动过程中首次刷新时间间隔，单位为毫秒，默认值为3000|
+|servicecomb.kie.enableLongPolling|long pulling模式是否开启，默认值为true|
 
 * 使用 nacos
 
