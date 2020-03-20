@@ -47,7 +47,9 @@ servicecomb:
 
 * 使用 servicecomb-kie
 
-[servicecomb-kie](https://github.com/apache/servicecomb-kie) 是全新设计的配置中心。 从 2.0.0 版本开始， java-chassis 支持使用 servicecomb-kie。 
+[servicecomb-kie](https://github.com/apache/servicecomb-kie) 是全新设计的配置中心。 
+从 2.0.0 版本开始， java-chassis 支持使用 servicecomb-kie。 
+从 2.0.1 版本开始， java-chassis 默认使用long polling 拉取 servicecomb-kie 配置，来节省间隔轮询带来的网络消耗。 
 servicecomb-kie 的安装指导可以参考官网文档。 在 java-chassis 中使用 servicecomb-kie， 需要引入下面的依赖：
 
 ```xml
