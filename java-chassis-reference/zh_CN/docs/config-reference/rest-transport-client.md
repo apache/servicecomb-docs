@@ -17,7 +17,8 @@
 
 **备注**:
 
-1. 如果没有配置，或者配置的值小于8，为CPU的核数。 如果CPU核数小于8， 取8。
+1. 如果没有配置，为CPU的核数，如果CPU核数小于8，则取8。
+
 2. java-chassis 默认采用 vert.x 的 HTTP Client 功能，这个配置项对应的是 verticle instances 数量。 verticle instances 数量
    会影响并发资源分配。比如： 如果 verticle instances 为 2， maxPoolSize 为 5， 那么实际创建的连接数为 2*5=10。
 
