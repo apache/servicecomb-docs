@@ -36,6 +36,5 @@
 
 • [负载均衡策略](/build-provider/configuration/lb-strategy.html)  
 • [限流策略](/build-provider/configuration/ratelimite-strategy.html)  
-• [降级策略](/build-provider/configuration/downgrade-strategy.html)  
 • [参数教研](/build-provider/configuration/parameter-validator.html)  
 

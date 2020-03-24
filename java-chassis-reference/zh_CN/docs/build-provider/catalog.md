@@ -12,7 +12,6 @@
 * [线程池](thread-pool.md)
 * 服务配置 
     * [限流策略](configuration/ratelimite-strategy.md)
-    * [降级策略](configuration/downgrade-strategy.md)
     * [参数效验](configuration/parameter-validator.md)
     * [程序启动逻辑](bootup.md)
 * [Access Log配置](access-log-configuration.md)
