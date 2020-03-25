@@ -149,23 +149,29 @@ paths:
 
 #### Consumer端调用服务
 
-- consumer端RPC开发模式：
-  - Provider接口定义
-  ```java
-    public interface HelloServiceIntf {
-      String sayHello(String name, int age);
-    }
-  ```
-  - 调用代码
-  ```java
-    String result = helloService.sayHello("Bob", 22); // result的值为"Hello, your name is Bob, and age is 22"
-  ```
-- consumer端RestTemplate开发模式：
-  ```java
-    String result = restTemplate.getForObject(
-      "cse://provider-service/hello/sayHello?name=Bob&age=22",
-      String.class); // 调用效果与RPC方式相同
-  ```
+consumer端RPC开发模式：
+
+* Provider接口定义
+    
+```java
+public interface HelloServiceIntf {
+  String sayHello(String name, int age);
+}
+```
+
+* 调用代码
+
+```java
+String result = helloService.sayHello("Bob", 22); // result的值为"Hello, your name is Bob, and age is 22"
+```
+
+* consumer端RestTemplate开发模式：
+
+```java
+String result = restTemplate.getForObject(
+  "cse://provider-service/hello/sayHello?name=Bob&age=22",
+  String.class); // 调用效果与RPC方式相同
+```
 
 ## ServiceComb支持的Spring MVC标签说明
 
