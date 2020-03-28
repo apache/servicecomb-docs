@@ -99,7 +99,7 @@ Java Chassis 可以部署运行于 JSP/Servlet 容器里面， 在这个场景�
 ## Java Chassis 与 Spring Cloud 
 
 Java Chassis 和 Spring Cloud 都实现了微服务架构模式， 相比而言， Java Chassis 是一个更加紧凑的实现， 开箱即用， 而 Spring Cloud 则是
-相对松散的实现， 整合了大量的 Hystrix 组件。 
+相对松散的实现， 整合了大量的 Netflix 组件。 
 
 微服务架构模式关注微服务内部和微服务之间的设计， 也关注微服务与微服务基础设施之间的关系。 Java Chassis 微服务基础设施包括服务注册和发现，
 服务配置管理， 灰度发布和契约管理等功能。 Spring Cloud 可以使用 [spring-cloud-huawei](https://github.com/huaweicloud/spring-cloud-huawei) 
