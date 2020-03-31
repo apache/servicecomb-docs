@@ -5,6 +5,13 @@ Context 会序列化为 json 格式并通过 HTTP Header 传递，因此也不�
 Context 在一次请求中，会在请求链上传递，不需要重新设置。[access log](../build-provider/access-log-configuration.md)的 trace id 等
 功能都基于这个特性实现的。
 
+Context 保存的内容分为 context 和 localContext。 localContext 在调用过程中，会在进程内部传递， 而 context 的内容会传递到调用过程中
+远端服务。 这种传递是单向的。比如在一个 Provider 内部， 调用接口， 那么 localContext 的内容会复制给调用接口运行过程中的 localContext，
+如果这个接口在调用过程中修改了 localContext， 接口返回后， Provider 后续的逻辑处理看不到对于 context 的修改。 
+
+在 Handler 或者 Filter 中调用其他微服务， context 信息默认不会复制，需要开发者显示的将 context 信息传递过去。 使用 RestTemplate 或者
+RPC 方式传递 context 的例子，请参考本文后面的案例。  
+
 ## 使用 Context 的场景
 
 * 在认证场景，Edge Service 认证通过以后，需要将会话 ID、用户名称等信息传递给微服务，实现鉴权等逻辑。
