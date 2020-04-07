@@ -59,8 +59,8 @@ The certificate configuration items are shown in Table 1. Certificate Configurat
 | Ssl.engine| jdk | - | No | ssl protocol, provide jdk/openssl options | default jdk |
 | ssl.protocols | TLSv1.2 | - | No | Protocol List | separated by comma |
 | ssl.ciphers | TLS\_ECDHE\_RSA\_WITH\_AES\_256\_GCM\_SHA384,<br/>TLS\_ECDHE\_RSA\_WITH \_AES\_128\_GCM\_SHA256 | - | No| List of laws | separated by comma |
-| ssl.authPeer | true | - | No | Whether to authenticate the peer | - |
-| ssl.checkCN.host | true | - | No | Check whether the CN of the certificate is checked. | This configuration item is valid only on the Consumer side and is valid using the http protocol. That is, the Consusser side uses the rest channel. Invalid for Provider, highway, etc. The purpose of checking CN is to prevent the server from being phishing, refer to Standard definition: [https://tools.ietf.org/html/rfc2818. ](https://tools.ietf.org/html/rfc2818.) |
+| ssl.authPeer | false | - | No | Whether to authenticate the peer | - |
+| ssl.checkCN.host | false | - | No | Check whether the CN of the certificate is checked. | This configuration item is valid only on the Consumer side and is valid using the http protocol. That is, the Consusser side uses the rest channel. Invalid for Provider, highway, etc. The purpose of checking CN is to prevent the server from being phishing, refer to Standard definition: [https://tools.ietf.org/html/rfc2818. ](https://tools.ietf.org/html/rfc2818.) |
 | ssl.trustStore | trust.jks | - | No | Trust certificate file | - |
 | ssl.trustStoreType | JKS | - | No | Trust Certificate Type | - |
 | ssl.trustStoreValue | - | - | No | Trust Certificate Password | - |
