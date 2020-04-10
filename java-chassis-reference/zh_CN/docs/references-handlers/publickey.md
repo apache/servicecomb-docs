@@ -54,4 +54,4 @@ servicecomb:
 
 以上规则配置了黑名单，不允许微服务名称为hacker的访问；白名单，允许微服务名称为cust前缀的服务访问。
 
-ServiceComb提供了[trust-sample](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/trust-sample)来演示黑白名单功能。
+ServiceComb提供了[trust-sample](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/trust-sample)来演示黑白名单功能。
