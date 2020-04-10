@@ -56,4 +56,4 @@ servicecomb:
 
 The above rules are configured with blacklists, which do not allow microservice names to be accessed by hackers; whitelists allow access to services with microservice names named cust.
 
-ServiceComb provides [trust-sample] (https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/trust-sample) to demonstrate the black and white list feature.
+ServiceComb provides [trust-sample] (https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/trust-sample) to demonstrate the black and white list feature.
