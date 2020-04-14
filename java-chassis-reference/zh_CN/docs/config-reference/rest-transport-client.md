@@ -16,7 +16,7 @@
   |servicecomb.rest.client.connection.maxPoolSize||5|HTTP 客户端连接池大小|
   |servicecomb.rest.client.connection.keepAlive||true|HTTP 连接是否保活|
   |servicecomb.rest.client.maxHeaderSize||8192|HTTP 最大头部限制|
-  |servicecomb.rest.client.http2.enabled||true|是否启用Rest Transport Client，HTTP 2|
+  |servicecomb.rest.client.http2.enabled|2.0.2|true|是否启用Rest Transport Client，HTTP 2|
   |servicecomb.rest.client.http2.useAlpnEnabled||true||
   |servicecomb.rest.client.http2.multiplexingLimit||1||
   |servicecomb.rest.client.http2.maxPoolSize||1|HTTP2 客户端连接池大小|
