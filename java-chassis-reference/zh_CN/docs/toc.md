@@ -51,7 +51,7 @@
     * [文件上传下载](general-development/upload-download.md)
     * [Reactive](general-development/reactive.md)
     * [DNS自定义配置](general-development/dnsconfig.md)
-    * [代理设置](general-development/dai-li-she-zhi.md)
+    * [代理设置](general-development/proxy.md)
     * [框架上报版本号](general-development/report-framework-version.md)
     * [跨应用调用](general-development/cross-app-invocation.md)
     * [定制序列化和反序列化方法](general-development/secret-field.md)
@@ -94,6 +94,9 @@
     - [公钥认证](references-handlers/publickey.md)
 - 常用配置项参考:
     - [REST Transport Client 配置项](config-reference/rest-transport-client.md)
+    - [Config Center Client 配置项](config-reference/config-center-client.md)
+    - [Service Center Client 配置项](config-reference/service-center-client.md)
+    - [ServiceComb Kie Client 配置项](config-reference/kie-client.md)
 - 常见问题:
     - [Q & A](question-and-answer/question_answer.md)
     - [FAQ](question-and-answer/faq.md)

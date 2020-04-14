@@ -9,7 +9,7 @@
 * [文件上传下载](upload-download.md)
 * [Reactive](reactive.md)
 * [DNS自定义配置](dnsconfig.md)
-* [代理设置](dai-li-she-zhi.md)
+* [代理设置](proxy.md)
 * [框架上报版本号](report-framework-version.md)
 * [跨应用调用](cross-app-invocation.md)
 * [定制序列化和反序列化方法](secret-field.md)
