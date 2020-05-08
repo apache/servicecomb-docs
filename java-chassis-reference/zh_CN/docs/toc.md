@@ -26,6 +26,7 @@
     * [接口定义和数据类型](build-provider/interface-constraints.md)
     * [服务监听地址和发布地址](build-provider/listen-address-and-publish-address.md)
     * [线程池](build-provider/thread-pool.md)
+    * [服务启动事件](build-provider/event-listener.md)
     * 服务配置 
         * [限流策略](build-provider/configuration/ratelimite-strategy.md)
         * [参数效验](build-provider/configuration/parameter-validator.md)

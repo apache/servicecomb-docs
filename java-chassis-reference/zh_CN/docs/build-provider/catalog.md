@@ -10,6 +10,7 @@
 * [接口定义和数据类型](interface-constraints.md)
 * [服务监听地址和发布地址](listen-address-and-publish-address.md)
 * [线程池](thread-pool.md)
+* [服务启动事件](event-listener.md)
 * 服务配置 
     * [限流策略](configuration/ratelimite-strategy.md)
     * [参数效验](configuration/parameter-validator.md)
