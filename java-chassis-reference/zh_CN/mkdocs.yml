@@ -37,6 +37,7 @@ nav:
 - 处理链参考: 
     - 处理链介绍: references-handlers/intruduction.md
     - 负载均衡: references-handlers/loadbalance.md
+    - 路由管理: references-handlers/router.md
     - 隔离熔断容错: references-handlers/bizkeeper.md
     - 公钥认证: references-handlers/publickey.md
 - 常用配置项参考:

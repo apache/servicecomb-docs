@@ -13,11 +13,12 @@
 
 在配置文件中增加配置项：
 
+前提条件：配置servicecomb.handler.chain.Consumer.default，在处理链Consumer中配置loadbalance，[loadbalance处理链介绍](references-handlers/loadbalance.md)。
+
 | 配置项名                                   | 描述                   |
 | ------------------------------------------ | ---------------------- |
 | servicecomb.routeRule.[targetService]      | 目标服务的路由管理规则 |
 | servicecomb.routeRule.type                 | 填写'router'           |
-| servicecomb.handler.chain.Consumer.default | 增加'loadbalance'      |
 
 路由管理规则实例如下：
 
