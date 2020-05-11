@@ -13,7 +13,7 @@
 
 在配置文件中增加配置项：
 
-前提条件：配置servicecomb.handler.chain.Consumer.default，在处理链Consumer中配置loadbalance，[loadbalance处理链介绍](references-handlers/loadbalance.md)。
+前提条件：配置servicecomb.handler.chain.Consumer.default，在处理链Consumer中配置loadbalance，[loadbalance处理链介绍](./loadbalance.md)。
 
 | 配置项名                                   | 描述                   |
 | ------------------------------------------ | ---------------------- |
