@@ -5,30 +5,33 @@
 * 业务异常：这类异常由业务接口定义。用户在获取到服务swagger定义的时候，就能够从定义中看到这类异常对
   应的错误码，以及返回值类型。 下面的例子展现了业务定义异常。
 
-      @Path("/errorCode")
-      @POST
-      @ApiResponses({
+        @Path("/errorCode")
+        @POST
+        @ApiResponses({
           @ApiResponse(code = 200, response = MultiResponse200.class, message = ""),
           @ApiResponse(code = 400, response = MultiResponse400.class, message = ""),
           @ApiResponse(code = 500, response = MultiResponse500.class, message = "")})
-      public MultiResponse200 errorCode(MultiRequest request) {
-        if (request.getCode() == 400) {
-          MultiResponse400 r = new MultiResponse400();
-          r.setCode(400);
-          r.setMessage("bad request");
-          throw new InvocationException(javax.ws.rs.core.Response.Status.BAD_REQUEST, r);
-        } else if (request.getCode() == 500) {
-          MultiResponse500 r = new MultiResponse500();
-          r.setCode(500);
-          r.setMessage("internal error");
-          throw new InvocationException(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR, r);
-        } else {
-          MultiResponse200 r = new MultiResponse200();
-          r.setCode(200);
-          r.setMessage("success result");
-          return r;
+        public MultiResponse200 errorCode(MultiRequest request) {
+            if (request.getCode() == 400) {
+              MultiResponse400 r = new MultiResponse400();
+              r.setCode(400);
+              r.setMessage("bad request");
+              throw new InvocationException(javax.ws.rs.core.Response.Status.BAD_REQUEST, r);
+            } else if (request.getCode() == 500) {
+              MultiResponse500 r = new MultiResponse500();
+              r.setCode(500);
+              r.setMessage("internal error");
+              throw new InvocationException(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR, r);
+            } else {
+              MultiResponse200 r = new MultiResponse200();
+              r.setCode(200);
+              r.setMessage("success result");
+              return r;
+            }
         }
-      }
+
+  ***注意***： 对于 2xx 错误码，可以返回具体的业务 model， 对于其他的错误码， 
+  必须抛出 InvocationException。 
 
   客户端代码可以按照如下方式处理异常。异常的类型是确定的，可以通过cast获取到异常类型。
 
