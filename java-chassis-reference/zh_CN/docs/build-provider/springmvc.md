@@ -2,7 +2,8 @@
 
 ## 概念阐述
 
-ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着项目 [SpringMVC](https://github.com/apache/servicecomb-java-chassis/tree/master/samples/springmvc-sample) 进行详细阅读
+ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着
+项目 [SpringMVC](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample) 进行详细阅读
 
 ## 开发示例
 
@@ -60,7 +61,7 @@ public class SpringmvcHelloImpl implements Hello {
 
 ### 步骤4 启动provider 服务
 
-下面的代码使用Log4j作为日志记录器。开发者可以方便使用其他日志框架。
+下面的代码使用Log4j作为日志记录器。开发者可以使用其他日志框架。
 
 ```java
 public class SpringmvcProviderMain {
