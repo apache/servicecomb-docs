@@ -1,76 +1,155 @@
-# 用SpringMVC 开发微服务
+# 用 Spring MVC 开发微服务
 
 ## 概念阐述
 
-ServiceComb支持SpringMVC注解，允许使用SpringMVC风格开发微服务。建议参照着
-项目 [SpringMVC](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample) 进行详细阅读
+Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这套注解定义 REST 接口。 servicecomb 也支持使用
+这套标签定义 REST 接口。
 
-## 开发示例
+可以参考示例项目 [SpringMVC](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample) 。
 
-### 步骤1 定义服务接口（可选，方便使用RPC方式调用）
+## 开发步骤
 
-定义接口不是必须的，但是 一个好习惯，可以简化客户端使用RPC方式编写代码。
+* 定义服务接口（可选）
 
-```java
-public interface Hello {
-    String sayHi(String name);
-    String sayHello(Person person);
-}
-```
+  定义接口是一个好习惯， 它不是必须的。
 
+        ```java
+        public interface Hello {
+            String sayHi(String name);
+            String sayHello(Person person);
+        }
+        ```
 
+* 实现服务接口
 
-### 步骤2 实现服务
+在服务的实现类上打上注解 `@RestSchema`，指定 `schemaId`。 注意 `schemaId` 需要保证微服务范围内唯一。
 
-使用Spring MVC注解开发业务代码，Hello的服务实现如下。在服务的实现类上打上注解@RestSchema，指定schemaId，schemaId必须保证微服务范围内唯一。
+        ```java
+        @RestSchema(schemaId = "springmvcHello")
+        @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
+        public class SpringmvcHelloImpl implements Hello {
+            @Override
+            @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
+            public String sayHi(@RequestParam(name = "name") String name) {
+                return "Hello " + name;
+            }
+        
+            @Override
+            @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
+            public String sayHello(@RequestBody Person person) {
+                return "Hello person " + person.getName();
+            }
+        }
+        ```
 
-```java
-@RestSchema(schemaId = "springmvcHello")
-@RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
-public class SpringmvcHelloImpl implements Hello {
-    @Override
-    @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
-    public String sayHi(@RequestParam(name = "name") String name) {
-        return "Hello " + name;
-    }
-
-    @Override
-    @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
-    public String sayHello(@RequestBody Person person) {
-        return "Hello person " + person.getName();
-    }
-}
-```
-
-### 步骤3 发布服务 （可选，默认会扫描main函数所在的package）
+* 发布服务 （可选，默认会扫描 main 函数所在的 package ）
 
 在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
+        ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+        
+        <beans xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:cse="http://www.huawei.com/schema/paas/cse/rpc"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.huawei.com/schema/paas/cse/rpc classpath:META-INF/spring/spring-paas-cse-rpc.xsd">
+        
+            <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.povider"/>
+        </beans>
+        ```
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+* 启动 provider 服务
 
-    <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.povider"/>
-</beans>
-```
+servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
 
-### 步骤4 启动provider 服务
+        ```java
+        public class SpringmvcProviderMain {
+        
+          public static void main(String[] args) throws Exception {
+            BeanUtils.init();
+          }
+        }
+        ```
 
-下面的代码使用Log4j作为日志记录器。开发者可以使用其他日志框架。
+## 在响应中包含  HTTP header
+
+可以有多种方式在响应中包含 HTTP header， 下面代码展示了使用 ResponseEntity 包含 HTTP header。 需要注意
+使用 @ResponseHeaders 声明返回的 header 信息。 包含了 @ResponseHeaders 以后， 接口生成的契约中，也可以
+看到对应的 header 参数。
 
 ```java
-public class SpringmvcProviderMain {
+  @ResponseHeaders({@ResponseHeader(name = "h1", response = String.class),
+      @ResponseHeader(name = "h2", response = String.class)})
+  @RequestMapping(path = "/responseEntity", method = RequestMethod.POST)
+  public ResponseEntity<Date> responseEntity(InvocationContext c1, 
+        @RequestAttribute("date") Date date) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("h1", "h1v " + c1.getContext().get(Const.SRC_MICROSERVICE));
 
-  public static void main(String[] args) throws Exception {
-    Log4jUtils.init();
-    BeanUtils.init();
+    InvocationContext c2 = ContextUtils.getInvocationContext();
+    headers.add("h2", "h2v " + c2.getContext().get(Const.SRC_MICROSERVICE));
+
+    return new ResponseEntity<>(date, headers, HttpStatus.ACCEPTED);
   }
-}
+```
+
+也可以使用 Response 对象返回 HTTP header，示例代码如下：
+
+```java
+  @ApiResponse(code = 202, response = User.class, message = "")
+  @ResponseHeaders({@ResponseHeader(name = "h1", response = String.class),
+      @ResponseHeader(name = "h2", response = String.class)})
+  @RequestMapping(path = "/cseResponse", method = RequestMethod.GET)
+  public Response cseResponse(InvocationContext c1) {
+    Response response = Response.createSuccess(Status.ACCEPTED, new User());
+    Headers headers = response.getHeaders();
+    headers.addHeader("h1", "h1v " + c1.getContext().get(Const.SRC_MICROSERVICE));
+
+    InvocationContext c2 = ContextUtils.getInvocationContext();
+    headers.addHeader("h2", "h2v " + c2.getContext().get(Const.SRC_MICROSERVICE));
+
+    return response;
+  }
+```
+
+这个示例代码还通过 @ApiResponse 指定了返回 202 错误码及其类型， 这个响应值会在契约体现。
+
+***注意***: HIGHWAY 协议不支持指定返回错误码和类型。需要同时使用 HIGHWAY 和 REST 访问的接口，
+请勿使用。  
+
+## 指定 String 类型 body 编码方式
+
+使用 REST 通信的服务， 一般采用 json 进行编解码。 String 类型的数据， 编码为 json 的时候，存在
+双引号。 比如 `abc` 编码以后为 `"abc"` 。 但是 Spring 自身的实现， 将 String 类型的数据，编码
+为不带双引号。 为了保持 Spring 原始实现的方式兼容， servicecomb 提供了 `RawJsonRequestBody` 接收
+不带双引号的参数。 
+
+```java
+  @ResponseBody
+  public String testRawJsonAnnotation(@RawJsonRequestBody String jsonInput) {
+    return jsonInput;
+  }
+```
+
+或者使用 MediaType.TEXT_PLAIN_VALUE, 不使用 MediaType.APPLICATION_JSON_VALUE
+
+```java
+  @RequestMapping(path = "/textPlain", method = RequestMethod.POST, 
+      consumes = MediaType.TEXT_PLAIN_VALUE)
+  public String textPlain(@RequestBody String body) {
+    return body;
+  }
+```
+
+如果响应不期望带双引号，可以使用 `produces = MediaType.TEXT_PLAIN_VALUE`
+
+```java
+ @RequestMapping(path = "/sayhi/compressed/{name}/v2", 
+    method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+  public String sayHiForCompressed(@PathVariable(name = "name") String name) {
+     return name;
+  }
 ```
 
 ## Query参数聚合为POJO对象
@@ -174,17 +253,21 @@ String result = restTemplate.getForObject(
   String.class); // 调用效果与RPC方式相同
 ```
 
-## ServiceComb支持的Spring MVC标签说明
+## ServiceComb支持的 Spring MVC 注解说明
 
-ServiceComb支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，而且有不一样的设计目标。CSE的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的`HttpServletRequest`。ServiceComb没有实现`@Controller`相关功能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
+ServiceComb支持使用 Spring MVC 提供的注解\(org.springframework.web.bind.annotation\)来声
+明REST接口，但是两者是独立的实现，而且有不一样的设计目标。CSE的目标是提供跨语言、支持多通信协议的
+框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比
+如直接访问Servlet协议定义的`HttpServletRequest`。ServiceComb没有实现`@Controller`相关功
+能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
 
 下面是一些具体差异。
 
 * 常用标签支持
 
-下面是CSE对于Spring MVC常用标签的支持情况。
+  下面是CSE对于Spring MVC常用标签的支持情况。
 
-### 表1-1 Spring MVC注解情况说明
+  ### 表1-1 Spring MVC注解情况说明
 
 | 标签名称 | 是否支持 | 说明 |
 | :--- | :--- | :--- |
@@ -213,40 +296,50 @@ ServiceComb支持使用Spring MVC提供的标签\(org.springframework.web.bind.a
 
 * 服务声明方式
 
-Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
+  Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需
+  要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
 
-```
-@RestSchema(schemaId = "hello")
-@RequestMapping(path = "/")
-```
+        ```
+        @RestSchema(schemaId = "hello")
+        @RequestMapping(path = "/")
+        ```
 
-Schema是CSE的服务契约，是服务运行时的基础，服务治理、编解码等都基于契约进行。在跨语言的场景，契约也定义了不同语言能够同时理解的部分。
+  Schema 是 CSE 的服务契约，是服务运行时的基础，服务治理、编解码等都基于契约进行。在跨语言的场景，契约
+  也定义了不同语言能够同时理解的部分。
 
-最新版本也支持`@RestController`声明，等价于`@RestSchma(schemaId="服务的class名称")`，建议用户使用`@RestSchema`显式声明schemaId，在管理接口基本的配置项的时候，更加直观。
+  servicecomb 也支持 `@RestController` 声明，等价于 `@RestSchma(schemaId="服务的class名称")`，这个
+  功能可以简化用户将老的应用改造为 servicecomb 。 建议用户使用`@RestSchema`显式声明schemaId，在管理
+  接口基本的配置项的时候，更加直观。
 
-**注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
-`servicecomb.provider.rest.scanRestController=false`以关闭此功能。
+  **注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
+  `servicecomb.provider.rest.scanRestController=false` 以关闭此功能。
 
 * 数据类型支持
 
-采用Spring MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被json序列化和反序列化。比如：
+  Spring 技术实现的 Spring MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被json序列化和
+  反序列化。比如：
 
-```
-// 抽象类型
-public void postData(@RequestBody Object data)
-// 接口定义
-public void postData(@RequestBody IPerson interfaceData)
-// 没指定类型的泛型
-public void postData(@RequestBody Map rawData)
-// 具体协议相关的类型
-public void postData(HttpServletRequest rquest)
-```
+        ```
+        // 抽象类型
+        public void postData(@RequestBody Object data)
+        // 接口定义
+        public void postData(@RequestBody IPerson interfaceData)
+        // 没指定类型的泛型
+        public void postData(@RequestBody Map rawData)
+        // 具体协议相关的类型
+        public void postData(HttpServletRequest rquest)
+        ```
 
-ServiceComb会根据接口定义生成契约，从上面的接口定义，如果不结合实际的实现代码或者额外的开发文档说明，无法直接生成契约。也就是站在浏览器的REST视角，不知道如何在body里面构造消息内容。ServiceComb不建议定义接口的时候使用抽象类型、接口等。
+  servicecomb 对于数据类型存在一定的限制，不允许使用接口等数据类型定义参数，因为 servicecomb 会根据接口
+  定义生成契约。 例子中的接口定义，如果不结合实现代码或者额外的开发文档说明，
+  无法知道具体的参数信息。站在浏览器的 REST 视角，不知道如何在 body 里面构造消息内容。
 
-为了支持快速开发，ServiceComb的数据类型限制也在不停的扩充，比如支持HttpServletRequest，Object等。但是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在ServiceComb的使用场景下，尽可能使用契约能够描述的类型，让代码阅读性更好。
+  为了支持快速开发，servicecomb 支持 HttpServletRequest，Object。但
+  是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在 servicecomb 的
+  使用场景下，尽可能不要使用 HttpServletRequest，Object 作为请求参数。
 
-ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
+  ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
 
 * 其他
-更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
+
+  更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
