@@ -1,6 +1,5 @@
 # 通用功能开发
 
-* [访问服务中心](visit-sc.md)
 * [应用性能监控](metrics.md)
 * [微服务调用链](microservice-invocation-chain.md)
 * [自定义调用链打点](customized-tracing.md)

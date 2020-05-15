@@ -15,6 +15,8 @@ nav:
     - REST over Vertx: transports/rest-over-vertx.md
     - Highway: transports/highway-rpc.md
     - HTTP2: transports/http2.md
+- 管理注册发现:
+    - 注册发现说明: registry/introduction.md
 - 管理服务配置:
     - 通用配置说明: config/general-config.md
     - 配置注入机制: config/inject-config.md

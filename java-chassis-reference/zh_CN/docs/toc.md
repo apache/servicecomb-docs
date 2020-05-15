@@ -43,7 +43,6 @@
         * [故障注入](build-consumer/fault-injection.md)
     * [调用第三方REST服务](build-consumer/3rd-party-service-invoke.md)
 * [通用功能开发](general-development/catalog.md)
-    * [访问服务中心](general-development/visit-sc.md)
     * [应用性能监控](general-development/metrics.md)
     * [微服务调用链](general-development/microservice-invocation-chain.md)
     * [自定义调用链打点](general-development/customized-tracing.md)
@@ -69,6 +68,8 @@
     * [REST over Vertx](transports/rest-over-vertx.md)
     * [Highway](transports/highway-rpc.md)
     * [HTTP2](transports/http2.md)
+* 管理注册发现:
+    * [注册发现说明](registry/introduction.md)
 * 管理服务配置:
     * [通用配置说明](config/general-config.md)
     * [配置注入机制](config/inject-config.md)
