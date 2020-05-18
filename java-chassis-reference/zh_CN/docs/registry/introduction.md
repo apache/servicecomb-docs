@@ -46,3 +46,49 @@
 
 servicecomb 与服务中心采用 HTTP 进行交互， HTTP client 相关配置可以参
 考 [Service Center Client 配置项](../config-reference/service-center-client.md)
+
+## 本地注册发现
+
+servicecomb 提供了本地注册发现机制。服务注册时， `Microservice` 和 `MicroserviceInstance` 信息、契约信息
+都注册到微服务本地内存。 服务发现时，从配置文件(registry.yaml)中读取其他服务的 `Microservice` 和 
+`MicroserviceInstance` 信息，从目录 `microservices/{serviceName}/{schemaId}.yaml` 或者 
+`applications/{appId}/{serviceName}/{schemaId}.yaml` 读取微服务的契约
+信息。本地注册发现主要用于一些小规模，组网确定的场景使用。由于一个微服务只有一个存放契约的目录，不能存放
+多个版本的微服务契约，本地注册发现不支持灰度场景。
+
+* registry.yaml 格式
+
+        ```yaml
+        ms1:
+          - id: "001"
+            version: "1.0"
+            appid: exampleApp
+            environment: development
+            schemaIds:
+              - hello
+            instances:
+              - endpoints:
+                  - rest://127.0.0.1:8080
+          - id: "002"
+            version: "2.0"
+            environment: development
+            appid: exampleApp
+            schemaIds:
+              - hello
+            instances:
+              - endpoints:
+                  - rest://127.0.0.2:8080
+        ms2:
+          - id: "003"
+            version: "1.0"
+            environment: development
+            appid: exampleApp
+            schemaIds:
+              - hello
+            instances:
+              - endpoints:
+                  - rest://127.0.0.1:8081
+        ``` 
+
+  `registry.yaml` 指定了微服务的基本信息：应用ID (appId)， 微服务名称 (serviceName),
+  微服务版本(version)，环境(environment) 和契约；微服务实例基本信息：网络地址(endpoints)。
