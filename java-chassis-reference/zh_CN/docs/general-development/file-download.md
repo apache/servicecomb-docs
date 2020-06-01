@@ -72,6 +72,10 @@ public ResponseEntity<Resource> resource() {
 一样的， 使用 InputStream 需要 @ApiResponse 标识这是一个文件下载场景
 
 ```
+@GetMapping(path = "/inputStream")
+@ApiResponses({
+  @ApiResponse(code = 200, response = File.class, message = ""),
+})
 return ResponseEntity
     .ok()
     .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
