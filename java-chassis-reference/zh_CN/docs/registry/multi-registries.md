@@ -12,7 +12,8 @@
 
 在[调用第三方服务](../build-consumer/3rd-party-service-invoke.md)里面介绍了servicecomb提供的一种
 调用第三方服务的使用方式，这种方式依赖于使用服务中心作为注册发现。 下面介绍一种组合使用服务中心和本地注册发现，
-实现调用第三方服务。 
+实现调用第三方服务。 在本方案中，第三方调用是通过本地注册发现实现的，java chassis 微服务之间是通过服务中心
+实现的。可以看出，使用本地注册发现实现，比原来的第三方调用方案功能更加完善，开发更加灵活。
 
 * 首先在项目中引入两种注册发现的实现
 
@@ -41,52 +42,78 @@ thirdParty-service-center:
           - rest://localhost:30100
 ```
 
-* 在 `microservices/thirdParty-service-center/ServiceCenterEndpoint.yaml` 中定义契约内容
+* 注册契约。 与开发服务接口一样， 调用第三方服务也可以采用 `Core First` 
+  或者 `Contrast First` 两种方式注册契约。 
 
-```yaml
-swagger: "2.0"
-info:
-  version: "1.0.0"
-  title: "swagger definition for org.apache.servicecomb.demo.registry.ServiceCenterEndpoint"
-  x-java-interface: "gen.swagger.ServiceCenterEndpointIntf"
-basePath: "/v4/default/registry"
-schemes:
-  - "http"
-consumes:
-  - "application/json"
-produces:
-  - "application/json"
-paths:
-  /instances:
-    get:
-      operationId: "getInstances"
-      parameters:
-        - name: "appId"
-          in: "query"
-          required: true
-          type: "string"
-        - name: "serviceName"
-          in: "query"
-          required: true
-          type: "string"
-        - name: "global"
-          in: "query"
-          required: true
-          type: "string"
-        - name: "version"
-          in: "query"
-          required: true
-          type: "string"
-        - name: "x-domain-name"
-          in: "header"
-          required: true
-          type: "string"
-      responses:
-        "200":
-          description: "response of 200"
-          schema:
-            type: "object"
-```
+    * Code First 方式注册契约
+  
+      需要在服务启动完成后(`AFTER_REGISTRY`事件）， 调用接口完成契约注册。 
+  
+            @RequestMapping(path = "/v4/default/registry", produces = MediaType.APPLICATION_JSON)
+            public interface IServiceCenterEndpoint {
+              // java name can not be `x-domain-name`, so interfaces define all parameters.
+              @GetMapping(path = "/getInstances")
+              Object getInstances(@RequestParam(name = "appId") String appId,
+                  @RequestParam(name = "serviceName") String serviceName,
+                  @RequestParam(name = "global") String global,
+                  @RequestParam(name = "version") String version,
+                  @RequestHeader(name = "x-domain-name") String domain);
+            }
+         
+             RegistrationManager.INSTANCE.getSwaggerLoader().registerSwagger(
+                    "demo-multi-registries",
+                    "thirdParty-service-center",
+                    "ServiceCenterEndpoint", IServiceCenterEndpoint.class);
+
+    * Contrast First 方式注册契约
+  
+      在 `microservices/thirdParty-service-center/ServiceCenterEndpoint.yaml` 中定义契约内容
+
+            ```yaml
+            swagger: "2.0"
+            info:
+              version: "1.0.0"
+              title: "swagger definition for org.apache.servicecomb.demo.registry.ServiceCenterEndpoint"
+              x-java-interface: "gen.swagger.ServiceCenterEndpointIntf"
+            basePath: "/v4/default/registry"
+            schemes:
+              - "http"
+            consumes:
+              - "application/json"
+            produces:
+              - "application/json"
+            paths:
+              /instances:
+                get:
+                  operationId: "getInstances"
+                  parameters:
+                    - name: "appId"
+                      in: "query"
+                      required: true
+                      type: "string"
+                    - name: "serviceName"
+                      in: "query"
+                      required: true
+                      type: "string"
+                    - name: "global"
+                      in: "query"
+                      required: true
+                      type: "string"
+                    - name: "version"
+                      in: "query"
+                      required: true
+                      type: "string"
+                    - name: "x-domain-name"
+                      in: "header"
+                      required: true
+                      type: "string"
+                  responses:
+                    "200":
+                      description: "response of 200"
+                      schema:
+                        type: "object"
+            ```
+
 
 * 经过上面的准备，就可以像访问 servicecomb 的微服务一样访问第三方服务了。 比如采用 RPC 的方式访问这个
  服务的代码如下：
