@@ -99,7 +99,7 @@ Java Bean，或是一个拥有public字段的类。
     ```Java
     priorityPropertyManager.unregisterConfigObject(config)
     ```
-进行显示回收。 2.1.0 及其之后的版本， 不需要调用这个接口，系统创建的对象是 WeakReference， 再未被
+进行显示回收。 2.1.0 及其之后的版本， 不需要调用这个接口，系统创建的对象是 WeakReference， 在未被
 业务引用以后，会自动回收。 
 
 更多关于配置注入的用法，建议下载 java-chassis 的源码， 查看 TestConfigObjectFactory 类里面的示例。

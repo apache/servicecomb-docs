@@ -76,11 +76,13 @@ public ResponseEntity<Resource> resource() {
 @ApiResponses({
   @ApiResponse(code = 200, response = File.class, message = ""),
 })
-return ResponseEntity
-    .ok()
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=resource.txt")
-    .body(stream);
+public ResponseEntity<InputStream> download() throws IOException {
+    return ResponseEntity
+        .ok()
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=resource.txt")
+        .body(stream);
+}
 ```
 
 在下载完成后，ServiceComb会自动关闭stream，开发人员不必再关注。
