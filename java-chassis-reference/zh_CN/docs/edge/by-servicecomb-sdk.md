@@ -221,21 +221,10 @@ servicecomb:
 
 DEMO 源码请参考 [edge service demo](https://github.com/apache/servicecomb-java-chassis/tree/master/demo/demo-edge)
 
-该demo包含以下工程：
-
-* authentication：微服务：鉴权服务器
-* edge-service
-* hiboard-business-1.0.0微服务：business，1.0.0版本，operation add
-* hiboard-business-1.1.0微服务：business，1.1.0版本，operation add/dec
-* hiboard-business-2.0.0微服务：business，2.0.0版本，operation add/dec
-* hiboard-consumer作为一个普通的httpclient，而不是servicecomb consumer
-* hiboard-model非微服务，仅仅是一些公共的model
-
-通过edge-service访问微服务business的不同版本，并确认是由正确的实例处理的。
-
 ### 1.注册Dispatcher
 
-实现接口org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher，或从org.apache.servicecomb.edge.core.AbstractEdgeDispatcher继承，实现自己的dispatcher功能。
+实现接口org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher，或从
+org.apache.servicecomb.edge.core.AbstractEdgeDispatcher继承，实现自己的dispatcher功能。
 
 实现类通过java标准的SPI机制注册到系统中去。
 
@@ -323,9 +312,6 @@ edgeInvocation.setVersionRule(versionMapper.getOrCreate(pathVersion).getVersionR
 
 versionMapper的作用是将v1或是v2这样的串，转为1.0.0-2.0.0或2.0.0-3.0.0这样的兼容规则。
 
-**注意：**
-
-接口不兼容会导致非常多的问题。java chassis要求高版本服务兼容低版本服务，只允许增加接口不允许删除接口。在增加接口后，必须增加微服务的版本号。在开发阶段，接口变更频繁，开发者往往忘记这个规则。当这个约束被打破的时候，需要清理服务中心微服务的信息，并重启微服务和Edge Service\(以及依赖于该微服务的其他服务\)。否则可能出现请求转发失败等情况。
 
 ### 4.鉴权
 
@@ -337,24 +323,27 @@ Edge Service是系统的边界，对于很多请求需要执行鉴权逻辑。
 
 ```
 public class AuthHandler implements Handler {
- private Auth auth;
+  private static Logger LOGGER = LoggerFactory.getLogger(AuthHandler.class);
 
- public AuthHandler() {
- auth = Invoker.createProxy("auth", "auth", Auth.class);
- }
-……
+  private static Auth auth;
 
- @Override
- public void handle(Invocation invocation, AsyncResponse asyncResp) throws Exception {
- if (!auth.auth("")) {
- asyncResp.consumerFail(new InvocationException(Status.UNAUTHORIZED, (Object) "auth failed"));
- return;
- }
+  static {
+    auth = Invoker.createProxy("auth", "auth", Auth.class);
+  }
 
- LOGGER.debug("auth success.");
- invocation.next(asyncResp);
- }
-}
+  @Override
+  public void init(MicroserviceMeta microserviceMeta, InvocationType invocationType) {
+  }
+
+  @Override
+  public void handle(Invocation invocation, AsyncResponse asyncResp) throws Exception {
+    if (invocation.getHandlerContext().get(EdgeConst.ENCRYPT_CONTEXT) != null) {
+      invocation.next(asyncResp);
+      return;
+    }
+
+    auth.auth("").whenComplete((succ, e) -> doHandle(invocation, asyncResp, succ, e));
+  }
 ```
 
 Auth表示是鉴权微服务提供的接口，Invoker.createProxy\("auth", "auth", Auth.class\)是透明RPC开发模式中consumer的底层api，与@ReferenceRpc是等效，只不过不需要依赖spring bean机制。
@@ -374,3 +363,9 @@ servicecomb:
 ```
 
 这个例子，表示转发请求给所有的微服务都必须经过鉴权，但是调用鉴权微服务时不需要鉴权。
+
+***特别注意：***  edge service 的定制逻辑，包括 Dispatcher, Handler, HttpServerFilter 等，均在
+事件派发线程 event-loop 中执行， 任何定制逻辑必须不能够存在阻塞逻辑，否则会导致 edge service 出现死锁。
+比如上面鉴权的逻辑，必须使用异步接口，而不能够参考 provider 开发的逻辑那样，使用同步接口。 建议业务使用
+定制逻辑的时候，对 edge service 进行并发测试，死锁问题会在并发数大于 event-loop 线程数量的情况下出现。
+（event-loop线程数量默认是CPU核数的两倍， 可以通过 jstack 命令查看线程。）

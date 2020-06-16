@@ -88,6 +88,7 @@
 - 专题文章:
     - [在Spring Boot中使用java chassis](using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md)
     - [使用 inspector 模块查看契约](featured-topics/using-inspector.md)
+    - [兼容问题和兼容性策略](featured-topics/compatibility.md)
     - [新功能介绍系列文章](featured-topics/features.md)
     - [升级指导系列文章](featured-topics/upgrading.md)
 - 处理链参考: 
