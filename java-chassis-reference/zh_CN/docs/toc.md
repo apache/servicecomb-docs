@@ -70,6 +70,7 @@
     * [HTTP2](transports/http2.md)
 * 管理注册发现:
     * [注册发现说明](registry/introduction.md)
+    * [去中心化注册发现](registry/distributed.md)
     * [组合使用多个实现](registry/multi-registries.md)
 * 管理服务配置:
     * [通用配置说明](config/general-config.md)
