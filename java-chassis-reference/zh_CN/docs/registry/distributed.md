@@ -4,7 +4,7 @@
 对于弹性扩缩容要求不高的场景。 servicecomb 提供了两种方式满足去中心化的注册发现。这两种方式涉及如下模块：
 
 * 本地注册发现: registry-local，通过本地配置文件注册发现
-* 广播注册发现: registry-zeroconfig, 采用广播的方式注册发现
+* 组播注册发现: registry-zeroconfig, 采用组播的方式注册发现
 * 实例契约发现: registry-schema-dicovery, 通过给实例发送请求，从实例查询契约
 
 ## 本地注册发现 + 实例契约发现
@@ -41,9 +41,9 @@ demo-zeroconfig-schemadiscovery-registry-edge:
           - rest://localhost:8888
 ```
 
-## 广播注册发现 + 实例契约发现
+## 组播注册发现 + 实例契约发现
 
-广播注册发现采用UDP协议发现实例。使用这种方式只需要在项目中配置依赖：
+组播注册发现采用UDP协议发现实例。使用这种方式只需要在项目中配置依赖：
 
 ```xml
     <dependency>
