@@ -13,28 +13,8 @@ public class ServerBServiceCenterConfiguration {
   @Bean("serverBServiceCenterConfig")
   public ServiceRegistryConfig serverBServiceCenterConfig() {
     ServiceRegistryConfig config = ServiceRegistryConfig.buildFromConfiguration();
-    String address = DynamicPropertyFactory.getInstance()
-        .getStringProperty("servicecomb.service.registry-serverB.address", null)
-        .get();
-    if (address == null) {
-      throw new IllegalStateException("service center address is required.");
-    }
-    String[] urls = address.split(",");
-    List<String> uriList = Arrays.asList(urls);
-    ArrayList<IpPort> ipPortList = new ArrayList<>();
-    uriList.forEach(anUriList -> {
-      try {
-        URI uri = new URI(anUriList.trim());
-        if ("https".equals(uri.getScheme())) {
-          config.setSsl(true);
-        }
-        ipPortList.add(NetUtils.parseIpPort(uri));
-      } catch (Exception e) {
-        throw new IllegalStateException("service center address is required.", e);
-      }
-    });
-    config.setIpPort(ipPortList);
-    return config;
+    return ServiceRegistryConfigCustomizer.from(config)
+        .addressListFromConfiguration("servicecomb.service.registry-serverB.address").get();
   }
 }
 ```
