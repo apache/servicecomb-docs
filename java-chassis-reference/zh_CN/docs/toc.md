@@ -78,9 +78,9 @@
     * [配置注入机制](config/inject-config.md)
 - 服务能力开放:
     - [介绍](edge/open-service.md)
-    - [使用Edge Service做边缘服务](edge/by-servicecomb-sdk.md)
-    - [使用confd和Nginx做边缘服务](edge/nginx.md)
-    - [使用zuul做边缘服务](edge/zuul.md)
+    - [使用 Edge Service 做网关](edge/by-servicecomb-sdk.md)
+    - [使用 `zuul` 和 `spring cloud gateway` 做网关](edge/zuul.md)
+    - [nginx 网关简单介绍](edge/nginx.md)
 - 服务打包和运行: 
     - [以standalone模式打包](packaging/standalone.md)
     - [以WEB容器模式打包](packaging/web-container.md)
