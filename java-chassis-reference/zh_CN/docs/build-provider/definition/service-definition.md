@@ -1,14 +1,23 @@
-### 概念阐述
+# 微服务定义
 
-服务定义信息是微服务的身份标识，它定义了服务从属于哪个应用，以及名字和版本。服务定义信息中也可以有扩展信息，用于定义服务的属性元数据。
+servicecomb 微服务定义包括两个基础模型 `Microservice` 和 `MicroserviceInstance`。 这些信息定义了
+微服务标识，从属于哪个应用，以及名字和版本。
 
-### 场景描述
+* 微服务信息
 
-当用户定义新的微服务或修改微服务的基本信息时，会涉及到服务定义信息的创建和修改操作。
+  servicecomb 的微服务信息在类 `Microservice` 中定义。 它主要包含应用 ID (appId)， 微服务名称 (serviceName),
+  微服务版本(version)，环境(environment) 等信息。 
 
-### 配置说明
+* 实例信息
 
-本章节介绍涉及microservice.yaml文件的以下配置项，文件在项目中的存放路径为src\main\resources\microservice.yaml。
+  servicecomb 的实例信息在类 `MicroserviceInstance` 中定义。 它主要包含网络地址(endpoints) 信息。
+
+# 场景描述
+
+开发一个微服务，需要在 `microservice.yaml` 文件中配置微服务的基本信息。 如果使用 spring boot，也可以在
+`application.yml` 文件中配置微服务的基本信息。 
+
+`microservice.yaml` 文件在项目中的存放路径为 `src\main\resources\microservice.yaml`。
 
 表1-1配置项说明
 
@@ -28,7 +37,7 @@
 > * 服务的元数据会随服务一同注册到服务中心，如需修改，则要连同服务version一起变更。若想保持服务version不变，则需要通过服务管理中心统一变更元数据。
 > * 虽然微服务名、契约名中可以使用"."字符，但是不推荐在命名中使用"."。这是由于ServiceComb使用的配置文件是yaml格式的，"."符号用于分割配置项名称，如果微服务名、契约名中也包含了"."可能会导致一些支持微服务、契约级别的配置无法正确被识别。
 
-### 示例代码
+下面是一个微服务信息的配置示例：
 
 ```yaml
 APPLICATION_ID: helloTest # 应用名
@@ -45,3 +54,4 @@ instance_description: #实例描述
     key3: value3
   propertyExtentedClass: org.apache.servicecomb.serviceregistry.MicroServicePropertyExtendedStub
 ```
+
