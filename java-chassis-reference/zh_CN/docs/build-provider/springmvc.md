@@ -1,13 +1,16 @@
 # 用 Spring MVC 开发微服务
 
-## 概念阐述
+Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这套注解定义 REST 接口。 servicecomb 也
+支持使用这套标签定义 REST 接口。需要注意的是，servicecomb 只是使用这些注解，而注解的实现是项目自行开发的，
+实现的功能集合是 Spring MVC 注解的子集。可以阅读文章后面的内容了解具体的标签集合和使用约束。
 
-Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这套注解定义 REST 接口。 servicecomb 也支持使用
-这套标签定义 REST 接口。
+[SpringMVC Sample](spring-mvc-sample) 提供了一些基础的代码示例，可以下载使用。
 
-可以参考示例项目 [SpringMVC](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample) 。
+[spring-mvc-sample]: https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample
 
 ## 开发步骤
+
+下面简单介绍使用 Spring MVC 开发 REST 服务的一些简单步骤。
 
 * 定义服务接口（可选）
 
@@ -22,7 +25,7 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
 
 * 实现服务接口
 
-在服务的实现类上打上注解 `@RestSchema`，指定 `schemaId`。 注意 `schemaId` 需要保证微服务范围内唯一。
+  在服务的实现类上打上注解 `@RestSchema`，指定 `schemaId`。 注意 `schemaId` 需要保证微服务范围内唯一。
 
         ```java
         @RestSchema(schemaId = "springmvcHello")
@@ -44,7 +47,8 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
 
 * 发布服务 （可选，默认会扫描 main 函数所在的 package ）
 
-在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
+  在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，
+  命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
 
         ```xml
         <?xml version="1.0" encoding="UTF-8"?>
@@ -61,7 +65,7 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
 
 * 启动 provider 服务
 
-servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
+  servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
 
         ```java
         public class SpringmvcProviderMain {
@@ -71,6 +75,102 @@ servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
           }
         }
         ```
+
+## ServiceComb支持的 Spring MVC 注解说明
+
+servicecomb 支持使用 Spring MVC 提供的注解 `org.springframework.web.bind.annotation` 来声
+明REST接口，但是两者是独立的实现，而且有不一样的设计目标。servicecomb 的目标是提供跨语言、支持多通信协议的
+框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比
+如直接访问Servlet协议定义的`HttpServletRequest`。servicecomb 没有实现`@Controller`相关功
+能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
+
+下面是一些具体差异。
+
+* 常用标签支持
+
+  下面是CSE对于Spring MVC常用标签的支持情况。
+
+  ***表1-1 Spring MVC注解情况说明***
+
+| 标签名称 | 是否支持 | 说明 |
+| :--- | :--- | :--- |
+| RequestMapping | 是 | 不允许制定多个Path，一个接口只允许一个Path，必须显示的声明 method 属性，只能定义唯一一个 method |
+| GetMapping | 是 |  |
+| PutMapping | 是 |  |
+| PostMapping | 是 |  |
+| DeleteMapping | 是 |  |
+| PatchMapping | 是 |  |
+| RequestParam | 是 |  |
+| CookieValue | 是 |  |
+| PathVariable | 是 |  |
+| RequestHeader | 是 |  |
+| RequestBody | 是 | 目前支持application/json，plain/text |
+| RequestPart | 是 | 用于文件上传的场景，对应的标签还有Part、MultipartFile |
+| ResponseBody | 否 | 返回值缺省都是在body返回 |
+| ResponseStatus | 否 | 可以通过ApiResponse指定返回的错误码 |
+| RequestAttribute | 否 | Servlet协议相关的标签 |
+| SessionAttribute | 否 | Servlet协议相关的标签 |
+| MatrixVariable | 否 |  |
+| ModelAttribute | 否 |  |
+| ControllerAdvice | 否 |  |
+| CrossOrigin | 否 |  |
+| ExceptionHandler | 否 |  |
+| InitBinder | 否 |  |
+
+* 服务声明方式
+
+  Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需
+  要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
+
+        ```
+        @RestSchema(schemaId = "springmvcHello")
+        @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
+        public class SpringmvcHelloImpl implements Hello {
+          ......
+        }
+        ```
+
+  servicecomb 也支持 `@RestController` 声明，等价于 `@RestSchma(schemaId="服务的class名称")`，这个
+  功能可以简化用户将老的应用改造为 servicecomb 。 建议用户使用`@RestSchema`显式声明schemaId，在管理
+  接口基本的配置项的时候，更加直观。
+
+  **注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
+  `servicecomb.provider.rest.scanRestController=false` 以关闭此功能。
+
+* 数据类型支持
+
+  Spring 技术实现的 Spring MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被json序列化和
+  反序列化。比如：
+
+        ```
+        // 抽象类型
+        public void postData(@RequestBody Object data)
+        // 接口定义
+        public void postData(@RequestBody IPerson interfaceData)
+        // 没指定类型的泛型
+        public void postData(@RequestBody Map rawData)
+        ```
+  
+  Spring 技术早期都是基于 JSP/Servlet 协议标准的，还可以使用相关的 context 参数，比如：
+  
+        ```
+        // 具体协议相关的类型
+        public void postData(HttpServletRequest rquest, HttpServletResponse response)
+        ```  
+   
+  servicecomb 对于数据类型存在一定的限制，不允许使用接口、抽象类等数据类型定义参数，虽然 servicecomb
+  支持使用 Object 这个特殊的类型来处理类型无法确定的情况，但是建议尽可能少使用，使用 Object 作为类型，
+  运行时的类型不确定，可能给客户端代码的书写带来一定麻烦。
+
+  servicecomb 也支持一些 context 参数， 参考[使用 Context 参数](context-param.md) 。但是由于 servicecomb 默认的运行环境并不是 JSP/Servlet 协议
+  环境，因此不能直接使用 `HttpServletRequest` 和 `HttpServletResponse`。 
+
+  ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
+
+* 其他
+
+  更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
+
 
 ## 在响应中包含  HTTP header
 
@@ -154,9 +254,8 @@ servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
 
 ## Query参数聚合为POJO对象
 
-### 使用说明
-
 SpringBoot支持将Java业务接口中的多个query参数聚合为一个POJO类，SpringBoot原生用法示例如下：
+
 ```java
 @RequestMapping("/hello")
 public class HelloService {
@@ -167,9 +266,11 @@ public class HelloService {
   }
 }
 ```
+
 其中，作为参数的`Person`类是一个标准的JavaBean，包含属性`name`和`age`。当服务接收到的请求时，SpringBoot会将query参数`name`和`age`聚合为Person对象传入业务接口。
 
 ServiceComb的SpringMVC开发模式现在也支持类似的用法，该用法的要求如下：
+
 1. POJO参数上不能有Spring的参数注解，否则ServiceComb不会将其作为聚合的query参数对象处理。
 2. 仅支持聚合query参数
 3. POJO参数类中的属性名与query参数名需要保持一致
@@ -253,93 +354,3 @@ String result = restTemplate.getForObject(
   String.class); // 调用效果与RPC方式相同
 ```
 
-## ServiceComb支持的 Spring MVC 注解说明
-
-ServiceComb支持使用 Spring MVC 提供的注解\(org.springframework.web.bind.annotation\)来声
-明REST接口，但是两者是独立的实现，而且有不一样的设计目标。CSE的目标是提供跨语言、支持多通信协议的
-框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比
-如直接访问Servlet协议定义的`HttpServletRequest`。ServiceComb没有实现`@Controller`相关功
-能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
-
-下面是一些具体差异。
-
-* 常用标签支持
-
-  下面是CSE对于Spring MVC常用标签的支持情况。
-
-  ### 表1-1 Spring MVC注解情况说明
-
-| 标签名称 | 是否支持 | 说明 |
-| :--- | :--- | :--- |
-| RequestMapping | 是 | 不允许制定多个Path，一个接口只允许一个Path |
-| GetMapping | 是 |  |
-| PutMapping | 是 |  |
-| PostMapping | 是 |  |
-| DeleteMapping | 是 |  |
-| PatchMapping | 是 |  |
-| RequestParam | 是 |  |
-| CookieValue | 是 |  |
-| PathVariable | 是 |  |
-| RequestHeader | 是 |  |
-| RequestBody | 是 | 目前支持application/json，plain/text |
-| RequestPart | 是 | 用于文件上传的场景，对应的标签还有Part、MultipartFile |
-| ResponseBody | 否 | 返回值缺省都是在body返回 |
-| ResponseStatus | 否 | 可以通过ApiResponse指定返回的错误码 |
-| RequestAttribute | 否 | Servlet协议相关的标签 |
-| SessionAttribute | 否 | Servlet协议相关的标签 |
-| MatrixVariable | 否 |  |
-| ModelAttribute | 否 |  |
-| ControllerAdvice | 否 |  |
-| CrossOrigin | 否 |  |
-| ExceptionHandler | 否 |  |
-| InitBinder | 否 |  |
-
-* 服务声明方式
-
-  Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需
-  要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
-
-        ```
-        @RestSchema(schemaId = "hello")
-        @RequestMapping(path = "/")
-        ```
-
-  Schema 是 CSE 的服务契约，是服务运行时的基础，服务治理、编解码等都基于契约进行。在跨语言的场景，契约
-  也定义了不同语言能够同时理解的部分。
-
-  servicecomb 也支持 `@RestController` 声明，等价于 `@RestSchma(schemaId="服务的class名称")`，这个
-  功能可以简化用户将老的应用改造为 servicecomb 。 建议用户使用`@RestSchema`显式声明schemaId，在管理
-  接口基本的配置项的时候，更加直观。
-
-  **注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
-  `servicecomb.provider.rest.scanRestController=false` 以关闭此功能。
-
-* 数据类型支持
-
-  Spring 技术实现的 Spring MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被json序列化和
-  反序列化。比如：
-
-        ```
-        // 抽象类型
-        public void postData(@RequestBody Object data)
-        // 接口定义
-        public void postData(@RequestBody IPerson interfaceData)
-        // 没指定类型的泛型
-        public void postData(@RequestBody Map rawData)
-        // 具体协议相关的类型
-        public void postData(HttpServletRequest rquest)
-        ```
-
-  servicecomb 对于数据类型存在一定的限制，不允许使用接口等数据类型定义参数，因为 servicecomb 会根据接口
-  定义生成契约。 例子中的接口定义，如果不结合实现代码或者额外的开发文档说明，
-  无法知道具体的参数信息。站在浏览器的 REST 视角，不知道如何在 body 里面构造消息内容。
-
-  为了支持快速开发，servicecomb 支持 HttpServletRequest，Object。但
-  是实际在使用的时候，他们与WEB服务器的语义是不一样的，比如不能直接操作流。因此建议开发者在 servicecomb 的
-  使用场景下，尽可能不要使用 HttpServletRequest，Object 作为请求参数。
-
-  ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
-
-* 其他
-
-  更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
