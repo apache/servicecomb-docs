@@ -63,42 +63,43 @@
     * [异常处理](general-development/error-handling.md)
     * [微服务实例间多环境隔离](general-development/multienvironment.md)
     * [线程模型](general-development/thread-model.md)
-* Transports:
+* 多样化的通信协议功能参考:
     * [REST over Servlet](transports/rest-over-servlet.md)
     * [REST over Vertx](transports/rest-over-vertx.md)
     * [Highway](transports/highway-rpc.md)
     * [HTTP2](transports/http2.md)
-* 管理注册发现:
+* 多样化的服务注册与发现功能参考:
     * [注册发现说明](registry/introduction.md)
     * [本地注册发现](registry/local-registry.md)
     * [去中心化注册发现](registry/distributed.md)
     * [连接多个服务中心](registry/multi-registries.md)
-* 管理服务配置:
-    * [通用配置说明](config/general-config.md)
-    * [配置注入机制](config/inject-config.md)
-- 服务能力开放:
+- 服务治理功能参考:: 
+    - [处理链介绍](references-handlers/intruduction.md)
+    - [负载均衡](references-handlers/loadbalance.md)
+    - [限流](references-handlers/ratelimit.md)
+    - [路由管理](references-handlers/router.md)
+    - [隔离熔断容错](references-handlers/bizkeeper.md)
+- 网关功能参考:
     - [介绍](edge/open-service.md)
     - [使用 Edge Service 做网关](edge/by-servicecomb-sdk.md)
     - [使用 `zuul` 和 `spring cloud gateway` 做网关](edge/zuul.md)
     - [nginx 网关简单介绍](edge/nginx.md)
+- 安全特性参考: 
+    - [使用TLS通信](security/tls.md)
+    - [使用RSA认证](security/shi-yong-rsa-ren-zheng.md)
+    - [公钥认证](references-handlers/publickey.md)
+* 管理服务配置:
+    * [通用配置说明](config/general-config.md)
+    * [配置注入机制](config/inject-config.md)
 - 服务打包和运行: 
     - [以standalone模式打包](packaging/standalone.md)
     - [以WEB容器模式打包](packaging/web-container.md)
-- 微服务安全: 
-    - [使用TLS通信](security/tls.md)
-    - [使用RSA认证](security/shi-yong-rsa-ren-zheng.md)
 - 专题文章:
     - [在Spring Boot中使用java chassis](using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md)
     - [使用 inspector 模块查看契约](featured-topics/using-inspector.md)
     - [兼容问题和兼容性策略](featured-topics/compatibility.md)
     - [新功能介绍系列文章](featured-topics/features.md)
     - [升级指导系列文章](featured-topics/upgrading.md)
-- 处理链参考: 
-    - [处理链介绍](references-handlers/intruduction.md)
-    - [负载均衡](references-handlers/loadbalance.md)
-    - [路由管理](references-handlers/router.md)
-    - [隔离熔断容错](references-handlers/bizkeeper.md)
-    - [公钥认证](references-handlers/publickey.md)
 - 常用配置项参考:
     - [REST Transport Client 配置项](config-reference/rest-transport-client.md)
     - [Config Center Client 配置项](config-reference/config-center-client.md)
