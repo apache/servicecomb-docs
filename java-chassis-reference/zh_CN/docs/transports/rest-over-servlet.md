@@ -212,5 +212,8 @@ REST over Servlet在microservice.yaml文件中的配置项见表3-9。
 | servicecomb.rest.server.timeout                  | -1           | 否       |异步servlet超时时间, 单位为毫秒<br>建议保持默认值      |
 | servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 否       |在同步线程中排队等待执行的超时时间，单位为毫秒         |
 | servicecomb.rest.servlet.urlPattern              | 无           | 否       | 用于简化servlet+servlet mapping配置<br>只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
+| servicecomb.uploads.maxSize                      | 无           | 否       | 文件上传 form body 最大大小                    |
+| servicecomb.uploads.maxFileSize                  | 无           | 否       | 文件上传所有文件总的大小限制 |
+| servicecomb.uploads.fileSizeThreshold            | 无           | 否       | 文件上传，实际写入磁盘文件的最大大小 |
 
 
