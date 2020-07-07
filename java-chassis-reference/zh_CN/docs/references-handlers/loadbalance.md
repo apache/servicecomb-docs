@@ -66,7 +66,9 @@ servicecomb:
 该规则默认启用，如果不需要使用，可以通过`servicecomb.loadbalance.filter.instanceProperty.enabled`进行关闭。根据实例属性进行路由转发功能在`InstancePropertyDiscoveryFilter`实现。
 
 ## 实例隔离功能
+
 开发者可以配置实例隔离的参数，以暂时屏蔽对于错误实例的访问，提升系统可靠性和性能。下面是其配置项和缺省值
+
 ```yaml
 servicecomb:
   loadbalance:
@@ -93,6 +95,7 @@ servicecomb:
 2. 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.consumer.MicroserviceInstancePing，内容为实现类的全名
 
 开发者可以针对不同的微服务配置不一样的隔离策略。只需要给配置项增加服务名，例如：
+
 ```yaml
 servicecomb:
   loadbalance:
@@ -106,6 +109,9 @@ servicecomb:
 ```
 
 该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.isolation.enabled进行关闭。数据中心信息隔离功能在IsolationDiscoveryFilter实现。
+
+***注意：*** 多数异常都会触发隔离计数。但一般的 `InvocationException` 不会触发隔离计数。详细可以参考
+`LoadbalanceHandler` 的 `isFailedResponse` 方法实现。
 
 ## 配置路由规则
 开发者可以通过配置项指定负载均衡策略。
@@ -157,6 +163,9 @@ servicecomb:
 ```
 
 retryOnNext表示失败以后，根据负载均衡策略，重新选择一个实例重试（可能选择到同一个实例）。 retryOnSame表示仍然使用上次失败的实例进行重试。
+
+***注意:*** 并不是所有的异常都会触发重试。缺省的情况，只有网络异常，或者 503 错误码才会触发重试。 详细可以
+参考 `DefaultRetryExtensionsFactory` 的定义。
 
 ## 自定义
 负载均衡模块提供的功能已经非常强大，能够通过配置支持大部分应用场景。同时它也提供了强大的扩展能力，包括DiscoveryFilter、ServerListFilterExt、ExtensionsFactory（扩展IRule，RetryHandler等）。loadbalance模块本身包含了每一个扩展的实现，这里不再详细描述如何扩展，只简单描述步骤。开发者可以自行下载ServiceComb源码进行参考。

@@ -43,6 +43,7 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | servicecomb.rest.client.connection.keepAlive            | true                                            | 是否使用长连接                                |
 | servicecomb.rest.client.connection.compression          | false                                           | 客户端是否支持启用压缩                        |
 | servicecomb.rest.client.maxHeaderSize                   | 8192                                            | 客户端接收响应的最大header长度，单位字节      |
+| servicecomb.uploads.maxSize                             | 无限制                                           | 最大 body 大小，这个配置项对文件上传，REST请求都生效|
 
 ### 补充说明
 * 极限连接数计算 
