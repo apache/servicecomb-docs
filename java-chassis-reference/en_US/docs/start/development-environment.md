@@ -21,7 +21,7 @@ Here is the windows system as an example:
 Set the JAVA\_HOME environment variable to point to the Java installation directory. Add %JAVA\_HOME%\bin to the system path path. After the environment variable is configured, use the java -version command to verify whether the installation is successful. The windows environment is echoed as follows:
 
 ```
-C:\Users\h00407576> java -version      
+C:\> java -version      
  java version "1.8.0_121"      
  Java(TM) SE Runtime Environment (build 1.8.0_121-b13)      
  Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
@@ -93,14 +93,8 @@ g. Verification
 Use the mvn -version command to verify that the installation is successful. The windows environment is echoed as follows:
 
 ```
-C:\Users\h00407576>mvn -version        
- Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:4        
- 7+08:00)        
- Maven home: D:\soft\apache-maven-3.3.9-bin\apache-maven-3.3.9        
- Java version: 1.8.0_121, vendor: Oracle Corporation        
- Java home: C:\Program Files\Java\jdk1.8.0_121\jre        
- Default locale: zh_CN, platform encoding: GBK        
- OS name: "windows 7", version: "6.1", arch: "amd64", family: "dos"
+C:\>mvn -version        
+ Apache Maven 3.3.9
 ```
 
 ## Eclipse installation
