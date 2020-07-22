@@ -1,10 +1,111 @@
-* **Q: 用IntelliJ的免费版开发，有什么问题？**   
+# 常见问题
 
-    * A: 没有问题，使用IntelliJ 开发，可参考 [Setup Developer Environment](/cn/developers/setup-develop-environment/) 进行相应的环境配置。    
+* [Q: 契约生成会报错 Caused by: java.lang.Error: OperationId must be unique，不支持函数重载？](#Q2)  
+* [Q: Map类型的key必须使用 String 类型？](#Q3)  
+* [Q: 参数返回值不能使用接口？](#Q4)
+* [Q: 参数返回值不能使用泛型？](#Q5)
+* [Q: 实现类中 public 方法被发布为接口，但是并没有使用？](#Q6)
 
-* **Q: 契约生成会报错Caused by: java.lang.Error: OperationId must be unique，不支持函数重载？**
+<h2 id="Q2">Q: 契约生成会报错 Caused by: java.lang.Error: OperationId must be unique，不支持函数重载？</h2>
 
-    * A: 支持函数重载，但是需要注意每个接口必须有唯一的operation id。可以加上`@ApiOperation`标签给重载的接口指定唯一的 operation id。
+* A: 支持函数重载，但是需要注意每个接口必须有唯一的operation id。可以加上`@ApiOperation`标签给重载的接口指定唯一的 operation id。
+
+
+
+<h2 id="Q3">Q: Map类型的 key 必须使用 String 类型？</h2>
+
+* A: 是的。java-chassis 遵循 [Open API 规范](https://swagger.io/docs/specification/data-models/dictionaries/), MAP
+  类型的 key 必须使用 String 类型。 业务可以结合实际情况，使用符合规范的类型。 如果必须使用其他类型，
+  可以考虑接口定义使用 Object 规避，客户端可以对返回值结果自行进行 json 转换。
+  
+ 
+  
+<h2 id="Q4">Q: 参数返回值不能使用接口？</h2>
+
+* A: 是的。java-chassis 不允许参数、返回值的类型为 `Interface` 或者 `Abstract Class`。因为这些类型
+  无法正确的生成 swagger 描述。如果必须使用这些类型，可以考虑接口定义使用 Object 规避，客户端可以对返回值结果
+  自行进行 json 转换。
+
+
+  
+<h2 id="Q5">Q: 参数返回值不能使用泛型？</h2>
+
+* A: 可以使用泛型。但是必须明确泛型类型。比如：
+
+```java
+  @PostMapping(path = "holderUser")
+  public Holder<User> holderUser(@RequestBody Holder<User> input) {
+    Assert.isInstanceOf(Holder.class, input);
+    Assert.isInstanceOf(User.class, input.value);
+    return input;
+  }
+
+  @GetMapping(path = "/genericParams")
+  @ApiOperation(value = "genericParams", nickname = "genericParams")
+  public List<List<String>> genericParams(@RequestParam("code") int code, @RequestBody List<List<String>> names) {
+    return names;
+  }
+```
+
+未指定泛型类型是不允许的。比如：
+
+```java
+  @GetMapping(path = "/genericParams")
+  @ApiOperation(value = "genericParams", nickname = "genericParams")
+  public List genericParams(@RequestParam("code") int code, @RequestBody List names) {
+    return names;
+  }
+```
+
+如果业务必须使用泛型，并且不能确定类型，可以考虑接口定义使用 Object 规避，客户端可以对返回值结果
+自行进行 json 转换。
+
+  
+<h2 id="Q6">Q: 实现类中 public 方法被发布为接口，但是并没有使用？</h2>
+
+* A: java chassis 会将所有 public 方法发布为接口。 如果有些接口不需要发布为接口，可以使用 @ApiOperation
+  标签声明不发布为接口。例子如下：
+  
+```java
+  @ApiOperation(value = "", hidden = true)
+  public void hidden() {
+
+  }
+```
+
+在迁移改造的过程中，比如将 HSF 和 Dubbo 的内部 RPC 接口改造为 java-chassis 的 RPC 接口，可能还有更加复杂
+的情况，比如：
+
+```java
+@HSFProvider(MyInterface.class)
+public MyService extends AbstractMyService implements MyInterface
+```
+
+如果直接改造为
+
+```java
+@RpcSchema(schemaId = "MyService")
+public MyService extends AbstractMyService implements MyInterface
+```
+
+那么 `AbstractMyService` 的公共方法也会发布为 RPC 接口， 而 HSF 和 dubbo 则不会。 这种情况建议增加
+一个类，而将原来的接口声明为服务类来处理， 比如：
+
+```java
+@Service("MyService")
+public MyService extends AbstractMyService implements MyInterface
+
+@RpcSchema(schemaId = "MyServiceImpl")
+public MyServiceImpl implements MyInterface {
+    @Autowired
+    @Qualifier("MyService")
+    MyInterface service;
+
+    public String hello(String name) {
+       return service.hello(name);
+    }
+}
+```
 
 * **Q: 使用*spring-boot-starter-provider*这个依赖时，在*application.yml*文件中声明的`spring.main.web-application`属性并没有生效？**
 
