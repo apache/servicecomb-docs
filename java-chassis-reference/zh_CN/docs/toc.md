@@ -106,6 +106,6 @@
     - [Service Center Client 配置项](config-reference/service-center-client.md)
     - [ServiceComb Kie Client 配置项](config-reference/kie-client.md)
 - 常见问题:
-    - [Q & A](question-and-answer/question_answer.md)
     - [FAQ](question-and-answer/faq.md)
+    - [Q & A](question-and-answer/question_answer.md)
     - [微服务接口兼容常见问题](question-and-answer/interface-compatibility.md)

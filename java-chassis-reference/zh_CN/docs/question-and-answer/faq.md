@@ -4,11 +4,31 @@
 * [Q: Map类型的key必须使用 String 类型？](#Q3)  
 * [Q: 参数返回值不能使用接口？](#Q4)
 * [Q: 参数返回值不能使用泛型？](#Q5)
-* [Q: 实现类中 public 方法被发布为接口，但是并没有使用？](#Q6)
+* [Q: 实现类中 public 方法全部被发布为接口，如何排除？](#Q6)
+* [Q: 如何自定义某个Java方法对应的REST接口里的HTTP Status Code？](#Q7)
 
 <h2 id="Q2">Q: 契约生成会报错 Caused by: java.lang.Error: OperationId must be unique，不支持函数重载？</h2>
 
-* A: 支持函数重载，但是需要注意每个接口必须有唯一的operation id。可以加上`@ApiOperation`标签给重载的接口指定唯一的 operation id。
+* A: 支持函数重载，但是需要注意每个接口必须有唯一的operation id。可以加上`@ApiOperation`标签给重载的接口指定唯一
+  的 operation id (对应于 nickname 属性）。示例代码如下：
+  
+```java
+  @Path("/sayHi")
+  @GET
+  @Produces("text/plain;charset=UTF-8")
+  @ApiOperation(value = "", nickname = "sayHi")
+  public String sayHello() {
+    return "ApiOperationJaxrsSchema#sayHello";
+  }
+
+  @Path("/sayHello")
+  @GET
+  @Produces("application/json;charset=UTF-8")
+  @ApiOperation(value = "", nickname = "sayHello")
+  public String sayHello(@ApiParam("name") String name) {
+    return name;
+  }
+```
 
 
 
@@ -61,7 +81,7 @@
 自行进行 json 转换。
 
   
-<h2 id="Q6">Q: 实现类中 public 方法被发布为接口，但是并没有使用？</h2>
+<h2 id="Q6">Q: 实现类中 public 方法全部被发布为接口，如何排除？</h2>
 
 * A: java chassis 会将所有 public 方法发布为接口。 如果有些接口不需要发布为接口，可以使用 @ApiOperation
   标签声明不发布为接口。例子如下：
@@ -107,37 +127,47 @@ public MyServiceImpl implements MyInterface {
 }
 ```
 
-* **Q: 使用*spring-boot-starter-provider*这个依赖时，在*application.yml*文件中声明的`spring.main.web-application`属性并没有生效？**
 
-    * A:  最近版本只支持 spring boot 2， 可以通过 ApplicationBuilder 创建运行环境。 参考[在Spring Boot中使用java chassis](../using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md)。
- 
-* **Q: 如何自定义某个Java方法对应的REST接口里的HTTP Status Code？**
 
-    * A:  对于正常的返回值，可以通过SwaggerAnnotation实现，例如：
+<h2 id="Q7">Q: 如何自定义某个Java方法对应的REST接口里的HTTP Status Code？</h2>
 
-            @ApiResponse(code = 300, response = String.class, message = "")
-            public int test(int x) {
-              return 100;
-            }
+* A:  对于 2xx 的返回值，可以通过 @ApiResponse 实现，例如：
 
-        对于异常的返回值，可以通过抛出自定义的InvocationException实现，例如：
+```java
+@ApiResponse(code = 201, response = Integer.class, message = "")
+public int test(int x) {
+  return 100;
+}
+```
 
-            public String testException(int code) {
-                String strCode = String.valueOf(code);
-                switch (code) {
-                    case 200:
-                        return strCode;
-                    case 456:
-                        throw new InvocationException(code, strCode, strCode + " error");
-                    case 556:
-                        throw new InvocationException(code, strCode, Arrays.asList(strCode + " error"));
-                    case 557:
-                        throw new InvocationException(code, strCode, Arrays.asList(Arrays.asList(strCode + " error")));
-                    default:
-                        break;
-                }
-                return "not expected";
-            }
+对于其他返回值，可以通过抛出自定义的 InvocationException 实现，例如：
+
+```java
+@Path("/errorCode")
+@POST
+@ApiResponses({
+  @ApiResponse(code = 200, response = MultiResponse200.class, message = ""),
+  @ApiResponse(code = 400, response = MultiResponse400.class, message = ""),
+  @ApiResponse(code = 500, response = MultiResponse500.class, message = "")})
+public MultiResponse200 errorCode(MultiRequest request) {
+    if (request.getCode() == 400) {
+      MultiResponse400 r = new MultiResponse400();
+      r.setCode(400);
+      r.setMessage("bad request");
+      throw new InvocationException(javax.ws.rs.core.Response.Status.BAD_REQUEST, r);
+    } else if (request.getCode() == 500) {
+      MultiResponse500 r = new MultiResponse500();
+      r.setCode(500);
+      r.setMessage("internal error");
+      throw new InvocationException(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR, r);
+    } else {
+      MultiResponse200 r = new MultiResponse200();
+      r.setCode(200);
+      r.setMessage("success result");
+      return r;
+    }
+}
+```
 
 * **Q: 如何定制自己微服务的日志配置?**
 
