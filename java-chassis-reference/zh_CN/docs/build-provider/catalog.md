@@ -2,9 +2,10 @@
 
 * [微服务定义](definition/service-definition.md)
 * [理解服务契约](define-contract.md)
-* [用SpringMVC开发微服务](springmvc.md)
 * [用JAX-RS开发微服务](jaxrs.md)
+* [用SpringMVC开发微服务](springmvc.md)
 * [用透明RPC开发微服务](transparent-rpc.md)
+* [只发布interface的方法为服务接口](use-interface.md)
 * [使用 Context 参数](context-param.md)
 * [使用Swagger注解](swagger-annotation.md)
 * [接口定义和数据类型](interface-constraints.md)
