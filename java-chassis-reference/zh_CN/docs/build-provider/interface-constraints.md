@@ -1,68 +1,108 @@
 # 接口定义和数据类型
 
-## 接口定义的要求
+不论采用 `JAX-RS`、`Spring MVC`，还是采用 `透明RPC` 开发，都涉及接口的返回值和参数。java-chassis 
+采用的是一种平台无关的数据序列化方式，当 `Transport` 为 `REST` 的时候，序列化方式为 `json`，当
+`Transport` 为 `Highway` 的时候，序列化方式为 `protobuffer`。 平台无关的数据序列化方式有个基本
+特征：作为 `Consumer`， 从序列化的数据中，无法获取任何和 `Consuemr` 开发语言有关的类型信息。 平台无关
+特性给接口定义的数据类型提供了更严格的要求，符合这些要求的接口定义，一方面运行更加高效，另外一方面更加方便的
+动态调整 `Transport`， 而无需对代码做出修改。 
 
-ServiceComb-Java-Chassis建议接口定义遵循一个简单的原则：接口定义即接口使用说明，不用通过查看代码实现，就能识别如何调用这个接口。可以看出，这个原则站在使用者这边，以更容易被使用作为参考。ServiceComb会根据接口定义生成接口契约，符合这个原则的接口，生成的契约也是用户容易阅读的。
+对于 `REST`， 虽然 `json` 本身不包含特定平台的类型信息，但是 `JAVA` 可以通过在反序列化的时候，指定目标
+类型，所以对于 `REST`， 可以更加灵活的使用不同的类型。 
 
-举个例子：
+本章节主要介绍为了实现最大的夸平台和高性能，开发者定义接口的最佳实践。同时介绍在使用 `REST` 的情况下，如何
+更加灵活的支持不同的类型。 
 
-```java
-public Person query(String id);
-public Object query(String id);
-public Person query(String name);
-```
+## 接口定义的最佳实践和类型约束
 
-显然调用接口一，我们知道要传递一个String类型的id参数，返回值是一个Person类型，Person里面存在String类型的name参数。调用接口二，我们不知道怎么处理返回值，必须参考服务提供者的文档说明。这个视角是熟练的RPC开发者的视角。
+java-chassis 的所有接口定义，都可以生成符合 `OpenAPI` 的 `swagger` 接口描述，当使用 `Highway` 协议时，
+`swagger` 文件还会在内部被转换为等价的 `proto` 文件。 接口定义的最佳实践需要满足 `OpenAPI` 和 `proto`的
+数据类型要求。 
 
-当我们要将接口发布为REST接口的时候，可以指定接口参数和HTTP协议的映射关系，比如：
+* `OpenAPI` 定义了如下一些基本类型：
 
-```java
-public Person query(@RequestParam String id);
-public Person query(@PathVariable String id);
-public void save(@RequestBody Person person);
-```
+下面列举一些常见的类型说明，详细参考 [OpenAPI文档][openAPI]。
 
-通常，我们会将简单的数据类型，比如String, int等在RequestParam或者PathVariable传递，而把复杂的数据类型使用JSON编码以后在RequestBody传递，以减少HTTP协议限制可能给开发者带来的各种问题。这个视角是熟练的REST开发者的视角，在RPC开发者的视角之外，REST开发者需要理解的信息更多，他们不仅需要知道RPC接口，还需要了解接口和HTTP协议的绑定关系，要理解JAVA对象如何在HTTP的消息中进行转换。
+[OpenAPI]: https://swagger.io/docs/specification/data-models/data-types/
 
-ServiceComb-Java-Chassis还有一个约束：接口定义必须符合Open API的规范，从而能够更好的在不同语言之间进行协作，能够支持除了HTTP以为的其他协议和编码。熟练的SpringMVC、JAX-RS开发者会发现一些特殊的用法无法使用，比如使用HttpServletRequest来解析HTTP头信息等。再比如，按照Open API规范，每个接口都必须有唯一的ID，如果开发者需要使用重载，那么必须显示的使用@ApiOperation给重载方法赋予唯一的ID。ServiceComb-Java-Chassis接口定义要求符合下面的范式：
+| type | format | java | 说明 |
+| :--- | :--- | :--- | :--- |
+| string | - | String | |
+| string | date | java.util.Date, java.time.LocalDate| 推荐使用 LocalDate|
+| string | date-time | java.util.Date, java.time.LocalDateTime| 推荐使用 LocalDateTime|
+| number | - | double | |
+| number | float | float | |
+| number | double | double | |
+| integer | - | integer | |
+| integer | int32 | int | |
+| integer | int64 | long | |
+| boolean | - | boolean | |
+| array | | ArrayList | 必须指定类型 |
+| object | | | 由上面的属性构成的对象类型。包括字典（HashMap），字典的 key 必须为 string |
 
-```
-@SupportedAnnotations
-ResponseType methodName(RequestType...)
-```
+* `proto` 定义了如下一些基本类型：
 
-不能定义异常、不能包含在接口原型未声明的错误码和输出（如果没声明错误码，缺省的错误码除外，比如HTTP 的200）。
+下面列举一些常见的类型说明，详细参考 [Proto Buffer类型说明][proto-buffer]。
 
-通常，系统约束越多，那么就更加容易对系统进行统一的管控和治理；开发方式越自由，实现业务功能则更加快速，需要在这两方面取得一些平衡。ServiceComb-Java-Chassis是比gRPC要灵活很多的框架，同时也去掉了Spring MVC的一些不常用的扩展。开发者可以在ServiceComb-Java-Chassis讨论区反馈开发过程中期望支持的场景，更好的维护这个平衡。期望这个讨论是围绕某个具体的应用场景来进行的，比如上传文件如何更好的进行，而不是具体的开发方式进行的，比如使用Object来传递参数。
+[proto-buffer]: https://docs.microsoft.com/en-us/dotnet/architecture/grpc-for-wcf-developers/protobuf-data-types
 
-## 详细的约束列表
+| type | java | 说明 |
+| :--- | :--- | :--- |
+| double | double | |
+| float | float | |
+| int32 | int | |
+| int64 | long | |
+| uint32 | int | |
+| uint64 | long | |
+| sint32 | int | |
+| sint64 | long | |
+| fixed32 | int | |
+| fixed64 | long | |
+| sfixed32 | int | |
+| sfixed64 | long | |
+| bool | boolean | |
+| string | String | |
+| bytes | ByteString | |
+| map | | 字典类型 |
+
+`OpenAPI` 的 `date` format 在 `proto` 里面采用 `long` 表示。 java-chassis 的开发实践分为 `code first`
+和 `contrast first` 两种模式， 如果采用 `contrast first` 模式，先写 `swagger`， 然后通过 `swagger` 生成
+代码， 这种方式生成的数据类型都是符合最佳实践的。 如果采用 `code first`， 要考虑哪些类型是最佳实践，可以从思考定义
+的 JAVA 类型，对应的 `swagger` 是什么样子的。 当然这样思考，对于不熟悉 `swagger` 或者 `proto` 的开发者
+还是显得复杂。 下面从 `code first` 的角度描述使用哪些类型是最佳实践。 
+
+## 从 `code first` 角度理解夸平台数据类型的约束
 
 开发者不能在接口定义的时候使用如下类型：
 
-* 抽象的数据结构: java.lang.Object, net.sf.json.JsonObject等
-
-  **备注：** 最新版本可以使用java.lang.Object作为参数和返回值。它的运行时类型可以是int、String、Map等。尽管如此，建议开发者不要使用抽象数据结构，以及第三方提供的非POJO类作为接口的参数和返回值。这些类型包括java.math.BigDecimal、org.joda.time.JodaTime等。这些类型会给开发者带来很大的困扰。比如开发者可能以为BigDecimal会以数字传输，实际不然，并且在某些内部状态没正确计算的情况下，得到的并不是用户预期的值。
+* 抽象的数据结构: java.lang.Object, net.sf.json.JsonObject 等。 使用这些类型 java-chassis 启动
+  不会报错，功能也是正常的。但不是最佳实践，也会对性能有一定影响。 
 
 * 接口或者抽象类
-  ```java
-   public interface IPerson {//...}
-   public abstract class AbstractPerson  {//...}
-  ```
 
-* 上述类型的集合类型或者没有指定具体类型的集合，比如：`List<IPerson>, Map<String, PersonHolder<?>>, List, Map`等。 `List<String>, List<Person>`这些具体类型是支持的。
+        ```java
+        public interface IPerson {//...}
+        public abstract class AbstractPerson  {//...}
+        ```
+
+* 上述类型的集合类型或者没有指定具体类型的集合，比如：`List<IPerson>, Map<String, PersonHolder<?>>, List, Map`等。 `List<String>, List<Person>` 这些具体类型是支持的。
 
 * 包含上述类型作为属性的类型
 
-  ```java
-   public class GroupOfPerson {IPerson master //...}
-  ```
+        ```java
+        public class GroupOfPerson {IPerson master //...}
+        ```
 
-开发者不用担心记不住这些约束，程序会在启动的时候检查不支持的类型，并给与错误提示。
+不用担心记不住这些约束，程序会在启动的时候检查不支持的类型，并给与错误提示。
 
-总之，数据结构需要能够使用简单的数据类型进行描述，一目了然就是最好的。这个在不同的语言，不同的协议里面都支持的很好，长期来看，可以大大减少开发者联调沟通和后期重构的成本。
+总之，数据结构需要能够使用简单的数据类型进行描述，一目了然就是最好的。这个在不同的语言，不同的协议里面都支持的很
+好，长期来看，可以大大减少开发者联调沟通和后期重构的成本。
 
 ### 关于数据结构和接口变更
-接口名称、参数类型、参数顺序、返回值类型变更都属于接口变更。ServiceComb启动的时候，会根据版本号检测接口变化，接口变化要求修改版本号。ServiceComb识别接口是否变化是通过代码生成的契约内容，有些不规范的接口定义可能导致在代码没有变化的情况下，生成的契约不同。比如：
+
+接口名称、参数类型、参数顺序、返回值类型变更都属于接口变更。ServiceComb启动的时候，会根据版本号检测接口变化，
+接口变化要求修改版本号。ServiceComb识别接口是否变化是通过代码生成的契约内容，有些不规范的接口定义可能导致在
+代码没有变化的情况下，生成的契约不同。比如：
 
 ```
 public void get(Person p)
@@ -74,7 +114,9 @@ class Person {
 }
 ```
 
-这个接口通过access method定义了"name"和"ok"两个属性，和实际的字段"value"和"isOk"不同。这种情况可能导致每次启动生成的契约不一样。需要将代码调整为符合JAVA Bean规范的定义。
+这个接口通过access method定义了"name"和"ok"两个属性，和实际的字段"value"和"isOk"不同。这种情况可能导
+致每次启动生成的契约不一样。需要将代码调整为符合JAVA Bean规范的定义。
+
 ```
 public void get(Person p)
 class Person {
@@ -98,63 +140,166 @@ class Person {
 }
 ```
 
-考虑到接口变更的影响，建议在进行对外接口定义的时候，尽可能不要使用第三方软件提供的类作为接口参数，而是使用自定义的POJO类。一方面升级三方件的时候，可能感知不到接口变化；另外一方面，如果出现问题，无法通过修改第三方代码进行规避。比如：java.lang.Timestamp, org.joda.time.JodaTime等。
+考虑到接口变更的影响，建议在进行对外接口定义的时候，尽可能不要使用第三方软件提供的类作为接口参数，而是使
+用自定义的POJO类。一方面升级三方件的时候，可能感知不到接口变化；另外一方面，如果出现问题，无法通过
+修改第三方代码进行规避。比如：java.lang.Timestamp, org.joda.time.JodaTime等。
 
 ## 协议上的差异
 
-尽管ServiceComb-Java-Chassis实现了不同协议之间开发方式的透明，受限于底层协议的限制，不同的协议存在少量差异。
+尽管 ServiceComb-Java-Chassis 实现了不同协议之间开发方式的透明，受限于底层协议的限制，不同的协议存在少量差异。
 
-* map，key只支持string
+* map，key只支持 string
 
 * highway \(protobuf限制\)  
-  1. 不支持在网络上传递null，包括Collection、array中的元素，map的value  
-  2. 长度为0的数组、list，不会在网络上传递，接收端解码出来就是默认值
+
+    1. 不支持在网络上传递null，包括Collection、array中的元素，map的value  
+    2. 长度为0的数组、list，不会在网络上传递，接收端解码出来就是默认值
 
 * springmvc  
-  1. 不支持Date作为path、query参数。 因为springmvc直接将Date做toString放在path、query中，与swagger的标准不匹配。
+
+    1. 不支持 Date 作为 path、query 参数。 因为springmvc 直接将 Date 做 toString 放在path、query中，与
+       swagger的标准不匹配。
 
 ## 泛型支持
 
 ServiceComb-Java-Chassis 支持REST传输方式下的泛型请求参数和返回值。例如使用一个泛型的数据类型:
+
 ```java
 public class Generic<T>{
   public T value;
 }
 ```
+
 其中的泛型属性T可以是一个实体类、java.util.Date、枚举，也可以嵌套泛型数据类型。
 
-当用户使用隐式契约功能自动生成微服务契约时，需要在provider接口方法的返回消息中明确指定泛型类型，以保证 ServiceComb-Java-Chassis 生成的契约中包含足够的接口信息。例如，当provider端接口方法代码为
+当用户使用隐式契约功能自动生成微服务契约时，需要在provider接口方法的返回消息中明确指定泛型类型，以保
+证 ServiceComb-Java-Chassis 生成的契约中包含足够的接口信息。例如，当provider端接口方法代码为
+
 ```java
-public Generic<List<Person>> getHolderListArea() {
+public Holder<List<Person>> getHolderListArea() {
   Holder<List<Person>> response = new Holder<>();
   // ommited
   return response;
 }
 ```
-时， ServiceComb-Java-Chassis 能够识别出泛型返回对象的确切信息，以保证consumer端接收到的应答消息能够被正确地反序列化。
-而如果provider端接口方法的代码为
+
+时， ServiceComb-Java-Chassis 能够识别出泛型返回对象的确切信息，以保证consumer端接收到的应答消息能够被
+正确地反序列化。而如果provider端接口方法的代码为
+
 ```java
-public Generic getHolderListArea() {
+public Holder getHolderListArea() {
   Holder<List<Person>> response = new Holder<>();
   // ommited
   return response;
 }
 ```
-时，由于契约中缺少List元素的类型信息，就会出现consumer端无法正确反序列化应答的情况，比如consumer接收到的参数类型可能会变为`Holder<List<Map<String,String>>>`，`Person`对象退化为Map类型。
+
+时，由于契约中缺少List元素的类型信息，就会出现consumer端无法正确反序列化应答的情况，比如consumer接收
+到的参数类型可能会变为`Holder<List<Map<String,String>>>`，`Person`对象退化为Map类型。
 
 > ***说明:***   
-> 虽然 ServiceComb-Java-Chassis 支持REST泛型参数，但是我们更加推荐用户使用实体类作为参数，以获得更加明确的接口语义。
+> 虽然 ServiceComb-Java-Chassis 支持REST泛型参数，但是我们更加推荐用户使用实体类作为参数，以获得
+> 更加明确的接口语义。
 
 ## 其他常见问题
 
-* 使用RestTemplate传递raw json
+* 使用 RestTemplate 传递 raw json
+
 假设服务端定义了接口
+
 ```
 Person test(Person input)
 ```
+
 用户期望使用RestTemplate自行拼接json字符串，然后进行传递:
 ```
       String personStr = JsonUtils.writeValueAsString(input);
       result = template.postForObject(cseUrlPrefix + "sayhello", personStr, Person.class);
 ```
-ServiceComb不推荐开发者这样使用，里面的处理逻辑存在大量歧义。如果必须使用，需要满足几个约束：Person必须包含带String类型的构造函数；provider/consumer都必须存在这个Person类型。
+
+ServiceComb不推荐开发者这样使用，里面的处理逻辑存在大量歧义。如果必须使用，需要满足几个约束：Person
+必须包含带String类型的构造函数；provider/consumer都必须存在这个Person类型。
+
+## `REST` 通信类型扩展
+
+默认情况下， 如果在接口中使用 `interface` 或者 `abstract class` 作为参数或者返回值， java-chassis
+启动会报告错误。 java-chassis 提供了类型扩展机制， 使得程序中可以支持各种类型。 
+
+***注意: *** 使用扩展机制的接口，只能够在 `REST` 通信模式下使用。
+
+以支持 `spring-data` 的 `Page` 接口作为返回值为例， 首先需要通过 `SPI` 的机制实现 `jackson` 的类型扩展：
+
+```java
+public class SpringDataModule extends SimpleModule implements SPIOrder {
+  private static final long serialVersionUID = 1L;
+
+  @JsonDeserialize(as = PageImpl.class)
+  @JsonPropertyOrder(alphabetic = true)
+  public static class PageMixin<T> {
+    @JsonCreator
+    public PageMixin(@JsonProperty(value = "content") List<T> content,
+        @JsonProperty("pageable") Pageable pageable,
+        @JsonProperty("total") long total) {
+    }
+  }
+
+  @JsonDeserialize(as = PageRequest.class)
+  @JsonPropertyOrder(alphabetic = true)
+  public static class PageableMixin {
+    @JsonCreator
+    public PageableMixin(@JsonProperty(value = "pageNumber") int page,
+        @JsonProperty("pageSize") int size, @JsonProperty(value = "sort") Sort sort) {
+    }
+  }
+
+  @JsonPropertyOrder(alphabetic = true)
+  @JsonDeserialize(as = Sort.class)
+  public static class SortMixin {
+    // Notice:
+    // spring data model changed from version to version
+    // for the tested version, sort is not consistency in serialization and deserialization
+    @JsonCreator
+    public SortMixin(String... properties) {
+    }
+  }
+
+  public SpringDataModule() {
+    super("springData");
+
+    setMixInAnnotation(Page.class, PageMixin.class);
+    setMixInAnnotation(Pageable.class, PageableMixin.class);
+    setMixInAnnotation(Sort.class, SortMixin.class);
+
+    setMixInAnnotation(PageImpl.class, PageMixin.class);
+    setMixInAnnotation(PageRequest.class, PageableMixin.class);
+  }
+
+  @Override
+  public Object getTypeId() {
+    return getModuleName();
+  }
+
+  @Override
+  public int getOrder() {
+    return Short.MAX_VALUE;
+  }
+}
+``` 
+
+再实现 `SPI` 告诉 java-chassis 跳过类型检查：
+
+```java
+public class SpringDataConcreteTypeRegister implements ConcreteTypeRegister {
+  @Override
+  public void register(Set<Type> types) {
+    types.add(Page.class);
+    types.add(Pageable.class);
+  }
+}
+```
+
+经过这两个步骤（步骤中没描述开发SPI 需要增加 services 文件的内容）， 就能够实现任意类型的支持。 需要注意，这些扩展，必须
+同时包含在 `Consumer`, `Provider`, `edge service` 中，因为这种处理方式是依赖于平台类型的非夸平台特性。 
+
+上述例子的详细代码可以参考 java-chassis 的源代码， generator-spring-data 模块。 
+
