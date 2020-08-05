@@ -14,36 +14,77 @@ Java Bean，或是一个拥有public字段的类。
 * 使用注解
 
         ```Java
-        @InjectProperties(prefix = "root") //指定该model关联的配置属性的前缀
-        public class ConfigWithAnnotation {
+          @InjectProperties(prefix = "jaxrstest.jaxrsclient")
+          public class Configuration {
+            /*
+             * 方法的 prefix 属性值 "override" 会覆盖标注在类定义的 @InjectProperties
+             * 注解的 prefix 属性值。
+             *
+             * keys属性可以为一个字符串数组，下标越小优先级越高。
+             *
+             * 这里会按照如下顺序的属性名称查找配置属性，直到找到已被配置的配置属性，则停止查找：
+             * 1) jaxrstest.jaxrsclient.override.high
+             * 2) jaxrstest.jaxrsclient.override.low
+             *
+             * 测试用例：
+             * jaxrstest.jaxrsclient.override.high: hello high
+             * jaxrstest.jaxrsclient.override.low: hello low
+             * 预期：
+             * hello high
+             */
+            @InjectProperty(prefix = "jaxrstest.jaxrsclient.override", keys = {"high", "low"})
+            public String strValue;
         
-          /*
-            此处的prefix属性值"override"会覆盖标注在类定义的@InjectProperties注解的prefix属性值"root"，keys属性可以为一个字符串数组，
-            下标越小优先级越高。
-            这里会按照如下顺序的属性名称查找配置属性，直到找到已被配置的配置属性，则停止查找：
-            1)override.high
-            2)override.low
-          */
-          @InjectProperty(prefix = "override", keys = {"high", "low"})
-          public String strValue;
+            /**
+             * keys支持通配符，并在可以在将配置属性注入的时候指定通配符的代入对象。
+             *
+             * 测试用例：
+             * jaxrstest.jaxrsclient.k.value: 3
+             * 预期：
+             * 3
+             */
+            @InjectProperty(keys = "${key}.value")
+            public int intValue;
         
-          //keys支持通配符，并在可以在将配置属性注入的时候指定通配符的代入对象。
-          @InjectProperty(keys = "${key}.value")
-          public int intValue;
+            /**
+             * 通配符的代入对象可以是一个字符串List，优先级遵循数组元素下标越小优先级越高策略。
+             *
+             * 测试用例：
+             * jaxrstest.jaxrsclient.l1-1: 3.0
+             * jaxrstest.jaxrsclient.l1-2: 2.0
+             *
+             * 预期：
+             * 3.0
+             */
+            @InjectProperty(keys = "${full-list}")
+            public float floatValue;
         
-            //通配符的代入对象可以是一个字符串List，优先级遵循数组元素下标越小优先级越高策略
-           @InjectProperty(keys = "${full-list}")
-           public float floatValue;
+            /**
+             * keys属性也支持多个通配符，优先级如下：首先通配符的优先级从左到右递减，
+             * 然后如果通配符被代入List，遵循List中元素index越小优先级越高策略。
+             *
+             * 测试用例：
+             * jaxrstest.jaxrsclient.low-1.a.high-1.b: 1
+             * jaxrstest.jaxrsclient.low-1.a.high-2.b: 2
+             * jaxrstest.jaxrsclient.low-2.a.high-1.b: 3
+             * jaxrstest.jaxrsclient.low-2.a.high-2.b: 4
+             * 预期：
+             * 1
+             */
+            @InjectProperty(keys = "${low-list}.a.${high-list}.b")
+            public long longValue;
         
-          //keys属性也支持多个通配符，优先级如下：首先通配符的优先级从左到右递减，然后如果通配符被代入List，遵循List中元素index越小优先级越高策略。
-          @InjectProperty(keys = "${low-list}.a.${high-list}.b")
-          public long longValue;
-        
-            //可以通过注解的defaultValue属性指定默认值。如果字段未关联任何配置属性，定义的默认值会生效，否则默认值会被覆盖
-          @InjectProperty(defaultValue = "abc")
-          public String strDef;
-        
-        }
+            /**
+             * 可以通过注解的defaultValue属性指定默认值。如果字段未关联任何配置属性，
+             * 定义的默认值会生效，否则默认值会被覆盖。
+             *
+             * 测试用例：
+             * 预期：
+             * abc
+             */
+            @InjectProperty(defaultValue = "abc")
+            public String strDef;
+          }
         ```
 
 * 不使用注解
@@ -51,8 +92,9 @@ Java Bean，或是一个拥有public字段的类。
         ```Java
         public class ConfigNoAnnotation {
             /*
-            如果未提供@InjectProperties和@InjectProperty注解，会默认使用字段名作为配置属性名。注意类名不作为前缀起作用。
-            此处将配置属性 strValue 绑定到该字段
+             * 如果未提供@InjectProperties和@InjectProperty注解，会默认使用字段名作为配置属性名。
+             * 注意类名不作为前缀起作用。
+             * 此处将配置属性 strValue 绑定到该字段
             */
           public String strValue;
         }
@@ -64,7 +106,7 @@ Java Bean，或是一个拥有public字段的类。
 
         ```Java
         ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager()
-          .createConfigObject(ConfigWithAnnotation.class,
+          .createConfigObject(Configuration.class,
                 "key", "k",
                 "low-list", Arrays.asList("low-1", "low-2"),
                 "high-list", Arrays.asList("high-1", "high-2"),
@@ -72,17 +114,17 @@ Java Bean，或是一个拥有public字段的类。
                 );
         ```
 
-  ConfigWithAnnotation对象的longValue字段按以下顺序查找已配置的属性:
+  Configuration对象的longValue字段按以下顺序查找已配置的属性:
 
-    1.  root.low-1.a.high-1.b
-    2.  root.low-1.a.high-2.b
-    3.  root.low-2.a.high-1.b
-    4.  root.low-2.a.high-2.b
+        1.  root.low-1.a.high-1.b
+        2.  root.low-1.a.high-2.b
+        3.  root.low-2.a.high-1.b
+        4.  root.low-2.a.high-2.b
 
-  ConfigWithAnnotation对象的floatValue字段按以下顺序查找已配置的属性:
+  Configuration对象的floatValue字段按以下顺序查找已配置的属性:
   
-    1.  root.l1-1
-    2.  root.l1-2
+        1.  root.l1-1
+        2.  root.l1-2
     
 * 不使用注解的场景
 
@@ -91,14 +133,15 @@ Java Bean，或是一个拥有public字段的类。
           .getPriorityPropertyManager().createConfigObject(ConfigNoAnnotation.class);
         ```
         
-    ConfigWithAnnotation 对象的 strValue 字段会查找已配置的属性 strValue，没有前缀和优先级。
+    ConfigNoAnnotation 对象的 strValue 字段会查找已配置的属性 strValue，没有前缀和优先级。
 
   
-***注意事项: *** 2.1.0 之前的版本， 如果系统中存在大量调用createConfigObject的情况， 需要调用
+  ***注意事项:*** 2.1.0 之前的版本， 如果系统中存在大量调用createConfigObject的情况， 需要调用
 
-    ```Java
-    priorityPropertyManager.unregisterConfigObject(config)
-    ```
+        ```Java
+        priorityPropertyManager.unregisterConfigObject(config)
+        ```
+        
 进行显示回收。 2.1.0 及其之后的版本， 不需要调用这个接口，系统创建的对象是 WeakReference， 在未被
 业务引用以后，会自动回收。 
 
