@@ -116,9 +116,12 @@ servicecomb-kie 的配置项及其含义如下：
 |servicecomb.kie.firstRefreshInterval|interval pull模式下启动过程中首次刷新时间间隔，单位为毫秒，默认值为3000|
 |servicecomb.kie.enableLongPolling|long pulling模式是否开启，默认值为true|
 
+***说明：*** kie 的 yaml 和 properties 类型会映射为多个配置项， 其他类型，比如 json, text， 
+只会映射为一个配置项。开发者需要读取配置项自己解析内容。  
+
 * 使用 nacos
 
-[nacos](https://github.com/alibaba/nacos) 是 alibaba 提供的配置中心。 java-chassis 从 2.0.0 版本支持 nacos。 
+[nacos](https://github.com/alibaba/nacos) 是 alibaba 提供的配置中心。 java-chassis 从 2.1.0 版本支持 nacos。 
 nacos的下载安装请参考官网介绍。 
 
 使用nacos，需要在项目中引入如下依赖：
@@ -135,9 +138,18 @@ nacos的下载安装请参考官网介绍。
 ```yaml
 servicecomb:
   nacos:
-    serverUri: http://127.0.0.1:8848
-    group: DEFAULT_GROUP
-    dataId: example
+    serverAddr: http://127.0.0.1:8848
+    group: jaxrstest
+    dataId: jaxrsclient
+    namespace: public
+    # contentType 可以为 properties, yaml, raw. 
+    # raw： 只增加一个配置项 [group].[dataId]=value. nacos 的 JSON/TEXT/HTML等都对应这种类型
+    # properties： 增加多个配置项。 配置项前缀为 [group].[dataId]
+    # yaml： 增加多个配置项。 配置项前缀为 [group].[dataId]
+    contentType: properties 
+    # if true [group].[dataId] will added as properties/yaml 
+    # items prefix. Will not influence raw.
+    addPrefix: true 
 ```
 
 * 使用 Apollo
