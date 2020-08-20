@@ -45,7 +45,7 @@
         * [故障注入](build-consumer/fault-injection.md)
     * [调用第三方REST服务](build-consumer/3rd-party-service-invoke.md)
 * [通用功能开发](general-development/catalog.md)
-    * [应用性能监控](general-development/metrics.md)
+    * [应用性能监控（metrics）](general-development/metrics.md)
     * [微服务调用链](general-development/microservice-invocation-chain.md)
     * [自定义调用链打点](general-development/customized-tracing.md)
     * [本地开发和测试](general-development/local-develop-test.md)

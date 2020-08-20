@@ -1,6 +1,6 @@
 # 通用功能开发
 
-* [应用性能监控](metrics.md)
+* [应用性能监控（metrics）](metrics.md)
 * [微服务调用链](microservice-invocation-chain.md)
 * [自定义调用链打点](customized-tracing.md)
 * [本地开发和测试](local-develop-test.md)
