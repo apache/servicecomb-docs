@@ -1,35 +1,95 @@
-# 一、Metrics介绍
+# 应用性能监控（metrics）
 
-![](../assets/metrics/logicDiagram.png)
+应用性能监控通过周期性的统计数据，帮助开发者分析业务性能瓶颈，在性能优化、故障定位的时候非常有帮助。应用性能监控的指标包括
+请求各个环节的时延、线程池使用情况、连接池使用情况、CPU和网络使用情况等。
 
-1. 基于[netflix spectator](https://github.com/Netflix/spectator)
-2. Foundation-metrics通过SPI机制加载所有MetricsInitializer实现，实现者可以通过MetricsInitializer中的getOrder规划执行顺序，order数字越小，越先执行。
-3. Metrics-core实现3类MetricsInitializer：
-   1. DefaultRegistryInitializer: 实例化并注册spectator-reg-servo，设置较小的order，保证比下面2类MetricsInitializer先执行
-   2. Meters Initializer: 实现TPS、时延、线程池、jvm资源等等数据的统计
-   3. Publisher: 输出统计结果，内置了日志输出，以及通过RESTful接口输出
-4. Metrics-prometheus提供与prometheus对接的能力
+统计数据是一个周期性时效数据，只在统计周期内具有意义。可以选择通过 `REST` 接口查询实时的统计数据，也可以通过日志开关，将
+统计数据输出到日志文件里面，帮助分析性能问题。
 
-# 二、使用方法
+## 使用方法
 
-### 1.Maven依赖
-```
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>metrics-core</artifactId>
-</dependency>
-```
-如果与prometheus集成，则还需要加入依赖
-```
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>metrics-prometheus</artifactId>
-</dependency>
-```
+使用应用性能监控非常简单， 只需要在应用中包含相关的依赖包，通过配置项开启和关闭相关功能。 
 
-_注：请将version字段修改为实际版本号；如果版本号已经在dependencyManagement中声明，则这里不必写版本号_  
+1. 开启应用性能监控功能， 需要引入下面的依赖：
 
-### 2.配置说明
+        ```
+        <dependency>
+          <groupId>org.apache.servicecomb</groupId>
+          <artifactId>metrics-core</artifactId>
+        </dependency>
+        ```
+
+  如果与prometheus集成，则还需要加入依赖
+  
+        ```
+        <dependency>
+          <groupId>org.apache.servicecomb</groupId>
+          <artifactId>metrics-prometheus</artifactId>
+        </dependency>
+        ```
+
+  通过在 `microservice.yaml` 中增加下面的配置项，就可以将性能统计数据输出到日志文件中。
+  
+        ```
+        servicecomb:
+          metrics:
+            window_time: 60000
+            invocation:
+              latencyDistribution: 0,1,10,100,1000
+            Consumer.invocation.slow:
+              enabled: true
+              msTime: 1000
+            Provider.invocation.slow:
+              enabled: true
+              msTime: 1000
+            publisher.defaultLog:
+              enabled: true
+              endpoints.client.detail.enabled: true
+        ```
+  
+  上述配置开启了慢调用检测，如果存在慢调用，则会立即输出相应日志：
+
+        ```
+        2019-04-02 23:01:09,103\[WARN]\[pool-7-thread-74]\[5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
+          http method: GET
+          url        : /v1/syncQuery/{id}/
+          server     : highway://192.168.0.152:7070?login=true
+          status code: 200
+          total      : 50.760 ms
+            prepare                : 0.0 ms
+            handlers request       : 0.0 ms
+            client filters request : 0.0 ms
+            send request           : 0.5 ms
+            get connection         : 0.0 ms
+            write to buf           : 0.5 ms
+            wait response          : 50.727 ms
+            wake consumer          : 0.23 ms
+            client filters response: 0.2 ms
+            handlers response      : 0.0 ms (SlowInvocationLogger.java:121)
+        ```
+
+  其中 5ca37935c00ff2c7-350076 是 `${traceId}-${invocationId}` 的结构，在log4j2 或 logback 的输出格式中通过 %marker 引用。
+  
+  也可以通过 `REST` 接口查询性能统数据。使用浏览器访问http://ip:port/metrics 即可，将会得到类似下面格式的json数据：
+                         
+        ```
+        {
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=connectCount,type=client)": 0.0,
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=disconnectCount,type=client)": 0.0,
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=connections,type=client)": 1.0,
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=bytesRead,type=client)": 508011.0,
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=bytesWritten,type=client)": 542163.0,
+        "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=queueCount,type=client)": 0.0,
+        
+        "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=connectCount,type=server)": 0.0,
+        "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=disconnectCount,type=server)": 0.0,
+        "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=connections,type=server)": 1.0,
+        "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=bytesRead,type=server)": 542163.0
+        ... ...
+        }
+        ```
+
+## 配置说明
 
 <div class="metrics-cfg"></div>
 
@@ -45,142 +105,10 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
 | servicecomb.metrics.publisher.defaultLog<br>.enabled | false | 是否输出默认的统计日志 |
 | servicecomb.metrics.publisher.defaultLog<br>.endpoints.client.detail.enabled | false | 是否输出每一条client endpoint统计日志，因为跟目标的ip:port数有关，可能会有很多数据，所以默认不输出 |
 
-### 3.慢调用检测
-  开启慢调用检测后，如果存在慢调用，则会立即输出相应日志：
+## 统计指标含义说明
 
-```
-2019-04-02 23:01:09,103\[WARN]\[pool-7-thread-74]\[5ca37935c00ff2c7-350076] - slow(40 ms) invocation, CONSUMER highway perf1.impl.syncQuery
-  http method: GET
-  url        : /v1/syncQuery/{id}/
-  server     : highway://192.168.0.152:7070?login=true
-  status code: 200
-  total      : 50.760 ms
-    prepare                : 0.0 ms
-    handlers request       : 0.0 ms
-    client filters request : 0.0 ms
-    send request           : 0.5 ms
-    get connection         : 0.0 ms
-    write to buf           : 0.5 ms
-    wait response          : 50.727 ms
-    wake consumer          : 0.23 ms
-    client filters response: 0.2 ms
-    handlers response      : 0.0 ms (SlowInvocationLogger.java:121)
-```
+* CPU 统计信息
 
-  其中5ca37935c00ff2c7-350076是${traceId}-${invocationId}的结构，在log4j2或logback的输出格式中通过%marker引用
-
-### 4.通过RESTful访问
-只要微服务开放了rest端口，则使用浏览器访问http://ip:port/metrics 即可，
-将会得到类似下面格式的json数据：
-
-```
-{
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=connectCount,type=client)": 0.0,
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=disconnectCount,type=client)": 0.0,
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=connections,type=client)": 1.0,
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=bytesRead,type=client)": 508011.0,
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=bytesWritten,type=client)": 542163.0,
-  "servicecomb.vertx.endpoints(address=192.168.0.124:7070,statistic=queueCount,type=client)": 0.0,
-
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=connectCount,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=disconnectCount,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=connections,type=server)": 1.0,
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=bytesRead,type=server)": 542163.0,
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=bytesWritten,type=server)": 508011.0,
-  "servicecomb.vertx.endpoints(address=0.0.0.0:7070,statistic=rejectByConnectionLimit,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=connectCount,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=disconnectCount,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=connections,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=bytesRead,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=bytesWritten,type=server)": 0.0,
-  "servicecomb.vertx.endpoints(address=localhost:8080,statistic=rejectByConnectionLimit,type=server)": 0.0,
-
-  "threadpool.completedTaskCount(id=cse.executor.groupThreadPool-group0)": 4320.0,
-  "threadpool.rejectedCount(id=cse.executor.groupThreadPool-group0)": 0.0,
-  "threadpool.taskCount(id=cse.executor.groupThreadPool-group0)": 4320.0,
-  "threadpool.currentThreadsBusy(id=cse.executor.groupThreadPool-group0)": 0.0,
-  "threadpool.poolSize(id=cse.executor.groupThreadPool-group0)": 4.0,
-  "threadpool.maxThreads(id=cse.executor.groupThreadPool-group0)": 10.0,
-  "threadpool.queueSize(id=cse.executor.groupThreadPool-group0)": 0.0,
-  "threadpool.corePoolSize(id=cse.executor.groupThreadPool-group0)": 4.0,
-
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,scope=[0,1),status=200,transport=highway,type=latencyDistribution)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,scope=[1,3),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,scope=[3,10),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,scope=[10,100),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,scope=[100,),status=200,transport=highway,type=latencyDistribution)": 0.0,
-
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,scope=[0,1),status=200,transport=highway,type=latencyDistribution)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,scope=[1,3),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,scope=[3,10),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,scope=[10,100),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,scope=[100,),status=200,transport=highway,type=latencyDistribution)": 0.0,
-  
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=total,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=total,statistic=totalTime,status=200,transport=highway,type=stage)": 0.25269420000000004,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=total,statistic=max,status=200,transport=highway,type=stage)": 2.7110000000000003E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_request,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_request,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0079627,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_request,statistic=max,status=200,transport=highway,type=stage)": 1.74E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0060666,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=handlers_response,statistic=max,status=200,transport=highway,type=stage)": 1.08E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=prepare,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=prepare,statistic=totalTime,status=200,transport=highway,type=stage)": 0.016679600000000003,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=prepare,statistic=max,status=200,transport=highway,type=stage)": 2.68E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=queue,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=queue,statistic=totalTime,status=200,transport=highway,type=stage)": 0.08155480000000001,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=queue,statistic=max,status=200,transport=highway,type=stage)": 2.1470000000000001E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=execution,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=execution,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0098285,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=execution,statistic=max,status=200,transport=highway,type=stage)": 4.3100000000000004E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_request,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_request,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0170669,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_request,statistic=max,status=200,transport=highway,type=stage)": 3.6400000000000004E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0196985,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=server_filters_response,statistic=max,status=200,transport=highway,type=stage)": 4.8100000000000004E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=producer_send_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=producer_send_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0880885,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=PRODUCER,stage=producer_send_response,statistic=max,status=200,transport=highway,type=stage)": 1.049E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=total,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=total,statistic=totalTime,status=200,transport=highway,type=stage)": 0.9796976000000001,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=total,statistic=max,status=200,transport=highway,type=stage)": 6.720000000000001E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_request,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_request,statistic=totalTime,status=200,transport=highway,type=stage)": 0.012601500000000002,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_request,statistic=max,status=200,transport=highway,type=stage)": 3.5000000000000004E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0066785,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=handlers_response,statistic=max,status=200,transport=highway,type=stage)": 3.21E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=prepare,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=prepare,statistic=totalTime,status=200,transport=highway,type=stage)": 0.010363800000000001,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=prepare,statistic=max,status=200,transport=highway,type=stage)": 2.85E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_request,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_request,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0060282,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_request,statistic=max,status=200,transport=highway,type=stage)": 9.2E-6,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_send_request,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_send_request,statistic=totalTime,status=200,transport=highway,type=stage)": 0.099984,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_send_request,statistic=max,status=200,transport=highway,type=stage)": 1.1740000000000001E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_get_connection,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_get_connection,statistic=totalTime,status=200,transport=highway,type=stage)": 0.006916800000000001,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_get_connection,statistic=max,status=200,transport=highway,type=stage)": 5.83E-5,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_write_to_buf,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_write_to_buf,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0930672,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_write_to_buf,statistic=max,status=200,transport=highway,type=stage)": 1.1580000000000001E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wait_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wait_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.7654931,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wait_response,statistic=max,status=200,transport=highway,type=stage)": 5.547E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wake_consumer,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wake_consumer,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0502085,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=consumer_wake_consumer,statistic=max,status=200,transport=highway,type=stage)": 3.7370000000000003E-4,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_response,statistic=count,status=200,transport=highway,type=stage)": 4269.0,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_response,statistic=totalTime,status=200,transport=highway,type=stage)": 0.0227188,
-  "servicecomb.invocation(operation=perf1.impl.syncQuery,role=CONSUMER,stage=client_filters_response,statistic=max,status=200,transport=highway,type=stage)": 4.0E-5
-}
-```
-
-# 三、统计项汇总
-### 1. CPU
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -201,7 +129,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 2. NET
+* 网络统计信息
+
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -239,7 +168,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 3. vertx client endpoints  
+* vertx client endpoints 统计信息 
+  
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -289,7 +219,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 4. vertx server endpoints  
+* vertx server endpoints 统计信息
+  
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -339,7 +270,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 5. invocation 时延分布 
+* 时延分布概览
+ 
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -381,7 +313,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 6. invocation consumer stage时延 
+* consumer 详细时延分布
+
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -480,7 +413,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 7. invocation producer stage时延 
+* provider 详细时延分布
+
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -572,7 +506,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 8. invocation edge stage时延 
+* edge service 详细时延分布
+
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -687,7 +622,8 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-### 9. threadpool
+* 线程池信息
+
 <table class="metrics-table">
   <tr>
     <th>Name</th>
@@ -731,15 +667,32 @@ _注：请将version字段修改为实际版本号；如果版本号已经在dep
   </tr>
 </table>
 
-# 四、业务定制
 
-因为ServiceComb已经初始化了servo的registry，所以业务不必再创建registry
+## 开发者信息和高级课题
 
-实现MetricsInitializer接口，定义业务级的Meters，或实现定制的Publisher，再通过SPI机制声明自己的实现即可。
+* 实现原理
 
-### 1.Meters:  
-  创建Meters能力均由spectator提供，可查阅[netflix spectator](https://github.com/Netflix/spectator)文档
+![](../assets/metrics/logicDiagram.png)
 
-### 2.Publisher:
-周期性输出的场景，比如日志场景，通过eventBus订阅org.apache.servicecomb.foundation.metrics.PolledEvent，PolledEvent.getMeters()即是本周期的统计结果
-非周期性输出的场景，比如通过RESTful接口访问，通过globalRegistry.iterator()即可得到本周期的统计结果
+    1. 基于[netflix spectator](https://github.com/Netflix/spectator)
+    2. Foundation-metrics通过SPI机制加载所有MetricsInitializer实现，实现者可以通过MetricsInitializer中的getOrder规划执行顺序，order数字越小，越先执行。
+    3. Metrics-core实现3类MetricsInitializer：
+      1. DefaultRegistryInitializer: 实例化并注册spectator-reg-servo，设置较小的order，保证比下面2类MetricsInitializer先执行
+      2. Meters Initializer: 实现TPS、时延、线程池、jvm资源等等数据的统计
+      3. Publisher: 输出统计结果，内置了日志输出，以及通过RESTful接口输出
+    4. Metrics-prometheus提供与prometheus对接的能力
+
+
+* 业务定制
+
+因为ServiceComb已经初始化了servo的registry，所以业务不必再创建registry。实现MetricsInitializer接口，定
+  义业务级的Meters，或实现定制的Publisher，再通过SPI机制声明自己的实现即可。
+
+  1.Meters
+  
+    创建Meters能力均由spectator提供，可查阅[netflix spectator](https://github.com/Netflix/spectator)文档
+
+  2.Publisher
+  
+    周期性输出的场景，比如日志场景，通过eventBus订阅org.apache.servicecomb.foundation.metrics.PolledEvent，PolledEvent.getMeters()即是本周期的统计结果
+     非周期性输出的场景，比如通过RESTful接口访问，通过globalRegistry.iterator()即可得到本周期的统计结果

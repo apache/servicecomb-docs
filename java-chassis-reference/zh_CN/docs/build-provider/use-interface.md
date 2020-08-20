@@ -1,7 +1,7 @@
 # 只发布interface的方法为服务接口
 
 不管采用 `JAX RS`, `Spring MVC`， 还是采用 `透明RPC` 开发， java-chassis 默认会扫描实现类的所有方法，
-将 `public` 方法发布为服务接口。 从 2.1.0 版本开始， 增加了 `schemaInterface` 属性， 实现类可以通过
+将 `public` 方法发布为服务接口。 从 2.1.1 版本开始， 增加了 `schemaInterface` 属性， 实现类可以通过
 实现 `schemaInterface` 对应的接口， 最终只有 `schemaInterface` 的方法发布为服务接口。 
 
 ## JAX RS 的例子
