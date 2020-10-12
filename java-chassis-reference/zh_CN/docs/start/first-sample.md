@@ -28,6 +28,15 @@
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>solution-basic</artifactId>
   </dependency>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>registry-service-center</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j-impl</artifactId>
+    <version>2.12.1</version>
+</dependency>
 </dependencies>
 ```
 `solution-basic`中已经包含了常见场景下开发Java-Chassis微服务所需的全部依赖项。
