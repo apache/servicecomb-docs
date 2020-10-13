@@ -1,6 +1,7 @@
 install:
   - npm install gitbook-cli -g
   - sudo pip install mkdocs
+  - sudo pip install ./plugins/bing-search
   - chmod +x scripts/travis.sh
 script: 
   - scripts/travis.sh script

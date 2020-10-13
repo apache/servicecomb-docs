@@ -77,7 +77,7 @@ servicecomb:
       errorThresholdPercentage: 0
       enableRequestThreshold: 5
       singleTestTime: 60000
-      continuousFailureThreshold: 5
+      continuousFailureThreshold: 2
 ```
 
 隔离的统计周期是1分钟。按照上面的配置，在1分钟内，如果请求总数大于5，并且连续错误超过2次，那么就会将实例隔离。
