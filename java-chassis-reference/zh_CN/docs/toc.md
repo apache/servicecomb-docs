@@ -32,6 +32,7 @@
         * [限流策略](build-provider/configuration/ratelimite-strategy.md)
         * [参数效验](build-provider/configuration/parameter-validator.md)
         * [程序启动逻辑](build-provider/bootup.md)
+    * [IPV6配置和使用](build-provider/ipv6-configuration.md)
     * [Access Log配置](build-provider/access-log-configuration.md)
 * [开发服务消费者](build-consumer/catalog.md)
     * [消费者通用配置项](build-consumer/common-configuration.md)
