@@ -91,6 +91,7 @@
     - [使用TLS通信](security/tls.md)
     - [使用RSA认证](security/shi-yong-rsa-ren-zheng.md)
     - [公钥认证](references-handlers/publickey.md)
+    - [RBAC认证](security/rbac.md)
 * 管理服务配置:
     * [通用配置说明](config/general-config.md)
     * [配置注入机制](config/inject-config.md)
