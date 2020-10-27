@@ -6,6 +6,7 @@ nav:
 - 概述 : index.md
 - 快速入门: start/catalog.md
 - 设计选型参考: start/design.md
+- 微服务定义: build-provider/definition/service-definition.md
 - 开发服务提供者: build-provider/catalog.md
 - 开发服务消费者: build-consumer/catalog.md
 - 通用功能开发: general-development/catalog.md
