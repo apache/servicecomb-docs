@@ -1,6 +1,5 @@
 # 开发服务提供者
 
-* [微服务定义](definition/service-definition.md)
 * [理解服务契约](define-contract.md)
 * [用JAX-RS开发微服务](jaxrs.md)
 * [用SpringMVC开发微服务](springmvc.md)
