@@ -1,7 +1,9 @@
-# 用JAX-RS开发微服务
+# 用 JAX-RS 开发微服务
 ## 概念阐述
 
-ServiceComb支持开发者使用JAX-RS注解，使用[JAX-RS](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/jaxrs-sample)模式开发服务。
+ServiceComb支持开发者使用JAX-RS注解，使用 [JAX-RS][jax-rs-sample] 模式开发服务。
+
+[jax-rs-sample]: https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample
 
 ## 开发示例
 
@@ -82,7 +84,9 @@ public class JaxrsProviderMain{
 
 ## 涉及API
 
-JAX-RS开发模式当前支持如下注解，所有注解的使用方法参考[JAX-RS官方文档](https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html)。
+JAX-RS开发模式当前支持如下注解，所有注解的使用方法参考 [JAX-RS官方文档][jax-rs-spec]。
+
+[jax-rs-spec]: https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
 
 ### 表1-1JAX-RS注解支持汇总
 
@@ -190,7 +194,7 @@ public interface HelloServiceIntf {
 ```
 
 - 调用代码
-  
+
 ```java
 String result = helloService.sayHello("Bob", 22); // result的值为"Hello, your name is Bob, and age is 22"
 ```

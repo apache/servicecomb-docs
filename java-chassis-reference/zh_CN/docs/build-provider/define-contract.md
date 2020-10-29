@@ -7,7 +7,7 @@ servicecomb 的核心设计理念是 `以契约为中心`，契约是微服务�
 * code first
 
   开发者首先通过 JAVA 代码定义接口信息，servicecomb 会根据代码定义，生成以 yaml 文件描述的 OpenAPI
-  文档。 servicecomb 支持使用 `JAX-RS`, `Sprig MVC` 等  REST Annotation 描述接口信息，还可以通过
+  文档。 servicecomb 支持使用 `JAX-RS`, `Spring MVC` 等  REST Annotation 描述接口信息，还可以通过
   swagger API 补充其他接口信息。 在使用 `RPC` 方式定义接口的时候， 系统会按照默认的规则生成接口描述，
   也可以使用这些标签修饰接口信息，让契约信息更加容易阅读和理解。
 
