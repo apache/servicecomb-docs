@@ -78,6 +78,9 @@ servicecomb:
       enableRequestThreshold: 5
       singleTestTime: 60000
       continuousFailureThreshold: 2
+      maxSingleTestWindow: 60000 # 为了保证在并发情况下只有一个实例放通，会锁定放通实例。这个时间表示最大锁定时间。
+      minIsolationTime: 3000 # 最短隔离时间。并发情况下，实例隔离后进行中的请求可能快速刷新隔离状态，增加最短隔离时间。
+      recoverImmediatelyWhenSuccess：true # 放通实例，如果调用成功，立即清除统计状态，保证后续请求能够使用该实例。 2.1.3 新增。
 ```
 
 隔离的统计周期是1分钟。按照上面的配置，在1分钟内，如果请求总数大于5，并且连续错误超过2次，那么就会将实例隔离。
@@ -86,7 +89,8 @@ servicecomb:
 
 注意事项：
 
-1. 当错误率达到设定值导致实例隔离后，要想恢复，需要等待隔离时间窗结束后的第一次成功请求进行周期性累加，直到总的错误率下降到设定值以下才行。由于请求总数是触发实例隔离的门槛，若请求总数达到设定值时计算出来的错误率远大于设定值，要想恢复是需要很久的。
+1. 2.1.2 之前的版本，当错误率达到设定值导致实例隔离后，要想恢复，需要等待隔离时间窗结束后的第一次成功请求进行周期性累加，直到总的错误率下降到设定值以下才行。
+  由于请求总数是触发实例隔离的门槛，若请求总数达到设定值时计算出来的错误率远大于设定值，要想恢复是需要很久的。 使用 2.1.3 及其之后的版本没有这个问题。
 2. ServiceComb为了检测实例状态，在后台启动类一个线程，每隔10秒检测一次实例状态（如果实例在10秒内有被访问，则不检测），如果检测失败，每次检测会将错误计数加1。这里的计数，也会影响实例隔离。
 
 系统缺省的实例状态检测机制是发送一个telnet指令，参考SimpleMicroserviceInstancePing的实现。如果业务需要覆盖状态检测机制，可以通过如下两个步骤完成：
@@ -107,8 +111,6 @@ servicecomb:
         singleTestTime: 10000
         continuousFailureThreshold: 2
 ```
-
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.isolation.enabled进行关闭。数据中心信息隔离功能在IsolationDiscoveryFilter实现。
 
 ***注意：*** 多数异常都会触发隔离计数。但一般的 `InvocationException` 不会触发隔离计数。详细可以参考
 `LoadbalanceHandler` 的 `isFailedResponse` 方法实现。
