@@ -29,7 +29,7 @@ servicecomb 微服务定义包括两个基础模型 `Microservice` 和 `Microser
 | servicecomb.service.name | 2.1.2 | defaultMicroservice | 是 | 微服务名, 应确保应用内部唯一。微服务名支持数字、大小写字母和"-"、"\_"、"."三个特殊字符，但是不能以特殊字符作为首尾字符，命名规范为：^\[a-zA-Z0-9\]+$&#124;^\[a-zA-Z0-9\]\[a-zA-Z0-9\_-.\]\*\[a-zA-Z0-9\]$。 |
 | servicecomb.service.version | 2.1.2 | 1.0.0.0 | 是 | 微服务版本号 |
 | servicecomb.service.role | 2.1.2 | FRONT | 否 | 服务类型 |
-| servicecomb.service.description | 2.1.2+| - | 否 | 微服务描述 |
+| servicecomb.service.description | 2.1.2 | - | 否 | 微服务描述 |
 | ervicecomb.service.environment | 2.1.2 | - | 否 | 运行环境，比如 development, production 等 |
 | servicecomb.service.propertyExtendedClass | 2.1.2 | - | 否 | 微服务元数据配置扩展信息， 接口返回的配置会覆盖配置文件中key相同的配置。|
 | servicecomb.service.properties | 2.1.2 | - | 否 | 服务实例元数据配置（通过microservice.yaml文件进行配置）|
