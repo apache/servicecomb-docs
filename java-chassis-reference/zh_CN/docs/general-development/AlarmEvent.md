@@ -53,7 +53,7 @@ Java-Chassis 会在运行期间抛出一些与微服务治理相关的告警事�
   </tr>
   <tr>
     <td>requestVolumeThreshold</td>
-    <td>10s内统计错误发生次数阈值，若超过此阈值则开始计算请求错误率，判断是否熔断</td>
+    <td>10s内请求数需要大于等于这个参数值，才开始计算错误率和判断是否进行熔断</td>
   </tr>
   <tr>
     <td>sleepWindowInMilliseconds</td>

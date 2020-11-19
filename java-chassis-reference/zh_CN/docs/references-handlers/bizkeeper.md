@@ -87,8 +87,8 @@ servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled
 | servicecomb.circuitBreaker.[type].[scope].forceOpen | FALSE | - | 否 | 不管失败次数，都进行熔断 |  |
 | servicecomb.circuitBreaker.[type].[scope].forceClosed | FALSE | - | 否 | 任何时候都不熔断 | 当与forceOpen同时配置时，forceOpen优先。 |
 | servicecomb.circuitBreaker.[type].[scope].sleepWindowInMilliseconds | 15000 | - | 否 | 熔断后，多长时间恢复 | 恢复后，会重新计算失败情况。注意：如果恢复后的调用立即失败，那么会立即重新进入熔断。 |
-| servicecomb.circuitBreaker.[type].[scope].requestVolumeThreshold | 20 | - | 否 | 10s内统计错误发生次数阈值，超过阈值则触发熔断 | 由于10秒还会被划分为10个1秒的统计周期，经过1s中后才会开始计算错误率，因此从调用开始至少经过1s，才会发生熔断。 |
-| servicecomb.circuitBreaker.[type].[scope].errorThresholdPercentage | 50 | - | 否 | 错误率阈值，达到阈值则触发熔断 |  |
+| servicecomb.circuitBreaker.[type].[scope].requestVolumeThreshold | 20 | - | 否 | 10s内请求数需要大于等于这个参数值，才开始计算错误率和判断是否进行熔断。 |  |
+| servicecomb.circuitBreaker.[type].[scope].errorThresholdPercentage | 50 | - | 否 | 错误率阈值，达到阈值则触发熔断 | 由于10秒还会被划分为10个1秒的统计周期，经过1s中后才会开始计算错误率，因此从调用开始至少经过1s，才会发生熔断。 |
 | servicecomb.fallback.[type].[scope].enabled | TRUE | - | 否 | 是否启用出错后的故障处理措施 |  |
 | servicecomb.fallback.[type].[scope].maxConcurrentRequests | 10 | - | 否 | 并发调用容错处理措施（servicecomb.fallbackpolicy.policy）的请求数，超过这个值则不再调用处理措施，直接返回异常 |  |
 | servicecomb.fallbackpolicy.[type].[scope].policy | throwexception | returnull \| throwexception | 否 | 出错后的处理策略 |  |
