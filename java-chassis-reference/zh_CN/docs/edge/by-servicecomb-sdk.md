@@ -153,6 +153,7 @@ CommonHttpEdgeDispatcher 能够将请求转发到监听 HTTP 或者 HTTP 2 协�
 servicecomb:
   http:
     dispatcher:
+      edge:
         http:
           enabled: true
           pattern: /(.*) ## 默认值，一般不需要配置
