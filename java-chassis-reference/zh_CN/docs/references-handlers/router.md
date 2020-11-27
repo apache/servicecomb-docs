@@ -18,7 +18,7 @@
 | 配置项名                                   | 描述                   |
 | ------------------------------------------ | ---------------------- |
 | servicecomb.routeRule.[targetService]      | 目标服务的路由管理规则 |
-| servicecomb.routeRule.type                 | 填写'router'           |
+| servicecomb.router.type                    | 填写'router'           |
 
 路由管理规则实例如下：
 
