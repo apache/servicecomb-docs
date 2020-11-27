@@ -18,9 +18,9 @@ nav:
     - HTTP2: transports/http2.md
 - 多样化的服务注册与发现功能参考:
     - 注册发现说明: registry/introduction.md
+    - 使用服务中心: registry/service-center.md
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
-    - 连接多个服务中心: registry/multi-registries.md
 - 服务治理功能参考:
       - 处理链介绍: references-handlers/intruduction.md
       - 负载均衡: references-handlers/loadbalance.md

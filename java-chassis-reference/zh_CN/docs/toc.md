@@ -73,10 +73,10 @@
     * [HTTP2](transports/http2.md)
 * 多样化的服务注册与发现功能参考:
     * [注册发现说明](registry/introduction.md)
+    * [使用服务中心](registry/service-center.md)
     * [本地注册发现](registry/local-registry.md)
     * [去中心化注册发现](registry/distributed.md)
-    * [连接多个服务中心](registry/multi-registries.md)
-- 服务治理功能参考:: 
+- 服务治理功能参考:
     - [处理链介绍](references-handlers/intruduction.md)
     - [负载均衡](references-handlers/loadbalance.md)
     - [限流](references-handlers/ratelimit.md)
@@ -91,7 +91,6 @@
     - [使用TLS通信](security/tls.md)
     - [使用RSA认证](security/shi-yong-rsa-ren-zheng.md)
     - [公钥认证](references-handlers/publickey.md)
-    - [RBAC认证](security/rbac.md)
 * 管理服务配置:
     * [通用配置说明](config/general-config.md)
     * [配置注入机制](config/inject-config.md)
