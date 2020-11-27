@@ -1,7 +1,7 @@
 ## 使用RestTemplate开发服务消费者
 RestTemplate是Spring提供的RESTful访问接口，ServiceComb提供该接口的实现类用于服务的调用。
 
-## 使用AsynRestTemplate开发服务消费者
+## 使用AsyncRestTemplate开发服务消费者
 AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 RestTemplate 类似，只是这里以异步的形式进行服务的调用。
 
 ## 使用透明RPC方式开发服务消费者

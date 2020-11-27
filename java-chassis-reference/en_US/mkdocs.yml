@@ -27,7 +27,7 @@ nav:
 - Writing Service Consumer: 
     - Consumer common configuration: build-consumer/common-configuration.md
     - Using Rest Template: build-consumer/using-resttemplate.md
-    - Using AsynRestTemplate: build-consumer/using-AsyncRestTemplate.md
+    - Using AsyncRestTemplate: build-consumer/using-AsyncRestTemplate.md
     - Using with RPC: build-consumer/develop-consumer-using-rpc.md
     - Contract: build-consumer/with-contract.md
     - Invoke control: 

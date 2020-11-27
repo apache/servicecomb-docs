@@ -1,7 +1,7 @@
 ## Develop consumer with Rest Template
 RestTemplate is a RESTful API provided by the Spring framework.  ServiceComb provides the implementation class for service calling
 
-## Develop consumer with AsynRestTemplate
+## Develop consumer with AsyncRestTemplate
 AsyncRestTemplate allows users to make asynchronous service calls. The logic is similar to restTemplate, except that the service is called asynchronously.
 
 ## Develop consumer with transparent RPC

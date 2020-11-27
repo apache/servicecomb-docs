@@ -14,11 +14,10 @@
 * [定制序列化和反序列化方法](secret-field.md)
 * [使用Context传递控制消息](context.md)
 * [返回值序列化扩展](produceprocess.md)
-* [CORS机制](CORS.md)
+* [跨域资源共享(CORS)配置](CORS.md)
 * [获取熔断与实例隔离告警事件信息](AlarmEvent.md)
 * [优雅停机](shutdown.md)
 * [异常处理](error-handling.md)
 * [微服务实例间多环境隔离](multienvironment.md)
 * [线程模型](thread-model.md)
-
-    
+* [配置日志](config-logs.md)    
