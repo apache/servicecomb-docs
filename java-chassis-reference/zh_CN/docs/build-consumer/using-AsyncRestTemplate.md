@@ -1,4 +1,22 @@
-# 使用AsynRestTemplate开发服务消费者
+# 使用AsyncRestTemplate开发服务消费者
+
+***注意***: AsyncRestTemplate 接口在新版本的 Spring 接口中已经废弃。 建议使用异步 RPC 接口访问， 例如：
+
+```
+interface Hello {
+  CompletableFuture<String> sayHi(String name);
+}
+
+@Component
+public class SomeBean {
+  ......
+
+  @RpcReference(microserviceName = "helloService", schemaId = "helloSchema")
+  private Hello hello;
+
+  ......
+}
+```
 
 ## 概念阐述
 

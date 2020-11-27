@@ -1,4 +1,4 @@
-# Develop consumer with AsynRestTemplate
+# Develop consumer with AsyncRestTemplate
 
 ## Concepts
 
