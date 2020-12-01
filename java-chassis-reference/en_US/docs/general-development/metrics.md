@@ -470,7 +470,7 @@ will get json data in the following format:
     <td>totalTime</td>
     <td>In seconds<br>
         totalTime=The total duration of the call in the current period (seconds)<br>
-        AverageTime divided by count to get the average latency</td>
+        totalTime divided by count to get the average latency</td>
   </tr>
   <tr>
     <td>max</td>
