@@ -29,7 +29,6 @@
     * [线程池](build-provider/thread-pool.md)
     * [服务启动事件](build-provider/event-listener.md)
     * 服务配置 
-        * [限流策略](build-provider/configuration/ratelimite-strategy.md)
         * [参数效验](build-provider/configuration/parameter-validator.md)
         * [程序启动逻辑](build-provider/bootup.md)
     * [IPV6配置和使用](build-provider/ipv6-configuration.md)
@@ -42,7 +41,6 @@
     * [泛化调用](featured-topics/features/invoker.md)
     * [使用服务契约](build-consumer/with-contract.md)
     * 调用控制
-        * [限流策略](build-consumer/flow-control.md)
         * [故障注入](build-consumer/fault-injection.md)
     * [调用第三方REST服务](build-consumer/3rd-party-service-invoke.md)
 * [通用功能开发](general-development/catalog.md)

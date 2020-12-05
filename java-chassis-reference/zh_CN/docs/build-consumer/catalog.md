@@ -7,6 +7,5 @@
 * [泛化调用](../featured-topics/features/invoker.md)
 * [使用服务契约](with-contract.md)
 * 调用控制
-    * [限流策略](flow-control.md)
     * [故障注入](fault-injection.md)
 * [调用第三方REST服务](3rd-party-service-invoke.md)
