@@ -12,7 +12,6 @@
 * [线程池](thread-pool.md)
 * [服务启动事件](event-listener.md)
 * 服务配置 
-    * [限流策略](configuration/ratelimite-strategy.md)
     * [参数效验](configuration/parameter-validator.md)
     * [程序启动逻辑](bootup.md)
 * [IPV6配置和使用](ipv6-configuration.md)
