@@ -37,65 +37,18 @@ JDK已经安装成功。
 
 ### **安装步骤**
 
-a.在官方地址下载Maven安装包。
+* 在官方地址下载Maven安装包。
+* 解压Maven安装包到本机路径。
+* 设置环境变量:
+  * 设置M2\_HOME环境变量，指向Maven安装目录。
+  * 将%M2\_HOME%\bin添加到系统路径path中。
+* 结果验证
+  
+  使用mvn -version命令验证是否安装成功，windows环境下回显如下：
 
-b.（可选）在官方地址下载Eclipse插件m2eclipse。最新的Eclipse版本中带有Maven插件，则不用下载此插件
+        C:\>mvn -version        
+        Apache Maven 3.3.9
 
-c.解压Maven安装包到本机路径。
-
-d.设置环境变量。
-
-* 设置M2\_HOME环境变量，指向Maven安装目录。
-
-* 将%M2\_HOME%\bin添加到系统路径path中。
-
-e.（可选）设置本地仓库路径，用于保存从远程仓库获取的插件和依赖的副本。
-
-这里以路径D:\maven\repository为例。在/conf中找到settings.xml文件，设置localRepository为D:\maven\repository
-
-f. （可选）要想项目能够快速的下载各种依赖，建议配置一下maven仓库地址。
-
-在`profiles`中增加如下配置：
-```xml
-<profile>
-    <id>MyProfile</id>
-    <repositories>
-        <repository>
-            <id>SDK</id>
-            <url>https://repo.huaweicloud.com/repository/maven/huaweicloudsdk/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-</profile>
-```
-在`mirrors`节点中增加如下配置：
-```xml
-<mirror>
-    <id>RepoMirror</id>
-    <mirrorOf>*,!SDK</mirrorOf>
-    <url>https://repo.huaweicloud.com/repository/maven/</url>
-</mirror>
-```
-新增`activeProfiles`配置：
-```xml
-<activeProfiles>
-    <activeProfile>MyProfile</activeProfile>
-</activeProfiles>
-```
-
-g.结果验证
-
-使用mvn -version命令验证是否安装成功，windows环境下回显如下：
-
-```
-C:\>mvn -version        
- Apache Maven 3.3.9
-```
 
 ## Eclipse安装
 
