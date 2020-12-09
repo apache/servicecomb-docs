@@ -31,13 +31,13 @@ servicecomb:
        requestVolumeThreshold: 3
  fallbackpolicy:
    Provider:
-     policy: returnnull
+     policy: returnNull
 ```
 
 也可以通过环境变量的方式动态修改配置文件的值，比如采用以下指令重新运行即可：
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.handler.chain.Provider.default=bizkeeper-provider -Dservicecomb.circuitBreaker.Provider.calculator.requestVolumeThreshold=3 -Dservicecomb.fallbackpolicy.Provider.policy=returnnull"
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.handler.chain.Provider.default=bizkeeper-provider -Dservicecomb.circuitBreaker.Provider.calculator.requestVolumeThreshold=3 -Dservicecomb.fallbackpolicy.Provider.policy=returnNull"
 ```
 
 ## 验证

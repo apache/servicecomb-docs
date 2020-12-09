@@ -91,7 +91,7 @@ servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled
 | servicecomb.circuitBreaker.[type].[scope].errorThresholdPercentage | 50 | - | 否 | 错误率阈值，达到阈值则触发熔断 | 由于10秒还会被划分为10个1秒的统计周期，经过1s中后才会开始计算错误率，因此从调用开始至少经过1s，才会发生熔断。 |
 | servicecomb.fallback.[type].[scope].enabled | TRUE | - | 否 | 是否启用出错后的故障处理措施 |  |
 | servicecomb.fallback.[type].[scope].maxConcurrentRequests | 10 | - | 否 | 并发调用容错处理措施（servicecomb.fallbackpolicy.policy）的请求数，超过这个值则不再调用处理措施，直接返回异常 |  |
-| servicecomb.fallbackpolicy.[type].[scope].policy | throwexception | returnull \| throwexception | 否 | 出错后的处理策略 |  |
+| servicecomb.fallbackpolicy.[type].[scope].policy | throwException | returnNull \| throwexception | 否 | 出错后的处理策略 |  |
 
 **小心**：谨慎使用 `servicecomb.isolation.timeout.enabled=true` 。因为系统处理链都是异步执行，中间处理链的返回，会导致
 后面处理链的逻辑处理效果丢失。尽可能将 `servicecomb.isolation.timeout.enabled` 保持默认值false，并且正确设置网络层超时时
@@ -121,7 +121,7 @@ servicecomb:
       enabled: true
   fallbackpolicy:
     Consumer:
-      policy: throwexception
+      policy: throwException
 ```
 
 > **说明：**  

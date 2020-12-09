@@ -66,7 +66,7 @@ For Consumers, the conriguration item should be servicecomb.isolation.Provider.t
 | servicecomb.circuitBreaker.[type].errorThresholdPercentage  | 50             | -                             | No       | The threshold of error rate. If the threshold is reached, circuit breaker is triggered. |                                                              |
 | servicecomb.fallback.[type].enabled                         | TRUE           | -                             | No       | Enable fallback handling or not                              |                                                              |
 | servicecomb.fallback.[type].maxConcurrentRequests           | 10             | -                             | No       | The max number of concurrent fallback(specified by servicecomb.fallbackpolicy.policy) calls. When the threshold is reached, the fallback method is not called by return exception directly. |                                                              |
-| servicecomb.fallbackpolicy.[type].policy                    | throwexception | returnnulll \| throwexception | No       | The fallback policy when errors occurred.                    |                                                              |
+| servicecomb.fallbackpolicy.[type].policy                    | throwException | returnNull \| throwException | No       | The fallback policy when errors occurred.                    |                                                              |
 
 **Caution:** Be cautious to set servicecomb.isolation.timeout.enabled to true. All handlers in the handler chain are asynchronously executed, the intermediate handlers' return will make the follow-up handlers processing abandoned. Therefore, we recommend to set servicecomb.isolation.timeout.enabled to be false(by default) and set the network timeout duration servicecomb.request.timeout to 30000.
 
@@ -94,7 +94,7 @@ servicecomb:
       enabled: true
   fallbackpolicy:
     Consumer:
-      policy: throwexception
+      policy: throwException
 ```
 
 > **NOTE:**
