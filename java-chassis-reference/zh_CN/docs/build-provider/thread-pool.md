@@ -43,3 +43,4 @@ Java Chassis 提供了一个全局的内置线程池， 如果业务有特殊的
 | servicecomb.executor.default.maxThreads-per-group   | 100               | 每组线程池的最大线程数                                                    |
 | servicecomb.executor.default.maxIdleSecond-per-group| 60                | 每组线程池中超过coreThreads-per-group的线程，如果idle超时，则会销毁该线程 |
 | servicecomb.executor.default.maxQueueSize-per-group | Integer.MAX_VALUE | 每组线程池中任务队列的最大长度                                            |
+| servicecomb.rest.server.requestWaitInPoolTimeout    | 30000             |在同步线程中排队等待执行的超时时间，单位为毫秒         |
