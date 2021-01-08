@@ -73,10 +73,15 @@ servicecomb:
         - headers
           Authentication: 
             prefix: Basic
+      services: helloService
 ```
 
 一个流量对应一个 Key， userLoginAction 为 Key 的名称。 一个流量可以定义多个标记规则，每个标记规则里面可以定义 `apiPath`,
 `method`, `headers` 匹配规则。 不同标记规则是或的关系，匹配规则是与的关系。
+
+`services` 是治理规则公共属性，指出这个限流规则的生效范围。在应用系统设计的规程中，流量标记、治理规则对于所有微服务都是可见的，一个微服务只会启用
+`services` 包含自己的规则。这个属性可选，表示这条规则默认生效。可以使用 `example:1.0.0` 格式指明服务和版本，多个服务用逗号分隔，比如：
+`foo:1.0.0,bar`。
 
 * 算子
 
@@ -90,27 +95,16 @@ servicecomb:
      数据范围。在进行 = 和 != 判断时 ， 如果二者的差值小于1e-6就视为相等。例如模式串为: >-10 会对大于-10以上的目标串匹配成功。
 
 流量标记可以在不同的应用层实现，比如在提供 REST 接口的服务端，可以通过 `HttpServletRequest` 获取流量信息。在 RestTemplate 调用的客户端，可以从
-`RestTemplate` 获取流量信息。不同的框架和应用层，提取信息的方式不一样。 实现层通过将特征映射到 `GovHttpRequest` 来屏蔽这些差异，使得在不同的框架，
+`RestTemplate` 获取流量信息。不同的框架和应用层，提取信息的方式不一样。 实现层通过将特征映射到 `GovernanceRequest` 来屏蔽这些差异，使得在不同的框架，
 不同的应用层都可以使用治理。
 
 ```java
-public class GovHttpRequest {
-  private final String serviceName;
-
-  private final String version;
-
+public class GovernanceRequest {
   private Map<String, String> headers;
 
   private String uri;
 
   private String method;
-
-  public GovHttpRequest(String serviceName, String version) {
-    Assert.notNull(serviceName, "serviceName should not be null");
-    Assert.notNull(version, "version should not be null");
-    this.serviceName = serviceName;
-    this.version = version;
-  }
 }
 ```
 
@@ -129,9 +123,6 @@ servicecomb:
 规则解释：限流规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为： 每隔limitRefreshPeriod的时间会加入limitForPeriod个新许可，
 如果获取不到新的许可(已经触发限流)，当前线程会park，最多等待timeoutDuration的时间，默认单位为ms。在异步框架中，建议 timeoutDuration
 设置为0，否则可能阻塞事件派发线程。
-
-services 是治理规则公共属性，指出这个限流规则的生效范围。在应用系统设计的规程中，流量标记、治理规则对于所有微服务都是可见的，一个微服务只会启用
-services 包含自己的规则。这个属性可选，表示这条规则默认生效。
 
 ### 重试
 
