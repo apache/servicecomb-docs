@@ -4,6 +4,10 @@
 
 透明RPC开发模式是一种基于接口和接口实现的开发模式，服务的开发者不需要使用Spring MVC和JAX-RS注解。
 
+[透明RPC例子][pojo-sample] 提供了一些基础的代码示例，可以下载使用。
+
+[pojo-sample]: https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/pojo-sample
+
 ## 开发示例
 
 透明RPC开发模式支持Spring xml配置和注解配置两种服务发布方式，通过Spring xml配置的方式如下：
