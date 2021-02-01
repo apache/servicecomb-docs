@@ -45,12 +45,14 @@ cp -r docs/ servicecomb-java-chassis-doc/
 ls -l servicecomb-java-chassis-doc/docs/java-chassis
 ls -l servicecomb-java-chassis-doc/docs/java-chassis/1.x
 
-echo "Starting push docs"
+echo "Starting prepare docs"
 cd servicecomb-java-chassis-doc
 git add docs
 git commit -m "Publish gitbook docs"
-git config --local user.email bismy@qq.com
-git config --local user.name libuao68
+git config --local user.email "bismy@qq.com"
+git config --local user.name "libuao68"
+
+echo "Starting push docs"
 git push https://3fbf951cac299b8fe7834284bb2a557332fdbf3e@github.com/huaweicse/servicecomb-java-chassis-doc.git master
 
 
