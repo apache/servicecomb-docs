@@ -4,7 +4,7 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
 支持使用这套标签定义 REST 接口。需要注意的是，servicecomb 只是使用这些注解，而注解的实现是项目自行开发的，
 实现的功能集合是 Spring MVC 注解的子集。可以阅读文章后面的内容了解具体的标签集合和使用约束。
 
-[SpringMVC Sample](spring-mvc-sample) 提供了一些基础的代码示例，可以下载使用。
+[SpringMVC Sample][spring-mvc-sample] 提供了一些基础的代码示例，可以下载使用。
 
 [spring-mvc-sample]: https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample
 

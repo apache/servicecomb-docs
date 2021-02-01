@@ -120,7 +120,7 @@ servicecomb:
       services: helloService
 ```
 
-规则解释：限流规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为： 每隔limitRefreshPeriod的时间会加入limitForPeriod个新许可，
+规则解释：限流规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为： 每隔limitRefreshPeriod的时间会加入limitForPeriod（即rate）个新许可，
 如果获取不到新的许可(已经触发限流)，当前线程会park，最多等待timeoutDuration的时间，默认单位为ms。在异步框架中，建议 timeoutDuration
 设置为0，否则可能阻塞事件派发线程。
 
@@ -159,7 +159,7 @@ servicecomb:
     userLoginAction: |
       failureRateThreshold：50
       slowCallRateThreshold： 100
-      SlowCallDurationThreshold： 60000
+      slowCallDurationThreshold： 60000
       minimumNumberOfCalls: 100
       slidingWindowType: count
       slidingWindowSize: 100
@@ -167,7 +167,7 @@ servicecomb:
 ```
 
 规则解释：熔断规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为：达到指定 failureRateThreshold 错误率或者 slowCallRateThreshold 慢请求
-率时进行熔断，慢请求通过 SlowCallDurationThreshold 定义。minimumNumberOfCalls 是达到熔断要求的最低请求数量门槛。slidingWindowType指定滑动窗口
+率时进行熔断，慢请求通过 slowCallDurationThreshold 定义。minimumNumberOfCalls 是达到熔断要求的最低请求数量门槛。slidingWindowType指定滑动窗口
 类型，默认可选 count / time 分别是基于请求数量窗口和基于时间窗口。slidingWindowSize 指定窗口大小，根据滑动窗口类型，单位可能是请求数量或者秒。
 
 ### 隔离仓
@@ -184,9 +184,106 @@ servicecomb:
 规则解释：隔离仓规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为：当最大并发数超过 maxConcurrentCalls，等待 maxWaitDuration
 竞争资源，如果获得资源，则继续处理，如果获取不到，则拒绝执行请求。在异步框架，建议 maxWaitDuration 设置为0，防止阻塞事件派发线程。
 
-### 使用 JAVA SDK
+### 基于流量标记治理使用指南
 
-* 待完善
+* Java Chassis
+
+Java Chassis 通过 Handler 实现了基于流量标记治理能力。其中 Provider 实现了限流、熔断和隔离仓，Consumer 实现了重试。使用流量标
+记治理能力，首先需要在代码中引入依赖：
+
+```xml
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>handler-governance</artifactId>
+</dependency>
+```
+
+然后配置 Handler 链
+
+```yaml
+servicecomb:
+  handler:
+    chain:
+      Consumer:
+        default: governance-consumer,loadbalance
+      Provider:
+        default: governance-provider
+```
+
+* Spring Cloud
+
+Spring Cloud通过Aspect拦截RequestMappingHandlerAdater实现了限流、熔断和隔离仓，通过拦截RestTemplate和FeignClient实现了重试。
+使用流量标记治理能力，首先需要在代码中引入依赖：
+
+```xml
+<dependency>
+  <groupId>com.huaweicloud</groupId>
+  <artifactId>spring-cloud-starter-huawei-governance</artifactId>
+</dependency>
+```
+
+* Dubbo
+
+Dubbo的Provider通过Filter拦截请求实现了限流、熔断和隔离仓，通过拦截ClusterInvoker实现了重试。使用流量标记治理能力，首先需要在代码中引入依赖：
+
+```xml
+<dependency>
+  <groupId>com.huaweicloud.dubbo-servicecomb</groupId>
+  <artifactId>dubbo-servicecomb-governance-center</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+如果要使用重试，需要修改dubbo的Spring配置文件，将dubbo默认的ClusterInvoker修改为dubbo-servicecomb：
+
+```xml
+<dubbo:consumer cluster="dubbo-servicecomb"></dubbo:consumer>
+```
+
+* 自定义
+
+服务治理的默认实现并不一定能够解决业务的所有问题。自定义治理功能可以方便的在不同的场景下使用基于流量的治理能力，比如在网关场景下进行流控。
+SDK基于Spring，使用Spring的框架都能够灵活的使用这些API，方法类似。下面以流控为例，说明如何使用API。 使用API开发的自定义代码，也
+可以通过动态配置下发治理规则。
+
+代码的基本过程包括声明RateLimitingHandler的引用，创建GovernanceRequest，拦截（包装）业务逻辑，处理治理异常。
+
+```java
+@Autowired
+private RateLimitingHandler rateLimitingHandler;
+
+GovernanceRequest governanceRequest = convert(request);
+
+CheckedFunction0<Object> next = pjp::proceed;
+DecorateCheckedSupplier<Object> dcs = Decorators.ofCheckedSupplier(next);
+
+try {
+  SpringCloudInvocationContext.setInvocationContext();
+
+  RateLimiter rateLimiter = rateLimitingHandler.getActuator(request);
+  if (rateLimiter != null) {
+	dcs.withRateLimiter(rateLimiter);
+  }
+
+  return dcs.get();
+} catch (Throwable th) {
+  if (th instanceof RequestNotPermitted) {
+	response.setStatus(429);
+	response.getWriter().print("rate limited.");
+	LOGGER.warn("the request is rate limit by policy : {}",
+		th.getMessage());
+  } else {
+	if (serverRecoverPolicy != null) {
+	  return serverRecoverPolicy.apply(th);
+	}
+	throw th;
+  }
+} finally {
+  SpringCloudInvocationContext.removeInvocationContext();
+}
+```
+
+上面简单的介绍了自定义开发。对于更加深入的使用方式，也可以直接参考Java Chassis、Spring Cloud、Dubbo项目中的默认实现代码。
 
 [java-chassis]: https://github.com/apache/servicecomb-java-chassis
 [go-chassis]: https://github.com/go-chassis/go-chassis
