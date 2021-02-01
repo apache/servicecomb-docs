@@ -184,7 +184,7 @@ servicecomb:
 规则解释：隔离仓规则借鉴了 [Resilience4j][resilience4j] 的思想，其原理为：当最大并发数超过 maxConcurrentCalls，等待 maxWaitDuration
 竞争资源，如果获得资源，则继续处理，如果获取不到，则拒绝执行请求。在异步框架，建议 maxWaitDuration 设置为0，防止阻塞事件派发线程。
 
-### 基于流量标记治理使用指南
+## 基于流量标记治理使用指南
 
 * Java Chassis
 
