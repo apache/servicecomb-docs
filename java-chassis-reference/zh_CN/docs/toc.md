@@ -66,10 +66,11 @@
     * [线程模型](general-development/thread-model.md)
     * [配置日志](general-development/config-logs.md)
 * 多样化的通信协议功能参考:
+    * [多协议介绍](transports/introduction.md)
     * [REST over Servlet](transports/rest-over-servlet.md)
     * [REST over Vertx](transports/rest-over-vertx.md)
+    * [REST over HTTP2](transports/http2.md)
     * [Highway](transports/highway-rpc.md)
-    * [HTTP2](transports/http2.md)
 * 多样化的服务注册与发现功能参考:
     * [注册发现说明](registry/introduction.md)
     * [使用服务中心](registry/service-center.md)

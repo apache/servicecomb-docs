@@ -27,6 +27,8 @@ Highway通道在microservice.yaml文件中的配置项如下表所示：
 | servicecomb.highway.server.verticle-count      | [verticle-count](verticle-count.md) | highway server verticle实例数             |
 | servicecomb.highway.client.thread-count        | [verticle-count](verticle-count.md) | highway client verticle实例数(Deprecated) |
 | servicecomb.highway.client.verticle-count      | [verticle-count](verticle-count.md) | highway client verticle实例数             |
+| servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000 |在同步线程中排队等待执行的超时时间，单位为毫秒 |
+| servicecomb.highway.server.requestWaitInPoolTimeout | 30000       |同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       |
 
 ## 示例代码
 

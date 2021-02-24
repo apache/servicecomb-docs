@@ -36,13 +36,8 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | servicecomb.rest.server.compression                     | false                                           | 服务端是否支持启用压缩                        |
 | servicecomb.rest.server.maxInitialLineLength            | 4096                                            | 服务端接收请求的最大 initial line 长度，单位字节 |
 | servicecomb.rest.server.maxHeaderSize                   | 32768                                           | 服务端接收请求的最大header长度，单位字节      |
-| servicecomb.rest.client.thread-count                    | [verticle-count](verticle-count.md) | rest client verticle实例数（Deprecated）      |
-| servicecomb.rest.client.verticle-count                  | [verticle-count](verticle-count.md) | rest client verticle实例数                    |
-| servicecomb.rest.client.connection.maxPoolSize          | 5                                               | 对一个IP:port组合，在每个连接池中的最大连接数 |
-| servicecomb.rest.client.connection.idleTimeoutInSeconds | 30                                              | 连接闲置时间，超时连接会被释放                |
-| servicecomb.rest.client.connection.keepAlive            | true                                            | 是否使用长连接                                |
-| servicecomb.rest.client.connection.compression          | false                                           | 客户端是否支持启用压缩                        |
-| servicecomb.rest.client.maxHeaderSize                   | 8192                                            | 客户端接收响应的最大header长度，单位字节      |
+| servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000  |在同步线程中排队等待执行的超时时间，单位为毫秒 |
+| servicecomb.rest.server.requestWaitInPoolTimeout | 30000        |同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       |                                     | 客户端接收响应的最大header长度，单位字节      |
 | servicecomb.uploads.maxSize                             | 无限制                                           | 最大 body 大小，这个配置项对文件上传，REST请求都生效|
 
 ### 补充说明
@@ -61,8 +56,9 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
   * 一个client最多向一个server建立40条连接。(`8 * 5 = 40`)  
   * `n`个client最多会向一个server建立`40 * n`条连接
 
-为了提高性能，需要尽量使用更大的连接池，但是更大的连接池又可能会导致连接数暴涨，当微服务实例规模达到百级别时，有的进程可能需要管理几万条连接，业务需要根据实际业务规模进行合理的规划。  
-  http1.1的规划相对复杂，并且有的场景几乎无解，建议切换为[http2](http2.md)。
+为了提高性能，需要尽量使用更大的连接池，但是更大的连接池又可能会导致连接数暴涨，当微服务实例规模达到百级别时，有的进程可能需要管理
+几万条连接，业务需要根据实际业务规模进行合理的规划。在实例规模比较小的情况下，HTTP仍然是所有应用程序的最佳选择，它具备更好的兼容性
+和可靠性。当单个实例的连接数管理规模超过1万的时候，可以考虑切换为[http2](http2.md)。
 
 ## 示例代码
 
