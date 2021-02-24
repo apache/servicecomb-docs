@@ -1,5 +1,11 @@
 # REST over Servlet
-REST over Servlet对应使用web容器部署运行，需要新建一个servlet工程将微服务包装起来，打成war包，加载到web容器中启动运行。
+REST over Servlet的本质是将Java Chassis作为一个Servlet，部署到支持Servlet的Web容器中。 通常有两种使用场景：第一种是在
+独立的Web容器中部署运行，比如Tomcat；第二种是组合Spring Boot提供的Embedded Tomcat运行。 
+
+本章节主要介绍在独立的Web容器中部署运行。在Spring Boot提供的Embedded Tomcat中运行，请参考
+[在Spring Boot中使用java chassis](../using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md)。
+
+
 ## 对外发布的Path
 当微服务部署到web容器中时，相对于独立运行，会涉及到web root以及servlet url pattern对url的改变。  
 对于传统开发框架而言，需要consumer感知对方的完整url；比如web root为/mywebapp，url pattern为/rest，业务级path为/application，则consumer代码必须通过/mywebapp/rest/application来访问。  
@@ -206,14 +212,15 @@ REST over Servlet在microservice.yaml文件中的配置项见表3-9。
 
 表1-1 REST over Servlet配置项说明
 
-| 配置项                                           | 默认值       | 是否必选 | 含义                                                  |
-| :----------------------------------------------- | :----------- | :------- | :---------------------------------------------------- |
-| servicecomb.rest.address                         | 0.0.0.0:8080 | 否       |服务监听地址<br>必须配置为与web容器监听地址相同的地址  |
-| servicecomb.rest.server.timeout                  | -1           | 否       |异步servlet超时时间, 单位为毫秒<br>建议保持默认值      |
-| servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 否       |在同步线程中排队等待执行的超时时间，单位为毫秒         |
-| servicecomb.rest.servlet.urlPattern              | 无           | 否       | 用于简化servlet+servlet mapping配置<br>只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
-| servicecomb.uploads.maxSize                      | 无           | 否       | 文件上传 form body 最大大小                    |
-| servicecomb.uploads.maxFileSize                  | 无           | 否       | 文件上传所有文件总的大小限制 |
-| servicecomb.uploads.fileSizeThreshold            | 无           | 否       | 文件上传，实际写入磁盘文件的最大大小 |
+| 配置项                                           | 默认值       | 含义                                                  |
+| :----------------------------------------------- | :----------- | :---------------------------------------------------- |
+| servicecomb.rest.address                         | 0.0.0.0:8080 | 服务监听地址<br>必须配置为与web容器监听地址相同的地址  |
+| servicecomb.rest.server.timeout                  | -1           | 异步servlet超时时间, 单位为毫秒<br>建议保持默认值      |
+| servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000 | 在同步线程中排队等待执行的超时时间，单位为毫秒 |
+| servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       |
+| servicecomb.rest.servlet.urlPattern              | 无           | 用于简化servlet+servlet mapping配置<br>只有在web.xml中未配置servlet+servlet mapping时，才使用此配置项，配置格式为：/\* 或  /path/\*，其中path可以是多次目录 |
+| servicecomb.uploads.maxSize                      | 无           | 文件上传 form body 最大大小                    |
+| servicecomb.uploads.maxFileSize                  | 无           | 文件上传所有文件总的大小限制 |
+| servicecomb.uploads.fileSizeThreshold            | 无           | 文件上传，实际写入磁盘文件的最大大小 |
 
 

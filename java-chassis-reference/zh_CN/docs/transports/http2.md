@@ -1,4 +1,4 @@
-#Http2
+# REST over Http2
 
 ## 场景描述
 
@@ -31,13 +31,6 @@
 |-----------------------------------------------|---------|---------------------------------------- |------|
 |servicecomb.rest.server.http2.useAlpnEnabled   | true    |是否启用 ALPN                            |      |
 |servicecomb.rest.server.http2.concurrentStreams| 100     |一条连接中，同时支持的最大的stream并发量 |以server端的concurrentStreams和client端的multiplexingLimit较小值为准|
-
-## http2 client 端配置项
-
-| 配置项                                            | 默认值 | 含义                                                  | 注意 | 
-|---------------------------------------------------|--------|------------------------------------------------------ |------|
-|servicecomb.rest.client.http2.useAlpnEnabled       |true    |是否启用 ALPN                                          |      |
-|servicecomb.rest.client.http2.multiplexingLimit    |-1      |一条连接中，同时支持的最大的stream并发量，-1表示不限制 |以server端的concurrentStreams和client端的multiplexingLimit较小值为准 |
-|servicecomb.rest.client.http2.maxPoolSize          |1       |每个连接池中，对每一个IP：Port最多建立的连接数         |      |
-|servicecomb.rest.client.http2.idleTimeoutInSeconds |0       |空闲连接的超时时间，超时后会关闭连接                   |      |
+|servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000 | 在同步线程中排队等待执行的超时时间，单位为毫秒 |  |
+|servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       | |
 
