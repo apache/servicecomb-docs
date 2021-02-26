@@ -6,6 +6,7 @@
 * [用透明RPC开发微服务](transparent-rpc.md)
 * [只发布interface的方法为服务接口](use-interface.md)
 * [使用 Context 参数](context-param.md)
+* [多个返回值和错误码](multi-code.md)
 * [使用Swagger注解](swagger-annotation.md)
 * [接口定义和数据类型](interface-constraints.md)
 * [服务监听地址和发布地址](listen-address-and-publish-address.md)

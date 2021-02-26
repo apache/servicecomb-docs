@@ -23,6 +23,7 @@
     * [用透明RPC开发微服务](build-provider/transparent-rpc.md)
     * [只发布interface的方法为服务接口](build-provider/use-interface.md)
     * [使用 Context 参数](build-provider/context-param.md)
+    * [多个返回值和错误码](build-provider/multi-code.md)
     * [使用Swagger注解](build-provider/swagger-annotation.md)
     * [接口定义和数据类型](build-provider/interface-constraints.md)
     * [服务监听地址和发布地址](build-provider/listen-address-and-publish-address.md)
@@ -40,8 +41,6 @@
     * [使用RPC方式开发服务消费者](build-consumer/develop-consumer-using-rpc.md)
     * [泛化调用](featured-topics/features/invoker.md)
     * [使用服务契约](build-consumer/with-contract.md)
-    * 调用控制
-        * [故障注入](build-consumer/fault-injection.md)
     * [调用第三方REST服务](build-consumer/3rd-party-service-invoke.md)
 * [通用功能开发](general-development/catalog.md)
     * [应用性能监控（metrics）](general-development/metrics.md)
@@ -81,6 +80,7 @@
     - [负载均衡](references-handlers/loadbalance.md)
     - [限流](references-handlers/ratelimit.md)
     - [路由管理](references-handlers/router.md)
+    - [故障注入](references-handlers/fault-injection.md)
     - [隔离熔断容错](references-handlers/bizkeeper.md)
     - [基于动态配置的流量特征治理](references-handlers/governance.md)
 - 网关功能参考:
