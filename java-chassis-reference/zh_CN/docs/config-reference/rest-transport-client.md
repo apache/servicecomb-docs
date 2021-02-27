@@ -2,7 +2,22 @@
 
 * 基本配置
 
-  REST Trasnport Client 分为 HTTP 和 HTTP 2, 它们共享很多配置项。包含 `http2` 的配置项， 是 HTTP 2 独有的。
+  REST Trasnport Client 分为 HTTP 和 HTTP2, 它们共享很多配置项。下表中配置项名称包含 `http2` 的配置项， 是 HTTP2 独有的。
+  HTTP2协议依赖于HTTP协议，HTTP和HTTP2的连接池是共享的，在使用HTTP2的情况下，同样需要配置HTTP的连接池参数。比如：
+
+    servicecomb:
+      rest:
+        client:
+          connection:
+            maxPoolSize: 50
+          http2:
+            maxPoolSize: 5
+
+  连接池在计算是否超过大小的时候，会同时检查这两个配置项。假设访问的服务器为H，那么上述配置，和H建立的最大连接可能性为
+  HTTP:HTTP2=50:0, HTTP:HTTP2=0:5, HTTP:HTTP2=20:3等。一个客户端和H建立的总的连接数还和servicecomb.rest.client.verticle-count
+  有关。可以理解为每个vertical会针对H创建一个连接池，连接池个数为vertical-count。
+
+  由于HTTP和HTTP2协议之间这种紧密的关系，在使用HTTP2的情况下，其他相关的HTTP参数建议一并需要合理设置，比如连接闲置超时时间等。
 
   |配置项名称|版本|缺省值|功能描述|
   |---|---|---|---|
