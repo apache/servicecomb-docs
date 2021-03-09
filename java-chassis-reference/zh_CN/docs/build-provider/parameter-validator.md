@@ -6,12 +6,12 @@
 
 * 添加swagger-invocation-validator的pom依赖：
 
-  ```xml
-  <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>swagger-invocation-validator</artifactId>
-  </dependency>
-  ```
+        ```xml
+        <dependency>
+          <groupId>org.apache.servicecomb</groupId>
+          <artifactId>swagger-invocation-validator</artifactId>
+        </dependency>
+        ```
 
 * 在需要验证的代码上按照JSR 349规范添加验证器注解，如@NotNull，@Min，@Max等。
 

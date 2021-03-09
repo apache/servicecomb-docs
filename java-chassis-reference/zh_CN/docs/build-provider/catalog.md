@@ -13,8 +13,7 @@
 * [服务监听地址和发布地址](listen-address-and-publish-address.md)
 * [线程池](thread-pool.md)
 * [服务启动事件](event-listener.md)
-* 服务配置 
-    * [参数效验](configuration/parameter-validator.md)
-    * [程序启动逻辑](bootup.md)
+* [参数效验](parameter-validator.md)
+* [程序启动逻辑](bootup.md)
 * [IPV6配置和使用](ipv6-configuration.md)
 * [Access Log配置](access-log-configuration.md)
