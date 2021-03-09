@@ -14,7 +14,9 @@ ServiceComb提供了分层次的配置机制。按照优先级从高到低，分
 
 ### 配置文件
 
-配置文件默认是classpath下的microservice.yaml文件。ServiceComb-Java-Chassis启动时会从classpath的各个jar包、磁盘
+* microservice.yaml
+
+在使用Spring启动Java Chassis的场景下， 配置文件默认是classpath下的microservice.yaml文件。Java Chassis启动时会从classpath的各个jar包、磁盘
 目录中加载microservice.yaml文件，并将这些文件合并为一份microservice.yaml配置。位于磁盘上的microservice.yaml
 文件优先级高于jar包中的microservice.yaml文件。用户还可以通过在配置文件中指定`servicecomb-config-order`来指定优先级，
 如果不同路径下的 microservice.yaml 包含一样的配置项，文件中 `servicecomb-config-order` 值大的配置项会覆盖值小的配置项。
@@ -27,6 +29,11 @@ ServiceComb提供了分层次的配置机制。按照优先级从高到低，分
 |---|---|
 |servicecomb.configurationSource.additionalUrls|配置文件的列表，以`,`分隔的多个包含具体位置的完整文件名|
 |servicecomb.configurationSource.defaultFileName|默认配置文件名|
+
+* applicatioin.yaml
+
+在使用Spring Boot启动Java Chassis的场景下，可以使用Spring Boot提供的配置机制。通常会通过applicatioin.yaml等文件定义配置。在Spring Boot
+场景下，microservice.yaml的配置依然有效，优先级比applicatioin.yaml低。
 
 ### 环境变量
 
@@ -178,33 +185,15 @@ apollo:
     firstRefreshInterval: 0
 ```
 
-## 在程序中读取配置信息
-
-Java-Chassis支持使用一致的API获取配置，不必关注配置的来源位置：
-```java
-DynamicDoubleProperty myprop = DynamicPropertyFactory.getInstance().getDoubleProperty("trace.handler.sampler.percent", 0.1);
-```
-以上例子表示声明了一个key为`trace.handler.sampler.percent`的动态配置对象，默认值为`0.1`。用户可以选择在microservice.yaml文件、环境变量、Java System Property或配置中心里配置`trace.handler.sampler.percent`来修改配置项的值。**用户不需要关注从哪里读取配置项的值，Java-Chassis会自动从各处读取配置，并按照上文的优先级顺序进行合并以保证用户取到的是优先级最高的配置值。**
-
-关于配置项API的具体方法可参考[API DOC](https://netflix.github.io/archaius/archaius-core-javadoc/com/netflix/config/DynamicPropertyFactory.html)。
-
-开发者可以注册callback处理配置变更：
-```java
- myprop.addCallback(new Runnable() {
-      public void run() {
-          // 当配置项的值变化时，该回调方法会被调用
-          System.out.println("trace.handler.sampler.percent is changed!");
-      }
-  });
-```
-
 ## 进行配置项映射
-有些情况下，我们要屏蔽我们使用的一些开源组件的配置并给用户提供我们自己的配置项。在这种情况下，可以通过classpath下的mapping.yaml进行映射定义：
+
+配置项映射可以用于给配置项取一个别名，在使用环境变量覆盖业务配置、兼容性场景广泛使用。
+进行配置项映射通过classpath下的mapping.yaml定义：
+
 ```yaml
-registry:
-  client:
-    serviceUrl:
-      defaultZone: eureka.client.serviceUrl.defaultZone
+PAAS_CSE_SC_ENDPOINT:
+  - servicecomb.service.registry.address
 ```
 
-定义映射后，在配置装载的时候框架会默认进行映射，把我们定义的配置项映射为开源组件可以认的配置项。
+假设`PAAS_CSE_SC_ENDPOINT`是环境变量，应用程序读取`servicecomb.service.registry.address`的地方，
+会取到环境变量`PAAS_CSE_SC_ENDPOINT`的值。
