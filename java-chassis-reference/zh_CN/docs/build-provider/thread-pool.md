@@ -19,10 +19,15 @@ Java Chassis 提供了一个全局的内置线程池， 如果业务有特殊的
   * 指定schema专用的线程池: `servicecomb.executors.Provider.${schemaId}: custom-executor`
   * 指定operation专用的线程池: `servicecomb.executors.Provider.${schemaId}.${operationId}: custom-executor`
  
-## ServiceComb内置线程池
+## Java Chassis 内置线程池
+
+Java Chassis提供了两个内置的线程池，`servicecomb.executor.groupThreadPool` 和 `servicecomb.executor.reactive`。 前者
+是同步线程池，在Consumer和Provider默认启用；后者是异步线程池，在Edge Service默认启用。 
+
+### 同步线程池
 
 一般的线程池都是所有线程共享一个任务队列，在这种情况下，所有网络线程需要向同一个队列申请请求入队，线程池中的所有线程需要从同一个队列中抢任务执行，对于高吞吐的场景，这会导致竞争冲突，形成性能瓶颈  
-所以，为了提升性能，ServiceComb内置线程池实际是真正线程池的包装，允许在其内部配置多组线程池，且每个网络线程绑定一组线程池，以减小竞争冲突  
+所以，为了提升性能，Java Chassis内置线程池实际是真正线程池的包装，允许在其内部配置多组线程池，且每个网络线程绑定一组线程池，以减小竞争冲突  
 ![](../assets/producer-default-executor.png)
 
 * 1.2.0之前的版本
@@ -44,3 +49,12 @@ Java Chassis 提供了一个全局的内置线程池， 如果业务有特殊的
 | servicecomb.executor.default.maxIdleSecond-per-group| 60                | 每组线程池中超过coreThreads-per-group的线程，如果idle超时，则会销毁该线程 |
 | servicecomb.executor.default.maxQueueSize-per-group | Integer.MAX_VALUE | 每组线程池中任务队列的最大长度                                            |
 | servicecomb.rest.server.requestWaitInPoolTimeout    | 30000             |在同步线程中排队等待执行的超时时间，单位为毫秒         |
+
+### 异步线程池
+
+所谓的异步线程池，实际上是没有提供额外的线程池。 所有的业务逻辑直接在 event-loop 线程池执行。 使用异步线程池，业务代码不能够存在阻塞操作。
+常见的阻塞操作包括
+
+* 使用同步API，调用其他微服务，比如 RestTemplate、透明RPC等。
+* 特别耗时的任务。比如等待IO、等待锁、Sleep等。
+
