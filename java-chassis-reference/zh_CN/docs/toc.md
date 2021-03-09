@@ -64,6 +64,7 @@
     * [微服务实例间多环境隔离](general-development/multienvironment.md)
     * [线程模型](general-development/thread-model.md)
     * [配置日志](general-development/config-logs.md)
+    * [使用 inspector 模块查看契约](general-development/using-inspector.md)  
 * 多样化的通信协议功能参考:
     * [多协议介绍](transports/introduction.md)
     * [REST over Servlet](transports/rest-over-servlet.md)
@@ -100,7 +101,6 @@
     - [以WEB容器模式打包](packaging/web-container.md)
 - 专题文章:
     - [在Spring Boot中使用java chassis](using-java-chassis-in-spring-boot/using-java-chassis-in-spring-boot.md)
-    - [使用 inspector 模块查看契约](featured-topics/using-inspector.md)
     - [兼容问题和兼容性策略](featured-topics/compatibility.md)
     - [新功能介绍系列文章](featured-topics/features.md)
     - [升级指导系列文章](featured-topics/upgrading.md)
