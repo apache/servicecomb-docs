@@ -20,4 +20,5 @@
 * [异常处理](error-handling.md)
 * [微服务实例间多环境隔离](multienvironment.md)
 * [线程模型](thread-model.md)
-* [配置日志](config-logs.md)    
+* [配置日志](config-logs.md)  
+* [使用 inspector 模块查看契约](using-inspector.md)  
