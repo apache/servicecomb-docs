@@ -75,6 +75,9 @@
     * [使用服务中心](registry/service-center.md)
     * [本地注册发现](registry/local-registry.md)
     * [去中心化注册发现](registry/distributed.md)
+* 管理服务配置:
+    * [通用配置说明](config/general-config.md)
+    * [在程序中读取配置信息](config/read-config.md)
 - 服务治理功能参考:
     - [处理链介绍](references-handlers/intruduction.md)
     - [负载均衡](references-handlers/loadbalance.md)
@@ -92,9 +95,6 @@
     - [使用TLS通信](security/tls.md)
     - [使用RSA认证](security/shi-yong-rsa-ren-zheng.md)
     - [公钥认证](references-handlers/publickey.md)
-* 管理服务配置:
-    * [通用配置说明](config/general-config.md)
-    * [配置注入机制](config/inject-config.md)
 - 服务打包和运行: 
     - [以standalone模式打包](packaging/standalone.md)
     - [以WEB容器模式打包](packaging/web-container.md)
