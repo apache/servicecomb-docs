@@ -79,7 +79,7 @@
     - [处理链介绍](references-handlers/intruduction.md)
     - [负载均衡](references-handlers/loadbalance.md)
     - [限流](references-handlers/ratelimit.md)
-    - [路由管理](references-handlers/router.md)
+    - [灰度发布](references-handlers/router.md)
     - [故障注入](references-handlers/fault-injection.md)
     - [隔离熔断容错](references-handlers/bizkeeper.md)
     - [基于动态配置的流量特征治理](references-handlers/governance.md)
