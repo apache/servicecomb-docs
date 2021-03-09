@@ -29,9 +29,8 @@
     * [服务监听地址和发布地址](build-provider/listen-address-and-publish-address.md)
     * [线程池](build-provider/thread-pool.md)
     * [服务启动事件](build-provider/event-listener.md)
-    * 服务配置 
-        * [参数效验](build-provider/configuration/parameter-validator.md)
-        * [程序启动逻辑](build-provider/bootup.md)
+    * [参数效验](build-provider/parameter-validator.md)
+    * [程序启动逻辑](build-provider/bootup.md)
     * [IPV6配置和使用](build-provider/ipv6-configuration.md)
     * [Access Log配置](build-provider/access-log-configuration.md)
 * [开发服务消费者](build-consumer/catalog.md)
@@ -104,6 +103,7 @@
     - [兼容问题和兼容性策略](featured-topics/compatibility.md)
     - [新功能介绍系列文章](featured-topics/features.md)
     - [升级指导系列文章](featured-topics/upgrading.md)
+    - [性能问题分析和调优](featured-topics/performance.md)
 - 常用配置项参考:
     - [REST Transport Client 配置项](config-reference/rest-transport-client.md)
     - [Config Center Client 配置项](config-reference/config-center-client.md)
