@@ -86,6 +86,7 @@
     - [故障注入](references-handlers/fault-injection.md)
     - [隔离熔断容错](references-handlers/bizkeeper.md)
     - [基于动态配置的流量特征治理](references-handlers/governance.md)
+    - [快速失败和重试](references-handlers/fail-retry.md)
 - 网关功能参考:
     - [介绍](edge/open-service.md)
     - [使用 Edge Service 做网关](edge/by-servicecomb-sdk.md)
