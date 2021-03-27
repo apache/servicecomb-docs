@@ -16,8 +16,10 @@ Java Chassis 提供了一个全局的内置线程池， 如果业务有特殊的
 * 启用线程池  
   假设新线程池bean id为custom-executor
   * 替换全局线程池：`servicecomb.executors.default: custom-executor`
-  * 指定schema专用的线程池: `servicecomb.executors.Provider.${schemaId}: custom-executor`
-  * 指定operation专用的线程池: `servicecomb.executors.Provider.${schemaId}.${operationId}: custom-executor`
+  * 指定schema专用的线程池: `servicecomb.executors.Provider.${microserviceId}.${schemaId}: custom-executor`
+  * 指定operation专用的线程池: `servicecomb.executors.Provider.${microserviceId}.${schemaId}.${operationId}: custom-executor`
+  * 指定microservice专用的线程池: `servicecomb.executors.Provider.${microserviceId}: custom-executor`
+    其中microserviceId为可选项，在edge service中用以区分不同的microservice
  
 ## Java Chassis 内置线程池
 
