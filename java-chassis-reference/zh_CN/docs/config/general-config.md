@@ -88,6 +88,7 @@ servicecomb:
 |servicecomb.config.client.tenantName|应用的租户名称|
 |servicecomb.config.client.serverUri|config-center访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
 |servicecomb.config.client.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为30000|
+|servicecomb.config.client.fileSource|指定该配置项的内容为yaml文件，多个配置文件可以用`,`分隔|
 
 * 使用 servicecomb-kie
 
