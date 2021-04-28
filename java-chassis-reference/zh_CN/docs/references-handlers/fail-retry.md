@@ -68,7 +68,8 @@ Java Chassis 会在上述过程的开始阶段，执行超时检测，如果发�
 
 | 配置项 | 默认值 | 含义 |
 | :--- | :--- | :--- |
-| servicecomb.invocation.enableTimeoutCheck                | true | 功能开关，默认启用 |
+| servicecomb.invocation.timeout.check.enabled                | false | 功能开关，默认关闭 |
+| servicecomb.invocation.timeout.check.strategy               | passing-time | 全局时间计算策略，可选 passing-time 和 processing-time|
 | servicecomb.invocation.${op-any-priority}.timeout        | -1   | 请求超时时间，默认为-1，表示不超时 |
 
 侵入式超时时间支持全局配置和针对某个具体接口配置， Producer 和 Consumer 配置不同。 比如：
@@ -85,8 +86,10 @@ servicecomb.invocation.${target_service}.${schema_id}.${operation_id}.timeout: 1
 ```
 
 侵入式超时检测具备传播机制。 比如客户端->A->B的场景，当B判断是否已经超时的时候，会加上在A已经处理的时间。因此可以用侵入式超时时间控制
-请求链路的全局超时。 由于机器时间同步问题，全局超时并不是所有环节都是精确的，比如B在计算超时的时候，A的请求在网络传输的时间被忽略掉了，只计算实际
-在A已经处理的时间。
+请求链路的全局超时。 由于机器时间同步问题，全局超时包括两种计算方式，第一种是 passing-time，这种方式依赖于服务器的时间同步，B计算
+运行时间通过A记录的开始时间与B当前时间的差值；第二种是 processing-time，B在计算超时的时候，A的请求在网络传输的时间被忽略掉了，只计算实际
+在A已经处理的时间加上B已经处理的时间。第一种方式适合于服务器之间的时间非常同步，可以忽略差异的场景。第二种方式更加适合于不考虑时间同步，但是
+对于实际计算时间精度要求不高的场景。
 
 开发者也可以在自定义 Filter, Handler, 业务逻辑（比如执行数据库操作前和操作后）增加超时检测。 具体方式是先获取 `Invocation` 对象， 然后调用
 `ensureInvocationNotTimeout` 方法。
@@ -102,9 +105,3 @@ public String testInvocationTimeout(InvocationContext context) {
 }
 ```
  
-
-
-
-
-  
-  

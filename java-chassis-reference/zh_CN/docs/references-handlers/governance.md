@@ -210,6 +210,42 @@ servicecomb:
         default: governance-provider
 ```
 
+Java Chassis是基于Open API的REST/RPC框架，在模型上和单纯的REST框架存在差异。Java Chassis提供两种模式匹配规则，
+第一种是基于REST的，第二种是基于RPC的。可以通过配置项：`servicecomb.governance.{operation}.matchType` 指定匹配规则，
+默认使用REST。比如：
+
+```
+servicecomb: 
+  governance: 
+    matchType: rest # 设置全局默认是rest匹配模式
+    GovernanceEndpoint.helloRpc: 
+      matchType: rpc # 设置服务端的接口helloRpc采用RPC匹配模式
+```
+
+在REST匹配模式下， apiPath使用url， 比如： 
+
+```
+servicecomb: 
+  matchGroup: 
+    userLoginAction: | 
+      matches: 
+        - apiPath: 
+            exact: "/user/login" 
+```
+
+在RPC匹配模式下, apiPath使用operation, 比如： 
+
+```
+servicecomb: 
+  matchGroup: 
+    userLoginAction: | 
+      matches: 
+        - apiPath: 
+            exact: "UserSchema.login"
+```
+
+对于服务端治理，比如限流，REST模式下从HTTP取header；对于客户端治理，比如重试，REST模式下从InvocationContext取header。
+
 * Spring Cloud
 
 Spring Cloud通过Aspect拦截RequestMappingHandlerAdater实现了限流、熔断和隔离仓，通过拦截RestTemplate和FeignClient实现了重试。
@@ -220,6 +256,22 @@ Spring Cloud通过Aspect拦截RequestMappingHandlerAdater实现了限流、熔�
   <groupId>com.huaweicloud</groupId>
   <artifactId>spring-cloud-starter-huawei-governance</artifactId>
 </dependency>
+```
+
+Spring Cloud是基于REST的框架，能比较好的符合流量特征治理的匹配语义，apiPath和headers分别对应HTTP协议的概念： 
+
+```
+servicecomb: 
+  matchGroup: 
+    userLoginAction: | 
+      matches: 
+        - apiPath: 
+            exact: "/user/login" 
+           method: 
+             - POST 
+        - headers:
+            Authentication: 
+              prefix: Basic
 ```
 
 * Dubbo
@@ -238,6 +290,24 @@ Dubbo的Provider通过Filter拦截请求实现了限流、熔断和隔离仓，�
 
 ```xml
 <dubbo:consumer cluster="dubbo-servicecomb"></dubbo:consumer>
+```
+
+Dubbo是一个RPC框架，需要定义operation和apiPath的映射关系，比如，服务端限流、熔断、隔离仓场景：
+ `com.huaweicloud.it.order.OrderGovernanceService.hello` ；客户端重试场景：
+ `com.huaweicloud.it.order.OrderGovernanceService.retry` 。 headers使用Attachments，需要包含在Attachments里面的头才会参与匹配。 
+
+```
+servicecomb: 
+  matchGroup: 
+    userLoginAction: | 
+      matches: 
+        - apiPath: 
+            exact: "com.huaweicloud.it.order.OrderGovernanceService.hello" 
+          method: 
+            - POST 
+        - headers 
+            Authentication: 
+              prefix: Basic
 ```
 
 * 自定义
