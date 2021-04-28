@@ -1,64 +1,51 @@
-# 去中心化注册发现
+# 轻量化配置中心 zero-config
 
-去中心化注册发现指不通过服务中心中间件，实现服务注册发现。去中心化注册发现比较适合于小规模管理面服务的开发，或者
-对于弹性扩缩容要求不高的场景。 servicecomb 提供了两种方式满足去中心化的注册发现。这两种方式涉及如下模块：
+zero-config是Java Chassis提供的轻量化服务中心，以支持在小规模的应用场景下，不必专门部署独立的服务中心。
 
-* 本地注册发现: registry-local，通过本地配置文件注册发现
-* 组播注册发现: registry-zeroconfig, 采用组播的方式注册发现
-* 实例契约发现: registry-schema-dicovery, 通过给实例发送请求，从实例查询契约
+zero-config支持多种工作模式：
 
-## 本地注册发现 + 实例契约发现
-
-通过组合本地注册发现和实例契约发现能够实现去中心化注册发现。这种场景需要 consumer 配置 provider 的地址信息，
-适合 provider 地址固定的场景。 或者在容器部署的场景（比如 Istio）， consumer 可以通过固定的服务名访问 provider,
-采用这种注册发现方式能够很好利用容器的发现能力。
-
-通过组合本地注册发现和实例契约发现包含下面几个开发步骤：
-
-* 引入相关依赖
-
-        ```xml
-            <dependency>
-              <groupId>org.apache.servicecomb</groupId>
-              <artifactId>registry-schema-discovery</artifactId>
-            </dependency>
-        ```
-
-  备注： registry-schema-discovery 依赖于 registry-local
+* local
+  单机模式，没有实例动态发现能力，所有的服务调用，都使用[调用第三方服务](../build-consumer/3rd-party-service-invoke.md)机制处理。
   
-* 在 consumer 的 `registry.yaml` 中配置 provider 的微服务和微服务实例信息
+* multicast
+  使用UDP多播发送微服务注册信息，适用于所有微服务实例都在同一个子网内的场景，每个微服务实例都相当于是一个服务中心实例。
 
-```yaml
-demo-zeroconfig-schemadiscovery-registry-edge:
-  - id: "002"
-    version: "0.0.2"
-    appid: demo-zeroconfig-schemadiscovery-registry
-    schemaIds:
-      - ClientServerEndpoint
-      - SchemaDiscoveryEndpoint
-    instances:
-      - endpoints:
-          - rest://localhost:8888
-```
-
-## 组播注册发现 + 实例契约发现
-
-组播注册发现采用UDP协议发现实例。使用这种方式只需要在项目中配置依赖：
+使用 zero-config， 需要在项目中引入如下依赖：
 
 ```xml
-    <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>registry-schema-discovery</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>registry-zero-config</artifactId>
-    </dependency>
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>registry-zero-config</artifactId>
+</dependency>
 ```
 
-可以看出使用这种方式非常简单，也是 zero-config 名称的由来。 
+## zero-config 相关配置
 
-## 注意事项
+配置前缀： `servicecomb.service.zero-config`
 
-使用去中心化注册发现，一般会去掉集中注册发现模块的依赖。 如果没去掉依赖，就会存在多种注册发现并存的情况。这种
-情况的行为可以参考注册发现概述的内容。
+| 配置项 | 默认值 | 含义 |
+| :--- | :--- | :--- |
+| enabled | true    | 是否使用zero-config服务中心功能 |
+| mode    | multicast| 工作模式，内置multicast和local模式 |
+| heartbeat.interval | 30s | 发送注册/心跳消息的间隔 |
+| heartbeat.lost-times | 3 | 心跳丢失超过指定的次数，则删除相应的实例 |
+| pull-interval | 3s | consumer流程更新目标实例的间隔 |
+| multicast.address | 0.0.0.0:6666 | UDP的本地bind地址， 对于不允许bind 0.0.0.0的场景，需要修改本配置项。注意： 相应的网卡要打开UDP multicast功能 |
+| multicast.group | 225.6.7.8| UDP multicast多播group地址，根据标准，合法地址范围为(224.0.0.0, 239.255.255.255]。开发阶段，为避免不同开发人员之间产生环境互相干扰， 可以各自设置不同的group地址|
+
+示例：
+
+```
+servicecomb:
+  service:
+    zero-config:
+      enable: true
+      mode: multicast
+      heartbeat:
+        interval: 30s
+        lost-times: 3
+      pull-interval: 3s
+      multicast:
+        address: 0.0.0.0:6666
+        group: 225.6.7.8
+```
