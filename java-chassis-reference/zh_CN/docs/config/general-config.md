@@ -30,10 +30,10 @@ ServiceComb提供了分层次的配置机制。按照优先级从高到低，分
 |servicecomb.configurationSource.additionalUrls|配置文件的列表，以`,`分隔的多个包含具体位置的完整文件名|
 |servicecomb.configurationSource.defaultFileName|默认配置文件名|
 
-* applicatioin.yaml
+* application.yaml
 
-在使用Spring Boot启动Java Chassis的场景下，可以使用Spring Boot提供的配置机制。通常会通过applicatioin.yaml等文件定义配置。在Spring Boot
-场景下，microservice.yaml的配置依然有效，优先级比applicatioin.yaml低。
+在使用Spring Boot启动Java Chassis的场景下，可以使用Spring Boot提供的配置机制。通常会通过application.yaml等文件定义配置。在Spring Boot
+场景下，microservice.yaml的配置依然有效，优先级比application.yaml低。
 
 ### 环境变量
 
