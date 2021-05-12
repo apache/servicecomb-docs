@@ -11,19 +11,12 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 | 版本| 链接 | 说明 |
 | :--- | :--- | :--- |
-| 最新(2.0.0) | [中文](https://docs.servicecomb.io/java-chassis/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/en_US/)| 由 github pages 托管 |
-| 最新(2.0.0) | [中文](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://liubao68.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由 gitee pages 托管，适合中国用户|
+| 最新(2.0.0) | [中文](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由 github pages 托管 |
+| 最新(2.0.0) | [中文](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由 gitee pages 托管，适合中国用户|
 | 最新(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| 由 coding pages 托管，适合中国用户|
-| 1.3.0 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |
-| 1.2.1 | [中文](https://docs.servicecomb.io/java-chassis/1.x/zh_CN/), [English](https://docs.servicecomb.io/java-chassis/1.x/en_US/)| |
 
 ## 如何使用本文档
 
 * 通过[目录](toc.md)了解文档结构，查看关注的章节。
-* 本文档目前的搜索功能不支持中文关键字，只能使用英文单词辅助搜索。 最好的办法是使用搜索引擎，配合站内搜索使用。
-  推荐使用[Bing](https://cn.bing.com/)， [Google](http://google.com.hk/)进行搜索。例子如下：
-        
-        异常处理 site:docs.servicecomb.io
-
 * 访问[文档源代码](https://github.com/apache/servicecomb-docs/tree/master/java-chassis-reference)， 参考主页说明，采用 mkdocs 编译
   后本地使用。 并在[issue](https://github.com/apache/servicecomb-docs/issues) 提交文档错误。 
