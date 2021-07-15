@@ -276,13 +276,13 @@ will get json data in the following format:
   </tr>
   <tr>
     <td>bytesRead</td>
-    <td>Average number of bytes sent per second during the current period (Bps)<br>
+    <td>Average number of bytes received per second during the current period (Bps)<br>
         Business layer statistics, relative to the data obtained from the network card, the data here does not include the size of the header<br>
         For http messages, does not include http header size</td>
   </tr>
   <tr>
     <td>bytesWritten</td>
-    <td>Average number of bytes received per second during the current period (Bps)<br>
+    <td>Average number of bytes sent per second during the current period (Bps)<br>
         Business layer statistics, relative to the data obtained from the network card, the data here does not include the size of the header<br>
         For http messages, does not include http header size</td>
   </tr>
