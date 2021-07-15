@@ -49,6 +49,7 @@ servicecomb 与服务中心采用 HTTP 进行交互， HTTP client 相关配置�
         ```
         servicecomb:
           credentials:
+            rbac.enabled: true # 使用启用 RBAC， 默认为 false
             account:
               name: root   #服务中心支持的用户名
               password: your-password  #用户名对应的密码
