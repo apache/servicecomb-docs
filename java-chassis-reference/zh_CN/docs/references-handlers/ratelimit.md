@@ -58,10 +58,10 @@ java-chassis 支持 Provider 限流和 Consumer 限流。 Provider 限流控制�
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | servicecomb.flowcontrol.Provider.qps.enabled | true | true/false | 否 | 是否启用Provider流控 | - |
 | servicecomb.flowcontrol.Provider.qps.strategy | FixedWindow | FixedWindow/LeakyBucket/TokenBucket/自定义 | 否 | 流控策略 | - |
-| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\].\[Schema\].\[operation\] | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | 每秒钟允许的请求数 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
-| servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | provider接受请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
-| servicecomb.flowcontrol.Provider.qps.bucket.\[ServiceName\].\[Schema\].\[operation\] | 两倍limit大小，不超过max int | \(0,2147483647\]，整形 | 否 | 令牌桶场景下桶的大小 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
-| servicecomb.flowcontrol.Provider.qps.global.bucket | 两倍limit大小，不超过max int | \(0,2147483647\]，整形 | 否 | 令牌桶场景下provider桶的大小 | 没有具体的流控配置时，此配置生效 |
+| servicecomb.flowcontrol.Provider.qps.limit.\[ServiceName\].\[Schema\].\[operation\] | 2147483647（max int） | \(0,2147483647\]，整型 | 否 | 每秒钟允许的请求数 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
+| servicecomb.flowcontrol.Provider.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整型 | 否 | provider接受请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
+| servicecomb.flowcontrol.Provider.qps.bucket.\[ServiceName\].\[Schema\].\[operation\] | 两倍limit大小，不超过max int | \(0,2147483647\]，整型 | 否 | 令牌桶场景下桶的大小 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
+| servicecomb.flowcontrol.Provider.qps.global.bucket | 两倍limit大小，不超过max int | \(0,2147483647\]，整型 | 否 | 令牌桶场景下provider桶的大小 | 没有具体的流控配置时，此配置生效 |
 
 
 > **注意：**
@@ -96,10 +96,10 @@ QPS流控配置项说明
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | servicecomb.flowcontrol.Consumer.qps.enabled | true | Boolean | 否 | 是否启用Consumer流控 | - |
 | servicecomb.flowcontrol.Consumer.qps.strategy | FixedWindow | FixedWindow/LeakyBucket/TokenBucket/自定义 | 否 | 流控策略 | - |
-| servicecomb.flowcontrol.Consumer.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整形 | 否 | consumer发送请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
-| servicecomb.flowcontrol.Consumer.qps.limit.\[ServiceName\].\[Schema\].\[operation\] | 2147483647  \(max int\) | \(0,2147483647\]，整形 | 否 | 每秒钟允许的请求数 | 支持microservice、schema、operation三个级别的配置 |
-| servicecomb.flowcontrol.Consumer.qps.global.bucket | 两倍limit大小，不超过max int | \(0,2147483647\]，整形 | 否 | 令牌桶场景下consumer桶的大小 | 没有具体的流控配置时，此配置生效 |
-| servicecomb.flowcontrol.Consumer.qps.bucket.\[ServiceName\].\[Schema\].\[operation\] | 两倍limit大小，不超过max int | \(0,2147483647\]，整形 | 否 | 令牌桶场景下桶的大小 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
+| servicecomb.flowcontrol.Consumer.qps.global.limit | 2147483647（max int） | \(0,2147483647\]，整型 | 否 | consumer发送请求流量的全局配置 | 没有具体的流控配置时，此配置生效 |
+| servicecomb.flowcontrol.Consumer.qps.limit.\[ServiceName\].\[Schema\].\[operation\] | 2147483647  \(max int\) | \(0,2147483647\]，整型 | 否 | 每秒钟允许的请求数 | 支持microservice、schema、operation三个级别的配置 |
+| servicecomb.flowcontrol.Consumer.qps.global.bucket | 两倍limit大小，不超过max int | \(0,2147483647\]，整型 | 否 | 令牌桶场景下consumer桶的大小 | 没有具体的流控配置时，此配置生效 |
+| servicecomb.flowcontrol.Consumer.qps.bucket.\[ServiceName\].\[Schema\].\[operation\] | 两倍limit大小，不超过max int | \(0,2147483647\]，整型 | 否 | 令牌桶场景下桶的大小 | 支持microservice/schema/operation三个级别的配置，后者的优先级高于前者 |
 
 
 > **注意：**
