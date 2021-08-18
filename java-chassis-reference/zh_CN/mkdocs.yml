@@ -1,4 +1,5 @@
 site_name: ServiceComb Java Chassis 开发指南
+use_directory_urls: false
 
 nav:
 
