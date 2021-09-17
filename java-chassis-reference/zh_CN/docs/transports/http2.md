@@ -31,6 +31,11 @@
 |-----------------------------------------------|---------|---------------------------------------- |------|
 |servicecomb.rest.server.http2.useAlpnEnabled   | true    |是否启用 ALPN                            |      |
 |servicecomb.rest.server.http2.concurrentStreams| 100     |一条连接中，同时支持的最大的stream并发量 |以server端的concurrentStreams和client端的multiplexingLimit较小值为准|
+|servicecomb.rest.server.http2.HeaderTableSize  | 4096    |                                      |         |
+|servicecomb.rest.server.http2.pushEnabled      | true    |                                      |         |
+|servicecomb.rest.server.http2.initialWindowSize| 65535   |                                      |         |
+|servicecomb.rest.server.http2.maxFrameSize     | 16384   |                                      |         |
+|servicecomb.rest.server.http2.maxHeaderListSize|Integer.MAX_VALUE|                              |         |
 |servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000 | 在同步线程中排队等待执行的超时时间，单位为毫秒 |  |
 |servicecomb.rest.server.requestWaitInPoolTimeout | 30000        | 同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       | |
 
