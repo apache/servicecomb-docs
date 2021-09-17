@@ -39,6 +39,12 @@ Table 1-1 Configuration items for REST over Vertx
 | servicecomb.rest.server.compression                    | false                                          | Wether the server support compression          |
 | servicecomb.rest.server.maxInitialLineLength           | 4096                                           | The max initial line length of the request the server can process, unit is Byte |
 | servicecomb.rest.server.maxHeaderSize                  | 32768                                          | The max header size of the request the server can process, unit is Byte |
+| servicecomb.rest.server.maxFormAttributeSize           | 2048                                           | The max form attribute size of the request the server can process, unit is Byte |
+| servicecomb.rest.server.compressionLevel               | 6                                              | The gzip/deflate compression level |
+| servicecomb.rest.server.maxChunkSize                   | 8192                                           | The max HTTP chunk size, unit is Byte |
+| servicecomb.rest.server.decoderInitialBufferSize       | 128                                            | The max initial buffer size for HttpObjectDecoder, unit is Byte |
+| servicecomb.rest.server.http2ConnectionWindowSize      | -1                                             | HTTP/2 connection window size, unlimited    |
+| servicecomb.rest.server.decompressionSupported         | false                                          | whether decompression is supported  |
 |servicecomb.rest.client.thread-count                    |[verticle-count](verticle-count.md) |rest client verticle instance count(Deprecated) |
 |servicecomb.rest.client.verticle-count                  |[verticle-count](verticle-count.md) |rest client verticle instance count             |
 |servicecomb.rest.client.connection.maxPoolSize          |5                                               |The maximum number of connections in each connection pool for an IP:port combination |

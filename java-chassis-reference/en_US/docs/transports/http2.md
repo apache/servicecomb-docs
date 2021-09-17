@@ -36,6 +36,11 @@ Specific examples can refer to [http2-it-tests](https://github.com/apache/servic
 | configuration                                 | default | description                                             | notice | 
 |-----------------------------------------------|---------|-------------------------------------------------------- |--------|
 |servicecomb.rest.server.http2.useAlpnEnabled   | true    |Whether to enable ALPN                                   |        |
+|servicecomb.rest.server.http2.HeaderTableSize  | 4096    |                                                         |        |
+|servicecomb.rest.server.http2.pushEnabled      | true    |                                                         |        |
+|servicecomb.rest.server.http2.initialWindowSize| 65535   |                                                         |        |
+|servicecomb.rest.server.http2.maxFrameSize     | 16384   |                                                         |        |
+|servicecomb.rest.server.http2.maxHeaderListSize|Integer.MAX_VALUE|                                                 |        |
 |servicecomb.rest.server.http2.concurrentStreams| 100     |The maximum stream concurrency supported in a connection |The smaller value of the concurrentStreams on the server side and the multiplexingLimit on the client side|
 
 ## http2 client configuration

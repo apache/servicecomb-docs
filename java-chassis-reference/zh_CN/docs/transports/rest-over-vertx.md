@@ -36,6 +36,12 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | servicecomb.rest.server.compression                     | false                                           | 服务端是否支持启用压缩                        |
 | servicecomb.rest.server.maxInitialLineLength            | 4096                                            | 服务端接收请求的最大 initial line 长度，单位字节 |
 | servicecomb.rest.server.maxHeaderSize                   | 32768                                           | 服务端接收请求的最大header长度，单位字节      |
+| servicecomb.rest.server.maxFormAttributeSize            | 2048                                            | 服务端接收请求的最大 form 长度，单位为字节   |
+| servicecomb.rest.server.compressionLevel                | 6                                               | 服务端gzip/deflate压缩级别
+| servicecomb.rest.server.maxChunkSize                    | 8192                                            | 最大http chunk大小，单位为字节         |
+| servicecomb.rest.server.decoderInitialBufferSize        | 128                                             | HttpObjectDecoder的最大初始缓冲区大小   |
+| servicecomb.rest.server.http2ConnectionWindowSize       | -1                                              | 允许HTTP/2连接数大小，无限制 |    
+| servicecomb.rest.server.decompressionSupported          | false                                           | 是否支持解压缩  |
 | servicecomb.Provider.requestWaitInPoolTimeout${op-priority}| 30000  |在同步线程中排队等待执行的超时时间，单位为毫秒 |
 | servicecomb.rest.server.requestWaitInPoolTimeout | 30000        |同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。       |                                     | 客户端接收响应的最大header长度，单位字节      |
 | servicecomb.uploads.maxSize                             | 无限制                                           | 最大 body 大小，这个配置项对文件上传，REST请求都生效|

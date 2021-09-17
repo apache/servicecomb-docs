@@ -54,7 +54,7 @@ servicecomb 微服务定义包括两个基础模型 `Microservice` 和 `Microser
 
 | 配置项 | 版本 | 默认值 | 是否必选 | 含义 |
 | :--- | :--- | :--- | :--- | :--- |
-| servicecomb.instance.properties | 2.1.2 | - | 否 | 服务实例云数据配置 |
+| servicecomb.instance.properties | 2.1.2 | - | 否 | 服务实例元数据配置 |
 | servicecomb.instance.propertyExtendedClass | 2.1.2 | - | 否 | 微服务实例元数据配置扩展信息， 接口返回的配置会覆盖配置文件中key相同的配置。| |
 | servicecomb.instance.initialStatus | 2.1.2 | UP | 否 | 实例初始状态 |
 | servicecomb.instance.properties.tags | 2.1.2 | - | 否 | 标签 |
