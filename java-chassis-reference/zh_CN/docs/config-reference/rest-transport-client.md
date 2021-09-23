@@ -25,7 +25,7 @@
   |servicecomb.rest.client.verticle-count||[备注1](#note1)|[备注2](#note2)|
   |servicecomb.rest.client.thread-count|废弃||同verticle-count|
   |servicecomb.rest.client.connection.timeoutInMillis|2.0.2|1000|连接超时时间|
-  |servicecomb.rest.client.connection.idleTimeoutInSeconds||60|HTTP 连接闲置超时时间|
+  |servicecomb.rest.client.connection.idleTimeoutInSeconds||30|HTTP 连接闲置超时时间|
   |servicecomb.rest.client.connection.compression||false|是否启用压缩|
   |servicecomb.rest.client.maxWaitQueueSize||-1|HTTP HTTP2 等待队列大小|
   |servicecomb.rest.client.connection.maxPoolSize||5|HTTP 客户端连接池大小|
