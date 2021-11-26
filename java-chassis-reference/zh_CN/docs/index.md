@@ -11,7 +11,7 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 | 版本| 链接 | 说明 |
 | :--- | :--- | :--- |
-| 最新(2.0.0) | [中文](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由 github pages 托管 |
+| 最新(2.0.0) | [中文](https://servicecomb.apache.org/references/java-chassis/zh_CN/), [English](https://servicecomb.apache.org/references/java-chassis/en_US/)| |
 | 最新(2.0.0) | [中文](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| 由 gitee pages 托管，适合中国用户|
 | 最新(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| 由 coding pages 托管，适合中国用户|
 
