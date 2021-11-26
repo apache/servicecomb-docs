@@ -9,7 +9,7 @@ For other versions, please check the following table.
 
 | version | link | notes |
 | :--- | :--- | :--- |
-| latest(2.0.0) | [中文](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| hosted by github pages |
+| latest(2.0.0) | [中文](https://servicecomb.apache.org/references/java-chassis/zh_CN/), [English](https://servicecomb.apache.org/references/java-chassis/en_US/)| |
 | latest(2.0.0) | [中文](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| hosted by gitee pages |
 | latest(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| hosted by coding pages|
 
