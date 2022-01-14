@@ -63,8 +63,8 @@ If at this time, the consumer wants to use a transport to access the producer, i
 ```
 servicecomb:
   references:
-    <service_name>:
-      transport: highway
+    transport: 
+      <service_name>: highway
 ```
 
 * When a microservice producer only provided the endpoint of the highway
