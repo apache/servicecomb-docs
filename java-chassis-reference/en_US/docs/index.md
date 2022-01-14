@@ -9,7 +9,13 @@ For other versions, please check the following table.
 
 | version | link | notes |
 | :--- | :--- | :--- |
-| latest(2.0.0) | [中文](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](https://huaweicse.github.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| hosted by github pages |
-| latest(2.0.0) | [中文](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/), [English](http://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/)| hosted by gitee pages |
-| latest(2.0.0) | [中文](http://1v96us.coding-pages.com/docs/java-chassis/zh_CN/), [English](http://1v96us.coding-pages.com/docs/java-chassis/en_US/)| hosted by coding pages|
+| latest(2.0.0) | [中文][apache.zh_CN], [English][apache.en_US] | |
+| latest(2.0.0) | [中文][gitee.zh_CN], [English][gitee.en_US] | hosted by gitee pages |
+| latest(2.0.0) | [中文][coding.zh_CN], [English][coding.en_US] | hosted by coding pages|
 
+[apache.zh_CN]: https://servicecomb.apache.org/references/java-chassis/zh_CN/
+[apache.en_US]: https://servicecomb.apache.org/references/java-chassis/en_US/
+[gitee.zh_CN]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/
+[gitee.en_US]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/
+[coding.zh_CN]: https://1v96us.coding-pages.com/docs/java-chassis/zh_CN/
+[coding.en_US]: https://1v96us.coding-pages.com/docs/java-chassis/en_US/

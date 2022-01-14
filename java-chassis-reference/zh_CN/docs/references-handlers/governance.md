@@ -36,7 +36,7 @@ servicecomb:
             exact: "/login"
           method:
             - POST
-        - headers
+        - headers:
           Authentication: 
             prefix: Basic
 ```
@@ -70,7 +70,7 @@ servicecomb:
             exact: "/login"
           method:
             - POST
-        - headers
+        - headers:
           Authentication: 
             prefix: Basic
       services: helloService
@@ -305,7 +305,7 @@ servicecomb:
             exact: "com.huaweicloud.it.order.OrderGovernanceService.hello" 
           method: 
             - POST 
-        - headers 
+        - headers:
             Authentication: 
               prefix: Basic
 ```
