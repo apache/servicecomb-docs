@@ -64,8 +64,8 @@ ServiceComb不绑定日志器，只是使用了slf4j，用户可以自由选择l
 ```
 servicecomb:
   references:
-    <service_name>:
-      transport: highway
+    transport:
+      <service_name>: highway
 ```
 
 * 当一个微服务producer只开放了highway的endpoint
