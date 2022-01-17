@@ -73,15 +73,10 @@ servicecomb:
         - headers:
           Authentication: 
             prefix: Basic
-      services: helloService
 ```
 
 一个流量对应一个 Key， userLoginAction 为 Key 的名称。 一个流量可以定义多个标记规则，每个标记规则里面可以定义 `apiPath`,
 `method`, `headers` 匹配规则。 不同标记规则是或的关系，匹配规则是与的关系。
-
-`services` 是治理规则公共属性，指出这个限流规则的生效范围。在应用系统设计的规程中，流量标记、治理规则对于所有微服务都是可见的，一个微服务只会启用
-`services` 包含自己的规则。这个属性可选，表示这条规则默认生效。可以使用 `example:1.0.0` 格式指明服务和版本，多个服务用逗号分隔，比如：
-`foo:1.0.0,bar`。
 
 * 算子
 
