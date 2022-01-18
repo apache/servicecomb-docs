@@ -77,7 +77,7 @@ servicecomb:
       errorThresholdPercentage: 0
       enableRequestThreshold: 5
       singleTestTime: 60000
-      continuousFailureThreshold: 2
+      continuousFailureThreshold: 5
       maxSingleTestWindow: 60000 # 为了保证在并发情况下只有一个实例放通，会锁定放通实例。这个时间表示最大锁定时间。
       minIsolationTime: 3000 # 最短隔离时间。并发情况下，实例隔离后进行中的请求可能快速刷新隔离状态，增加最短隔离时间。
       recoverImmediatelyWhenSuccess：true # 放通实例，如果调用成功，立即清除统计状态，保证后续请求能够使用该实例。 2.1.3 新增。

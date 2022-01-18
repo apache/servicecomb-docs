@@ -60,7 +60,7 @@ public class AuthHandler implements Handler {
 }
 ```
 
-* 增加*.handler.xml文件，给Handler取一个名字
+* 增加*.handler.xml文件，给Handler取一个名字,并且文件要放在```classpath*:config/```路径下
 
 ```xml
 <config>
