@@ -61,7 +61,7 @@ public class JaxrsConsumerMain {
 
 > 说明：
 >
-> * URL格式为：`cse://microserviceName/path?querystring`。以[用SpringMVC开发微服务](https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/build-provider/springmvc.html)中定义的服务提供者为例，其微服务名称是`springmvc`，basePath是`/springmvchello`，那么URL中的microserviceName=`springmvc`，请求sayhi时的path=`springmvchello/sayhi`，所以示例代码中请求sayhi的URL是`cse://springmvc/springmvchello/sayhi?name=Java Chassis`。具体代码示例如下 ：
+> * URL格式为：`cse://microserviceName/path?querystring`。以[用SpringMVC开发微服务](../build-provider/springmvc.md)中定义的服务提供者为例，其微服务名称是`springmvc`，basePath是`/springmvchello`，那么URL中的microserviceName=`springmvc`，请求sayhi时的path=`springmvchello/sayhi`，所以示例代码中请求sayhi的URL是`cse://springmvc/springmvchello/sayhi?name=Java Chassis`。具体代码示例如下 ：
 
 
 ```java
