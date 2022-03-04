@@ -61,7 +61,7 @@ public class JaxrsConsumerMain {
 
 > 说明：
 >
-> * URL格式为：`cse://microserviceName/path?querystring`。以[用SpringMVC开发微服务](/用SpringMVC开发微服务)中定义的服务提供者为例，其微服务名称是`springmvc`，basePath是`/springmvchello`，那么URL中的microserviceName=`springmvc`，请求sayhi时的path=`springmvchello/sayhi`，所以示例代码中请求sayhi的URL是`cse://springmvc/springmvchello/sayhi?name=Java Chassis`。具体代码示例如下 ：
+> * URL格式为：`cse://microserviceName/path?querystring`。以[用SpringMVC开发微服务](../build-provider/springmvc.md)中定义的服务提供者为例，其微服务名称是`springmvc`，basePath是`/springmvchello`，那么URL中的microserviceName=`springmvc`，请求sayhi时的path=`springmvchello/sayhi`，所以示例代码中请求sayhi的URL是`cse://springmvc/springmvchello/sayhi?name=Java Chassis`。具体代码示例如下 ：
 
 
 ```java
@@ -82,29 +82,31 @@ public class SpringmvcHelloImpl implements Hello {
     }
 }
 ```
-> 下述代码是示例项目  [ SpringMVC ](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/samples/springmvc-sample)的 springmvc-provider 模块 中 resources 目录下 microservice.yaml
+> 下述代码是示例项目  [ SpringMVC ](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample)的 springmvc-provider 模块 中 resources 目录下 microservice.yaml
 
 ```yaml
-APPLICATION_ID: springmvc-sample
-service_description:
-  name: springmvc # 这里就是定义的微服务名称
-  version: 0.0.2
 servicecomb:
   service:
+    application: springmvc-sample
+    name: springmvc
+    version: 0.0.1
+
     registry:
-      address: http://127.0.0.1:30100
+      # Default using local service center
+      address: http://localhost:30100
+      # address: https://cse.cn-south-1.myhuaweicloud.com
+      instance:
+        watch: false
+  kie:
+    serverUri: http://localhost:30110
+
   rest:
     address: 0.0.0.0:8080
-  highway:
-    address: 0.0.0.0:7070
   handler:
     chain:
       Provider:
         default: bizkeeper-provider
-cse:
-  service:
-    registry:
-      address: http://127.0.0.1:30100		#service center address
+
 ```
 
 
