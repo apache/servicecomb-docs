@@ -9,4 +9,4 @@
 [ServiceComb Java Chassis][java-chassis] 提供了实现 SDK，可以将其用于其他开发框架。SDK 默认采用 [Resilience4j][resilience4j]
 实现治理过程。规范没有约束治理过程的实现框架，可以很方便的使用其他的治理框架实现治理过程。 
 
-详细的开发指南参考： https://support.huaweicloud.com/devg-cse/cse_devg_0026.html
+基于动态配置的流量特征治理详细概念和开发指南请参考[微服务引擎开发指南](https://support.huaweicloud.com/devg-cse/cse_devg_0026.html)
