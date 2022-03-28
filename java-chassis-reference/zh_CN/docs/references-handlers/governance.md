@@ -10,3 +10,9 @@
 实现治理过程。规范没有约束治理过程的实现框架，可以很方便的使用其他的治理框架实现治理过程。 
 
 基于动态配置的流量特征治理详细概念和开发指南请参考[微服务引擎开发指南](https://support.huaweicloud.com/devg-cse/cse_devg_0026.html)
+
+[java-chassis]: https://github.com/apache/servicecomb-java-chassis
+[go-chassis]: https://github.com/go-chassis/go-chassis
+[spring-cloud]: https://github.com/huaweicloud/spring-cloud-huawei
+[dubbo]: https://github.com/huaweicloud/dubbo-servicecomb
+[resilience4j]: https://github.com/resilience4j
