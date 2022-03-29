@@ -36,7 +36,7 @@ REST over Vertx通道在microservice.yaml文件中有以下配置项：
 | servicecomb.rest.server.compression                     | false                                           | 服务端是否支持启用压缩                        |
 | servicecomb.rest.server.maxInitialLineLength            | 4096                                            | 服务端接收请求的最大 initial line 长度，单位字节 |
 | servicecomb.rest.server.maxHeaderSize                   | 32768                                           | 服务端接收请求的最大header长度，单位字节      |
-| servicecomb.rest.server.maxFormAttributeSize            | 2048                                            | 服务端接收请求的最大 form 长度，单位为字节   |
+| servicecomb.rest.server.maxFormAttributeSize            | 8192                                            | 服务端接收请求的最大 form 长度，单位为字节   |
 | servicecomb.rest.server.compressionLevel                | 6                                               | 服务端gzip/deflate压缩级别
 | servicecomb.rest.server.maxChunkSize                    | 8192                                            | 最大http chunk大小，单位为字节         |
 | servicecomb.rest.server.decoderInitialBufferSize        | 128                                             | HttpObjectDecoder的最大初始缓冲区大小   |

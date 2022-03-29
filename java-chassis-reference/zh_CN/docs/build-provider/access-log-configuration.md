@@ -322,7 +322,7 @@ public class UserDefinedCompositeExtendedAccessLogItemMeta extends CompositeVert
 
 3. 配置SPI加载文件
 
-  在 `resources/META-INF/services/` 目录下定义一个名为 "org.apache.servicecomb.transport.rest.vertx.accesslog.parser.VertxRestAccessLogItemMeta" 的文件，将上一步中定义的meta类完整类名填写到该文件中，供Parser加载meta类。
+  在 `resources/META-INF/services/` 目录下定义一个名为 "org.apache.servicecomb.common.accessLog.core.parser.VertxRestAccessLogItemMeta" 的文件，将上一步中定义的meta类完整类名填写到该文件中，供Parser加载meta类。
 
 4. 配置 Access Log 的 pattern
 

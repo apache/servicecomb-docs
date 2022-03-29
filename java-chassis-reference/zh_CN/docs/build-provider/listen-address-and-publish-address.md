@@ -39,7 +39,9 @@ servicecomb:
   service:
     publishAddress: "{eth0}" # 注册到服务中心的发布地址会是eth0网卡的IP
   rest:
+    publishPort: 8888 # 发布地址端口，不配置默认与监听地址端口一致
     address: 0.0.0.0:8080 # 监听主机的全部网卡IP
   highway:
+    publishPort: 8888 # 发布地址端口，不配置默认与监听地址端口一致
     address: 0.0.0.0:7070 # 监听主机的全部网卡IP
 ```

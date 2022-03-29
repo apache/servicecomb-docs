@@ -19,10 +19,10 @@ spring cloud gateway 是 spring cloud 开发的新一代网关服务，详细介
 
 使用 `zuul` 和 `spring cloud gateway` 作为网关，核心需要解决的问题是从服务中心发现其他微服务实例，
 需要使用到 [spring cloud huawei][spring-cloud-huawei0] 的组件，
-详细开发指南可以参考[1][spring-cloud-huawei1], [2][spring-cloud-huawei2]
+详细开发指南可以参考[zuul用spring cloud huawei的例子][zuul-ref]，[gateway用spring cloud huawei的例子][spring-cloud-gateway-ref]
 
-[zuul-ref]: https://springcloud.cc/spring-cloud-dalston.html#_router_and_filter_zuul
-[spring-cloud-gateway-ref]: https://spring.io/projects/spring-cloud-gateway
+[zuul-ref]: https://github.com/huaweicloud/spring-cloud-huawei-samples/tree/Hoxton/basic-zuul
+[spring-cloud-gateway-ref]: https://github.com/huaweicloud/spring-cloud-huawei-samples/tree/master/basic
 [spring-cloud-huawei0]: https://github.com/huaweicloud/spring-cloud-huawei
 [spring-cloud-huawei1]: https://support.huaweicloud.com/devg-servicestage/cse_java_0059.html
 [spring-cloud-huawei2]: https://support.huaweicloud.com/devg-servicestage/cse_java_0064.html
