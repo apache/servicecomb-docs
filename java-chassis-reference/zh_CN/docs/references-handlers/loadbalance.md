@@ -65,6 +65,40 @@ servicecomb:
 
 该规则默认启用，如果不需要使用，可以通过`servicecomb.loadbalance.filter.instanceProperty.enabled`进行关闭。根据实例属性进行路由转发功能在`InstancePropertyDiscoveryFilter`实现。
 
+## 根据实例属性值的层级进行路由转发
+实例属性优先级匹配可以看做是针对实例属性匹配的一种逻辑扩展。
+
+微服务的实例属性可以定义为具备优先级的格式，通过`.`符号进行分割。
+
+```yaml
+instance_description:
+  properties:
+    KEY: a.b.c
+```
+
+消费者需要指定用于优先级匹配的实例属性key，默认的key为`environment`。
+
+```yaml
+servicecomb:
+  loadbalance:
+    filter:
+      priorityInstanceProperty:
+        key: KEY
+```
+
+假设某个consumer的属性值为`a.b.c`，那么将会按照`a.b.c`>`a.b`>`a`>`[空]` 这样的优先级顺序匹配provider的实例，一旦匹配到即终止，下面的表格给出了不同情况的具体示例
+
+| consumer | match priority of provider|
+| :--- | :--- | 
+|a.b.c|a.b.c>a.b>a>[空]|
+|a.b|a.b>a>[空]|
+|a|a>[空]|
+|[空]|[空]|
+
+> 注意[空]是一种特殊情况，即未设置该属性的实例
+
+该规则默认关闭，如果需要开启，可以通过`servicecomb.loadbalance.filter.priorityInstanceProperty.enabled`配置打开。该功能在`PriorityInstancePropertyDiscoveryFilter`中实现。
+
 ## 实例隔离功能
 
 开发者可以配置实例隔离的参数，以暂时屏蔽对于错误实例的访问，提升系统可靠性和性能。下面是其配置项和缺省值
