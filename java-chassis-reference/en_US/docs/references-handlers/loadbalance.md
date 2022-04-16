@@ -68,6 +68,38 @@ This rule needs to be configured separately for each service. Global rule for al
 
 This rule is enabled by default, it can be disabled by setting `servicecomb.loadbalance.filter.instanceProperty.enabled` to false. The instance attributes based routing policy is implemented in `InstancePropertyDiscoveryFilter`.
 
+## Routing and forwarding by instance attributes with hierarchy value
+This is a extension of the feature above.
+
+You can specify the properties of microservice instances in microservice.yaml with hierarchy value, which is separated by `.` symbol.
+```yaml
+instance_description:
+  properties:
+    KEY: a.b.c
+```
+
+Consumer need to specify the key of instance which is used to match provider, the default key is `environment`
+
+```yaml
+servicecomb:
+  loadbalance:
+    filter:
+      priorityInstanceProperty:
+        key: KEY
+```
+
+Assuming there is a consumer instance with property value `a.b.c`, the match priority of provider will be `a.b.c`>`a.b`>`a`>`[empty]` and the table shown below gives detail match priority.
+| consumer | match priority of provider|
+| :--- | :--- | 
+|a.b.c|a.b.c>a.b>a>[empty]|
+|a.b|a.b>a>[empty]|
+|a|a>[empty]|
+|[empty]|[empty]|
+
+> Note that [empty] is represent for the instances which is not set value of this property key
+
+This rule is **NOT** enabled by default, which can be enabled by setting `servicecomb.loadbalance.filter.priorityInstanceProperty.enabled` to true. The policy is implemented in `PriorityInstancePropertyDiscoveryFilter`.
+
 ## Instance isolation
 Developers can configure instance-isolated parameters to temporarily drop access to the wrong instance, improving system reliability and performance. Below are the configuration items and default values:
 ```yaml
