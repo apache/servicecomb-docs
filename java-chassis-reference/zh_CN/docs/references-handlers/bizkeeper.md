@@ -82,7 +82,7 @@ servicecomb.isolation.Provider.DemoService.hello.sayHello.timeout.enabled # 接�
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | servicecomb.isolation.[type].[scope].timeout.enabled | FALSE | - | 否 | 是否启用超时检测 |  |
 | servicecomb.isolation.[type].[scope].timeoutInMilliseconds | 30000 | - | 否 | 超时时间阈值 |  |
-| servicecomb.isolation.[type].[scope].maxConcurrentRequests | 10 | - | 否 | 最大并发数阈值 |  |
+| servicecomb.isolation.[type].[scope].maxConcurrentRequests | 1000 | - | 否 | 最大并发数阈值 |  |
 | servicecomb.circuitBreaker.[type].[scope].enabled | TRUE | - | 否 | 是否启用熔断措施 |  |
 | servicecomb.circuitBreaker.[type].[scope].forceOpen | FALSE | - | 否 | 不管失败次数，都进行熔断 |  |
 | servicecomb.circuitBreaker.[type].[scope].forceClosed | FALSE | - | 否 | 任何时候都不熔断 | 当与forceOpen同时配置时，forceOpen优先。 |
