@@ -44,7 +44,7 @@ The default implementation of the dynamic configuration is the config-cc client,
 |servicecomb.config.client.refreshPort|config-center push configured port|
 |servicecomb.config.client.tenantName|Application tenant name|
 |servicecomb.config.client.serverUri|config-center access address, the format is `http(s)://{ip}:{port}`, to separate multiple addresses with comma (optional, when cse.config.client.regUri is configured as This configuration item will take effect when empty))|
-|servicecomb.config.client.refresh_interval|the configuration refresh interval, the unit is millisecond, default value is 30000|
+|servicecomb.config.client.refresh_interval|the configuration refresh interval, the unit is millisecond, default value is 15000|
 
 ## Get configuration information in the program
 
