@@ -87,7 +87,7 @@ servicecomb:
 |servicecomb.config.client.refreshPort|config-center推送配置的端口|
 |servicecomb.config.client.tenantName|应用的租户名称|
 |servicecomb.config.client.serverUri|config-center访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
-|servicecomb.config.client.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为30000|
+|servicecomb.config.client.refresh_interval|pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为15000|
 |servicecomb.config.client.fileSource|指定该配置项的内容为yaml文件，多个配置文件可以用`,`分隔|
 
 * 使用 servicecomb-kie
@@ -120,7 +120,7 @@ servicecomb-kie 的配置项及其含义如下：
 |---|---|
 |servicecomb.kie.domainName| 区域名称，默认为default |
 |servicecomb.kie.serverUri|servicecomb-kie访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址|
-|servicecomb.kie.refresh_interval|interval pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为3000|
+|servicecomb.kie.refresh_interval|interval pull模式下刷新配置项的时间间隔，单位为毫秒，默认值为15000|
 |servicecomb.kie.firstRefreshInterval|interval pull模式下启动过程中首次刷新时间间隔，单位为毫秒，默认值为3000|
 |servicecomb.kie.enableLongPolling|long pulling模式是否开启，默认值为true|
 
