@@ -20,6 +20,8 @@ null（比如get调用的场景），如果不为null，对应的码流长度，
 >HttpClientFilter 的 beforeSendRequest 在接口调用的当前线程执行， afterReceiveResponse 在业务线程池中执行。
 >HttpServerFilter 的 afterReceiveRequest 在业务线程池中执行，beforeSendResponse 和 beforeSendResponseAsync
 >可能在业务线程池执行， 也可能在网络线程池执行， 务必保证不能够出现阻塞操作。
+>
+>Java Chassis底层是异步框架，线程切换频繁。当业务扩展Filter时，若涉及通过ThreadLocal获取线程上下文时，可能会出现获取为空的情况。针对这种场景，建议使用InHeritableThreadLocal来代替ThreadLocal存储数据，或者使用扩展Handler的方式来代替Filter。
 
 ## HttpClientFilter
 

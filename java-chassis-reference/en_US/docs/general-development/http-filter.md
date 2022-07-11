@@ -18,6 +18,13 @@ Both HttpClientFilter and HttpServerFilter allow multiple loads:
 
 Whether it is request or response, read the body stream, use getBodyBytes\ (\), the return value may be null (such as scenario of getting an invocation), if not null, the corresponding stream length, Obtain through getBodyBytesLength\ (\ ).
 
+>***Tips***: 
+>The beforeSendRequest of HttpClientFilter is executed in the current thread of the interface call, and the afterReceiveResponse is executed in the business thread pool.
+>
+>The afterReceiveRequest of HttpServerFilter is executed in the business thread pool, beforeSendResponse and beforeSendResponseAsync may be executed in the business thread pool or the network thread pool. Make sure that blocking operations can not occur.
+>
+>The bottom layer of Java Chassis is an asynchronous framework, with frequent thread switching. When the business extends Filter, if it involves obtaining the thread context through ThreadLocal, the acquisition may be empty. For this scenario, it is recommended to use InhritableThreadLocal instead of ThreadLocal to store data, or to use extended Handler instead of Filter.
+
 # 2.HttpClientFilter
 
 The system has two built-in HttpClientFilter. Note that the order value does not conflict when extending the function:
