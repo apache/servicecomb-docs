@@ -179,35 +179,6 @@ servicecomb:
       successiveFailedTimes: 5 # 客户端失败次数，超过后会切换服务器
 ```
 
-## 设置重试策略
-负载均衡模块还支持配置失败重试的策略。
-```yaml
-servicecomb:
-  loadbalance:
-    retryEnabled: false
-    retryOnNext: 0
-    retryOnSame: 0
-```
-缺省情况未启用重试。同时也支持对不同的服务设置特殊的策略：
-```yaml
-servicecomb:
-  loadbalance:
-    myservice：
-      retryEnabled: true
-      retryOnNext: 1
-      retryOnSame: 0
-```
-
-retryOnNext表示失败以后，根据负载均衡策略，重新选择一个实例重试（可能选择到同一个实例）。 retryOnSame表示仍然使用上次失败的实例进行重试。
-
-**注意事项:**
-
-​     1.并不是所有的异常都会触发重试。缺省的情况，只有网络异常，或者 503 错误码才会触发重试。 详细可以参考 `DefaultRetryExtensionsFactory` 的定义。
-
-​     2.retry的场景下，对于同步调用, 同步调用的主线程已经被挂起，无法再主线程中进行重试，重试也不能在网络线程（event-loop）中进行，未被保护的阻塞操作会导致网络线程挂起，因此当前的重试机制会另起一个retry-pool-thread进行重试，因此如果业务在扩展`HttpClientFilter`的时候，如果涉及到通过ThreadLocal获取线程上下文的时候，会存在获取不到的情况，针对这种场景，建议在获取的时候做个判断处理，或者针对涉及ThreadLocal获取线程上下文的业务场景，建议采取通过扩展Handler的机制，进行处理，并保证扩展的Handler在loadbalance之前执行。
-
-​     3.如果代码中引入了solution-basic依赖，重试默认开启，详细配置可以参考该依赖里面的[配置文件](https://github.com/apache/servicecomb-java-chassis/blob/master/solutions/solution-basic/src/main/resources/microservice.yaml) 。
-
 ## 自定义
 负载均衡模块提供的功能已经非常强大，能够通过配置支持大部分应用场景。同时它也提供了强大的扩展能力，包括DiscoveryFilter、ServerListFilterExt、ExtensionsFactory（扩展IRule，RetryHandler等）。loadbalance模块本身包含了每一个扩展的实现，这里不再详细描述如何扩展，只简单描述步骤。开发者可以自行下载ServiceComb源码进行参考。
 
