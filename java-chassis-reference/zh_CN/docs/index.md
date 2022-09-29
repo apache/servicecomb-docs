@@ -9,21 +9,17 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 开发者可以通过下面的链接获取其他版本的帮助文档。
 
-| 版本| 链接 | 说明 |
-| :--- | :--- | :--- |
-| 最新(2.0.0) | [中文][apache.zh_CN], [English][apache.en_US] | |
-| 最新(2.0.0) | [中文][gitee.zh_CN], [English][gitee.en_US] | 由 gitee pages 托管，适合中国用户|
-| 最新(2.0.0) | [中文][coding.zh_CN], [English][coding.en_US] | 由 coding pages 托管，适合中国用户|
+| 适用版本      | 链接 | 说明 |
+|:----------| :--- | :--- |
+| 2.8.x     | [中文][apache.zh_CN], [English][apache.en_US] | |
+| 2.8.x | [中文][gitee.zh_CN], [English][gitee.en_US] | 由 gitee pages 托管，适合中国用户|
 
 [apache.zh_CN]: https://servicecomb.apache.org/references/java-chassis/zh_CN/
 [apache.en_US]: https://servicecomb.apache.org/references/java-chassis/en_US/
 [gitee.zh_CN]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/
 [gitee.en_US]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/
-[coding.zh_CN]: https://1v96us.coding-pages.com/docs/java-chassis/zh_CN/
-[coding.en_US]: https://1v96us.coding-pages.com/docs/java-chassis/en_US/
 
 ## 如何使用本文档
 
 * 通过[目录](toc.md)了解文档结构，查看关注的章节。
-* 访问[文档源代码](https://github.com/apache/servicecomb-docs/tree/master/java-chassis-reference)， 参考主页说明，采用 mkdocs 编译
-  后本地使用。 并在[issue](https://github.com/apache/servicecomb-docs/issues) 提交文档错误。 
+* 访问[文档源代码](https://github.com/apache/servicecomb-docs/tree/master/java-chassis-reference) ，采用 mkdocs 编译后本地使用。 并在[issue](https://github.com/apache/servicecomb-docs/issues) 提交改进建议。 
