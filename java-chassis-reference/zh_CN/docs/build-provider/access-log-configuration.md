@@ -1,3 +1,5 @@
+# Access Log
+
 ## 概念阐述
 
 ServiceComb 提供了基于 Vert.x 的 access log 和 request log 功能。当用户使用 REST over Vertx 通信方式时，可以通过简单的配置启用 access log 打印功能。当用户 client 端进行远程调用时，可以通过简单的配置启用 request log 打印功能
@@ -17,11 +19,15 @@ ServiceComb 提供了基于 Vert.x 的 access log 和 request log 功能。当�
 ```yaml
 servicecomb:
   accesslog:
-    enabled: true  ## server 端 启用access log
-    pattern: "%h - - %t %r %s %B %D" ##  server 端 自定义 access log 日志格式
+    ## server 端 启用access log
+    enabled: true
+    ##  server 端 自定义 access log 日志格式
+    pattern: "%h - - %t %r %s %B %D" 
     request:
-      enabled: true  ## client 端开启 request log
-      pattern: "%h %SCB-transport - - %t %r %s %D" ## client 端自定义 request log 日志格式
+      ## client 端开启 request log
+      enabled: true
+      ## client 端自定义 request log 日志格式
+      pattern: "%h %SCB-transport - - %t %r %s %D" 
 ```
 
 _**Access log & Request log 配置项说明**_
@@ -32,10 +38,6 @@ _**Access log & Request log 配置项说明**_
 | servicecomb.accesslog.pattern | 表示打印格式的字符串 | **"%h - - %t %r %s %B %D"** |  配置项见_**日志元素说明表**_ |
 | servicecomb.accesslog.request.enabled | true/false | **false** | 如果为true则启用request log，否则不启用 |
 | servicecomb.accesslog.request.pattern | 表示打印格式的字符串 | **"%h %SCB-transport - - %t %r %s %D"** |  配置项见_**日志元素说明表**_ |
-
-> _**说明：**_
->
-> * 以上四个配置项均可省略，若省略则使用默认值。
 
 ### 日志格式配置
 
@@ -105,100 +107,8 @@ _**Access log 与 Request log 的日志元素对比**_
 
 ### 日志输出文件配置
 
-Access log & Request log 的日志打印实现框架默认采用 Log4j ，并提供了一套默认的日志文件配置。用户可以在自己定义的 log4j.properties 文件中覆写这些配置。用户可配置的日志文件配置项见下表。
+Access log & Request log 的日志打印实现框架默认采用 Slf4j ，其中 logger 名称分别为 `accesslog` 和 `requestlog`, 可以结合应用使用的日志框架将日志输出到不同的文件中。
 
-_**日志文件配置项**_
-
-| 配置项 | 默认值 | 含义 | 说明 |
-| :--- | :--- | :--- | :--- |
-| paas.logs.accesslog.dir | ${paas.logs.dir} | 日志文件输出目录 | 与普通日志输出到同一个目录中 |
-| paas.logs.accesslog.file | access.log | 日志文件名 | - |
-| log4j.appender.access.MaxBackupIndex | 10 | 最大保存的日志滚动文件个数 | - |
-| log4j.appender.access.MaxFileSize | 20MB | 日志文件最大体积 | 正在记录的文件达到此大小时触发日志滚动存储 |
-| log4j.appender.access.logPermission | rw------- | 日志文件权限 | - |
-| paas.logs.requestlog.dir | ${paas.logs.dir} | 日志文件输出目录 | 与普通日志输出到同一个目录中 |
-| paas.logs.requestlog.file | request.log | 日志文件名 | - |
-| log4j.appender.request.MaxBackupIndex | 10 | 最大保存的日志滚动文件个数 | - |
-| log4j.appender.request.MaxFileSize | 20MB | 日志文件最大体积 | 正在记录的文件达到此大小时触发日志滚动存储 |
-| log4j.appender.request.logPermission | rw------- | 日志文件权限 | - |
-
-> _**注意：**_  
-> 由于 ServiceComb 的日志打印功能只依赖 slf4j 的接口，因此用户可以选择其他日志打印框架，选择其他日志打印框架时需要用户自行配置日志文件输出选项。
-
-### 日志实现框架切换为 logback
-
-> 针对采用 logback 作为日志打印框架的项目，需要将日志打印框架依赖从 Log4j 改为 logback 并添加部分配置以使 log 功能正常生效。
-
-#### 1. 排除 Log4j 依赖
-
-在将日志实现框架切换为 logback 之前，需要检查项目的依赖，从中排除掉 Log4j 相关的依赖项。在项目中运行 maven 命令 `dependency:tree` ，找出其中依赖了Log4j的ServiceComb组件，在其`<dependency>`依赖项中添加如下配置：
-
-```xml
-<exclusion>
-  <groupId>org.slf4j</groupId>
-  <artifactId>slf4j-log4j12</artifactId>
-</exclusion>
-```
-
-#### 2. 添加 logback 依赖
-
-在 pom 文件中添加 logback 的依赖项：
-
-```xml
-<dependency>
-  <groupId>org.slf4j</groupId>
-  <artifactId>slf4j-api</artifactId>
-</dependency>
-<dependency>
-  <groupId>ch.qos.logback</groupId>
-  <artifactId>logback-classic</artifactId>
-</dependency>
-<dependency>
-  <groupId>ch.qos.logback</groupId>
-  <artifactId>logback-core</artifactId>
-</dependency>
-```
-
-#### 3. 配置 access log & request log 组件的 logger
-
-ServiceComb 提供的日志打印组件是获取名为 `accesslog` & `requestlog` 的 logger 来打印 access log  和 request log ，因此将日志实现框架从 Log4j 切换为 logback 的关键就是提供一个名为 `accesslog` & `requestlog` 的 Logger，并为其配置好日志输出文件。以下是 **access log** & **request log** 在 logback 配置文件中的配置示例（本示例仅展示 access log & request log相关的配置，其他日志配置均省略）：
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-  <!-- 用户可根据需要自定义appender -->
-  <appender name="ACCESSLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/access.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./logs/access-%d{yyyy-MM-dd}.log</fileNamePattern>
-    </rollingPolicy>
-    <!-- 注意：由于access log的内容是在代码中完成格式化的，因此这里只需输出message即可，无需添加额外的格式 -->
-    <encoder>
-      <pattern>%msg%n</pattern>
-    </encoder>
-  </appender>
-  <appender name="REQUESTLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/request.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./logs/access-%d{yyyy-MM-dd}.log</fileNamePattern>
-    </rollingPolicy>
-    <!-- 注意：由于request log的内容是在代码中完成格式化的，因此这里只需输出message即可，无需添加额外的格式 -->
-    <encoder>
-      <pattern>%msg%n</pattern>
-    </encoder>
-  </appender>
-
-  <!-- 提供一个名为"accesslog"的logger供access log打印组件使用 -->
-  <logger name="accesslog" level="INFO" additivity="false">
-    <appender-ref ref="ACCESSLOG" />
-  </logger>
-  <!-- 提供一个名为"requestlog"的logger供request log打印组件使用 -->
-  <logger name="requestlog" level="INFO" additivity="false">
-    <appender-ref ref="REQUESTLOG" />
-  </logger>
-
-</configuration>
-```
 
 ### 自定义扩展 Access Log & Request Log
 
@@ -339,35 +249,3 @@ servicecomb:
 
 以服务端为例， 运行服务触发Access Log打印，假设请求返回状态码是 200，则可以看到Access Log打印内容为 "`user-defined--server-200-param`"。
 
-## 示例代码
-
-### microservice.yaml文件中的配置
-
-```yaml
-## other configurations omitted
-servicecomb:
-  accesslog:
-    enabled: true ## 应用作为服务端，开启 Access log
-    pattern: "%h - - %t %r %s %B %D" ## Access log 日志格式
-    request:   
-      enabled: true  ## 应用作为客户端，开启 Request log
-      pattern: "%h %SCB-transport - - %t %r %s %D" ## Request log 日志格式
-    
-```
-
-### log4j.properties文件中的配置
-
-```properties
-# log configuration item
-paas.logs.dir=../logs/
-paas.logs.accesslog.file=access.log
-paas.logs.requestlog.file=request.log
-# access log File appender
-log4j.appender.access.MaxBackupIndex=10
-log4j.appender.access.MaxFileSize=20MB
-log4j.appender.access.logPermission=rw-------
-# request log File appender
-log4j.appender.request.MaxBackupIndex=10
-log4j.appender.request.MaxFileSize=20MB
-log4j.appender.request.logPermission=rw-------
-```
