@@ -63,7 +63,6 @@
     * [微服务实例间多环境隔离](general-development/multienvironment.md)
     * [线程模型](general-development/thread-model.md)
     * [配置日志](general-development/config-logs.md)
-    * [使用 inspector 模块查看契约](general-development/using-inspector.md)  
 * 多样化的通信协议功能参考:
     * [多协议介绍](transports/introduction.md)
     * [REST over Servlet](transports/rest-over-servlet.md)
@@ -84,7 +83,6 @@
     - [限流](references-handlers/ratelimit.md)
     - [灰度发布](references-handlers/router.md)
     - [故障注入](references-handlers/fault-injection.md)
-    - [隔离熔断容错](references-handlers/bizkeeper.md)
     - [基于动态配置的流量特征治理](references-handlers/governance.md)
     - [快速失败和重试](references-handlers/fail-retry.md)
 - 网关功能参考:
