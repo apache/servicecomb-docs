@@ -1,48 +1,56 @@
 # 使用 Edge Service 做网关
 
-Edge Service 是ServiceComb 提供的JAVA网关服务开发框架。Edge Service作为整个微服务系统对外的接口，向最终用户提供服务，接入RESTful请求，转发给内部微服务。Edge Service以开发框架的形式提供，开发者可以非常简单的搭建一个Edge Service服务，通过简单的配置就可以定义路由转发规则。同时Edge Service支持强大的扩展能力，服务映射、请求解析、加密解密、鉴权等逻辑都可以通过扩展实现。
+Edge Service 是ServiceComb 提供的JAVA网关服务开发框架。Edge Service作为整个微服务系统对外的接口，向最终用户提供服务，接入REST请求，转发给内部微服务，Edge Service支持REST请求和Highway请求的转发。Edge Service以开发框架的形式提供，开发者可以非常简单的搭建一个Edge Service服务，通过简单的配置就可以定义路由转发规则。同时Edge Service支持强大的扩展能力，服务映射、请求解析、加密解密、鉴权等逻辑都可以通过扩展实现。
 
 Edge Service 本身也是一个微服务，需遵守所有微服务开发的规则。其本身可以部署为多实例，前端使用负载均衡装置进行负载分发；也可以部署为主备，直接接入用户请求。开发者可以根据Edge Service承载的逻辑和业务访问量、组网情况来规划。
 
 ## 开发 Edge Service 服务
-开发 Edge Service 和开发一个普通的微服务步骤差不多，开发者可以从导入[ServiceComb Edge Service Demo](https://github.com/apache/incubator-servicecomb-java-chassis/tree/master/demo/demo-edge)入手。从头搭建项目包含如下几个步骤：
+
+开发 Edge Service 和开发一个普通的微服务步骤差不多，开发者可以从导入[ServiceComb Edge Service Samples](https://github.com/apache/servicecomb-samples/tree/master/basic/gateway)入手。从头搭建项目包含如下几个步骤：
 
 * 配置依赖关系
 
-在项目中加入edge-core的依赖，就可以启动Edge Service的功能。Edge Service在请求转发的时候，会经过处理链，因此还可以加入相关的处理链的模块的依赖，下面的实例增加的负载均衡的处理链，这个是必须的。
+在项目中加入edge-core的依赖，就可以启动Edge Service的功能。
+
 ```
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>edge-core</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>handler-loadbalance</artifactId>
-</dependency>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>edge-core</artifactId>
+    </dependency>
 ```
 
 * 定义启动类
 
-和开发普通微服务一样，可以通过加载Spring的方式将服务拉起来。
+和开发普通微服务一样，可以通过 `@EnableServiceComb` 的方式将服务拉起来。
+
 ```
-public class EdgeMain {
+@SpringBootApplication
+@EnableServiceComb
+public class GatewayApplication {
   public static void main(String[] args) throws Exception {
-    Log4jUtils.init();
-    BeanUtils.init();
+    try {
+      new SpringApplicationBuilder().web(WebApplicationType.NONE).sources(GatewayApplication.class).run(args);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
 ```
 
-* 增加配置文件microservie.yaml
+* 增加配置文件 microservice.yaml
 
-Edge Service本身也是一个微服务，遵循微服务查找的规则，自己也会进行注册。注意APPLICAIONT_ID与需要转发的微服务相同。在下面的配置中，指定了Edge Service监听的地址，处理链等信息。其中auth处理链是DEMO项目中自定义的处理链，用于实现认证。同时auth服务本身，不经过这个处理链，相当于不鉴权。
+Edge Service本身也是一个微服务，遵循微服务查找的规则，自己也会进行注册。注意 `application` 与需要转发的微服务相同。在下面的配置中，指定了Edge Service监听的地址，处理链等信息。其中auth处理链是DEMO项目中自定义的处理链，用于实现认证。同时auth服务本身，不经过这个处理链，相当于不鉴权。
+
 ```
-APPLICATION_ID: edge
-service_description:
-  name: edge
-  version: 0.0.1
 servicecomb:
   service:
+    application: edge
+    name: edge
+    version: 0.0.1
     registry:
       address: http://127.0.0.1:30100
   rest:
@@ -127,7 +135,8 @@ servicecomb:
       edge:
         url:
           enabled: true
-          pattern: /(.*) ## 默认值，一般不需要配置
+          ## 默认值，一般不需要配置
+          pattern: "/(.*)"
           mappings:
             businessV1:
               prefixSegmentCount: 1
@@ -141,7 +150,7 @@ servicecomb:
               versionRule: 2.0.0-3.0.0
 ```
 
-businessV1配置项表示的含义是将请求路径为/usr/business/v1/.*的请求，转发到business这个微服务，并且只转发到版本号为1.0.0-2.0.0的实例（不含2.0.0）。转发的时候URL为/business/v1/.*。path使用的是JDK的正则表达式，可以查看Pattern类的说明。prefixSegmentCount表示前缀的URL Segment数量，前缀不包含在转发的URL路径中。有三种形式的versionRule可以指定。2.0.0-3.0.0表示版本范围，含2.0.0，但不含3.0.0；2.0.0+表示大于2.0.0的版本，含2.0.0；2.0.0表示只转发到2.0.0版本。2，2.0等价于2.0.0。
+`businessV1` 配置项表示的含义是将请求路径为 `/url/business/v1/.*` 的请求，转发到`business` 这个微服务，并且只转发到版本号为1.0.0-2.0.0的实例（不含2.0.0）。转发的时候URL为 `/business/v1/.*` 。path使用的是JDK的正则表达式，可以查看Pattern类的说明。prefixSegmentCount表示前缀的URL Segment数量，前缀不包含在转发的URL路径中。有三种形式的versionRule可以指定。2.0.0-3.0.0表示版本范围，含2.0.0，但不含3.0.0；2.0.0+表示大于2.0.0的版本，含2.0.0；2.0.0表示只转发到2.0.0版本。2，2.0等价于2.0.0。
 
 从上面的配置可以看出，URLMappedEdgeDispatcher也支持客户端灰度。当然配置项会比DefaultEdgeDispatcher多。URLMappedEdgeDispatcher支持通过配置中心动态的修改配置，调整路由规则。
 
@@ -157,7 +166,8 @@ servicecomb:
       edge:
         http:
           enabled: true
-          pattern: /(.*) ## 默认值，一般不需要配置
+          ## 默认值，一般不需要配置
+          pattern: "/(.*)" 
           mappings:
             businessV2:
               prefixSegmentCount: 1
