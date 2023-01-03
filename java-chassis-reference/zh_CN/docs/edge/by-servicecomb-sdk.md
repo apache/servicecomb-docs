@@ -90,7 +90,8 @@ servicecomb:
 使用Edge Service的核心工作是配置路由规则。场景不同，规则也不同。
 路由规则由一系列AbstractEdgeDispatcher组成。Edge Service提供了几个常见的Dispatcher，通过配置即可启用，如果这些Dispatcher不满足业务场景需要，还可以自定义。
 
-### 使用 DefaultEdgeDispatcher
+* 使用 DefaultEdgeDispatcher
+
 DefaultEdgeDispatcher是一个非常简单、容易管理的Dispatcher，使用这个Dispatcher，用户不用动态管理转发规则，应用于实际的业务场景非常方便，这个也是推荐的一种管理机制。它包含如下几个配置项：
 ```
 servicecomb:
@@ -106,18 +107,18 @@ servicecomb:
 
 常见的这些配置项的示例及含义如下:
 
-* [prefix=rest;withVersion=true;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=true;prefixSegmentCount=3]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，，请求可能转发到任意微服务实例。
-* [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/abc，，请求可能转发到任意微服务实例。
+  * [prefix=rest;withVersion=true;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+  * [prefix=rest;withVersion=true;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+  * [prefix=rest;withVersion=true;prefixSegmentCount=3]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/v1/abc，请求只转发到[1.0.0-2.0.0)版本的微服务实例。
+  * [prefix=rest;withVersion=false;prefixSegmentCount=1]微服务xService提供的URL为: /xService/v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，请求可能转发到任意微服务实例。
+  * [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /v1/abc，通过Edge访问的地址为/rest/xService/v1/abc，，请求可能转发到任意微服务实例。
+  * [prefix=rest;withVersion=false;prefixSegmentCount=2]微服务xService提供的URL为: /abc，通过Edge访问的地址为/rest/xService/abc，，请求可能转发到任意微服务实例。
 
 withVersion配置项提供了客户端灰度规则，可以让客户端指定访问的服务端版本。Edge Service还包含根据接口兼容性自动路由的功能，请求会转发到包含了该接口的实例。假设某微服务，兼容规划为所有高版本必须兼容低版本，部署了以下版本实例：
 
-* 1.0.0，提供了operation1
+  * 1.0.0，提供了operation1
 
-* 1.1.0，提供了operation1、operation2
+  * 1.1.0，提供了operation1、operation2
 
 Edge Service在转发operation1时，会自动使用1.0.0+的规则来过滤实例
 
@@ -125,7 +126,8 @@ Edge Service在转发operation2时，会自动使用1.1.0+的规则来过滤实�
 
 以上过程用户不必做任何干预，全自动完成，以避免将新版本的operation转发到旧版本的实例中去。
 
-### 使用 URLMappedEdgeDispatcher
+* 使用 URLMappedEdgeDispatcher
+
 URLMappedEdgeDispatcher 允许用户配置URL和微服务的映射关系。使用它可以非常灵活的定义哪些URL转发到哪些微服务。它包含如下几个配置项：
 
 ```yaml
@@ -154,7 +156,7 @@ servicecomb:
 
 从上面的配置可以看出，URLMappedEdgeDispatcher也支持客户端灰度。当然配置项会比DefaultEdgeDispatcher多。URLMappedEdgeDispatcher支持通过配置中心动态的修改配置，调整路由规则。
 
-### 使用 CommonHttpEdgeDispatcher
+* 使用 CommonHttpEdgeDispatcher
 
 CommonHttpEdgeDispatcher 能够将请求转发到监听 HTTP 或者 HTTP 2 协议的 Provider， 对于 Provider 的开发框架没有限制，也不
 要求 Provider 注册契约信息。 
@@ -178,7 +180,7 @@ servicecomb:
 
 CommonHttpEdgeDispatcher 配置项的含义和 URLMappedEdgeDispatcher 类似。
 
-### 自定义 Dispatcher
+* 自定义 Dispatcher
 
 自定义Dispatcher包含两个步骤：
 
@@ -187,7 +189,7 @@ CommonHttpEdgeDispatcher 配置项的含义和 URLMappedEdgeDispatcher 类似。
 
 详细的代码细节可以参考下面的章节"DEMO功能说明"。开发者也可以参考DefaultEdgeDispatcher等代码来定义自己的Dispatcher。
 
-### 进行认证鉴权和其他业务处理
+* 进行认证鉴权和其他业务处理
 
 通过Edge Servie工作流程可以看出，可以通过多种方式来扩展Edge Service的功能，包括Dispatcher、HttpServerFilter、Handler、HttpClientFilter等。比较常用和简单的是通过Handler来扩展。DEMO里面展示了如何通过Handler扩展来实现鉴权。详细的代码细节可以参考下面的章节"DEMO功能说明"。
 
@@ -197,23 +199,23 @@ CommonHttpEdgeDispatcher 配置项的含义和 URLMappedEdgeDispatcher 类似。
 
 ## 工作模式
 
-### reactive \(默认\)
+* reactive \(默认\)
 
 Edge Service默认工作于高性能的reactive模式，此模式要求工作于Edge Service转发流程中的业务代码不能有任何的阻塞操作，包括不限于：
 
-* 远程同步调用，比如同步查询数据库、同步调用微服务，或是同步查询远程缓存等等
+  * 远程同步调用，比如同步查询数据库、同步调用微服务，或是同步查询远程缓存等等
 
-* 任何的sleep调用
+  * 任何的sleep调用
 
-* 任何的wait调用
+  * 任何的wait调用
 
-* 超大的循环
+  * 超大的循环
 
 Edge Service的底层是基于netty的vertx，以上约束即是netty的reactive模式约束。
 
 ![](../assets/reactive.png)
 
-### 线程池
+*  线程池
 
 如果业务模型无法满足reactive要求，则需要使用线程池模式。
 
@@ -233,7 +235,7 @@ servicecomb:
 
 DEMO 源码请参考 [edge service demo](https://github.com/apache/servicecomb-java-chassis/tree/master/demo/demo-edge)
 
-### 1.注册Dispatcher
+* 注册Dispatcher
 
 实现接口org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher，或从
 org.apache.servicecomb.edge.core.AbstractEdgeDispatcher继承，实现自己的dispatcher功能。
@@ -242,7 +244,7 @@ org.apache.servicecomb.edge.core.AbstractEdgeDispatcher继承，实现自己的d
 
 Dispatcher需要实现2个方法：
 
-* ### getOrder
+* getOrder
 
 Dispatcher需要向vertx注入路由规则，路由规则之间是有优先级顺序关系的。
 
@@ -250,7 +252,7 @@ Dispatcher需要向vertx注入路由规则，路由规则之间是有优先级�
 
 如果2个Dispatcher的getOrder返回值相同，则2者的顺序不可预知。
 
-* ### init
+* init
 
 init方法入参为vertx框架中的io.vertx.ext.web.Router，需要通过该对象实现路由规则的定制。
 
@@ -268,7 +270,7 @@ _假设Dispatcher A和B都可以处理同一个url，并且A优先级更高，�
 
 * _如果A处理完，然后调用了RoutingContext.next\(\)，则会将请求转移给B处理_
 
-### 2.转发请求
+* 转发请求
 
 注册路由时，指定了使用哪个方法来处理请求（下面使用onRequest来指代该方法），在onRequest中实现转发逻辑。
 
@@ -298,7 +300,7 @@ edgeInvoke调用内部，会作为ServiceComb标准consumer去转发调用。
 
 作为标准consumer，意味着ServiceComb所有标准的治理能力在这里都是生效的。
 
-### 3.设置兼容规则
+* 设置兼容规则
 
 不同的业务可能有不同的兼容规划，servicecomb默认的兼容规则，要求所有新版本兼容旧版本。如果满足这个要求，则不必做任何特殊的设置。
 
@@ -325,7 +327,7 @@ edgeInvocation.setVersionRule(versionMapper.getOrCreate(pathVersion).getVersionR
 versionMapper的作用是将v1或是v2这样的串，转为1.0.0-2.0.0或2.0.0-3.0.0这样的兼容规则。
 
 
-### 4.鉴权
+* 鉴权
 
 Edge Service是系统的边界，对于很多请求需要执行鉴权逻辑。
 

@@ -1,11 +1,12 @@
 # 返回值序列化扩展
+
 ## 概念阐述
 
 当前REST通道返回值支持application/json和text/plain两种格式，支持开发人员扩展和重写，服务提供者通过produces声明可提供序列化能力，服务消费者通过请求的Accept头指明返回值序列化方式，默认返回application/json格式的数据。
 
 ## 开发说明
 
-* ### 扩展
+* 扩展
 
   开发人员可以根据业务需要，通过编程的方式来扩展返回值序列化方式。实施步骤如下，以扩展支持application/xml格式为例：
 
@@ -48,7 +49,7 @@
 
   在resources下META-INF/services/文件夹新建文件xxx.ProduceProcessor（xxx为接口的包名），内容填写xxx.ProduceAppXmlProcessor（xxx为实现类的包名）。
 
-* ### 重写
+* 重写
 
   开发人员可以对现有的application/json和text/plain两种格式实现逻辑进行重写，也可以对自行扩展的格式进行重写，以重写xml序列化方式为例：
 
@@ -60,7 +61,7 @@
 
   4.在resources下META-INF/services/文件夹新建文件xxx.ProduceProcessor（xxx为接口的包名），内容填写xxx.ProduceAppXmlProcessor（xxx为实现类的包名）。
 
-* ### 验证
+* 验证
 
   服务提供者通过produces声明可提供xml序列化能力
 

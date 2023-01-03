@@ -93,7 +93,6 @@ nav:
     - 'FAQ' : question-and-answer/faq.md
     - Micro Service Interface Compatibility FAQ: question-and-answer/interface-compatibility.md
 
-theme: readthedocs
-plugins: 
-    - search:
-        lang: en
+theme: material
+plugins:
+    - search
