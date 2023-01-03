@@ -61,6 +61,6 @@ nav:
     - 'FAQ' : question-and-answer/faq.md
     - 'Q & A' : question-and-answer/question_answer.md
     - 微服务接口兼容常见问题: question-and-answer/interface-compatibility.md
-theme: readthedocs
+theme: material
 plugins:
-    - bingsearch
+    - search

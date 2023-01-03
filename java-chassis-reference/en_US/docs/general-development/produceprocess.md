@@ -1,11 +1,12 @@
 # return value serialization extension
+
 ## Concept Description
 
 The current REST channel return value supports both application/json and text/plain formats, supports developer extensions and rewrites, service providers provide serialization capabilities through producer declarations, and service consumers specify return value serialization through the request's Accept header. By default, the data in application/json format is returned.
 
 ## Development Instructions
 
-* ### extension
+* extension
 
   Developers can extend the return value serialization method programmatically based on business needs. The implementation steps are as follows, taking the extended support application/xml format as an example:
 
@@ -48,7 +49,7 @@ The current REST channel return value supports both application/json and text/pl
 
   In the META-INF/services/ folder under resources, create a new file xxx.ProduceProcessor (xxx is the package name of the interface), and fill in the content xxx.ProduceAppXmlProcessor (xxx is the package name of the implementation class).
 
-* ### Rewrite
+* Rewrite
 
   Developers can rewrite the existing application/json and text/plain implementation logic, or rewrite the self-extended format to rewrite the xml serialization method as an example:
 
@@ -60,7 +61,7 @@ The current REST channel return value supports both application/json and text/pl
 
   4. In the META-INF/services/ folder under resources, create a new file xxx.ProduceProcessor (xxx is the package name of the interface), and fill in the content xxx.ProduceAppXmlProcessor (xxx is the package name of the implementation class).
 
-* ### verification
+* verification
 
   Service providers provide xml serialization capabilities through producer declarations
 

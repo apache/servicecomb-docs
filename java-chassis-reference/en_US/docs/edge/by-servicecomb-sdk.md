@@ -64,7 +64,8 @@ The workflow of the Edge Service is as follows, the blue background part is exec
 The core job of using the Edge Service is to configure routing rules. The rules are different, and the rules are different.
 A routing rule consists of a series of AbstractEdgeDispatchers. The Edge Service provides several common Dispatchers that can be enabled through configuration. If these Dispatchers do not meet the needs of the business scenario, they can be customized.
 
-### Using DefaultEdgeDispatcher
+* Using DefaultEdgeDispatcher
+
 DefaultEdgeDispatcher is a very simple and easy to manage Dispatcher. With this Dispatcher, users do not need to manage forwarding rules dynamically. It is very convenient to apply to actual business scenarios. This is also a recommended management mechanism. It contains the following configuration items:
 ```
 servicecomb:
@@ -98,7 +99,8 @@ When Edge Service forwards operation2, it automatically uses the rules of 1.1.0+
 
 The above process does not require any intervention and is fully automated to avoid forwarding the new version of the operation to the instance of the old version.
 
-### Using URLMappedEdgeDispatcher
+* Using URLMappedEdgeDispatcher
+
 URLMappedEdgeDispatcher allows users to configure mappings between URLs and microservices. It is very flexible to define which URLs are forwarded to which microservices. It contains the following configuration items:
 ```
 servicecomb:
@@ -124,7 +126,7 @@ The meaning of the businessV1 configuration item is that the request with the re
 
 As can be seen from the above configuration, URLMappedEdgeDispatcher also supports client grayscale. Of course, there will be more configuration items than DefaultEdgeDispatcher. The URLMappedEdgeDispatcher supports dynamic configuration modification of the configuration center to adjust routing rules.
 
-### Custom Dispatcher
+* Custom Dispatcher
 
 Customizing the Dispatcher involves two steps:
 
@@ -133,7 +135,7 @@ Customizing the Dispatcher involves two steps:
 
 Detailed code details can be found in the following section "DEMO Functional Description". Developers can also refer to the Code such as DefaultEdgeDispatcher to define their Dispatcher.
 
-### Perform authentication and other business processing
+* Perform authentication and other business processing
 
 Through the Edge Service workflow, you can see that the Edge Service features can be extended in a variety of ways, including Dispatcher, HttpServerFilter, Handler, HttpClientFilter, and more. More common and straightforward is to extend through Handler. DEMO shows how to implement authentication through Handler extensions. Detailed code details can be found in the following section "DEMO Functional Description".<Paste>
 
@@ -143,7 +145,7 @@ Through the Edge Service workflow, you can see that the Edge Service features ca
 
 ## Operating mode
 
-###reactive \(default\)
+* reactive \(default\)
 
 The Edge Service works by default in the high-performance reactive mode. This mode requires that the business code working in the Edge Service forwarding process cannot have any blocking operations, including:
 
@@ -159,7 +161,7 @@ The underlying Edge Service is based on netty's vertx. The above constraint is n
 
 ![](../assets/reactive.png)
 
-### Thread Pool
+* Thread Pool
 
 If the business model cannot meet the reactive requirements, you need to use the thread pool mode.
 
@@ -193,7 +195,7 @@ The demo contains the following projects:
 
 Access different versions of microservices through edge-service and confirm that the correct instance handles them.
 
-### 1.Register Dispatcher
+* Register Dispatcher
 
 Implement the interface org.apache.servicecomb.transport.rest.vertx.VertxHttpDispatcher, or inherit from org.apache.servicecomb.edge.core.AbstractEdgeDispatcher to implement your own dispatcher function.
 
@@ -201,7 +203,7 @@ The implementation class is registered to the system through the Java standard S
 
 Dispatcher needs to implement 2 methods:
 
-* ### getOrder
+* getOrder
 
 Dispatcher needs to inject routing rules into vertx, and routing rules have a priority order relationship.
 
@@ -209,7 +211,7 @@ All Dispatchers in the system are sorted according to the return value of getOrd
 
 If the GetOrder return values the two Dispatchers are the same, the order of the two is unpredictable.
 
-* ### init
+* init
 
 The init method is included in the io.vertx.ext.web.The router in the vertx framework. You need to customize the routing rules through this object.
 
@@ -227,7 +229,7 @@ _Assuming Dispatcher A and B can both handle the same url, and A has a higher pr
 
 * _ If A is processed and then calling RoutingContext.next\(\), the request will be transferred to B.
 
-### 2. Forwarding request
+* Forwarding request
 
 When registering a route, it specifies which method is used to process the request (the following method is used to refer to the method), and the forwarding logic is implemented in the onRequest.
 
@@ -257,7 +259,7 @@ The edgeInvoke call is internally called and will be forwarded as a ServiceComb 
 
 As a standard consumer, it means that the governance capabilities of all ServiceComb standards are valid here.
 
-### 3. Setting compatibility rules
+* Setting compatibility rules
 
 Different services may have different compatibility plans, servicecomb default compatibility rules, and all new versions are required to be compatible with the old version. If this requirement is met, no special settings need to be made.
 
@@ -287,7 +289,7 @@ The role of versionMapper is to convert a string such as v1 or v2 to a compatibi
 
 Incompatible interfaces can cause many problems. The java chassis requires that the higher version of the service is compatible with the lower version of the service, and only allows the addition of the interface to not allow the interface to be deleted. After adding an interface, you must increase the version number of the microservice. In the development phase, interfaces change frequently, and developers often forget this rule. When this constraint is broken, you need to clean up the service center microservices information and restart the microservices and Edge Service\ (and other services that depend on the microservices). Otherwise, the request forwarding failure may occur.
 
-### 4.Authentication
+* Authentication
 
 The Edge Service is the boundary of the system and requires authentication logic for many requests.
 
