@@ -9,15 +9,18 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 开发者可以通过下面的链接获取其他版本的帮助文档。
 
-| 适用版本      | 链接 | 说明 |
-|:----------| :--- | :--- |
-| 2.8.x     | [中文][apache.zh_CN], [English][apache.en_US] | |
-| 2.8.x | [中文][gitee.zh_CN], [English][gitee.en_US] | 由 gitee pages 托管，适合中国用户|
+| 适用版本  | 链接 | 说明   |
+|:------| :--- |:-----|
+| 3.x.x | [中文][apache.zh_CN], [English][apache.en_US] | 开发状态 |
+| 2.8.x | [中文][apache.zh_CN.2.8.x], [English][apache.en_US.2.8.x] |      |
+| 1.3.x | [中文][apache.zh_CN.1.3.x], [English][apache.en_US.1.3.x] |      |
 
 [apache.zh_CN]: https://servicecomb.apache.org/references/java-chassis/zh_CN/
 [apache.en_US]: https://servicecomb.apache.org/references/java-chassis/en_US/
-[gitee.zh_CN]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/zh_CN/
-[gitee.en_US]: https://servicecomb.gitee.io/servicecomb-java-chassis-doc/java-chassis/en_US/
+[apache.zh_CN.2.8.x]: https://servicecomb.apache.org/references/java-chassis/2.x/zh_CN/
+[apache.en_US.2.8.x]: https://servicecomb.apache.org/references/java-chassis/2.x/en_US/
+[apache.zh_CN.1.3.x]: https://servicecomb.apache.org/references/java-chassis/1.x/zh_CN/
+[apache.en_US.1.3.x]: https://servicecomb.apache.org/references/java-chassis/1.x/en_US/
 
 ## 如何使用本文档
 
