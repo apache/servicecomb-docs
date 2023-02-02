@@ -102,10 +102,6 @@ servicecomb:
 
   rest:
     address: 0.0.0.0:8080
-  handler:
-    chain:
-      Provider:
-        default: bizkeeper-provider
 
 ```
 

@@ -36,5 +36,4 @@ Publish address: refers to the address where the microservice instance is regist
 
 • [Load Balancing Policy](/build-provider/configuration/lb-strategy.html)
 • [Limiting Policy](/build-provider/configuration/ratelimite-strategy.html)
-• [Downgrade Strategy](/build-provider/configuration/downgrade-strategy.html)
 • [Parameters and Research](/build-provider/configuration/parameter-validator.html)

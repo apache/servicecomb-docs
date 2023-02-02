@@ -106,14 +106,6 @@ servicecomb:
     address: 0.0.0.0:8080
   highway:
     address: 0.0.0.0:7070
-  handler:
-    chain:
-      Provider:
-        default: bizkeeper-provider
-cse:
-  service:
-    registry:
-      address: http://127.0.0.1:30100		#service center address
 ```
 
 - With the URL format, ServiceComb framework will perform internal microservice descovery, fallback, fault tolerance and send the requests to the microservice providers.
