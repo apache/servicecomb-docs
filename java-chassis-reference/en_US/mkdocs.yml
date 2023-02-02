@@ -20,7 +20,6 @@ nav:
     - Thread pool: build-provider/thread-pool.md
     - Service Configuration: 
         - Rate Limiting Policy: build-provider/configuration/ratelimite-strategy.md
-        - Fallback Policy: build-provider/configuration/downgrade-strategy.md
         - Parameter Validator: build-provider/configuration/parameter-validator.md
     - Boot-up Process: build-provider/bootup.md
     - Access Log Configuration: build-provider/access-log-configuration.md
@@ -31,7 +30,6 @@ nav:
     - Using with RPC: build-consumer/develop-consumer-using-rpc.md
     - Contract: build-consumer/with-contract.md
     - Invoke control: 
-        - Circuit Breaker: build-consumer/circuit-breaker.md
         - Flow Control: build-consumer/flow-control.md
         - Fault Injection: build-consumer/fault-injection.md
     - Invoke 3rd-party REST services: build-consumer/3rd-party-service-invoke.md
