@@ -8,10 +8,18 @@ java chassis 系统内部全部采用 `slf4j` 记录日志。 `slf4j` 是一套�
 使用 log4j2 需要在项目中提供如下依赖。
 
 ```xml
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-    </dependency>
+<dependency>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-slf4j-impl</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-api</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-core</artifactId>
+</dependency>
 ```
 
 * log4j

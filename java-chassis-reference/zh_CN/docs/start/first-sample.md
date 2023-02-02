@@ -153,7 +153,7 @@ Spring MVC和JaxRS适合REST接口开发。 POJO是通常说的RPC，适合于�
 
 开发者也可以通过如下方式快速构建一个项目：
 
-* 下载samples项目。java-chassis提供了大量的示例代码，这些示例代码可以通过[servicecomb-samples](https://github.com/apache/servicecomb-samples)获取。
+* 下载samples项目。java-chassis提供了大量的示例代码，这些示例代码可以通过 [servicecomb-samples](https://github.com/apache/servicecomb-samples) 获取。
 
   * [Spring MVC例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample)
   * [JaxRS例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample)
