@@ -40,6 +40,26 @@ java-chassis 的所有接口定义，都可以生成符合 `OpenAPI` 的 `swagge
 | array | | ArrayList | 必须指定类型 |
 | object | | | 由上面的属性构成的对象类型。包括字典（HashMap），字典的 key 必须为 string |
 
+
+| 参数类型   | 通信协议       | 编码方式 | 是否支持 | 备注                               |
+|:-------|:-----------|:-----|:-----|:---------------------------------|
+| Query  | HTTP/HTTP2 | TEXT | 是    | 支持string, number, boolean, array |
+| Path   | HTTP/HTTP2 | TEXT | 是    | 支持string, number, boolean        |
+| Header | HTTP/HTTP2 | TEXT | 是    | 支持string, number, boolean        |
+| Cookie | HTTP/HTTP2 | TEXT | 是    | 支持string, number, boolean        |
+| Body   | HTTP/HTTP2 | application/x-www-form-urlencoded | 是    | 支持string, number, boolean        |
+| Body   | HTTP/HTTP2 | multipart/form-data | 是    | 支持string, number, boolean        |
+| Body   | HTTP/HTTP2 | application/json | 是    ||
+| Body   | HTTP/HTTP2 | application/protobuf | 是    ||
+| Query  | HIGHWAY    | TEXT | 是    | 支持string, number, boolean, array |
+| Path   | HIGHWAY | TEXT | 是    | 支持string, number, boolean        |
+| Header | HIGHWAY | TEXT | 是    | 支持string, number, boolean        |
+| Cookie | HIGHWAY | TEXT | 是    | 支持string, number, boolean        |
+| Body   | HIGHWAY | application/x-www-form-urlencoded | 否    |                                  |
+| Body   | HIGHWAY | multipart/form-data | 否    |                                  |
+| Body   | HIGHWAY | application/json | 是    ||
+| Body   | HIGHWAY | application/protobuf | 是    ||
+
 * `proto` 定义了如下一些基本类型：
 
 下面列举一些常见的类型说明，详细参考 [Proto Buffer类型说明][proto-buffer]。
