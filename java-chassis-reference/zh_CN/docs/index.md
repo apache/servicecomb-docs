@@ -31,5 +31,4 @@ Apache ServiceComb Java Chassis 给开发者提供一个快速构建微服务的
 
 ## 如何使用本文档
 
-* 通过[目录](toc.md)了解文档结构，查看关注的章节。
 * 访问[文档源代码](https://github.com/apache/servicecomb-docs/tree/master/java-chassis-reference) ，采用 mkdocs 编译后本地使用。 并在[issue](https://github.com/apache/servicecomb-docs/issues) 提交改进建议。 

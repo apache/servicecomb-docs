@@ -3,11 +3,10 @@ use_directory_urls: false
 
 nav:
 
-- 目录: toc.md
 - 概述 : index.md
+- Java Chassis设计参考: start/design.md
 - 3.x.x 版本介绍 : introduce3.x.x.md
 - 快速入门: start/catalog.md
-- 设计选型参考: start/design.md
 - 微服务定义: build-provider/definition/service-definition.md
 - 开发服务提供者: build-provider/catalog.md
 - 开发服务消费者: build-consumer/catalog.md
