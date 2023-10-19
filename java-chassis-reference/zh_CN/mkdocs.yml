@@ -24,8 +24,9 @@ nav:
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
 - 管理服务配置:
-    - 通用配置说明: config/general-config.md
+    - 服务配置介绍: config/general-config.md
     - 在程序中读取配置信息: config/read-config.md
+    - 配置中心参考: config/config-service.md
 - 服务治理功能参考:
       - 处理链介绍: references-handlers/intruduction.md
       - 负载均衡: references-handlers/loadbalance.md
