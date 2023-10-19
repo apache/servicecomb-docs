@@ -1,4 +1,4 @@
-# Java Chassis设计参考
+# Java Chassis 设计参考
 
 Java Chassis 结合大量微服务开发实践，实现[微服务架构模式](https://microservices.io/patterns/microservice-chassis.html) ， 帮
 助开发者更加简单、快速的构建微服务应用。
@@ -13,7 +13,7 @@ Java Chassis主要实现了如下微服务架构模式功能：
 
 此外还有性能监控、日志管理、健康检查等功能。 Java Chassis 采用优雅的设计模式，实现了上述所有的核心部件的功能，并且使得这些功能开箱即用。使用 Java Chassis , 开发者能够更加聚焦于业务功能开发，快速的构建商业可用的微服务应用。 
 
-## Java Chassis 的软件工程实践 <a name="h1"></a>
+## Java Chassis 软件工程实践 <a name="h1"></a>
 
 Java Chassis 在设计的时候， 不仅考虑了如何更好的使用微服务架构模式， 还把优秀的软件工程思想融合进来， 帮助开发者更好的管理信息
 资产， 提升软件工程管理能力。 
@@ -27,7 +27,7 @@ Java Chassis 在设计的时候， 不仅考虑了如何更好的使用微服务
 可以阅读 [基于CSE的微服务工程实践-以契约为中心](https://bbs.huaweicloud.com/blogs/113640) 了解契约如何应用的更多内容。 工程
 实践不是 Java Chassis 的强制约束， 开发者可以结合实际情况进行选择。 
 
-## Java Chassis 的运行时架构 <a name="h2"></a>
+## Java Chassis 运行时架构 <a name="h2"></a>
 
 为了支持软件工程实践， Java Chassis 的运行时架构是一个哑铃结构， 两端分别是“编程模型” 和 “通信模型”， 中间是“运行模型”。 
 
@@ -59,19 +59,19 @@ Java Chassis 在设计的时候， 不仅考虑了如何更好的使用微服务
 Java 语言拥有庞大的技术体系和标准， 并且广泛的应用到业务的系统的各个方面。 和 Java Chassis 有紧密关系的技术包括 JSP/Servlet 标准
 和容器， Spring 和 Spring Boot 技术， 以及 Spring Boot 提供的 REST 开发框架 Spring MVC。 
 
-### Java Chassis 和 JSP/Servlet 标准
+### Java Chassis 和 Servlet 标准
 
 Java Chassis 基于 Vert.x 实现了 REST 和 HIGHWAY 等 RPC 协议的实现， 在性能要求高的核心业务场景， 使用这种轻量级的技术非常合适。 这种场景下， 没有完整的实现 JSP/Servlet 相关接口， 比如 HttpServletRequest, 
 HttpServletResponse 等。 [servicecomb-samples](https://github.com/apache/servicecomb-samples/tree/master/porter_lightweight) 
 提供了一个完整的使用这种部署模式的例子。 [基于CSE的微服务架构实践-轻量级架构技术选型](https://bbs.huaweicloud.com/blogs/101875) 提供了
 一些常见的组件的选型参考。 
 
-Java Chassis 支持 JSP/Servlet 标准的容器。 在这个场景下， Java Chassis 的核心部件就是一个 Servlet ， 在这个 Servlet 里面
+Java Chassis 支持 Servlet 标准的容器。 在这个场景下， Java Chassis 的核心部件就是一个 Servlet ， 在这个 Servlet 里面
 实现了 Java Chassis 的核心 RPC 系统。 采用 JSP/Servlet 容器运行 Java Chassis, 业务请求首先经过容器的 HTTP 实现， 然后经过 Filter， 
 进入 Java Chassis 的 RestServlet ， 运行 Java Chassis 的运行时模型， 进入业务接口处理。 可以参考 
 [REST over Servlet](../transports/rest-over-servlet.md) 了解如何在 Servlet 容器中加载 Java Chassis 的 Servlet。  
 
-### Java Chassis 和 Spring、Spring Boot
+### Java Chassis 和 Spring Boot
 
  Java Chassis 建立在 Spring Boot技术之上，核心部件都通过Spring Boot技术提供实现和扩展。 
  

@@ -3,38 +3,40 @@
 Java Chassis支持使用一致的API获取配置，开发者不需要关注从哪里读取配置项的
 值，Java Chassis会自动从各处读取配置，并按照优先级进行合并以保证用户取到的是优先级最高的配置值。读取配置信息支持下面几种不同的方式。 
 
-## 使用 archaius API
+## 使用 Spring Boot 的配置机制读取配置
+
+Java Chassis的配置信息，可以通过Spring和Spring Boot的配置机制进行读取，比如 `@Value`、`@ConfigurationProperties`、 `Environment` 等。 Java Chassis
+将配置层次应用于Spring Environment中，Spring和Spring Boot读取配置的方式，也能够读取到`microservice.yaml`和动态配置的值。
+
+>>> 注意： `@Value`、`@ConfigurationProperties` 两种使用方式，在动态配置变化的时候，值不会变化。 使用 `Environment`, 在动态配置变化的时候，值会实时变化。 
+
+## 使用 `DymamicProperties` 监听配置变化
+
+注入 `DymamicProperties`， 通过其 API 读取配置和监听配置变化。 
 
 ```java
-DynamicDoubleProperty myprop = DynamicPropertyFactory.getInstance()
-  .getDoubleProperty("trace.handler.sampler.percent", 0.1);
+@RestSchema(schemaId = "ProviderController")
+@RequestMapping(path = "/")
+public class ProviderController {
+  private DynamicProperties dynamicProperties;
+
+  private String example;
+
+  @Autowired
+  public ProviderController(DynamicProperties dynamicProperties) {
+    this.dynamicProperties = dynamicProperties;
+    this.example = this.dynamicProperties.getStringProperty("basic.example",
+            value -> this.example = value, "not set");
+  }
+}
 ```
 
-以上例子表示声明了一个key为`trace.handler.sampler.percent`的动态配置对象，默认值为`0.1`。
+## 使用 Java Chassis 优先级配置
 
-关于配置项API的具体方法可参考[archaius API][archaius]。
-
-[archaius]: https://netflix.github.io/archaius/archaius-core-javadoc/com/netflix/config/DynamicPropertyFactory.html
-
-archaius API 支持callback处理配置变更：
-
-```java
- myprop.addCallback(new Runnable() {
-      public void run() {
-          // 当配置项的值变化时，该回调方法会被调用
-          System.out.println("trace.handler.sampler.percent is changed!");
-      }
-  });
-```
-
-## 使用Java Chassis配置注入机制
-
-配置注入提供了一种简单的管理大量复杂配置的机制，开发者不需要使用 DynamicPropertyFactory 逐个读取配置项，增加配置监听，
-而是定义一个简单的 JAVA Bean， 定义这个 Bean 的属性对应的配置项， 当配置信息变化的时候， Bean 的属性会自动刷新，极大
+优先级配置提供了一种简单的管理大量复杂配置的机制，开发者定义一个简单的 JAVA Bean， 定义这个 Bean 的属性对应的配置项， 当配置信息变化的时候， Bean 的属性会自动刷新，极大
 的简化了用户管理大量复杂配置的复杂度。 
 
-Bean 属性对应的配置项名称支持通配符， 一个属性可以关联若干配置项，可以声明这些配置项的优先级。 Java对象可以是一个
-Java Bean，或是一个拥有public字段的类。
+Bean 属性对应的配置项名称支持通配符， 一个属性可以关联若干配置项，可以声明这些配置项的优先级。 Java对象可以是一个 Java Bean，或是一个拥有public字段的类。
 
 * 配置注入对象
 
@@ -162,20 +164,6 @@ Java Bean，或是一个拥有public字段的类。
         
   ConfigNoAnnotation 对象的 strValue 字段会查找已配置的属性 strValue，没有前缀和优先级。
 
-  
-  ***注意事项:*** 2.1.0 之前的版本， 如果系统中存在大量调用createConfigObject的情况， 需要调用
-
-        ```Java
-        priorityPropertyManager.unregisterConfigObject(config)
-        ```
-        
-  进行显示回收。 2.1.0 及其之后的版本， 不需要调用这个接口，系统创建的对象是 WeakReference， 在未被
-  业务引用以后，会自动回收。 
-
   更多关于配置注入的用法，建议下载 java-chassis 的源码， 查看 TestConfigObjectFactory 类里面的示例。
 
-## 使用Spring 和 Spring Boot的配置机制读取配置
-
-Java Chassis的配置信息，也可以通过Spring和Spring Boot的配置机制进行读取，比如@Value、@ConfigurationProperties等。 Java Chassis
-将配置层次应用于Spring Environment中，Spring和Spring Boot读取配置的方式，也能够读取到`microservice.yaml`和动态配置的值。
 
