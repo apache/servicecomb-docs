@@ -12,18 +12,19 @@ nav:
 - 开发服务消费者: build-consumer/catalog.md
 - 通用功能开发: general-development/catalog.md
 
-- 多样化的通信协议功能参考:
+- 多样化的通信协议功能:
     - 多协议介绍: transports/introduction.md
     - REST over Servlet: transports/rest-over-servlet.md
     - REST over Vertx: transports/rest-over-vertx.md
     - REST over HTTP2: transports/http2.md
     - Highway: transports/highway-rpc.md
-- 多样化的服务注册与发现功能参考:
+- 多样化的服务注册与发现功能:
     - 注册发现说明: registry/introduction.md
-    - 使用服务中心: registry/service-center.md
+    - 使用service-center: registry/service-center.md
+    - 使用nacos: registry/nacos.md
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
-- 管理服务配置:
+- 多样化的配置管理功能:
     - 服务配置介绍: config/general-config.md
     - 在程序中读取配置信息: config/read-config.md
     - 配置中心参考: config/config-service.md
