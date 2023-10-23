@@ -21,7 +21,7 @@ zero-config支持多种工作模式：
 
 ## zero-config 相关配置
 
-配置前缀： `servicecomb.service.zero-config`
+配置前缀： `servicecomb.registry.zero-config`
 
 | 配置项 | 默认值 | 含义 |
 | :--- | :--- | :--- |
@@ -37,7 +37,7 @@ zero-config支持多种工作模式：
 
 ```
 servicecomb:
-  service:
+  registry:
     zero-config:
       enable: true
       mode: multicast

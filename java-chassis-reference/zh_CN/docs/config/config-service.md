@@ -62,9 +62,13 @@
 
 ## 使用 nacos
 
-[nacos](https://github.com/alibaba/nacos) 是 alibaba 提供的配置中心。 java-chassis 从 2.1.0 版本支持 nacos。
-nacos的下载安装请参考官网介绍。
+* 下载安装
 
+  可以通过 [nacos官网](https://github.com/alibaba/nacos) 下载和安装 Nacos。
+
+  <br/>
+
+* 开发使用
 使用nacos，需要在项目中引入如下依赖：
 
 ```xml
@@ -80,18 +84,36 @@ nacos的下载安装请参考官网介绍。
 servicecomb:
   nacos:
     serverAddr: http://127.0.0.1:8848
-    group: jaxrstest
-    dataId: jaxrsclient
-    namespace: public
-    # contentType 可以为 properties, yaml, raw. 
-    # raw： 只增加一个配置项 [group].[dataId]=value. nacos 的 JSON/TEXT/HTML等都对应这种类型
-    # properties： 增加多个配置项。 配置项前缀为 [group].[dataId]
-    # yaml： 增加多个配置项。 配置项前缀为 [group].[dataId]
-    contentType: properties 
-    # if true [group].[dataId] will added as properties/yaml 
-    # items prefix. Will not influence raw.
-    addPrefix: true 
 ```
+  <br/>
+
+* 使用配置中心增加配置
+
+  Nacos的namespace对应于Java Chassis Environment, group对应于application。 客户端默认会读取下面几个层次的配置：
+
+    * 应用级配置：group为application名称，data-id为application名称，并且类型为yaml的配置。
+    * 服务级配置：group为application名称，data-id为微服务名称，并且类型为yaml的配置。
+    * 版本级配置：group为application名称，data-id为微服务名称+版本号，并且类型为yaml的配置， 比如: service-0.1
+    * Profile级配置：group为application名称，data-id为微服务名称+Profile名称，并且类型为yaml的配置， 比如: service-dev
+    * 自定义配置：可以通过配置项定义group、data-id、类型等信息，详情参考配置项。。
+
+  上述的配置级别，优先级从低到高。 
+
+  <br/>
+
+* 配置项参考
+
+  |配置项名| 含义                                              | 缺省值    |
+      |-------------------------------------------------|--------|---|
+  |servicecomb.nacos.serverAddr| NACOS访问地址，格式为`http(s)://{ip}:{port}`，以`,`分隔多个地址 | 空      |
+  |servicecomb.nacos.group| 自定义group                                        | 空      |
+  |servicecomb.nacos.dataId| 自定义data-id                                      | 空      |
+  |servicecomb.nacos.addPrefix| 是否使用group+data-id作为配置项前缀                        | false  |
+  |servicecomb.nacos.contentType| 自定义类型                                           | _yaml_ |
+  |servicecomb.nacos.username| 连接Nacos的用户名                                     | 空      |
+  |servicecomb.nacos.password| 连接Nacos的密码                                      | 空      |
+  |servicecomb.nacos.accessKey| 连接Nacos的Access Key                              | 空      |
+  |servicecomb.nacos.secretKey| 连接Nacos的Secret Key                              | 空      |
 
 ## 使用 Apollo
 
@@ -119,9 +141,9 @@ apollo:
     firstRefreshInterval: 0
 ```
 
-## 华为云配置中心
+## 华为云CSE1.0配置中心
 
-华为云配置中心是华为云CSE产品的一个部件，java-chassis 最早使用它作为配置中心。 对接这个配置中心的代码在 config-cc 模块实现。
+华为云CSE1.0配置中心是华为云CSE产品的一个部件，java-chassis 最早使用它作为配置中心。 对接这个配置中心的代码在 config-cc 模块实现。
 
 可以从[轻量化微服务引擎](https://cse-bucket.obs.myhwclouds.com/LocalCSE/Local-CSE-1.0.3.zip)下载本地使用的版本。也可以
 直接访问华为云 [ServiceStage](https://console.huaweicloud.com/servicestage) 产品，使用在线的版本。
