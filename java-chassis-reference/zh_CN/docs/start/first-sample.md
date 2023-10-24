@@ -2,16 +2,29 @@
 
 ## 准备工作
 
-在开发第一个Java-Chassis微服务之前，请先确保你的本地开发环境已经准备就绪，参考[安装本地开发环境](./development-environment.md)。
+在开发第一个Java-Chassis微服务之前，请先确保本地开发环境已经准备就绪，参考[安装本地开发环境](./development-environment.md)。
 
-本文示例需要用到服务中心，请参考[ServiceCenter 安装说明](http://servicecomb.apache.org/cn/docs/products/service-center/install/)。
+运行这些例子之前，需要先安装[注册中心](https://github.com/apache/servicecomb-service-center)
+和[配置中心](https://github.com/apache/servicecomb-kie)
+。华为云提供一个出色的[本地轻量化微服务引擎](https://support.huaweicloud.com/devg-cse/cse_devg_0036.html) , 可以直接下载安装使用，它包含了注册中心和配置中心。
 
-## 开发一个HelloWorld服务
+Java Chassis依赖于Spring Boot，如果对于Spring Boot比较陌生，可以先通过 [Spring Boot入门](https://spring.io/guides/gs/spring-boot/) 了解。 
+
+## 例子介绍
+
+[Basic示例](https://github.com/apache/servicecomb-samples/tree/master/basic) 包含了3个微服务： gateway, provider, consumer。
+这3个服务完成了一个最简单的微服务架构。 其中 provider 提供一个 REST 接口， consumer 调用 provider 的 REST 接口完成同样的功能。 gateway 作为微服务的接入端， 负责所有外部请求的接入。
+
+如果你已经了解 JAVA + MVN 应用程序开发， 可以直接下载并运行这个示例。 下面介绍该示例的关键开发步骤。
+
+## 开发一个带 REST 接口的微服务
 
 ### 配置pom文件
 
-创建一个空的maven工程。建议先配置`dependencyManagement`来管理依赖项，依赖项只需要引入`solution-basic`即可：
+创建一个空的maven工程。建议先配置`dependencyManagement`来管理依赖项
+
 ```xml
+
 <dependencyManagement>
   <dependencies>
     <dependency>
@@ -23,146 +36,235 @@
     </dependency>
   </dependencies>
 </dependencyManagement>
+```
+
+依赖项需要引入`solution-basic`, 并且引入注册中心、配置中心和Logger系统的依赖
+
+```xml
+
 <dependencies>
   <dependency>
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>solution-basic</artifactId>
   </dependency>
+  <!-- using log4j2 -->
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j-impl</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+  </dependency>
+  <!-- using service-center & kie -->
   <dependency>
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>registry-service-center</artifactId>
   </dependency>
   <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-slf4j-impl</artifactId>
-    <version>2.12.1</version>
-</dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>config-kie</artifactId>
+  </dependency>
+  <!-- using java chassis http transport -->
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+  </dependency>
 </dependencies>
 ```
+
 `solution-basic`中已经包含了常见场景下开发Java-Chassis微服务所需的全部依赖项。
 
-Java-Chassis 2.0版本还需要引入`maven-compiler-plugin`插件，使项目打包时保留方法参数名：
+引入`maven-compiler-plugin`插件，使项目打包时保留方法参数名：
+
 ```xml
-<build>
-  <plugins>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <version>3.1</version>
-      <configuration>
-        <compilerArgument>-parameters</compilerArgument>
-        <encoding>UTF-8</encoding>
-        <source>1.8</source>
-        <target>1.8</target>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
+
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>${maven-compiler-plugin.version}</version>
+  <configuration>
+    <compilerArgument>-parameters</compilerArgument>
+    <source>17</source>
+    <target>17</target>
+  </configuration>
+</plugin>
 ```
 
 ### 添加配置文件
 
-Java-Chassis默认读取的配置文件名为`microservice.yaml`，存放在`resources`目录中。
+按照Spring Boot应用程序要求，增加 `application.yaml` 文件 ，存放在`resources`目录中。
 
-文件内容如下，这份文件表示当前开发的是`sample`应用下的名为`helloworld`的微服务，版本为0.0.1。该微服务连接的服务中心地址为`http://127.0.0.1:30100`，监听`8080`端口。
+文件内容如下，这份文件表示当前开发的是`basic-application`应用下的名为`provider`的微服务，版本为0.0.1。该微服务连接的注册中心地址为`http://localhost:30100`
+，配置中心地址为`http://localhost:30110`。 该微服务监听HTTP协议的`9093`端口。
+
 ```yaml
-APPLICATION_ID: sample
-service_description:
-  name: helloworld
-  version: 1.0.0
 servicecomb:
   service:
-    registry:
-      address: http://127.0.0.1:30100
+    application: basic-application
+    name: provider
+    version: 0.0.1
   rest:
-    address: 0.0.0.0:8080
+    address: 0.0.0.0:9093
+  # 注册发现
+  registry:
+    sc:
+      address: http://localhost:30100
+  # 动态配置
+  kie:
+    serverUri: http://localhost:30110
 ```
 
 ### 编写Main类
 
-在工程中添加一个Main类，用于启动微服务实例：
+Java Chassis应用是一个标准的Spring Boot应用。本示例中，设置 `WebApplicationType.NONE`， 这样会使用 Java Chassis自带的高性能 HTTP 容器，而不使用 Spring
+Boot自带的WEB容器。
+
 ```java
-package org.apache.servicecomb.samples;
 
-import org.apache.servicecomb.foundation.common.utils.BeanUtils;
-
-public class AppMain {
-  public static void main(String[] args) {
-    BeanUtils.init();
+@SpringBootApplication
+public class ProviderApplication {
+  public static void main(String[] args) throws Exception {
+    try {
+      new SpringApplicationBuilder()
+          .web(WebApplicationType.NONE)
+          .sources(ProviderApplication.class)
+          .run(args);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
 ```
-
-调用`org.apache.servicecomb.foundation.common.utils.BeanUtils#init()`方法会完成配置加载、Spring应用上下文加载、微服务注册等一系列启动流程。
 
 ### 编写REST接口类
 
-最后在工程中添加一个REST接口类用于接收请求：
+在工程中添加一个REST接口类用于接收请求：
+
 ```java
-package org.apache.servicecomb.samples.service;
 
-import org.apache.servicecomb.provider.rest.common.RestSchema;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+@RestSchema(schemaId = "ProviderController")
+@RequestMapping(path = "/")
+public class ProviderController {
+  private DynamicProperties dynamicProperties;
 
-@RestSchema(schemaId = "hello")
-@RequestMapping("/")
-public class HelloWorldService {
-  @GetMapping("/hello")
-  public String hello() {
-    return "Hello world!";
+  private String example;
+
+  @Autowired
+  public ProviderController(DynamicProperties dynamicProperties) {
+    this.dynamicProperties = dynamicProperties;
+    this.example = this.dynamicProperties.getStringProperty("basic.example",
+        value -> this.example = value, "not set");
+  }
+
+  // a very simple service to echo the request parameter
+  @GetMapping("/sayHello")
+  public String sayHello(@RequestParam("name") String name) {
+    return "Hello " + name;
+  }
+
+  @GetMapping("/exampleConfig")
+  public String exampleConfig() {
+    return example;
   }
 }
 ```
 
+该类实现了两个REST接口，其中`sayHello`实现了一个简单的echo程序；`exampleConfig`演示了如何通过配置中心下发配置项，并动态监听配置项的变化。
+
 ### 添加日志配置文件
 
-`solution-basic`引入了log4j2组件。如果想要看到运行日志，还需要手动添加一份日志配置文件，文件存放位置为`resources\log4j2.xml`，内容如下：
+本例子引入了log4j2组件。如果想要看到运行日志，还需要手动添加一份日志配置文件，文件存放位置为`resources\log4j2.xml`，内容如下：
+
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+
+<Configuration status="INFO">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}[%L] - %msg%n"/>
+      <PatternLayout pattern="[%d][%t][%p]%m [%c:%L]%n"/>
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="info">
+    <Root level="INFO">
       <AppenderRef ref="Console"/>
     </Root>
   </Loggers>
 </Configuration>
 ```
 
+### 调用其他微服务
+
+在 Consumer 里面，演示了如何调用 Provider 的服务。 首先声明一个 PRC 接口， 该接口的方法名称、参数名称需要和服务端保持一致。
+
+```java
+public interface ProviderService {
+  String sayHello(String name);
+
+  String exampleConfig();
+}
+```
+
+使用 @RpcReference 声明 RPC 接口的远程引用， 然后可以像调用本地方法一样，访问 Provider 的服务。
+
+```java
+
+@RestSchema(schemaId = "ConsumerController")
+@RequestMapping(path = "/")
+public class ConsumerController {
+  @RpcReference(schemaId = "ProviderController", microserviceName = "provider")
+  private ProviderService providerService;
+
+  // consumer service which delegate the implementation to provider service.
+  @GetMapping("/sayHello")
+  public String sayHello(@RequestParam("name") String name) {
+    return providerService.sayHello(name);
+  }
+
+  @GetMapping("/exampleConfig")
+  public String exampleConfig() {
+    return providerService.exampleConfig();
+  }
+}
+```
+
+### 微服务网关的特殊配置
+
+微服务网关是一个普通的微服务，需要额外引入依赖即可。
+
+```xml
+
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>edge-core</artifactId>
+</dependency>
+```
+
 ### 启动服务
 
-以上工作完成后，运行`AppMain`类即可启动微服务。在浏览器中打开本地服务中心的页面`http://127.0.0.1:30103/`，如果能看到helloworld服务的实例记录，则表示启动成功。如下图所示：
-![](./first-sample-registered-in-sc.png)
+依次启动 `ProviderApplication`、`ConsumerApplication`和`GatewayApplication`， 访问 `http://localhost:9090/sayHello?name=World`
+，可以得到响应`"Hello World!"`。
 
-访问`http://127.0.0.1:8080/hello`，可以得到helloworld服务的响应`"Hello world!"`。至此，第一个Java-Chassis微服务开发完成。
+打开注册中心、配置中心控制台，还可以看到微服务的实例列表。通过配置中心给 `ProviderApplication` 添加配置， 访问 `http://localhost:9090/exampleConfig` ,
+可以得到响应，响应包含了最新的配置项的值。 
 
-## 补充说明
+### 使用Nacos注册中心和Nacos配置中心
 
-上文以Spring MVC开发风格来编写helloworld服务的REST接口类，目前Java-Chassis提供了三种REST接口类开发风格：
+本例子还可以使用 `Nacos` 作为注册中心和配置中心。 
 
-* Spring MVC
-* JaxRS
-* POJO
+编译：
 
-Spring MVC和JaxRS适合REST接口开发。 POJO是通常说的RPC，适合于进行内部接口开发。java-chassis允许在一个微服务里面混合使用上述开发方式，并且可以使用完全一致的方式，比如RestTemplate或者POJO的方式访问不同类型的服务，所以开始之前，可以根据熟悉程度，选择任意一种开发方式即可。java-chassis的开发方式和通信方式是完全解耦的，因此不同的开发方式并没有性能上的差异。
+```text
+mvn clean install -Pnacos
+```
 
-开发者也可以通过如下方式快速构建一个项目：
+运行:
 
-* 下载samples项目。java-chassis提供了大量的示例代码，这些示例代码可以通过 [servicecomb-samples](https://github.com/apache/servicecomb-samples) 获取。
+```text
+java -Dspring.profiles.active=nacos -jar basic-provider-2.0-SNAPSHOT.jar
+```
 
-  * [Spring MVC例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample)
-  * [JaxRS例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample)
-  * [POJO例子](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/pojo-sample)
-
-* 使用archetypes生成项目
-
-  archetypes是maven提供的一种机制，对于使用maven的用户，可以在项目里面配置插件，生成项目。java-chassis提供了多个archetypes供开发者使用，详细参考[链接](https://github.com/apache/servicecomb-java-chassis/tree/master/archetypes)
-
-* 使用脚手架生成项目
-
-  脚手架提供了一个图形化向导，通过向导可以快速构建项目，参考[链接](http://start.servicecomb.io/)。
+也可以在IDE里面选择 MVN 的 nacos PROFILE，并修改 application.yml 的 `spring.profiles.active` 为 nacos. 
