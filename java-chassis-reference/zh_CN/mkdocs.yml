@@ -10,24 +10,25 @@ nav:
   - 术语表: start/terminology.md
   - 微服务系统架构: start/architecture.md
   - 安装本地开发环境: start/development-environment.md
-  - 开发第一个微服务: start/first-sample.md
+  - 开发第一个微服务应用: start/first-sample.md
   - 完整例子-bmi应用: featured-topics/application-bmi.md
   - 完整例子-porter应用: featured-topics/application-porter.md
-- 在Spring Boot中使用Java Chassis:
-    - Java Chassis与Spring Boot模式: spring-boot/introduction.md
-    - 与 Spring Web MVC 开发习惯的差异: spring-boot/diff-spring-mvc.md
+- Spring Boot集成Java Chassis:
+    - Spring Boot集成Java Chassis介绍: spring-boot/introduction.md
+    - 与Spring Web MVC开发习惯的差异: spring-boot/diff-spring-mvc.md
 - 微服务定义: build-provider/definition/service-definition.md
 - 开发服务提供者: build-provider/catalog.md
 - 开发服务消费者: build-consumer/catalog.md
 - 通用功能开发: general-development/catalog.md
 - 多样化的通信协议功能:
     - 多协议介绍: transports/introduction.md
-    - REST over Servlet: transports/rest-over-servlet.md
-    - REST over Vertx: transports/rest-over-vertx.md
-    - REST over HTTP2: transports/http2.md
+    - REST over HTTP（Vert.x): transports/rest-over-vertx.md
+    - REST over HTTP2（Vert.x): transports/http2.md
+    - REST over Servlet(Spring Boot Embedded): transports/rest-over-servlet-embedded.md
+    - REST over Servlet(WAR): transports/rest-over-servlet.md
     - Highway: transports/highway-rpc.md
 - 多样化的服务注册与发现功能:
-    - 注册发现说明: registry/introduction.md
+    - 注册发现介绍: registry/introduction.md
     - 使用service-center: registry/service-center.md
     - 使用nacos: registry/nacos.md
     - 本地注册发现: registry/local-registry.md

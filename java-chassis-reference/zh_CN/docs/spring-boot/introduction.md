@@ -1,13 +1,14 @@
-# Java Chassis 与 Spring Boot 集成介绍
+# Java Chassis与Spring Boot 集成介绍
 
 将 [Spring Boot](https://projects.spring.io/spring-boot/) 用于微服务开发，可以极大的简化开发者配置和部署。Java Chassis在Spring Boot基础之上，提供了完善的的微服务架构模式需要的能力，包括服务注册发现、服务治理、良好的跨语言特性和高效的异步通信等能力。 
 
 Java Chassis有两种方式使用Spring Boot：
 
-1. 高性能模式：使用Java Chassis高性能HTTP服务器。
+  1. 高性能模式：使用Java Chassis高性能HTTP服务器。
 
-2. Web开发方式：引入spring-boot-starter-web，使用Spring Boot自带的Tomcat或者Jetty服务器。
+  2. Web开发方式：使用Spring Boot自带的Tomcat或者Jetty服务器。
 
+<br/>
 
 * 高性能模式
 

@@ -7,6 +7,6 @@
 * 使用新的处理链机制（Filter）取代旧的处理链机制(Handler)，以提供更好的异步处理支持。统一了Handler/HttServerFilter/HttpClientFilter等机制，都使用Filter来表达。 将Handler的配置文件编排，修改为Spring Boot的依赖注入，简化用户开发和使用Filter。 
 * 简化了注册发现（Discovery、Registration）接口，使得开发者能够更加简单的适配不同的注册中心，提供了本地注册（Local）、广播（zero-config）、ServiceComb 注册中心（SC)、Nacos注册中心等默认实现。 
 * 提供了全新的实例管理和负载均衡机制，以保证注册中心网络分区故障等场景下的可靠性。该机制能够在注册中心不同的故障场景下保障微服务自身运行的可靠性，降低了注册中心可靠性对于应用本身运行可靠性的影响，为选择不同的注册中心实现提供了更多的可能性。 
-* 简化了配置（DynamicPropertiesSource)接口，更好的支持Spring Boot的Environment和PropertySource等机制。做到和Spring Boot配置机制完全融合。同时保留了DynamicProperties、PriorityPropertyManager等配置机制，弥补Spring Boot配置使用在变更事件监听、优先级配置等方面的不足。 提供了ServiceComb配置中心（Kie)、nacos配置中心、Apollo配置中心等默认实现。
-* 移除了影响业务连续性的组件，并提供了替代方案。包括Hystrix、Archaius、Commons Configuration、Log4j等模块。 
+* 简化了配置（DynamicPropertiesSource)接口，更好的支持Spring Boot的Environment和PropertySource等机制。做到和Spring Boot配置机制完全融合。同时保留了DynamicProperties、PriorityPropertyManager等配置机制，弥补Spring Boot配置使用在变更事件监听、优先级配置等方面的不足。 提供了ServiceComb Kie配置中心、Nacos配置中心、Apollo配置中心等默认实现。
+* 移除了影响业务连续性的组件，并提供了替代方案。包括Hystrix、Archaius、Commons Configuration、Netflix Ribbon、Log4j等模块。 
 

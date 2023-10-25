@@ -1,4 +1,4 @@
-# 与 Spring Web MVC 开发习惯的差异
+# 与Spring Web MVC开发习惯的差异
 
 Java Chassis支持使用Spring MVC提供的标签\(org.springframework.web.bind.annotation\)来声明REST接口，但是两者是独立的实现，并且有不一样的设计目标。Java Chassis的目标是提供跨语言、支持多通信协议的框架，因此去掉了Spring Web MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比如直接访问Servlet协议定义的HttpServletRequest。Java Chassis支持的Spring Web MVC标签是Spring Boot的子集， 下面是一些显著的差别。
 
