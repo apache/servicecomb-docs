@@ -2,7 +2,7 @@
 
 ## 开发介绍
 
-参考 [Spring Boot集成Java Chassis介绍](../spring-boot/introduction.md) ，高性能模式使用 REST over HTTP（Vert.x）。
+参考 [Spring Boot集成Java Chassis介绍](../spring-boot/introduction.md) ，高性能模式使用 REST over HTTP2（Vert.x）。
 
 application.yaml 文件中的配置示例：
 
