@@ -10,7 +10,7 @@
 快速失败的问题。 
 
 使用`请求超时`配置来控制快速失败是非常常见的手段，因为它简洁无侵入，适用于大多数对于性能要求不高的场景。但是对于大规模应用系统，以及
-对于请求时延要求非常高的系统，`请求超时`并不是一个快速失败的有效手段。
+对于请求时延要求非常高的系统，`请求超时`并不是快速失败的有效手段，有如下原因：
 
 * 请求超时在使用HTTP协议的情况下，会关闭连接。连接重连是非常耗时的操作，大量重连会导致系统性能的严重恶化。
 * 在多线程系统，请求超时都是通过独立的线程进行检测的。这里涉及一个实时计算的问题。JDK并不能很好的应用于实时计算。简单的讲就是超时
@@ -23,85 +23,56 @@
 
 ## 如何应用重试和快速失败
 
-* 在网关进行重试一般是比较推荐的做法，除了重试，网关还需要加入流量控制和流量梳理功能，过滤超出系统处理能力的流量，并将突发的流量
-  转换为平滑的流量。微服务系统内部的请求进行重试可以作为补充，但是超时等错误场景，不应该进行重试。
+* 重试的最佳发起方是直接的消费者，比如对于WEB浏览器、手机APP等前端应用。
+* 如果前端应用无法重试，在网关进行重试一般是比较推荐的做法，除了重试，网关还需要加入流量控制和流量梳理功能，过滤超出系统处理能力的流量，并将突发的流量
+  转换为平滑的流量。
+* 微服务系统内部的请求进行重试可以作为补充，建议限制重试次数为2，超时等错误场景，重试可能带来性能恶化。
 * 当业务的平均时延在1ms~10ms，建议超时时间配置不小于1s；10~100ms，超时时间配置不小于5s；大于100ms，超时时间配置不小于10s。
   不建议超时时间超过30s（缺省值）。当业务某些请求需要超过30s的时候，应该对这些业务逻辑进行特殊处理，比如修改为独立线程池执行，
   并设置独立的超时时间；或者修改为异步执行，请求来的时候立即返回，通过异步的方式查询任务执行结果。
 
-通常业务都能够容忍超时给用户带来的偶然操作错误，无需对超时场景重试，依赖于超时设置进行快速失败是非常简单易用的技术手段。有些业务系统对用户体验
-提出了更高的要求，比如快速失败控制在100ms以下，网关能够对超时的场景也进行重试。由于超时时间设置并不能很好的处理这种精度，侵入式的
-超时检测就变得非常重要。
+Java Chassis建议在应用中搭配使用提供者流控和消费者隔离仓，来实现快速失败和重试。 下面是一个微服务的典型治理结构：
 
-侵入式超时检测在业务执行线程中执行，当业务逻辑执行到某个点，就进行一个超时检测，如果发现超时，就立即停止处理并返回超时错误。侵入式
-超时检测有非常多的优点：
+![](common-governance.png)
 
-* 不会导致HTTP连接关闭。因此应用可以设置更大的非侵入式超时时间，更小的侵入式超时时间，避免网络请求超时时间过小，引起的随机故障。
-* 侵入式检测可以由业务在合理的执行点进行检测，能够更加优雅的进行资源清理，防止程序状态不一致带来的问题。
-
-侵入式超时检测需要额外在业务代码中插入检测代码，会给代码带来一定的复杂性，可以采用切面等技术将这些逻辑进行有效隔离。
-
-
-## Java Chassis的侵入式超时检测机制
-
-Java Chassis 将请求的执行分为很多阶段，以客户端A将REST请求发送到服务端B为例，请求执行包括如下阶段：
-
-* 开始
-* A 执行 Handler
-* A 执行 HttpClientFilter
-* A 发送请求
-* B 收到请求
-* B 执行 HttpServerFilter
-* B 执行 Handler
-* B 执行 业务逻辑
-* B 执行 Handler
-* B 执行 HttpServerFilter
-* B 发送响应
-* A 收到响应
-* A 执行 HttpClientFilter
-* A 执行 Handler
-* 结束
-
-Java Chassis 会在上述过程的开始阶段，执行超时检测，如果发现请求超时，会返回 InvocationException, 并包含 408 错误码。
-
-侵入式超时机制在 2.3.0 版本提供， 控制侵入式超时有如下配置：
-
-| 配置项 | 默认值 | 含义 |
-| :--- | :--- | :--- |
-| servicecomb.invocation.timeout.check.enabled                | false | 功能开关，默认关闭 |
-| servicecomb.invocation.timeout.check.strategy               | passing-time | 全局时间计算策略，可选 passing-time 和 processing-time|
-| servicecomb.invocation.${op-any-priority}.timeout        | -1   | 请求超时时间，默认为-1，表示不超时 |
-
-侵入式超时时间支持全局配置和针对某个具体接口配置， Producer 和 Consumer 配置不同。 比如：
+该治理结构对应的配置为:
 
 ```yaml
-# 指定默认的超时时间为 60 秒
-servicecomb.invocation.timeout: 60000 
-
-# 指定 Producer 的 ${schema_id}.${operation_id} 的执行时间为 1 秒
-servicecomb.invocation.${schema_id}.${operation_id}.timeout: 1000 
-
-# 指定 Consumer 的 ${target_service}.${schema_id}.${operation_id} 的执行时间为 1 秒
-servicecomb.invocation.${target_service}.${schema_id}.${operation_id}.timeout: 1000 
+## 服务治理配置
+servicecomb:
+  matchGroup:
+    allOperation: 
+      matches:
+        - apiPath:
+            prefix: "/"
+  rateLimiting:
+  ## 限流器每10毫秒允许通过100个请求，如果一个请求超过1000毫秒没有获取到
+  ## 许可，将被拒绝
+    allOperation: |
+      rate: 10
+      limitRefreshPeriod: 1
+      timeoutDuration: 1000
+  retry:
+  ## 重试器最多重试2次，并且尽可能选择不同于失败的实例进行重试。
+    allOperation: |
+      maxAttempts: 2
+      retryOnSame: 0
+  instanceIsolation:
+  ## 熔断器错误率达到50%或者耗时请求达到100%，将开启。
+  ## 开启时间为5000毫秒，然后会放通10个请求。
+    allOperation: |
+      minimumNumberOfCalls: 10
+      slidingWindowSize: 100
+      slidingWindowType: COUNT_BASED
+      failureRateThreshold: 50
+      slowCallRateThreshold: 50
+      slowCallDurationThreshold: 5000
+      waitDurationInOpenState: 5000
+      permittedNumberOfCallsInHalfOpenState: 10
+  instanceBulkhead:
+  ## 隔离仓限制正在处理的请求数为20个，新来的请求等待1000毫秒没有获取到
+  ## 许可，将被拒绝。
+    allOperation: |
+      maxConcurrentCalls: 20
+      maxWaitDuration: 1000
 ```
-
-侵入式超时检测具备传播机制。 比如客户端->A->B的场景，当B判断是否已经超时的时候，会加上在A已经处理的时间。因此可以用侵入式超时时间控制
-请求链路的全局超时。 由于机器时间同步问题，全局超时包括两种计算方式，第一种是 passing-time，这种方式依赖于服务器的时间同步，B计算
-运行时间通过A记录的开始时间与B当前时间的差值；第二种是 processing-time，B在计算超时的时候，A的请求在网络传输的时间被忽略掉了，只计算实际
-在A已经处理的时间加上B已经处理的时间。第一种方式适合于服务器之间的时间非常同步，可以忽略差异的场景。第二种方式更加适合于不考虑时间同步，但是
-对于实际计算时间精度要求不高的场景。
-
-开发者也可以在自定义 Filter, Handler, 业务逻辑（比如执行数据库操作前和操作后）增加超时检测。 具体方式是先获取 `Invocation` 对象， 然后调用
-`ensureInvocationNotTimeout` 方法。
-
-```java
-public String testInvocationTimeout(InvocationContext context) {
-  someTimeConsumingOperartion();
-  
-  Invocation invocation = (Invocation) context;
-  invocation.ensureInvocationNotTimeout();
-
-  otherOpertions();
-}
-```
- 

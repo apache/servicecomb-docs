@@ -19,6 +19,8 @@ nav:
     - 与Spring Web MVC开发习惯的差异: spring-boot/diff-spring-mvc.md
 - 开发服务提供者: build-provider/catalog.md
 - 开发服务消费者: build-consumer/catalog.md
+- 定制请求处理流程:
+    - 处理链介绍: references-handlers/intruduction.md
 - 通用功能开发: general-development/catalog.md
 - 多样化的通信协议功能:
     - 多协议介绍: transports/introduction.md
@@ -38,7 +40,6 @@ nav:
     - 在程序中读取配置信息: config/read-config.md
     - 配置中心参考: config/config-service.md
 - 服务治理功能参考:
-      - 处理链介绍: references-handlers/intruduction.md
       - 负载均衡: references-handlers/loadbalance.md
       - 限流: references-handlers/ratelimit.md
       - 灰度发布: references-handlers/router.md
