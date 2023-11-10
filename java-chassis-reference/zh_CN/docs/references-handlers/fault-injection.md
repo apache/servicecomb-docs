@@ -8,16 +8,6 @@
 
 ## 配置说明
 
-故障注入配置在microservice.yaml文件中，相关配置项见下表。要开启服务消费者端的故障注入，还需要在处理链中配置消费端故障注入handler，配置示例如下：
-
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: loadbalance,fault-injection-consumer
-```
-
 故障注入配置项说明
 
 \[scope\]代表故障注入的生效范围，可配置值包括全局配置\_global，或指定微服务的服务名\[ServiceName\]。

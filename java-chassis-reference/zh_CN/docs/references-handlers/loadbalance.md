@@ -1,31 +1,11 @@
 # 负载均衡
 
-## 场景描述
+Java Chassis提供了强大的负载均衡能力, 在实例数非常多的场景，也能提供很好的性能。负载均衡的核心数据结构是 `DiscoveryTree`，`DiscoveryTree` 包含了一系列 `DiscoveryFilter`。  下图展示了负载均衡的处理过程：
 
-ServiceComb提供了非常强大的负载均衡能力。它的核心包括两部分，第一部分是DiscoveryTree，通过将微服务实例根据接口兼容性、数据中心、实例状态等分组，DiscoveryFilter是其主要组成部分；第二部分是基于Ribbon的负载均衡方案，支持随机、顺序、基于响应时间的权值等多种负载均衡路由策略IRule，以及可以支持Invocation状态的ServerListFilterExt。
-
-DiscoveryTree的逻辑比较复杂，可以通过下面的处理流程了解其处理过程。
-![](../assets/loadbalance-001.png)
-
-负载均衡适用于Consumer处理链，名称为loadbalance，示例如下：
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: loadbalance
-```
-
-POM依赖：
-```xml
- <dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>handler-loadbalance</artifactId>
-  </dependency>
-```
+![](discovery-tree.png)
 
 ## 按照数据中心信息进行路由转发
-服务提供者和消费者都可以通过在microservice.yaml中声明自己的服务中心信息：
+服务提供者和消费者都可以通过在microservice.yaml中声明自己的数据中心信息：
 ```yaml
 servicecomb:
   datacenter:
@@ -38,9 +18,10 @@ servicecomb:
 
 这里的region和availableZone是一般性的概念，用户可以自行确定其业务含义以便应用于资源隔离的场景中。可以参见[微服务实例之间的逻辑隔离关系](../build-provider/definition/isolate-relationship.md)，了解更多其他实例发现相关的隔离机制。
 
-该规则默认启用，如果不需要使用，可以通过servicecomb.loadbalance.filter.zoneaware.enabled进行关闭。数据中心信息隔离功能在ZoneAwareDiscoveryFilter实现。
+该规则默认启用，如果不需要使用，可以通过 `servicecomb.loadbalance.filter.zoneaware.enabled` 进行关闭。数据中心信息隔离功能在 `ZoneAwareDiscoveryFilter` 实现。
 
 ## 根据实例属性进行路由转发
+
 微服务可以指定实例的属性。实例属性可以在microservice.yaml中指定，也可以通过服务中心的API进行修改。
 ```yaml
 instance_description:
@@ -66,6 +47,7 @@ servicecomb:
 该规则默认启用，如果不需要使用，可以通过`servicecomb.loadbalance.filter.instanceProperty.enabled`进行关闭。根据实例属性进行路由转发功能在`InstancePropertyDiscoveryFilter`实现。
 
 ## 根据实例属性值的层级进行路由转发
+
 实例属性优先级匹配可以看做是针对实例属性匹配的一种逻辑扩展。
 
 微服务的实例属性可以定义为具备优先级的格式，通过`.`符号进行分割。
