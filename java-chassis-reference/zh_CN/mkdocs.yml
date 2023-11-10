@@ -54,9 +54,6 @@ nav:
       - 公钥认证: references-handlers/publickey.md
       - 使用TLS通信: security/tls.md
       - 使用RSA认证: security/shi-yong-rsa-ren-zheng.md
-- 服务打包和运行: 
-    - 以standalone模式打包: packaging/standalone.md
-    - 以WEB容器模式打包: packaging/web-container.md
 - 专题文章:
     - 新功能介绍系列文章: featured-topics/features.md
     - 兼容问题和兼容性策略: featured-topics/compatibility.md
