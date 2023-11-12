@@ -107,8 +107,8 @@ service_description:
   name: calculator
   version: 0.0.1
 servicecomb:
-  service:
-    registry:
+  registry:
+    sc:
       address: http://127.0.0.1:30100
   rest:
     address: 0.0.0.0:7777
@@ -118,11 +118,10 @@ servicecomb:
 spring boot的规范，配置文件名称使用 `application.yml`。
 
 #### 服务启动入口
-服务启动入口中只需添加 `@EnableServiceComb` 的注解即可启用 *ServiceComb* 微服务框架，代码如下：
+服务启动无需添加额外配置，引入之前的java-chassis-spring-boot-starter-servlet包即可启用*ServiceComb* 微服务框架。
 
 ```java
 @SpringBootApplication
-@EnableServiceComb
 public class CalculatorApplication {
   public static void main(String[] args) {
     SpringApplication.run(CalculatorApplication.class, args);
@@ -159,9 +158,9 @@ public class CalculatorApplication {
 在 `application.yml` 文件中配置路由规则及服务端口信息：
 
 ```yaml
-ervicecomb:
-  service:
-    registry:
+servicecomb:
+  registry:
+    sc:
       address: http://127.0.0.1:30100
   rest:
     address: 0.0.0.0:8889
@@ -201,11 +200,10 @@ Service 采用 SPI 的方式扩展 Dispatcher， 需要创建文件 `org.apache.
 
 #### 服务启动入口
 
-服务启动入口也只需要声明启用 `ServiceComb` 即可。
+服务启动也只需要按照Spring Boot的形式启动即可。
 
 ```java
 @SpringBootApplication
-@EnableServiceComb
 public class GatewayApplication {
   public static void main(String[] args) {
     new SpringApplicationBuilder().web(WebApplicationType.NONE).sources(GatewayApplication.class).run(args);

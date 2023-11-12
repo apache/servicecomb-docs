@@ -3,8 +3,8 @@
 ## 安装 Java 开发环境
 
 * 安装**git**，详情可参考[git安装教程](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)。
-
-* 安装JDK 1.8，详情可参考[JDK安装教程](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html)。
+## TODO JDK安装切换成17版本
+* 安装JDK 17，详情可参考[JDK安装教程](https://docs.oracle.com/en/java/javase/17/install/overview-jdk-installation.html)。
 
 * 安装Maven 3.x，详情可参考[Maven安装教程](https://maven.apache.org/install.html)。
 
@@ -46,3 +46,4 @@ cd webapp; mvn spring-boot:run
 * 验证服务。微服务启动完毕后，即可通过 <a>http://localhost:8889</a> 访问 **体质指数** 应用，届时将能看到如下界面，并可输入您的身高和体重信息验证服务是否正常运行。
 
    ![体质指数应用运行界面](bmi-interface.png)
+TODO 如果页面无法正常打开，需要修改applcation.yaml中的gateway.root的值，修改为实际所在路径

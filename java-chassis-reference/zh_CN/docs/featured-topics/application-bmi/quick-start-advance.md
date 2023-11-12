@@ -6,6 +6,4 @@
 
 * [流量控制](flow-control.md)。限制单位时间内访问某个微服务的请求数量。
 
-* [服务治理](service-management.md)。在微服务应用中隔离异常服务并阻止异常传递。
-
 * [分布式追踪](distributed-tracing.md)。可视化微服务间的数据流转。
