@@ -8,12 +8,9 @@ java-chassis 支持 Provider 限流和 Consumer 限流。 Provider 限流控制�
 2. 流量控制是业务层面的功能，不是安全意义上的流量控制，如需防止DDoS攻击，需要结合其他的一系列措施。
 3. 流量控制是微服务级的，不是实例级的。例如一个consumer服务有三个实例，当对它们依赖的provider实例配置限流策略后，
   provider不会区分consumer的请求具体是由哪个实例发出的，而是汇总成微服务级的统计数据进行限流判断。
+4. 本模块介绍的限流机制是基于 `operation` 的， 使用起来比较简单。后续推荐使用[流量特征治理](governance.md) 来限制流量。 
 
 ## 流控算法说明
-
-2.1.3 版本之前，不提供流控策略的选择，默认流控实现算法是固定窗口算法。
-
-2.1.3 版本以及之后，提供流控测流供选择，默认提供固定窗口算法、漏桶算法、令牌桶算法，且支持用户自定义流控策略实现。
 
 * 算法说明：
   * 固定窗口算法：默认窗口大小为1s，最大可能产生2倍于指定流量设置大小的误差。
@@ -33,26 +30,8 @@ java-chassis 支持 Provider 限流和 Consumer 限流。 Provider 限流控制�
 
 ### 配置说明
 
-限流策略配置在microservice.yaml文件中，相关配置项见表**QPS流控配置项说明**。要开启服务提供者端的限流策略，还需要在处理链中配置服
-务端限流handler，并添加pom依赖。
+限流策略配置在microservice.yaml文件中，相关配置项如下：
 
-* microservice.yaml配置示例如下：
-
-        servicecomb:
-          handler:
-            chain:
-              Provider:
-                default: qps-flowcontrol-provider
-  
-* 添加handler-flowcontrol-qps的pom依赖：
-
-        <dependency>
-          <groupId>org.apache.servicecomb</groupId>
-          <artifactId>handler-flowcontrol-qps</artifactId>
-        </dependency>
-
-
-**QPS流控配置项说明**
 
 | 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -80,17 +59,6 @@ java-chassis 支持 Provider 限流和 Consumer 限流。 Provider 限流控制�
 
 ### 配置说明
 
-限流策略配置在microservice.yaml文件中，相关配置项见下表。要开启服务消费者端的限流策略，还需要在处理链中配置消费端限流handler，配置示例如下：
-
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: qps-flowcontrol-consumer
-```
-
-QPS流控配置项说明
 
 | 配置项 | 默认值 | 取值范围 | 是否必选 | 含义 | 注意 |
 | :--- | :--- | :--- | :--- | :--- | :--- |

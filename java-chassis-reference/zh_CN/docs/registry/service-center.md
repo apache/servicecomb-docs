@@ -1,20 +1,19 @@
-# 使用服务中心 
+# 使用 service-center 
 
-服务中心(servicecomb-service-center) 提供了完备的注册发现机制， 实现了所有 `Microservice` 和 `MicroserviceInstance` 信息的注册和发现，
-是 servicecomb 缺省使用的注册发现机制。 
+ServcieComb service-center 提供了完备的注册发现机制， 是 Java Chassis 缺省使用的注册发现机制。 
 
 服务中心支持使用 `PULL` 和 `PUSH` 两种模式通知实例变化， 开发者可以配置服务中心集群地址、连接参数以及心跳管理等。
 
 * 表1-1 访问服务中心常用的配置项
 
-| 配置项 | 默认值 | 是否必选 | 含义 | 
-| :--- | :--- | :--- | :--- | 
-| servicecomb.service.registry.</p>address | http://127.0.0.1:30100 | 是 | 服务中心的地址信息，可以配置多个，用逗号分隔。 |
-| servicecomb.service.registry.</p>instance.watch | true | 否 | 是否采用PUSH模式监听实例变化。为false的时候表示使用PULL模式。 |
-| servicecomb.service.registry.</p>autodiscovery | false | 否 | 是否自动发现服务中心的地址。当需要配置部分地址，其他地址由配置的服务中心实例发现的时候，开启这个配置。 |
-| servicecomb.service.registry.</p>instance.healthCheck.interval | 30 | 否 | 心跳间隔。 |
-| servicecomb.service.registry.</p>instance.healthCheck.times | 3 | 否 | 允许的心跳失败次数。当连续第times+1次心跳仍然失败时则实例被sc下线。即interval \* (times + 1)决定了实例被自动注销的时间。如果服务中心等待这么长的时间没有收取到心跳，会注销实例。 |
-| servicecomb.service.registry.</p>instance.empty.protection | true | 否 | 当从服务中心查询到的地址为空的时候，是否覆盖本地缓存。这个是一种可靠性保护机制，避免实例异常批量下线导致的请求失败。 |
+| 配置项                                                       | 默认值                    | 是否必选 | 含义                                                                                                       | 
+|:----------------------------------------------------------|:-----------------------| :--- |:---------------------------------------------------------------------------------------------------------| 
+| servicecomb.registry.sc.enabled                           | true                   | 是 | 是否启用。                                                                                                    |
+| servicecomb.registry.sc.address                           | http://127.0.0.1:30100 | 是 | 服务中心的地址信息，可以配置多个，用逗号分隔。                                                                                  |
+| servicecomb.registry.sc.watch                             | false                  | 否 | 是否采用PUSH模式监听实例变化。为false的时候表示使用PULL模式。                                                                    |
+| servicecomb.registry.sc.autodiscovery                     | false                  | 否 | 是否自动发现服务中心的地址。当需要配置部分地址，其他地址由配置的服务中心实例发现的时候，开启这个配置。                                                      |
+| servicecomb.registry.sc.healthCheckIntervalInSeconds | 30                     | 否 | 心跳间隔。                                                                                                    |
+| servicecomb.registry.sc.healthCheckTimes    | 3                      | 否 | 允许的心跳失败次数。当连续第times+1次心跳仍然失败时则实例被sc下线。即interval \* (times + 1)决定了实例被自动注销的时间。如果服务中心等待这么长的时间没有收取到心跳，会注销实例。 |
 
 servicecomb 与服务中心采用 HTTP 进行交互， HTTP client 相关配置可以参
 考 [Service Center Client 配置项](../config-reference/service-center-client.md)
@@ -25,15 +24,6 @@ servicecomb 与服务中心采用 HTTP 进行交互， HTTP client 相关配置�
   <dependency>
     <groupId>org.apache.servicecomb</groupId>
     <artifactId>registry-service-center</artifactId>
-  </dependency>
-```
-
-也可以直接依赖：
-
-```
-  <dependency>
-    <groupId>org.apache.servicecomb</groupId>
-    <artifactId>solution-basic</artifactId>
   </dependency>
 ```
 

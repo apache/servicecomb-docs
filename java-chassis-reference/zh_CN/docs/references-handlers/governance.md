@@ -19,16 +19,6 @@
 
 ## 使用客户端熔断
 
-在 `Handler` 中包含客户端熔断处理链：
-
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: loadbalance,instance-isolation-consumer
-```
-
 配置参数：
 
 ```
@@ -48,16 +38,6 @@ servicecomb:
 上诉参数使用计算滑动窗口，如果错误率超过50%，就会进行熔断。
 
 ## 使用客户端隔离仓
-
-在 `Handler` 中包含客户端熔断处理链：
-
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: loadbalance,instance-bulkhead-consumer
-```
 
 配置参数：
 
@@ -92,14 +72,6 @@ maxAttempts表示最大重试次数（不包括第1次调用），retryOnSame表
 ## 组合使用
 
 一个比较好的实践是组合使用 `重试` 、 `客户端熔断` 和 `客户端隔离仓`。
-
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: loadbalance,instance-isolation-consumer,instance-bulkhead-consumer
-```
 
 这种组合可以防止偶然的实例错误导致的失败，也可以防止单个实例处理能力下降（比如刚刚启动的实例、故障的实例等场景）导致的整体故障。
 

@@ -6,11 +6,11 @@
 
 1.JDK版本
 
-JDK版本要求1.8以上。
+JDK 版本要求 17 以上。
 
 2.JDK下载
 
-请到JDK 1.8版本的官方地址下载。
+请到JDK 17 版本的官方地址下载。
 
 3.JDK安装
 
@@ -20,11 +20,11 @@ JDK版本要求1.8以上。
 
 设置JAVA\_HOME环境变量，指向Java安装目录。将%JAVA\_HOME%\bin添加到系统路径path中。环境变量配置完成后，使用java -version命令验证是否安装成功，windows环境下回显如下：
 
-```
+```text
 C:\> java -version      
- java version "1.8.0_121"      
- Java(TM) SE Runtime Environment (build 1.8.0_121-b13)      
- Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
+java version "17.0.5" 2022-10-18 LTS
+Java(TM) SE Runtime Environment (build 17.0.5+9-LTS-191)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.5+9-LTS-191, mixed mode, sharing)
 ```
 
 ## Maven安装步骤
@@ -46,9 +46,10 @@ JDK已经安装成功。
   
   使用mvn -version命令验证是否安装成功，windows环境下回显如下：
 
-        C:\>mvn -version        
-        Apache Maven 3.3.9
-
+```text
+C:\>mvn -version        
+Apache Maven 3.8.4
+```
 
 ## Eclipse安装
 

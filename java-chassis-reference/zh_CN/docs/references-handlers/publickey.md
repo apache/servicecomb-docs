@@ -8,27 +8,6 @@
 2. 消费者访问提供者之前，使用自己的私钥对消息进行签名。
 3. 提供者从服务中心获取消费者公钥，对签名的消息进行校验。
 
-公钥认证需要在消费者、提供者都启用。
-
-```
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: auth-consumer
-      Provider:
-        default: auth-provider
-```
-
-POM依赖：
-
-* 在pom.xml中增加依赖：
-
-        <dependency> 
-           <groupId>org.apache.servicecomb</groupId> 
-           <artifactId>handler-publickey-auth</artifactId> 
-         </dependency>
-
 ## 配置黑白名单
 
 基于公钥认证机制，ServiceComb提供了黑白名单功能。通过黑白名单，可以控制微服务允许其他哪些服务访问。目前支持通过配置服务属性来控制，配置项如下：

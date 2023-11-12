@@ -1,86 +1,68 @@
-# 处理链参考
+# 处理链介绍
 
-处理链(Handlers)是ServiceComb的核心组成部分，它们构成服务运行管控的基础。ServiceComb通过处理链来处理负载均衡、熔断容错、流量控制等。
+处理链定义了一个请求的处理流程，包括编解码、服务治理、网络发送等。Java Chassis的核心处理流程分为 `Provider处理流程`、`Consumer处理流程`、`Edge处理流程`。
 
-## 处理链配置
+* Provider处理流程
 
-处理链分为Consumer和Provider，分别配置如下：
+![](flow-provider.png)
 
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: qps-flowcontrol-consumer,loadbalance
-      Provider: 
-        default: qps-flowcontrol-provider
-```
+* Consumer处理流程
 
-通过名字配置处理链，可以根据需要调整处理链的顺序，配置在前面的处理链先执行。不同的处理链可能存在一定的逻辑关联，处理链的顺序
-不同，程序运行的效果会存在差异。
+![](flow-consumer.png)
 
-上述配置指定目标微服务缺省处理链，开发者还可以对特定的微服务配置不同的处理链，比如：
+* Edge处理流程
 
-```yaml
-servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: auth,qps-flowcontrol-consumer,loadbalance
-        service:
-          authentication-server: qps-flowcontrol-consumer,loadbalance
-```
+![](flow-edge.png)
 
-对于转发到authentication-server的请求，不经过auth处理链，转发到其他的微服务的请求，则经过auth处理链。
+Java Chassis提供了 `ProviderFilter`、`ConsumerFilter`、`EdgeFilter` 分别对应上述处理流程。
 
 ## 开发新的处理链
 
-开发者自定义处理链包含如下几个步骤。由于ServiceComb的核心组成就是处理链，开发者可以参考handlers目录的实现详细了解处理链。下面简单总结下几个关键步骤：
+`ProviderFilter`、`ConsumerFilter`、`EdgeFilter`的开发流程一样。开发者只需要实现上述接口，并将其声明为 Bean 即可。
 
-* 实现Handler接口
+* 实现Filter接口
 
 ```java
-public class AuthHandler implements Handler {
+public class EmptyFilter extends AbstractFilter implements ProviderFilter, ConsumerFilter, EdgeFilter {
   @Override
-  public void handle(Invocation invocation, AsyncResponse asyncResponse) throws Exception {
-    String token = invocation.getContext(Constants.CONTEXT_HEADER_AUTHORIZATION);
-    if (token == null) {
-      asyncResponse.consumerFail(new InvocationException(403, "forbidden", "not authenticated"));
-      return;
-    }
-    Jwt jwt = JwtHelper.decode(token);
-    try {
-      jwt.verifySignature(BeanUtils.getBean("authSigner"));
-    } catch (InvalidSignatureException e) {
-      asyncResponse.consumerFail(new InvocationException(403, "forbidden", "not authenticated"));
-      return;
-    }
-    invocation.next(asyncResponse);
+  public String getName() {
+    return "empty";
+  }
+
+  @Override
+  public CompletableFuture<Response> onFilter(Invocation invocation, FilterNode nextNode) {
+    return CompletableFuture.completedFuture(Response.ok(null));
+  }
+
+  @Override
+  public int getOrder() {
+    return 0;
   }
 }
 ```
 
-* 增加*.handler.xml文件，给Handler取一个名字,并且文件要放在```classpath*:config/```路径下
+* 声明为 Bean
 
-```xml
-<config>
-  <handler id="auth"
-    class="org.apache.servicecomb.authentication.gateway.AuthHandler" />
-</config>
+```java
+@Configuration
+public class EmptyFilterConfiguration {
+  @Bean
+  public EmptyFilter emptyFilter() {
+    return new EmptyFilter();
+  }
+}
 ```
 
-* 在microservice.yaml中启用新增加的处理链
+上述开发完成的处理链会在 `Provider处理流程`、`Consumer处理流程`、`Edge处理流程` 执行。 它的 order 是 0。 由于它继承了 `AbstractFilter`， 还可以在配置文件中
+定义是否启用，或者定义其优先级。
 
 ```yaml
 servicecomb:
-  handler:
-    chain:
-      Consumer:
-        default: auth,loadbalance
-        service:
-          authentication-server: loadbalance
+  filter:
+    # Filter名称
+    empty:
+      # 应用名 + 服务名
+      ${application}.${name}.order: 10
+      ${application}.${name}.enabled: false
 ```
-
-
-
 
