@@ -17,4 +17,4 @@
 * [体质指数微服务应用开发](application-bmi/quick-start-bmi.md)
 * [微服务开发进阶](application-bmi/quick-start-advance.md)
 
-介绍文档的源代码托管在[github](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/bmi)
+介绍文档的源代码托管在[github](https://github.com/apache/servicecomb-samples/tree/master/bmi)
