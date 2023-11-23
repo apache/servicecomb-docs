@@ -11,8 +11,8 @@ nav:
   - 微服务系统架构: start/architecture.md
   - 安装本地开发环境: start/development-environment.md
   - 开发第一个微服务应用: start/first-sample.md
-  - 完整例子-bmi应用: featured-topics/application-bmi.md
-  - 完整例子-porter应用: featured-topics/application-porter.md
+  - BMI应用-使用服务治理: featured-topics/application-bmi.md
+  - PORTER应用-典型开发场景: featured-topics/application-porter.md
 - 微服务定义: build-provider/definition/service-definition.md
 - Spring Boot集成Java Chassis:
     - Spring Boot集成Java Chassis介绍: spring-boot/introduction.md
