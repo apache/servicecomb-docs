@@ -56,7 +56,25 @@ ServiceComb 集成了 Zipkin 提供自动调用链追踪能力，如此一来用
 
 就这样，在加了两个配置项，没改动一行代码的情况下，我们启动了基于 Zipkin 和 Java chassis 的分布式调用链追踪的功能。
 
-**注意 **如果项目中的其他依赖也引入了 zipkin （例如 Spring Cloud），可能导致 zipkin 版本不一致而运行出错，这时需要在项目 pom 中声明 zipkin 版本。
+**注意 **如果项目中的其他依赖也引入了 zipkin （例如 Spring Cloud），可能导致 zipkin 版本不一致而运行出错，这时需要在项目 pom 中声明 zipkin 版本
+
+### 提供完整的http.path
+
+由于Java Chassis中默认返回的http.path是operation路径，相较于其他框架的路径区别较大，可以通过下述方式，返回完整的http.path
+
+在microservice.yaml文件中设置配置项：servicecomb.tracing.workWithThirdParty的值为true
+
+```
+  servicecomb: 
+    handler: 
+      chain: 
+        Consumer: 
+          default: loadbalance,tracing-consumer
+        Provider: 
+          default: tracing-provider
+    tracing:
+      workWithThirdParty: true
+```
 
 
 
