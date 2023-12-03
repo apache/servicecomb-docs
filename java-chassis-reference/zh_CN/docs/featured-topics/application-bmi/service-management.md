@@ -1,6 +1,6 @@
-# 服务治理
+# 熔断控制
 
-服务治理主要用于解决或缓解服务雪崩的情况，即个别微服务表现异常时，系统能对其进行容错处理，从而避免资源的耗尽。本指南将会展示如何在 *体质指数* 应用中使用 **ServiceComb** 提供的服务治理能力。
+熔断控制主要用于解决或缓解服务雪崩的情况，即个别微服务表现异常时，系统能对其进行容错处理。本指南将会展示如何在 *体质指数* 应用中使用熔断控制能力。
 
 ## 前言
 
@@ -8,44 +8,43 @@
 
 ## 启用
 
-* 在 *体质指数计算器* 的 `pom.xml` 文件中添加依赖项：
-
-```xml
-   <dependency>
-     <groupId>org.apache.servicecomb</groupId>
-     <artifactId>handler-bizkeeper</artifactId>
-   </dependency>
-```
-
-* 在 *体质指数计算器* 的 `application.yml` 文件中指明使用服务治理的处理链及指定熔断和容错策略：
+* 在 *体质指数界面* 的 `application.yml` 文件中指明使用服务治理的处理链及指定熔断和容错策略：
 
 ```yaml
 servicecomb:
- handler:
-   chain:
-     Provider:
-       default: bizkeeper-provider
- circuitBreaker:
-   Provider:
-     calculator:
-       requestVolumeThreshold: 3
- fallbackpolicy:
-   Provider:
-     policy: returnNull
+  matchGroup:
+    bmi-operation: |
+      matches:
+        - apiPath:
+            exact: "/bmi"
+  instanceIsolation:
+    bmi-operation: |
+      minimumNumberOfCalls: 5
+      slidingWindowSize: 10
+      slidingWindowType: COUNT_BASED
+      failureRateThreshold: 50
+      slowCallRateThreshold: 100
+      slowCallDurationThreshold: 3000
+      waitDurationInOpenState: 10000 
+      permittedNumberOfCallsInHalfOpenState: 10
+
 ```
 
-也可以通过环境变量的方式动态修改配置文件的值，比如采用以下指令重新运行即可：
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.handler.chain.Provider.default=bizkeeper-provider -Dservicecomb.circuitBreaker.Provider.calculator.requestVolumeThreshold=3 -Dservicecomb.fallbackpolicy.Provider.policy=returnNull"
-```
+>>> 注意：熔断控制是在消费者方。
 
 ## 验证
 
-* 使服务进入熔断状态。访问 <a>http://localhost:8889</a>，在身高或体重的输入框中输入一个负数，连续点击三次或以上 *Submit* 按钮，此时在网页下方能看到类似左图的界面。
+对 *体质指数计算器* 微服务进行水平扩展，使其运行实例数为2，即新增一个运行实例：
 
-* 验证服务处于熔断状态。在身高和体重的输入框中输入正数，再次点击 *Submit* 按钮，此时看到的界面依然是类似左图的界面。同时在 *体质指数计算器* 运行日志也能看到调用不再抛出异常，而是出现类似 `fallback called` 的日志。
+```bash
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.rest.address=0.0.0.0:7779 -Dbmi.mock.error=true"
+```
 
-* 验证服务恢复正常。约15秒后，在身高和体重的输入框中输入正数，点击 *Submit* 按钮，此时界面显示正常。
+* 访问 <a>http://localhost:8889</a> 。 输出身高和体重，连续点击几次提交，可以看到界面交替出现正常和错误界面。这是因为在其中一个实例里面构造了故障。
 
-   ![服务治理效果](service-management-result.png)
+  ![交替出现故障](service-management-error.png)
+
+* 继续点击界面，经过10次以后，发现故障实例被熔断。不再出现错误，所有的请求都被正常实例处理。每间隔10秒，会尝试往故障实例发生若干请求。 
+
+* 验证服务恢复正常。重启故障实例，不注入故障。 可以看到所有的请求都被正常处理，而且请求均匀的分布在两个正常实例。 
+

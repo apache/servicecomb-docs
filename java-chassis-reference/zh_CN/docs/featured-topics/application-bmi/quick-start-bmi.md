@@ -11,22 +11,24 @@ BMI主要由两个微服务组成：
 
 在开始前，需要先在服务的父工程中添加以下依赖项：
 
-```java
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.apache.servicecomb</groupId>
-        <artifactId>java-chassis-dependencies</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+```xml
+
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicecomb</groupId>
+      <artifactId>java-chassis-dependencies</artifactId>
+      <version>${servicecomb.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
 ```
+
 **注意**: `java-chassis-dependencies` 这个依赖是以pom的形式导入来统一项目中的依赖项的版本管理。
 
-下面将对这两个微服务的实现进行介绍，其代码已托管于[github](https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/bmi)上。
+下面将对这两个微服务的实现进行介绍，其代码已托管于[github](https://github.com/apache/servicecomb-samples/tree/master/bmi)上。
 
 ### 体质指数计算器实现
 体质指数计算器提供运算服务，其实现分为三部分：
@@ -70,10 +72,20 @@ public interface CalculatorEndpoint {
 引入 **ServiceComb** 依赖：
 
 ```xml
-    <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>java-chassis-spring-boot-starter-servlet</artifactId>
-    </dependency>
+<dependencies>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>registry-service-center</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>solution-basic</artifactId>
+  </dependency>
+</dependencies>
 ```
 
 暴露运算服务的Restful端点：
@@ -102,31 +114,34 @@ public class CalculatorRestEndpoint implements CalculatorEndpoint {
 如下的 `application.yml` 文件中的定义来配置端点端口，将契约和服务一起注册到服务注册中心。
 
 ```yaml
-APPLICATION_ID: bmi
-service_description:
-  name: calculator
-  version: 0.0.1
 servicecomb:
   registry:
     sc:
       address: http://127.0.0.1:30100
+  service:
+    application: bmi
+    name: calculator
+    version: 0.0.1
+
   rest:
     address: 0.0.0.0:7777
 ```
 
-***注意***: **ServiceComb**默认的配置文件名称是`microservice.yaml`。 本应用采用 spring boot作为运行环境，因此遵循
-spring boot的规范，配置文件名称使用 `application.yml`。
-
 #### 服务启动入口
-服务启动无需添加额外配置，引入之前的java-chassis-spring-boot-starter-servlet包即可启用*ServiceComb* 微服务框架。
+服务启动入口按照[高性能模式](../../spring-boot/introduction.md) 代码如下：
 
 ```java
 @SpringBootApplication
 public class CalculatorApplication {
   public static void main(String[] args) {
-    SpringApplication.run(CalculatorApplication.class, args);
+    try {
+      new SpringApplicationBuilder().web(WebApplicationType.NONE).sources(CalculatorApplication.class).run(args);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
+
 ```
 
 ### 体质指数界面实现
@@ -141,18 +156,30 @@ public class CalculatorApplication {
 其中，前端界面的组件使用了[Bootstrap](http://getbootstrap.com/)来开发。
 
 #### 网关及路由规则
-网关服务使用 **ServiceComb** 提供的 [Edge Service](http://localhost:8000/edge/by-servicecomb-sdk/) 来实现。
+网关服务使用 **ServiceComb** 提供的 [Edge Service](../../edge/by-servicecomb-sdk.md) 来实现。
 
 引入依赖：
 ```xml
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>edge-core</artifactId>
-</dependency>
+
+<dependencies>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>registry-service-center</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>solution-basic</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.apache.servicecomb</groupId>
+    <artifactId>edge-core</artifactId>
+  </dependency>
+</dependencies>
 ```
 
 在 `application.yml` 文件中配置路由规则及服务端口信息：
@@ -162,6 +189,11 @@ servicecomb:
   registry:
     sc:
       address: http://127.0.0.1:30100
+  service:
+    application: bmi
+    name: gateway
+    version: 0.0.1
+
   rest:
     address: 0.0.0.0:8889
 
@@ -200,7 +232,7 @@ Service 采用 SPI 的方式扩展 Dispatcher， 需要创建文件 `org.apache.
 
 #### 服务启动入口
 
-服务启动也只需要按照Spring Boot的形式启动即可。
+服务启动入口按照[高性能模式](../../spring-boot/introduction.md) 代码如下：
 
 ```java
 @SpringBootApplication

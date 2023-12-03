@@ -15,10 +15,10 @@
 对 *体质指数计算器* 微服务进行水平扩展，使其运行实例数为2，即新增一个运行实例：
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=7779 -Dservicecomb.rest.address=0.0.0.0:7779"
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.rest.address=0.0.0.0:7779"
 ```
 
-为了便于区分不同的运行实例，在体质指数计算器的实现中新增了返回实例ID和运行时间的接口，详情可查看[体质指数计算器的完整实现代码](https://github.com/apache/servicecomb-java-chassis/tree/master/samples/bmi/calculator)。而为了避免端口冲突，新的实例在另一个端口上运行。
+为了便于区分不同的运行实例，在体质指数计算器的实现中新增了返回实例ID和运行时间的接口。而为了避免端口冲突，新的实例在另一个端口上运行。
 
 此时点击 *Submit* 按钮就可以看到如下两个界面中的实例ID交替出现。
 

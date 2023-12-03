@@ -1,3 +1,5 @@
+# 使用MyBatis访问数据库
+
 访问数据库可以使用第三方提供的组件。这里选择了MyBatis说明如何访问数据库。开发者也可以直接参考：
 
 [http://www.mybatis.org/spring/zh/index.html](http://www.mybatis.org/spring/zh/index.html)
@@ -33,9 +35,14 @@
 
 ```
 <dependency>
-  <groupId>org.mybatis</groupId>
-  <artifactId>mybatis</artifactId>
-  <version>3.4.5</version>
+  <groupId>org.mybatis.spring.boot</groupId>
+  <artifactId>mybatis-spring-boot-starter</artifactId>
+  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </exclusion>
+  </exclusions>
 </dependency>
 <dependency>
   <groupId>mysql</groupId>
@@ -44,11 +51,6 @@
 <dependency>
   <groupId>org.apache.commons</groupId>
   <artifactId>commons-dbcp2</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.mybatis</groupId>
-  <artifactId>mybatis-spring</artifactId>
-  <version>1.3.0</version>
 </dependency>
 <dependency>
   <groupId>org.springframework</groupId>
@@ -71,40 +73,42 @@
 
 * 配置数据源和SqlSessionFactory
 
-数据源使用DBCP2。SqlSessionFactory里面指定了dataSource和configLocation两个属性，并新增加了mybatis-config.xml文件，用于配置mapper文件的路径。 在本微服务场景中，只需要使用简单的数据库连接和简单事务管理，如果需要使用复杂的事务管理，还需要配置XA数据源和相关的事务管理器。 有关MyBatis的Configuration更加详细的信息可以参考：[http://www.mybatis.org/mybatis-3/configuration.html](http://www.mybatis.org/mybatis-3/configuration.html) 。
+本例子使用Spring Data Source， 只需要在配置文件中加上配置信息：
 
 ```
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-  <property name="driverClassName" value="${db.url:com.mysql.jdbc.Driver}" />
-  <property name="url" value="${db.url:jdbc:mysql://localhost/porter_user_db}" />
-  <property name="username" value="${db.username:root}" />
-  <property name="password" value="${db.password:}" />
-</bean>
-
-<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-  <property name="dataSource" ref="dataSource" />
-  <property name="configLocation" value="classpath:/config/mybatis-config.xml"></property>
-</bean>
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/porter_user_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
 ```
 
 * 书写Mapper文件
 
-涉及到JAVA的Mapper定义UserMapper，XML中定义SQL与JAVA的映射关系UserMapper.xml。定义完成后，需要将内容配置到Mybatis的扫描路径和Spring的扫描路径中，涉及文件mybatis-config.xml和user.bean.xml。
+涉及到JAVA的Mapper定义UserMapper。
 
 ```
-### mybatis-config.xml
-<configuration>
-    <mappers>
-        <mapper resource="config/UserMapper.xml"/>
-    </mappers>
-</configuration>
+@Mapper
+public interface UserMapper {
+  @Insert("""
+      insert into T_USER (ID, USER_NAME, PASSWORD, ROLE_NAME)
+        values(#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+               #{password,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR})""")
+  void createUser(UserInfo userInfo);
 
-### user.bean.xml
-<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-    <property name="mapperInterface"
-        value="org.apache.servicecomb.samples.porter.user.dao.UserMapper" />
-    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-</bean>
+  @Select("""
+      select ID, USER_NAME, PASSWORD, ROLE_NAME
+        from T_USER where USER_NAME = #{userName,jdbcType=VARCHAR}""")
+  @Results({
+      @Result(property = "id", column = "ID"),
+      @Result(property = "userName", column = "USER_NAME"),
+      @Result(property = "password", column = "PASSWORD"),
+      @Result(property = "roleName", column = "ROLE_NAME")
+  })
+  UserInfo getUserInfo(String userName);
+}
+
 ```
 
 ## 设计用户服务

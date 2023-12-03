@@ -1,6 +1,6 @@
 # 流量控制
 
-流量控制机制通过控制数据传输速率来避免微服务过载运行。本指南将展示如何在 *体质指数* 应用中使用 **ServiceComb** 提供的流量控制能力。
+流量控制机制通过控制数据传输速率来避免微服务过载运行。本指南将展示如何在 *体质指数* 应用中使用流量控制能力。
 
 ## 前言
 
@@ -8,34 +8,20 @@
 
 ## 开启
 
-* 在 *体质指数计算器* 的 `pom.xml` 文件中添加依赖项：
-
-```xml
-<dependency>
-  <groupId>org.apache.servicecomb</groupId>
-  <artifactId>handler-flowcontrol-qps</artifactId>
-</dependency>
-```
-
-* 在 *体质指数计算器* 的 `application.yml` 文件中指明使用流量控制的处理链及指定流控策略：
+* 在 *体质指数计算器* 的 `application.yml` 文件中指明流控策略：
 
 ```yaml
 servicecomb:
- handler:
-   chain:
-     Provider:
-       default: qps-flowcontrol-provider
- flowcontrol:
-   Provider:
-     qps:
-       limit:
-         gateway: 1
-```
-
-也可以通过环境变量的方式动态修改配置文件的值，比如采用以下指令重新运行即可：
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dservicecomb.handler.chain.Provider.default=qps-flowcontrol-provider -Dservicecomb.flowcontrol.Provider.qps.limit.gateway=1"
+  matchGroup:
+    bmi-operation: |
+      matches:
+        - apiPath:
+            exact: "/bmi"
+  rateLimiting:
+    bmi-operation: |
+      timeoutDuration: 0
+      limitRefreshPeriod: 1000
+      rate: 1
 ```
 
 ## 验证 

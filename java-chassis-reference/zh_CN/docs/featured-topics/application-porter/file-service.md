@@ -1,12 +1,18 @@
-文件上传功能、用户管理功能都只需要提供REST接口，在技术选型上，使用轻量级REST框架。开发新的微服务都涉及到配置微服务信息，写一个新的Main函数，这些公共步骤在文档前面已经描述，后续文档会省略这些内容。
+# 开发文件上传功能
+
+文件上传功能、用户管理功能都只需要提供REST接口。
 
 * 增加依赖关系
 
 ```
-    <dependency>
-      <groupId>org.apache.servicecomb</groupId>
-      <artifactId>solution-basic</artifactId>
-    </dependency>
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>solution-basic</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.apache.servicecomb</groupId>
+  <artifactId>java-chassis-spring-boot-starter-standalone</artifactId>
+</dependency>
 ```
 
 * 定义服务接口
@@ -16,33 +22,34 @@
 ```
 @RestSchema(schemaId = "file")
 @RequestMapping(path = "/")
-public class FileServiceEndpoint {
-    @Autowired
-    private FileService fileService;
+public class FileEndpoint {
+  @Autowired
+  private FileService fileService;
+  
+  /**
+   * upload and return file id
+   */
+  @PostMapping(path = "/upload", produces = MediaType.TEXT_PLAIN_VALUE)
+  public String uploadFile(@RequestPart(name = "fileName") MultipartFile file) {
+      return fileService.uploadFile(file);
+  }
 
-    /**
-     * 上传文件接口，用户上传一个文件，返回文件ID。
-     */
-    @PostMapping(path = "/upload", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String uploadFile(@RequestPart(name = "fileName") MultipartFile file) {
-        return fileService.uploadFile(file);
-    }
-
-    /**
-     * 删除文件接口。指定ID，返回删除成功还是失败.
-     */
-    @DeleteMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean deleteFile(@RequestParam(name = "id") String id) {
-        return fileService.deleteFile(id);
-    }
+  /**
+   * delete file by id
+   */
+  @DeleteMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+  public boolean deleteFile(@RequestParam(name = "id") String id) {
+      return fileService.deleteFile(id);
+  }
 }
+
 ```
 
 为了实现不同方式的文件存储，将实现抽象出来FileService。为了简单，当前只提供了本地文件实现。这个实现限制了该服务无法进行多实例部署。可以考虑使用对象存储服务器、分布式文件系统等满足存储要求。
 
 * 设置临时目录
 
-需要在microservice.yaml中增加servicecomb.uploads.directory配置项，指定临时目录的路径。需要保证目录有写权限。默认情况下如果没设置临时目录，不允许启用上传功能。如果使用网关，网关也需要增加这个配置项。
+需要增加 `servicecomb.uploads.directory` 配置项，指定临时目录的路径。需要保证目录有写权限。默认情况下如果没设置临时目录，不允许启用上传功能。如果使用网关，网关也需要增加这个配置项。
 
 * 开发测试HTML，访问上传服务
 
