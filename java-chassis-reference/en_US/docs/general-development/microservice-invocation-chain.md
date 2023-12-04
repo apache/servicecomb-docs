@@ -57,3 +57,22 @@ Set the tracking processor and data collection service address in the microservi
 In this way, with the addition of two configuration items and no changes to one line of code, we started the distributed call chain tracking function based on Zipkin and Java chassis.
 
 **Note **If other dependencies in the project also introduce a zipkin (such as Spring Cloud), which may cause the zipkin version to be inconsistent and run incorrectly, you need to declare the zipkin version in the project pom.
+
+### Providing the full http.path
+
+The default http.path returned by Java Chassis is the operation path, which is different from the path of other frameworks. You can return the full http.path as follows.
+
+Setting the value of servicecomb.tracing.workWithThirdParty to true in the file of micoservice.yaml.
+
+```
+  servicecomb: 
+    handler: 
+      chain: 
+        Consumer: 
+          default: loadbalance,tracing-consumer
+        Provider: 
+          default: tracing-provider
+    tracing:
+      workWithThirdParty: true
+```
+
