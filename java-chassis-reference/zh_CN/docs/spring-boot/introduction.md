@@ -26,7 +26,7 @@ WebApplicationType指定为NONE
 ```java
 @SpringBootApplication
 public class ProviderApplication {
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     try {
       new SpringApplicationBuilder()
           .web(WebApplicationType.NONE)
@@ -50,12 +50,12 @@ public class ProviderApplication {
 </dependency>
 ```
 
-WebApplicationType指定为NONE
+WebApplicationType指定为SERVLET
 
 ```java
 @SpringBootApplication
 public class ProviderApplication {
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     try {
       new SpringApplicationBuilder()
           .web(WebApplicationType.SERVLET)
@@ -69,4 +69,6 @@ public class ProviderApplication {
 ```
 
 
-两种开发方式都会启用Java Chassis的全量功能，高性能模式运行于独立的HTTP服务器（基于vert.x构建）上，性能上存在很大的优势。Web模式运行于Tomcat或者其他内置的Web服务器之上，作为一个Servlet接收请求，因此在开发过程中，可以使用Web容器提供的一些功能，比如提供页面服务，使用Filter等。当应用只需要提供REST服务，并且对性能要求很高的场景，建议高性能模式。
+两种开发方式都会启用Java Chassis的全量功能，高性能模式运行于独立的HTTP服务器（基于vert.x构建）上，性能上存在很大的优势。Web模式运行于Tomcat或者其他内置的Web服务器之上，作为一个Servlet接收请求，因此在开发过程中，可以使用Web容器提供的一些功能，比如提供页面服务，使用Filter等。
+
+当应用只需要提供REST服务，并且对性能要求高的场景，建议使用高性能模式。
