@@ -15,7 +15,7 @@ Java Chassis依赖于Spring Boot，如果对于Spring Boot比较陌生，可以�
 [Basic示例](https://github.com/apache/servicecomb-samples/tree/master/basic) 包含了3个微服务： gateway, provider, consumer。
 这3个服务完成了一个最简单的微服务架构。 其中 provider 提供一个 REST 接口， consumer 调用 provider 的 REST 接口完成同样的功能。 gateway 作为微服务的接入端， 负责所有外部请求的接入。
 
-如果你已经了解 JAVA + MVN 应用程序开发， 可以直接下载并运行这个示例。 下面介绍该示例的关键开发步骤。
+如果已经了解 JAVA + MAVEN 应用程序开发， 可以直接下载并运行这个示例。 下面介绍该示例的关键开发步骤。
 
 ## 开发一个带 REST 接口的微服务
 
@@ -119,7 +119,7 @@ servicecomb:
     serverUri: http://localhost:30110
 ```
 
-### 编写Main类
+### 编写启动类
 
 Java Chassis应用是一个标准的Spring Boot应用。本示例中，设置 `WebApplicationType.NONE`， 这样会使用 Java Chassis自带的高性能 HTTP 容器，而不使用 Spring
 Boot自带的WEB容器。
@@ -141,7 +141,7 @@ public class ProviderApplication {
 }
 ```
 
-### 编写REST接口类
+### 编写服务
 
 在工程中添加一个REST接口类用于接收请求：
 
@@ -196,7 +196,7 @@ public class ProviderController {
 </Configuration>
 ```
 
-### 调用其他微服务
+### 调用服务
 
 在 Consumer 里面，演示了如何调用 Provider 的服务。 首先声明一个 PRC 接口， 该接口的方法名称、参数名称需要和服务端保持一致。
 
@@ -231,9 +231,9 @@ public class ConsumerController {
 }
 ```
 
-### 微服务网关的特殊配置
+### 微服务网关
 
-微服务网关是一个普通的微服务，需要额外引入依赖即可。
+微服务网关是一个普通的微服务，需要额外引入 `edge-core` 。
 
 ```xml
 
@@ -251,7 +251,7 @@ public class ConsumerController {
 打开注册中心、配置中心控制台，还可以看到微服务的实例列表。通过配置中心给 `ProviderApplication` 添加配置， 访问 `http://localhost:9090/exampleConfig` ,
 可以得到响应，响应包含了最新的配置项的值。 
 
-### 使用Nacos注册中心和Nacos配置中心
+### 使用`Nacos`注册中心和配置中心
 
 本例子还可以使用 `Nacos` 作为注册中心和配置中心。 
 
