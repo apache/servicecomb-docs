@@ -1,8 +1,6 @@
-# 2.0.1 新特性介绍： date和date-time
+# 特性介绍： date和date-time
 
 OpenAPI 针对时间定义了两种类型 [date 和 date-time](https://swagger.io/docs/specification/data-models/data-types/#string)。
-JavaChassis 在2.0.1之前的版本只支持使用 date-time，而且必须要求使用 `java.util.Date` 作为运行时类型，
-2.0.1 版本扩充了 date 和 date-time 的实现，开发者可以使用更加灵活的方式使用这两种类型。
 
 ## 使用 date
 
