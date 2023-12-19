@@ -1,9 +1,7 @@
-# 2.0.2 新特性介绍： Edge Service 通用的 HTTP 转发器 CommonHttpEdgeDispatcher
+# 特性介绍： Edge Service 通用的 HTTP 转发器 CommonHttpEdgeDispatcher
 
-Edge Service 提供了非常丰富的 HTTP 转发器，并支持自定义扩展。在 2.0.2 版本之前，缺省提供的转发器都是针对
-使用 java-chassis 开发的微服务设计的，这些转发器除了能够转发请求到不同的 transport ， 还能够支持 consumer
-端服务治理， 和普通的 consumer 调用类似。 在实际业务中，可能存在不同开发框架并存的情况，也可能包含遗留应用
-系统，或者需要将请求转发到其他第三方系统的场景。 2.0.2 提供了一个新的转发器 CommonHttpEdgeDispatcher 支持这些场景。 
+Edge Service 提供了非常丰富的 HTTP 转发器，并支持自定义扩展。在实际业务中，可能存在不同开发框架并存的情况，也可能包含遗留应用
+系统，或者需要将请求转发到其他第三方系统的场景。 Java Chassis提供了 CommonHttpEdgeDispatcher 支持这些场景。 
 
 CommonHttpEdgeDispatcher 要求目标微服务注册到服务中心，能够被自动发现。新的转发器可以管理实例状态，提供负载均衡策略配置，
 提供实例隔离等基本治理功能。 

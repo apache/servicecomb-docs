@@ -5,7 +5,7 @@ nav:
 
 - 概述 : index.md
 - Java Chassis设计参考: start/design.md
-- 3.x.x 版本介绍 : introduce3.x.x.md
+- Java Chassis 3版本介绍 : introduce3.x.x.md
 - 快速入门:
   - 安装本地开发环境: start/development-environment.md
   - 开发第一个微服务应用: start/first-sample.md
@@ -76,8 +76,9 @@ nav:
     - 使用TLS通信: security/tls.md
     - 使用RSA认证: security/shi-yong-rsa-ren-zheng.md
 - 专题文章:
-    - 新功能介绍系列文章: featured-topics/features.md
-    - 升级指导系列文章: featured-topics/upgrading.md
+    - 特性介绍: featured-topics/features.md
+    - 技术解密: featured-topics/secrets.md
+    - 升级指导: featured-topics/upgrading.md
     - 兼容问题和兼容性策略: featured-topics/compatibility.md
     - 性能问题分析和调优: featured-topics/performance.md
 - 常用配置项参考:

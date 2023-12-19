@@ -267,4 +267,4 @@ mvn clean install -Pnacos
 java -Dspring.profiles.active=nacos -jar basic-provider-2.0-SNAPSHOT.jar
 ```
 
-也可以在IDE里面选择 MVN 的 nacos PROFILE，并修改 application.yml 的 `spring.profiles.active` 为 nacos. 
+也可以在IDE里面选择 MAVEN 的 nacos PROFILE，并修改 application.yml 的 `spring.profiles.active` 为 nacos. 
