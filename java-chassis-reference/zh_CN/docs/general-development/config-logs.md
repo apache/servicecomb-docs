@@ -8,18 +8,20 @@ java chassis 系统内部全部采用 `slf4j` 记录日志。 `slf4j` 是一套�
 使用 log4j2 需要在项目中提供如下依赖。
 
 ```xml
-<dependency>
-  <groupId>org.apache.logging.log4j</groupId>
-  <artifactId>log4j-slf4j-impl</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.logging.log4j</groupId>
-  <artifactId>log4j-api</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.logging.log4j</groupId>
-  <artifactId>log4j-core</artifactId>
-</dependency>
+<dependencies>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 * log4j
@@ -27,6 +29,7 @@ java chassis 系统内部全部采用 `slf4j` 记录日志。 `slf4j` 是一套�
 使用 log4j 需要在项目中提供如下依赖。
 
 ```xml
+<dependencies>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -35,6 +38,7 @@ java chassis 系统内部全部采用 `slf4j` 记录日志。 `slf4j` 是一套�
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
     </dependency>
+</dependencies>
 ```
 
 * logback
@@ -42,8 +46,10 @@ java chassis 系统内部全部采用 `slf4j` 记录日志。 `slf4j` 是一套�
 使用 logback 需要在项目中提供如下依赖。
 
 ```xml
+<dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
+</dependencies>
 ```
