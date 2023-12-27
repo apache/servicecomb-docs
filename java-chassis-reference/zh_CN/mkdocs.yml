@@ -15,7 +15,8 @@ nav:
 - Spring Boot集成Java Chassis:
     - Spring Boot集成Java Chassis介绍: spring-boot/introduction.md
     - 与Spring Web MVC开发习惯的差异: spring-boot/diff-spring-mvc.md
-- 开发服务提供者: 
+- 开发服务提供者:
+    - 基础概念: build-provider/basics.md
     - 用JAX-RS开发微服务: build-provider/jaxrs.md
     - 用SpringMVC开发微服务: build-provider/springmvc.md
     - 用透明RPC开发微服务: build-provider/transparent-rpc.md
