@@ -159,30 +159,6 @@
    ***说明*** : 2.0.2 之前的版本部分业务异常无法通过 ExceptionToProducerResponseConverter 捕获，
     系统做了自动处理，不经过 ExceptionToProducerResponseConverter。 2.0.2 版本规范化了处理流程。 
 
-* 通过 Handler 拦截异常
-
-    可以开发一个自定义的 Handler, 并且将其放到其他 Handler 的前面，可以处理绝大多数业务异常、控制异常和
-    未知异常。Handler 不仅仅可以帮助和处理异常，还可以记录访问日志，参
-    考[2.0.1 新特性介绍： 在日志中记录trace id](../featured-topics/features/trace-id.md)
-    
-        public class ExceptionConvertHandler implements Handler {
-          @Override
-          public void handle(Invocation invocation, AsyncResponse asyncResp) throws Exception {
-            invocation.next(response -> {
-              if (response.isFailed()) {
-                Throwable e = response.getResult();
-                if (e instanceof InvocationException && ((InvocationException)e).getStatusCode() == 408) {
-                  CustomException customException = new CustomException("change the response", 777);
-                  InvocationException stt = new InvocationException(Status.EXPECTATION_FAILED, customException);
-                  response.setResult(stt);
-                  response.setStatus(stt.getStatus());
-                }
-              }
-              asyncResp.complete(response);
-            });
-          }
-        }
-
 * 控制消息消息体序列化
 
   控制消息消息体序列化的目的是简化消费者的异常处理逻辑，不用使用弱类型，而是使用确切类型。可以采用注册全局的错误码类型。
