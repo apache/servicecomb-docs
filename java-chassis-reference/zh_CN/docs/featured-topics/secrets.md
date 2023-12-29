@@ -8,3 +8,5 @@
 * [Java Chassis 3技术解密：熔断机制的改进路程](secrets/circuit-breaker.md)
 * [Java Chassis 3技术解密：过载状态下的快速失败](secrets/fail-fast.md)
 * [Java Chassis 3技术解密：日志记录和可维护性](secrets/logs.md)
+* [Java Chassis 3技术解密：动态可持续的兼容性策略](secrets/compatibility.md)
+
