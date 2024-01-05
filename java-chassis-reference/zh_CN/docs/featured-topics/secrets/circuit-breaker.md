@@ -2,7 +2,7 @@
 
 熔断机制是微服务治理非常重要的手段。当应用程序出现局部故障，比如多个微服务实例的其中一个实例故障，或者一个微服务实例的多个接口中的一个故障，恰当的熔断机制能够避免出现雪崩效应。熔断机制通常有如下几个重要的技术部件。
 
-* 熔断的目标对象。目标对象可以是一个实例的某个服务接口，也可以是正在访问的某个微服务实例，也可以是正在访问的某个微服务实例的某个接口。 站在Provider视角和站在Consumer视角，会有不同的目标对象。需要对目标对象进行准确的抽象，才能够提供有个好用的熔断机制。 
+* 熔断的目标对象。目标对象可以是一个实例的某个服务接口，也可以是正在访问的某个微服务实例，也可以是正在访问的某个微服务实例的某个接口。 站在Provider视角和站在Consumer视角，会有不同的目标对象。需要对目标对象进行准确的抽象，才能够提供一个好用的熔断机制。 
 * 故障检测方法。对目标对象的每次访问，需要对访问结果进行检查和分类，并统计相关指标。通常检查的结果包括抛出异常、返回状态码、请求处理时延等。 还需要考虑适当的算法进行指标统计，比如采用基于时间或者基于请求数量的滑动窗口算法。
 * 熔断的策略。当故障积累的时候，如何避免故障积累，产生雪崩效应。常见的策略包括：快速失败，对目标对象的访问，立即抛出异常，返回失败；隔离错误对象，当目标对象存在可替换副本，比如其他的微服务实例，不再访问故障实例，只访问其他非故障实例。 
 * 熔断的恢复策略。目标对象的熔断时长，如何从熔断状态中恢复也是非常重要的。
@@ -102,6 +102,9 @@ servicecomb:
       slidingWindowSize: 20
       slidingWindowType: COUNT_BASED
       failureRateThreshold: 50
+      recordFailureStatus: 
+        - 502
+        - 503
       slowCallRateThreshold: 100
       slowCallDurationThreshold: 3000
       waitDurationInOpenState: 10000 
@@ -119,6 +122,9 @@ servicecomb:
       slidingWindowType: COUNT_BASED
       failureRateThreshold: 50
       slowCallRateThreshold: 100
+      recordFailureStatus: 
+        - 502
+        - 503
       slowCallDurationThreshold: 3000
       waitDurationInOpenState: 10000 
       permittedNumberOfCallsInHalfOpenState: 10
@@ -165,8 +171,8 @@ servicecomb:
           serviceName: exampleService
 ```
 
-站在`Provider` 视角， 上述定义表示熔断对象是来自 `exampleService` 的设置了认证头的所有 POST 方法； 站在`Consumer` 视角， 上述定义表示熔断对象是设置了认证头的POST方法的 `exampleService` 的某个具体的实例。 
+站在`Provider` 视角， 上述定义表示熔断对象是来自 `exampleService` 的设置了认证头的所有 POST 方法； 站在`Consumer` 视角， 上述定义表示熔断对象是发往 `exampleService` 的某个具体的实例，并且设置了认证头的所有 POST 方法。 
 
 Java Chassis 3熔断机制逐步成为是一个简单易用， 满足绝大部分业务场景需要的通用设计规范。 
 
->>> 客户故事：客户期望建立一种持续演进的故障处理机制，以解决随着系统长期运行，随机故障、系统变慢等场景对整体故障的影响，动态的适应新的环境对可靠性带来的挑战。Java Chassis 3的服务治理配置机制，可以使得客户不需要修改代码和重启应用，就能够动态调整耗时接口和故障接口的熔断策略。通过规范赋能，运维人员就能够解决一些常见的过载防护问题。 
+>>> 客户故事：客户期望建立一种持续演进的故障处理机制，以降低随着系统长期运行，随机故障、系统变慢等场景对整体故障的影响，动态适应持续变化的环境对可靠性带来的挑战。Java Chassis 3的服务治理配置机制，可以使得客户不需要修改代码和重启应用，就能够动态调整耗时接口和故障接口的熔断策略。通过规范赋能，运维人员就能够解决一些常见的过载防护问题。 
