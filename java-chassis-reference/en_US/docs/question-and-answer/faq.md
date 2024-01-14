@@ -501,8 +501,7 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
 
     A: Service Center can be upgraded to version 4.0.0+ to solve [Service Center latest version portal] (http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center /1.0.0-m1/).
 
-
-*. **Q: Our API can not be accessed after microservices are up. It just returns *404 Not Found*. The codes we use is as follows:**
+* **Q: Our API can not be accessed after microservices are up. It just returns *404 Not Found*. The codes we use is as follows:**
 
    ```java
    @RestController
@@ -521,6 +520,30 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
    public class WorkerController {}
    ```
 
-*. **Q: What\'s the default base path if I have not declared the value of RequestMapping annotation?**
+* **Q: What\'s the default base path if I have not declared the value of RequestMapping annotation?**
 
    A: Supposed the class name of your controller is *HelloController*, the base path is /HelloController.
+
+* **Q: How to use the function of compressed data transmission？**
+
+  * A: To enable the response data compression transmission capability on the server, the following configuration is required:
+
+    ```yaml
+    servicecomb:
+      rest:
+        server:
+          compression: true
+    ```
+
+    At the same time, the consumer side needs to synchronize the activation of configuration items:
+
+    ```yaml
+    servicecomb:
+      rest:
+       client:
+         connection:
+           compression: true
+    ```
+
+​			 When the consumer sets the Accept Encoding: gzip, deflate field in the request header, the server will compress the response data based on the algorithm provided in this field and return it.
+

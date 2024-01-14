@@ -313,9 +313,32 @@ public MultiResponse200 errorCode(MultiRequest request) {
 
     * A: 可以使用@JsonIgnore注解标记需要忽略的属性， 例如:
 
-            public class OutputForTest{
-                @JsonIgnore
-                private String outputId = null;
-                private String inputId = null;
-                ...
-             }
+        ```java
+        public class OutputForTest{
+            @JsonIgnore
+            private String outputId = null;
+            private String inputId = null;
+            ...
+         }
+        ```
+
+* **Q: 如何使用数据压缩传输的能力？**
+
+    * A: 服务端要开启响应数据压缩传输的能力，需要进行如下配置：
+
+        ```yaml
+        servicecomb:
+          rest:
+            server:
+    	      compression: true
+		```
+		同时，消费端需要同步开启配置项：
+		```yaml
+		servicecomb:
+		  rest:
+		   client:
+		     connection:
+		       compression: true
+
+​			 当消费端在请求头中设置Accept-Encoding:gzip, deflate的字段时，服务端就会依据该字段中提供的算法，对响应数据进行压缩处理，并返回。
+
