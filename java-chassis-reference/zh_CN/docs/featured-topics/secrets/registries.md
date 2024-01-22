@@ -1,4 +1,4 @@
-# Java Chassis 3技术解密：多种注册中心支持
+# Java Chassis 3技术解密：易扩展的多种注册中心支持
 
 Java Chassis 的早期版本依赖于 Service Center，提供了很多差异化的竞争力：
 
@@ -7,7 +7,7 @@ Java Chassis 的早期版本依赖于 Service Center，提供了很多差异化�
 
 Java Chassis过度依赖 Service Center， 为产品的发展带来了一些瓶颈。 Java Chassis的生态推广依赖于 Service Center的生态推广， 不利于Java Chassis被更多用户使用。 随着云的发展， 越来越多的客户也期望一套代码，能够在不同的云环境运行，有些云产商未提供Service Center运行环境，那么用户选择Java Chassis 就会存在顾虑。 
 
-基于上述原因， Java Chassis简化了注册发现的依赖，定义了简单容易实现的接口，并基于 `Nacos` 提供了实现，未来还会提供 `zookeeper` 等实现。 Java Chassis 采用了一些列新的设计模式， 保证了在降低注册中心功能依赖的前提下，不降低应用自身的可靠性。 
+基于上述原因， Java Chassis简化了注册发现的依赖，定义了简单容易实现的接口，并基于 `Nacos` 提供了实现，未来还会提供 `zookeeper` 等实现。 Java Chassis 采用了一系列新的设计模式， 保证了在降低注册中心功能依赖的前提下，不降低应用自身的可靠性。 
 
 ## 接口级别转发的替代方案
 
@@ -136,7 +136,7 @@ public interface Registration<R extends RegistrationInstance> extends SPIEnabled
 
 ## 注册发现的组合
 
-Java Chassis 3可以独立实现多个 `Discovery` 和 `Registration`, 达到向多个注册中心注册和从多个注册中心发现实例的作用。 每个实例根据实例ID唯一来标识。 如果实例ID相同， 会被认为是同一个实例， 如果不同， 则会认为是不同的实例。 在 `Java Chassis 3技术解密：注册中心分区隔离` 中聊到了， Java Chassis 要求每次实例注册（新的进程）， 生成唯一的实例ID， 以解决注册分区隔离带来的实例假下线问题。 
+Java Chassis 3可以独立实现多个 `Discovery` 和 `Registration`, 达到向多个注册中心注册和从多个注册中心发现实例的作用。 每个实例根据实例ID唯一来标识。 如果实例ID相同， 会被认为是同一个实例， 如果不同， 则会认为是不同的实例。 在 `Java Chassis 3技术解密：注册中心分区隔离` 中聊到了， Java Chassis 要求每次实例注册（新的进程）， 生成唯一的实例ID， 以解决注册分区隔离带来的实例假下线问题。 `Discovery` 和 `Registration` 都包含了 Java Chassis 定义的基础信息。
 
 ```java
 /**
@@ -217,3 +217,6 @@ public interface MicroserviceInstance {
 
 ```
 
+在实现注册发现的时候，需要保证该接口定义的基础信息能够注册到注册中心，查询实例的时候，能够获取到这些信息。 
+
+>>> 客户故事：不把鸡蛋放到同一个篮子里面，是技术选型里面很重要的考量。解决方案的开放性和可替代性、云服务的可替代性，是很多客户都关注的问题。对于一个开源的技术框架，Java Chassis早期的版本虽然设计上也支持不同的注册中心扩展，但是实现难度很高，不自觉的把客户使用其他注册中心替换 service center的要求变得不可行。提供更加简化的注册发现实现，虽然减少了少量有有竞争力的功能特性，但是极大降低了客户选型的顾虑。 
