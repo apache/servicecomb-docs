@@ -117,7 +117,7 @@ servicecomb:
 
 ## 使用 Apollo
 
->>> 注意：本实现注意作为适配 Apollo 的参考。不建议在生产环境使用。 如果在生产环境使用，建议基于 Apollo 提供的 SDK 自行扩展实现。 
+>>> 注意：本实现作为适配 Apollo 的参考，整体逻辑功能和设计规格不完善，不建议在生产环境使用。 如果在生产环境使用，建议基于 Apollo 提供的 SDK 自行扩展实现。 
 
 [Apollo](https://github.com/ctripcorp/apollo) 是携程框架部门研发的分布式配置中心。 Apollo的下载安装请参考官网介绍。
 
@@ -149,7 +149,7 @@ apollo:
 
 华为云CSE1.0配置中心是华为云CSE产品的一个部件，java-chassis 最早使用它作为配置中心。 对接这个配置中心的代码在 config-cc 模块实现。
 
-可以从[轻量化微服务引擎](https://cse-bucket.obs.myhwclouds.com/LocalCSE/Local-CSE-1.0.3.zip)下载本地使用的版本。也可以
+可以从 [轻量化微服务引擎](https://cse-bucket.obs.myhwclouds.com/LocalCSE/Local-CSE-1.0.3.zip) 下载本地使用的版本。也可以
 直接访问华为云 [ServiceStage](https://console.huaweicloud.com/servicestage) 产品，使用在线的版本。
 
 使用华为云配置中心，需要在项目中引入如下依赖：

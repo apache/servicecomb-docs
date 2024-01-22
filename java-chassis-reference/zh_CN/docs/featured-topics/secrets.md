@@ -6,6 +6,6 @@
 * [Java Chassis 3技术解密：熔断机制的改进路程](secrets/circuit-breaker.md)
 * [Java Chassis 3技术解密：过载状态下的快速失败](secrets/fail-fast.md)
 * [Java Chassis 3技术解密：应用视角的配置管理](secrets/applied-config.md)
-* [Java Chassis 3技术解密：多种注册中心支持](secrets/registries.md)
+* [Java Chassis 3技术解密：易扩展的多种注册中心支持](secrets/registries.md)
 * [Java Chassis 3技术解密：与Spring Cloud的互操作](secrets/interoperability.md)
 
