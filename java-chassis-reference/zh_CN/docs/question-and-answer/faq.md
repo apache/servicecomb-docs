@@ -38,7 +38,7 @@
   类型的 key 必须使用 String 类型。 业务可以结合实际情况，使用符合规范的类型。 如果必须使用其他类型，
   可以考虑接口定义使用 Object 规避，客户端可以对返回值结果自行进行 json 转换。
   
- 
+   
   
 <h2 id="Q4">Q: 参数返回值不能使用接口？</h2>
 
@@ -47,7 +47,7 @@
   自行进行 json 转换。
 
 
-  
+
 <h2 id="Q5">Q: 参数返回值不能使用泛型？</h2>
 
 * A: 可以使用泛型。但是必须明确泛型类型。比如：
@@ -80,7 +80,7 @@
 如果业务必须使用泛型，并且不能确定类型，可以考虑接口定义使用 Object 规避，客户端可以对返回值结果
 自行进行 json 转换。
 
-  
+
 <h2 id="Q6">Q: 实现类中 public 方法全部被发布为接口，如何排除？</h2>
 
 * A: java chassis 会将所有 public 方法发布为接口。 如果有些接口不需要发布为接口，可以使用 @ApiOperation
@@ -217,14 +217,14 @@ public MultiResponse200 errorCode(MultiRequest request) {
 
     * A: 如果使用ServiceComb sdk servlet方式（使用transport-rest-servlet依赖）制作为war包部署到tomcat，需要保证，
         服务描述文件（microservice.yaml）中rest端口配置和外置容器一致才能实现该服务的正确注册。否则无法感知tomcat开放端口。
- 
+
 * **Q: 如果使用tomcat方式集成ServiceComb微服务框架，服务注册的时候如何将war包部署的上下文注册到服务中心**
 
     * A: 发布服务接口的时候需要将war包部署的上下文（context）放在baseurl最前面，这样才能保证注册到服务中心的路径是完整的路径（包含了上下文）。示例：
 
             @path(/{context}/xxx)
             class ServiceA
- 
+
 * **Q:  ServiceComb微服务框架如何实现数据多个微服务间透传**
 
     * A: 透传数据塞入：
@@ -303,7 +303,7 @@ public MultiResponse200 errorCode(MultiRequest request) {
 * **Q:  qps流控设计时是出于什么场景考虑的？**
 
     * A: 限流有两个主要作用，第一通过给不同的消费者限流保证对一些重点服务的服务效果，第二防止雪崩效应。可根据服务的重要性来决定水管的粗细，ServiceComb是支持消费端限流和服务端限流两种限流方式的，消费端限流可以做到比较精细的控制。
-  
+
 
 * **Q: 如果服务端是链式调用，即类似a->b->c，那设置了qps 流控会不会造成水管粗细不均的事情？**
 
@@ -322,23 +322,23 @@ public MultiResponse200 errorCode(MultiRequest request) {
          }
         ```
 
-* **Q: 如何使用数据压缩传输的能力？**
+  * **Q: 如何使用数据压缩传输的能力？**
 
     * A: 服务端要开启响应数据压缩传输的能力，需要进行如下配置：
 
-        ```yaml
-        servicecomb:
-          rest:
-            server:
-    	      compression: true
-		```
-		同时，消费端需要同步开启配置项：
-		```yaml
-		servicecomb:
-		  rest:
-		   client:
-		     connection:
-		       compression: true
-
-​			 当消费端在请求头中设置Accept-Encoding:gzip, deflate的字段时，服务端就会依据该字段中提供的算法，对响应数据进行压缩处理，并返回。
+    ```yaml
+    servicecomb:
+      rest:
+        server:
+          compression: true
+    ```
+    同时，消费端需要同步开启配置项：
+    ```yaml
+    servicecomb:
+      rest:
+        client:
+          connection:
+            compression: true
+    ```
+    当消费端在请求头中设置Accept-Encoding:gzip, deflate的字段时，服务端就会依据该字段中提供的算法，对响应数据进行压缩处理，并返回。
 
