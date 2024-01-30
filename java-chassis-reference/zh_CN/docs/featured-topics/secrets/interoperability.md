@@ -15,10 +15,10 @@ Java Chassis 3一个很重要的设计原则：利用架构的韧性设计来解
 
 从技术原理上梳理下上述互操作需要满足的条件：
 
-* Spring Cloud和Java Chassis需要有相互认识的注册信息。核心包括：应用名称、服务名称、地址信息和格式等。 需要的共同注册中心越少，越容易对注册中心和客户端进行选型。 在本例子中，我们选择 service center作为注册中心，并选择Spring Cloud Huawei实现Spring Cloud往service center注册。 
+* Spring Cloud和Java Chassis需要有相互认识的注册信息。核心包括：应用名称、服务名称、地址信息和格式等。 需要的共同注册中心越少，越容易对注册中心和客户端进行选型。 在本例子中，我们选择 `Service Center` 或者 `Nacos` 作为注册中心，并选择Spring Cloud Huawei实现Spring Cloud注册。 
 * Spring Cloud访问Java Chassis，只需要一个地址信息，依赖较少。 Java Chassis访问Spring Cloud，需要知道Spring Cloud应用提供的契约信息。 
 
-Java Chassis区别于Spring Cloud的REST调用的部分，就是契约依赖。 Spring Cloud通过FeignClient来声明客户端契约，客户端都需要在FeignClient中重复书写REST标签；Java Chassis有两种模式发现契约：从注册中心发现和从Provider实例发现。 Java Chassis3默认采用从Provider实例发现， Java Chassis2采用从注册中心发现。 从Provider发现的好处是可以降低对于注册中心元数据管理能力的要求，虽然本例子中采用 service center作为注册中心，选择Nacos等作为注册中心也是可以的。 
+Java Chassis区别于Spring Cloud的REST调用的部分，就是契约依赖。 Spring Cloud通过FeignClient来声明客户端契约，客户端都需要在FeignClient中重复书写REST标签；Java Chassis有两种模式发现契约：从注册中心发现和从Provider实例发现。 Java Chassis3默认采用从Provider实例发现， Java Chassis2采用从注册中心发现。 从Provider发现的好处是可以降低对于注册中心元数据管理能力的要求，本例既可以采用 `Service Center` 作为注册中心，也可以选择 `Nacos` 作为注册中心。 
 
 从Provider发现，要求Provider实现如下接口：
 
