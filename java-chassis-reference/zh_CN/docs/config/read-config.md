@@ -40,9 +40,10 @@ Bean 属性对应的配置项名称支持通配符， 一个属性可以关联�
 
 * 配置注入对象
 
-  我们首先设计两个Java类用于注入配置属性，分别用来演示不使用注解和使用注解的场景。使用注解:
+  我们首先设计两个Java类用于注入配置属性，分别用来演示不使用注解和使用注解的场景。使用@InjectProperties注解并声明为Bean:
 
       ```Java
+      @Component
       @InjectProperties(prefix = "jaxrstest.jaxrsclient")
       public class Configuration {
         /*
@@ -116,9 +117,23 @@ Bean 属性对应的配置项名称支持通配符， 一个属性可以关联�
       }
       ```
 
+  Configuration对象的longValue字段按以下顺序查找已配置的属性:
+
+        1.  root.low-1.a.high-1.b
+        2.  root.low-1.a.high-2.b
+        3.  root.low-2.a.high-1.b
+        4.  root.low-2.a.high-2.b
+
+  Configuration对象的floatValue字段按以下顺序查找已配置的属性:
+
+        1.  root.l1-1
+        2.  root.l1-2
+
   不使用注解：
 
         ```Java
+        @Component
+        @InjectProperties(prefix = "jaxrstest.jaxrsclient")
         public class ConfigNoAnnotation {
             /*
              * 如果未提供@InjectProperties和@InjectProperty注解，会默认使用字段名作为配置属性名。
@@ -129,39 +144,6 @@ Bean 属性对应的配置项名称支持通配符， 一个属性可以关联�
         }
         ```
 
-* 执行注入
-
-  使用注解的场景：
-
-        ```Java
-        ConfigWithAnnotation config = SCBEngine.getInstance().getPriorityPropertyManager()
-          .createConfigObject(Configuration.class,
-                "key", "k",
-                "low-list", Arrays.asList("low-1", "low-2"),
-                "high-list", Arrays.asList("high-1", "high-2"),
-                "full-list", Arrays.asList("l1-1", "l1-2")
-                );
-        ```
-
-  Configuration对象的longValue字段按以下顺序查找已配置的属性:
-
-        1.  root.low-1.a.high-1.b
-        2.  root.low-1.a.high-2.b
-        3.  root.low-2.a.high-1.b
-        4.  root.low-2.a.high-2.b
-
-  Configuration对象的floatValue字段按以下顺序查找已配置的属性:
-  
-        1.  root.l1-1
-        2.  root.l1-2
-    
-  不使用注解的场景：
-
-        ```Java
-        ConfigNoAnnotation config = SCBEngine.getInstance()
-          .getPriorityPropertyManager().createConfigObject(ConfigNoAnnotation.class);
-        ```
-        
   ConfigNoAnnotation 对象的 strValue 字段会查找已配置的属性 strValue，没有前缀和优先级。
 
   更多关于配置注入的用法，建议下载 java-chassis 的源码， 查看 TestConfigObjectFactory 类里面的示例。

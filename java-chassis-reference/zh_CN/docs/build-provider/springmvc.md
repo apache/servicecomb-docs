@@ -45,36 +45,6 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
         }
         ```
 
-* 发布服务 （可选，默认会扫描 main 函数所在的 package ）
-
-  在`resources/META-INF/spring`目录下创建`springmvcprovider.bean.xml`文件，
-  命名规则为`\*.bean.xml`，配置spring进行服务扫描的base-package，文件内容如下：
-
-        ```xml
-        <?xml version="1.0" encoding="UTF-8"?>
-        
-        <beans xmlns="http://www.springframework.org/schema/beans"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:cse="http://www.huawei.com/schema/paas/cse/rpc"
-          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                http://www.huawei.com/schema/paas/cse/rpc classpath:META-INF/spring/spring-paas-cse-rpc.xsd">
-        
-            <context:component-scan base-package="org.apache.servicecomb.samples.springmvc.povider"/>
-        </beans>
-        ```
-
-* 启动 provider 服务
-
-  servicecomb 依赖于 Spring, 只需要将 Spring 框架启动起来即可。
-
-        ```java
-        public class SpringmvcProviderMain {
-        
-          public static void main(String[] args) throws Exception {
-            BeanUtils.init();
-          }
-        }
-        ```
 
 ## ServiceComb支持的 Spring MVC 注解说明
 
@@ -92,30 +62,30 @@ servicecomb 支持使用 Spring MVC 提供的注解 `org.springframework.web.bin
 
   ***表1-1 Spring MVC注解情况说明***
 
-| 标签名称 | 是否支持 | 说明 |
-| :--- | :--- | :--- |
-| RequestMapping | 是 | 不允许制定多个Path，一个接口只允许一个Path，必须显示的声明 method 属性，只能定义唯一一个 method |
-| GetMapping | 是 |  |
-| PutMapping | 是 |  |
-| PostMapping | 是 |  |
-| DeleteMapping | 是 |  |
-| PatchMapping | 是 |  |
-| RequestParam | 是 |  |
-| CookieValue | 是 |  |
-| PathVariable | 是 |  |
-| RequestHeader | 是 |  |
-| RequestBody | 是 | 目前支持application/json，plain/text |
-| RequestPart | 是 | 用于文件上传的场景，对应的标签还有Part、MultipartFile |
-| ResponseBody | 否 | 返回值缺省都是在body返回 |
-| ResponseStatus | 否 | 可以通过ApiResponse指定返回的错误码 |
-| RequestAttribute | 否 | Servlet协议相关的标签 |
-| SessionAttribute | 否 | Servlet协议相关的标签 |
-| MatrixVariable | 否 |  |
-| ModelAttribute | 否 |  |
-| ControllerAdvice | 否 |  |
-| CrossOrigin | 否 |  |
-| ExceptionHandler | 否 |  |
-| InitBinder | 否 |  |
+| 标签名称             | 是否支持 | 说明                                                          |
+|------------------|:----:|:------------------------------------------------------------|
+| RequestMapping   |  是   | 不允许制定多个Path，一个接口只允许一个Path，必须显示的声明 method 属性，只能定义唯一一个 method |
+| GetMapping       |  是   |                                                             |
+| PutMapping       |  是   |                                                             |
+| PostMapping      |  是   |                                                             |
+| DeleteMapping    |  是   |                                                             |
+| PatchMapping     |  是   |                                                             |
+| RequestParam     |  是   | 注意含义与Spring MVC不同。Java Chassis 表示 query 参数。                 |
+| CookieValue      |  是   |                                                             |
+| PathVariable     |  是   |                                                             |
+| RequestHeader    |  是   |                                                             |
+| RequestBody      |  是   | 目前支持application/json，plain/text                             |
+| RequestPart      |  是   | 用于文件上传的场景，对应的标签还有Part、MultipartFile                         |
+| ResponseBody     |  否   | 返回值缺省都是在body返回                                              |
+| ResponseStatus   |  否   | 可以通过ApiResponse指定返回的错误码                                     |
+| RequestAttribute |  是   | 注意含义与Spring MVC不同。Java Chassis 表示 form 参数。                  |
+| SessionAttribute |  否   | Servlet协议相关的标签                                              |
+| MatrixVariable   |  否   |                                                             |
+| ModelAttribute   |  否   |                                                             |
+| ControllerAdvice |  否   |                                                             |
+| CrossOrigin      |  否   |                                                             |
+| ExceptionHandler |  否   |                                                             |
+| InitBinder       |  否   |                                                             |
 
 * 服务声明方式
 

@@ -20,6 +20,7 @@ nav:
     - 用JAX-RS开发微服务: build-provider/jaxrs.md
     - 用SpringMVC开发微服务: build-provider/springmvc.md
     - 用透明RPC开发微服务: build-provider/transparent-rpc.md
+    - HTTP参数映射参考: build-provider/http-mapping.md
     - 只发布interface的方法为服务接口: build-provider/use-interface.md
     - 异步处理: build-provider/reactive.md
     - 使用 Context 参数: build-provider/context-param.md
