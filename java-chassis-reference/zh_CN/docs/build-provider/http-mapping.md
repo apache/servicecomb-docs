@@ -147,45 +147,6 @@ public String formJAXRSExample(@FormParam("formParamExample1") String example1,
     @FormParam("formParamExample2") String example2)
 ```
 
-### multipart/form-data
-
-当 HTTP 消息体是 `multipart/form-data`， 表示文件上传。
-
-```text
-GET /apps HTTP/1.1
-Host: 127.0.0.1:8080
-Accept-Language: zh
-Content-Type: multipart/form-data; boundary=----boundary-example----
-
-----boundary-example----
-Content-Disposition: form-data; name="multiPartParamExample1"
-
-contents of multiPartParamExample1
-----boundary-example----
-Content-Disposition: form-data; name="multiPartParamExample2"
-
-contents of multiPartParamExample2
-----boundary-example----
-```
-
->>> multipart/form-data 也可以表示 Form 参数， 和 application/x-www-form-urlencoded 用法一样。为了避免混淆和简洁，建议multipart/form-data用于文件上传场景。 
-
-```java
-@PostMapping(path = "multiPartSpringMVCExample", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-public String multiPartSpringMVCExample(@RequestPart("multiPartParamExample1") MultipartFile example1,
-    @RequestPart("multiPartParamExample2") MultipartFile example2)
-```
-
-* JAX-RS
-
-```java
-@POST
-@Path("multiPartJAXRSExample")
-@Consumes(MediaType.MULTIPART_FORM_DATA)
-public String multiPartJAXRSExample(@FormParam("multiPartParamExample1") Part example1,
-    @FormParam("multiPartParamExample2") Part example2)
-```
-
 ### application/json
 
 当 HTTP 消息体是 `application/json`， 使用json进行对象序列化。
@@ -281,6 +242,45 @@ public String textJAXRSExample(Person person)
 
 >>> JAX-RS没有声明标签的时候表示Body参数。
 
+### 文件上传：multipart/form-data
+
+当 HTTP 消息体是 `multipart/form-data`， 表示文件上传。
+
+```text
+GET /apps HTTP/1.1
+Host: 127.0.0.1:8080
+Accept-Language: zh
+Content-Type: multipart/form-data; boundary=----boundary-example----
+
+----boundary-example----
+Content-Disposition: form-data; name="multiPartParamExample1"
+
+contents of multiPartParamExample1
+----boundary-example----
+Content-Disposition: form-data; name="multiPartParamExample2"
+
+contents of multiPartParamExample2
+----boundary-example----
+```
+
+>>> multipart/form-data 也可以表示 Form 参数， 和 application/x-www-form-urlencoded 用法一样。为了避免混淆和简洁，建议multipart/form-data用于文件上传场景。
+
+```java
+@PostMapping(path = "multiPartSpringMVCExample", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public String multiPartSpringMVCExample(@RequestPart("multiPartParamExample1") MultipartFile example1,
+    @RequestPart("multiPartParamExample2") MultipartFile example2)
+```
+
+* JAX-RS
+
+```java
+@POST
+@Path("multiPartJAXRSExample")
+@Consumes(MediaType.MULTIPART_FORM_DATA)
+public String multiPartJAXRSExample(@FormParam("multiPartParamExample1") Part example1,
+    @FormParam("multiPartParamExample2") Part example2)
+```
+
 ## HTTP响应参数映射
 
 ### 状态码 和 Header
@@ -351,6 +351,8 @@ public Response statusHeaderJAXRSExample(@RequestBody Person person) {
 
 响应类型根据 `Accept` 来确定，默认是 application/json。 也可以声明接口只支持 application/json 响应。 
 
+* Spring MVC
+
 ```java
 @PostMapping(path = "produceJsonSpringMVCExample", produces = MediaType.APPLICATION_JSON_VALUE)
 public Person produceJsonSpringMVCExample()
@@ -368,6 +370,8 @@ public Person produceJsonJAXRSExample()
 ### application/protobuf
 
 响应类型根据 `Accept` 来确定，默认是 application/json。 也可以声明接口只支持 application/protobuf 响应。
+
+* Spring MVC
 
 ```java
 @PostMapping(path = "produceProtobufSpringMVCExample", produces = SwaggerConst.PROTOBUF_TYPE)
@@ -387,6 +391,8 @@ public Person produceProtobufJAXRSExample()
 
 响应类型根据 `Accept` 来确定，默认是 application/json。 也可以声明接口只支持 application/text 响应。
 
+* Spring MVC
+
 ```java
 @PostMapping(path = "produceTextSpringMVCExample", produces = MediaType.TEXT_PLAIN_VALUE)
 public Person produceTextSpringMVCExample()
@@ -401,9 +407,9 @@ public Person produceTextSpringMVCExample()
 public Person produceTextJAXRSExample() 
 ```
 
-### 其他
+### 文件下载
 
-Java Chassis提供了通用的 `文件下载` 支持。 如果返回值类型为 `File`、`Resource`、`InputStream`、`Part` 等，则被认为是 `文件下载`。 
+Java Chassis提供了通用的 `文件下载` 支持。 如果返回值类型为 `File`、`Resource`、`InputStream`、`Part` 等，则被认为是 `文件下载`。 文件MIME类型和文件名可以使用 `Part` 的 API 指定。
 
 * Spring MVC
 
@@ -413,7 +419,7 @@ public Part downloadSpringMVCExample(String content) throws IOException {
     File file = createTempFile(content);
     return new FilePart(null, file)
         .setDeleteAfterFinished(true)
-        .setSubmittedFileName("test.txt")
+        .setSubmittedFileName("test.bin")
         .contentType("application/octet-stream");
 }
 ```
@@ -421,7 +427,7 @@ public Part downloadSpringMVCExample(String content) throws IOException {
 上述接口会返回如下响应头:
 
 ```text
-Content-Disposition: attachment;filename=file.txt;filename*=utf-8’’file.txt
+Content-Disposition: attachment;filename=test.bin;filename*=utf-8’’test.bin
 Content-Encoding: gzip
 Content-Type: application/octet-stream
 Transfer-Encoding: chunked
@@ -436,7 +442,7 @@ public Part downloadSpringMVCExample(String content) throws IOException {
     File file = createTempFile(content);
     return new FilePart(null, file)
         .setDeleteAfterFinished(true)
-        .setSubmittedFileName("test.txt")
+        .setSubmittedFileName("test.bin")
         .contentType("application/octet-stream");
 }
 ```
@@ -444,7 +450,7 @@ public Part downloadSpringMVCExample(String content) throws IOException {
 上述接口会返回如下响应头:
 
 ```text
-Content-Disposition: attachment;filename=file.txt;filename*=utf-8’’file.txt
+Content-Disposition: attachment;filename=test.bin;filename*=utf-8’’test.bin
 Content-Encoding: gzip
 Content-Type: application/octet-stream
 Transfer-Encoding: chunked
