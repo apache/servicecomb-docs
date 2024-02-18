@@ -263,7 +263,9 @@ contents of multiPartParamExample2
 ----boundary-example----
 ```
 
->>> multipart/form-data 也可以表示 Form 参数， 和 application/x-www-form-urlencoded 用法一样。为了避免混淆和简洁，建议multipart/form-data用于文件上传场景。
+>>> multipart/form-data 也可以表示 Form 参数， 和 application/x-www-form-urlencoded 用法一样。为了避免混淆和简洁，建议multipart/form-data专用于文件上传场景。
+
+* Spring MVC
 
 ```java
 @PostMapping(path = "multiPartSpringMVCExample", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
