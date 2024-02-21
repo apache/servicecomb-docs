@@ -35,11 +35,10 @@ nav:
     - IPV6配置和使用: build-provider/ipv6-configuration.md
     - Access Log配置: build-provider/access-log-configuration.md
 - 开发服务消费者:
-    - 消费者通用配置项: build-consumer/common-configuration.md
-    - 使用RestTemplate开发服务消费者: build-consumer/using-resttemplate.md
-    - 使用RPC方式开发服务消费者: build-consumer/develop-consumer-using-rpc.md
-    - 泛化调用: featured-topics/features/invoker.md
-    - 使用服务契约: build-consumer/with-contract.md
+    - 基础概念: build-consumer/basics.md
+    - Restful风格 - 使用 RestOperations: build-consumer/using-resttemplate.md
+    - RPC风格: build-consumer/develop-consumer-using-rpc.md
+    - 泛化调用: build-consumer/invoker.md
     - 调用第三方REST服务: build-consumer/3rd-party-service-invoke.md
 - 定制请求处理流程:
     - 处理链介绍: references-handlers/intruduction.md
@@ -66,10 +65,10 @@ nav:
     - 配置日志: general-development/config-logs.md
 - 多样化的通信协议功能:
     - 多协议介绍: transports/introduction.md
-    - REST over HTTP(Vert.x: transports/rest-over-vertx.md
-    - REST over HTTP2(Vert.x: transports/http2.md
-    - REST over Servlet(Spring Boot Embedded: transports/rest-over-servlet-embedded.md
-    - REST over Servlet(WAR: transports/rest-over-servlet.md
+    - REST over HTTP(Vert.x): transports/rest-over-vertx.md
+    - REST over HTTP2(Vert.x): transports/http2.md
+    - REST over Servlet(Spring Boot Embedded): transports/rest-over-servlet-embedded.md
+    - REST over Servlet(WAR): transports/rest-over-servlet.md
     - Highway: transports/highway-rpc.md
 - 多样化的服务注册与发现功能:
     - 注册发现介绍: registry/introduction.md
