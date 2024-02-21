@@ -1,7 +1,6 @@
-# 特性介绍： 泛化调用
+# 泛化调用
 
-泛化调用指在不知道 Provider 接口定义信息的情况下，访问 Provider 提供的服务。 与泛化调用对应的方式包括透明 RPC（POJO）和 
-RestTemplate。 透明 RPC 需要提供 Provider 对应的接口， RestTemplate 需要提供 Provider 对应的 URL 和 数据 Model 。 泛化
+泛化调用指在不知道 Provider 接口定义信息的情况下，访问 Provider 提供的服务。 泛化
 调用需要提供 Provider 的服务元数据： 微服务名称， 版本， Schema ID， Operation ID, 契约参数等信息。 
 
 ## 使用泛化调用
