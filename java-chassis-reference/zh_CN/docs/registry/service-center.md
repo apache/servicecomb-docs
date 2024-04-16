@@ -1,6 +1,6 @@
-# 使用 service-center 
+# 使用 Service Center 
 
-ServcieComb service-center 提供了完备的注册发现机制， 是 Java Chassis 缺省使用的注册发现机制。 
+ServcieComb Service Center 提供了完备的注册发现机制， 是 Java Chassis 缺省使用的注册发现机制。 
 
 服务中心支持使用 `PULL` 和 `PUSH` 两种模式通知实例变化， 开发者可以配置服务中心集群地址、连接参数以及心跳管理等。
 

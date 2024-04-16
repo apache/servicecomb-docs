@@ -72,14 +72,19 @@ nav:
     - Highway: transports/highway-rpc.md
 - 多样化的服务注册与发现功能:
     - 注册发现介绍: registry/introduction.md
-    - 使用service-center: registry/service-center.md
-    - 使用nacos: registry/nacos.md
+    - 使用Service Center: registry/service-center.md
+    - 使用Nacos: registry/nacos.md
+    - 使用ZooKeeper: registry/zookeeper.md
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
 - 多样化的配置管理功能:
     - 服务配置介绍: config/general-config.md
     - 在程序中读取配置信息: config/read-config.md
-    - 配置中心参考: config/config-service.md
+    - 使用Kie: config/kie.md
+    - 使用Nacos: config/nacos.md
+    - 使用Zookeeper: config/zookeeper.md
+    - 使用Apollo: config/apollo.md
+    - 使用CSE1.0配置中心: config/cse1.md
 - 服务治理功能参考:
     - 负载均衡: references-handlers/loadbalance.md
     - 限流: references-handlers/ratelimit.md
