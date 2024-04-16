@@ -1,6 +1,6 @@
-# 使用 nacos
+# 使用 Nacos
 
-可以通过 [nacos官网](https://github.com/alibaba/nacos) 下载和安装 Nacos。
+可以通过 [Nacos官网](https://github.com/alibaba/nacos) 下载和安装 Nacos。
 
 Nacos的namespace对应于环境Environment， group对应于application， service对应于微服务名称。 
 
