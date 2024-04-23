@@ -31,27 +31,27 @@ ZooKeeper使用认证详细情况可以参考官网。这里给出核心重要�
 
     在配置文件增加。其中 `sessionRequireClientSASLAuth` 指定了必须登录才能够访问 Zookeeper。 
 
-    ```text
-    authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
-    sessionRequireClientSASLAuth=true
-    ```
-   
+```
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+sessionRequireClientSASLAuth=true
+```
+
 2. 修改 java.env
 
    在配置文件增加。 其中 `file.conf` 是第3步增加的文件路径
 
-    ```text
-    SERVER_JVMFLAGS="-Djava.security.auth.login.config=/opt/file.conf"
-    ```
+```
+SERVER_JVMFLAGS="-Djava.security.auth.login.config=/opt/file.conf"
+```
 
 3. 增加 file.conf
 
     配置文件指定合法的登录用户。 
 
-    ```text
-    Server {
-       org.apache.zookeeper.server.auth.DigestLoginModule required
-       user_super="adminsecret"
-       user_bob="bobsecret";
-    };
-    ```
+```
+Server {
+ org.apache.zookeeper.server.auth.DigestLoginModule required
+ user_super="adminsecret"
+ user_bob="bobsecret";
+};
+```

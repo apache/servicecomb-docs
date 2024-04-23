@@ -8,4 +8,4 @@
 * [Java Chassis 3技术解密：应用视角的配置管理](secrets/applied-config.md)
 * [Java Chassis 3技术解密：易扩展的多种注册中心支持](secrets/registries.md)
 * [Java Chassis 3技术解密：与Spring Cloud的互操作](secrets/interoperability.md)
-
+* [Java Chassis 3技术解密：ZooKeeper注册和配置中心](secrets/zookeeper.md)
