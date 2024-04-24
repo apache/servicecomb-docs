@@ -61,7 +61,7 @@ ZooKeeper自身被设计为一个高可靠的中间件，Java Chassis 3进一步
 
 有观点认为， ZooKeeper不适合作为注册中心，一般的，CP系统都不适合作为注册中心，而AP作为注册中心才是最佳选择。 个人觉得这样的观点是片面而且非常不恰当的。 
 
-从[ZooKeeper 并不适合做注册中心](https://blog.csdn.net/looook/article/details/109168239?spm=1001.2014.3001.5501) 和 [为什么我们要把服务注册发现改为阿里巴巴的Nacos而不用 ZooKeeper？](zoo-nacos) 摘取了几个核心观点：
+从[ZooKeeper 并不适合做注册中心](https://blog.csdn.net/looook/article/details/109168239?spm=1001.2014.3001.5501) 和 [为什么我们要把服务注册发现改为阿里巴巴的Nacos而不用 ZooKeeper？](https://blog.csdn.net/u012921921/article/details/106521181/?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1--blog-109168239.235^v43^pc_blog_bottom_relevance_base3&spm=1001.2101.3001.4242.) 摘取了几个核心观点（后面简称“观点文章”）：
 
 * 网络分区隔离情况下，ZooKeeper会导致服务间调用错误，也会导致新的服务无法注册，不适合作为注册中心。
 * ZooKeeper所有写操作都在Leader进行，无法支持大规模微服务实例，不适合作为注册中心。
@@ -70,9 +70,9 @@ ZooKeeper自身被设计为一个高可靠的中间件，Java Chassis 3进一步
 
 ### 关于网络分区隔离
 
-网络分区隔离的场景比较多，在[Java Chassis 3技术解密：注册中心分区隔离](zone-isolation.md)描述的场景下，Java Chassis能够保证服务之间的调用不受影响。在[为什么我们要把服务注册发现改为阿里巴巴的Nacos而不用 ZooKeeper？](zoo-nacos)提到的场景中，Java Chassis也能够保证服务之间的调用不受影响，但是服务无法注册。网络分区隔离场景下，核心需要讨论的问题变成是否需要允许服务进行注册/扩容？尽管可能存在争议，但我们的观点是系统出现部分故障的情况下，系统不应该扩容，而是尽可能维持处理能力不变，这样会使得故障恢复更加可控，从而减少系统恢复时间。
+网络分区隔离的场景比较多，在[Java Chassis 3技术解密：注册中心分区隔离](zone-isolation.md)描述的场景下，Java Chassis能够保证服务之间的调用不受影响。在观点文章提到的场景中，Java Chassis也能够保证服务之间的调用不受影响，但是服务无法注册。网络分区隔离场景下，核心需要讨论的问题变成是否需要允许服务进行注册/扩容？尽管可能存在争议，但我们的观点是系统出现部分故障的情况下，系统不应该扩容，而是尽可能维持处理能力不变，这样会使得故障恢复更加可控，从而减少系统恢复时间。
 
-[为什么我们要把服务注册发现改为阿里巴巴的Nacos而不用 ZooKeeper？](zoo-nacos)提到的场景相对于实际部署场景还过于简单，我们把它扩展到实际场景：
+观点文章提到的场景相对于实际部署场景还过于简单，我们把它扩展到实际场景：
 
 ![](zookeeper-scale.png)
 
@@ -89,7 +89,4 @@ ZooKeeper只有Leader可以写入，通过扩容Learner(Follower/Observer)提升
 ## 总结
 
 Java Chassis 3使用ZooKeeper作为注册中心是非常好的选择，ZooKeeper可以在应用系统中同时扮演注册、配置和选举等功能，能够极大的简化应用部署和服务依赖。CP一致性也使得常见故障场景下应用程序的行为具备更好的预测性。大规模系统可以采用微服务网关来提升系统韧性，降低系统爆炸半径。
-
-
-zoo-nacos: https://blog.csdn.net/u012921921/article/details/106521181/?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1--blog-109168239.235^v43^pc_blog_bottom_relevance_base3&spm=1001.2101.3001.4242.
 
