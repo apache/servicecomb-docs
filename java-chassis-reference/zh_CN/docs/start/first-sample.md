@@ -142,14 +142,26 @@ public class ProviderApplication {
 ```
 
 ### 编写服务
+本例子采用契约优先的开发方法。
+
+首先定义服务接口：
+
+```java
+@RequestMapping(path = "/provider")
+public interface ProviderService {
+  @GetMapping("/sayHello")
+  String sayHello(@RequestParam("name") String name);
+
+  @GetMapping("/exampleConfig")
+  String exampleConfig();
+}
+```
 
 在工程中添加一个REST接口类用于接收请求：
 
 ```java
-
-@RestSchema(schemaId = "ProviderController")
-@RequestMapping(path = "/")
-public class ProviderController {
+@RestSchema(schemaId = "ProviderController", schemaInterface = ProviderService.class)
+public class ProviderController implements ProviderService {
   private DynamicProperties dynamicProperties;
 
   private String example;
@@ -161,13 +173,12 @@ public class ProviderController {
         value -> this.example = value, "not set");
   }
 
-  // a very simple service to echo the request parameter
-  @GetMapping("/sayHello")
-  public String sayHello(@RequestParam("name") String name) {
+  @Override
+  public String sayHello(String name) {
     return "Hello " + name;
   }
 
-  @GetMapping("/exampleConfig")
+  @Override
   public String exampleConfig() {
     return example;
   }
@@ -198,33 +209,36 @@ public class ProviderController {
 
 ### 调用服务
 
-在 Consumer 里面，演示了如何调用 Provider 的服务。 首先声明一个 PRC 接口， 该接口的方法名称、参数名称需要和服务端保持一致。
+在 Consumer 里面，演示了如何调用 Provider 的服务。 首先声明一个 PRC 接口的 Bean。
 
 ```java
-public interface ProviderService {
-  String sayHello(String name);
-
-  String exampleConfig();
+@Configuration
+public class ProviderServiceConfiguration {
+  @Bean
+  public ProviderService providerService() {
+    return Invoker.createProxy("provider", "ProviderController", ProviderService.class);
+  }
 }
 ```
 
-使用 @RpcReference 声明 RPC 接口的远程引用， 然后可以像调用本地方法一样，访问 Provider 的服务。
+使用 @Autowired 声明 RPC 接口的远程引用， 然后可以像调用本地方法一样，访问 Provider 的服务。
 
 ```java
-
-@RestSchema(schemaId = "ConsumerController")
-@RequestMapping(path = "/")
-public class ConsumerController {
-  @RpcReference(schemaId = "ProviderController", microserviceName = "provider")
+@RestSchema(schemaId = "ConsumerController", schemaInterface = ConsumerService.class)
+public class ConsumerController implements ConsumerService {
   private ProviderService providerService;
 
-  // consumer service which delegate the implementation to provider service.
-  @GetMapping("/sayHello")
-  public String sayHello(@RequestParam("name") String name) {
+  @Autowired
+  public void setProviderService(ProviderService providerService) {
+    this.providerService = providerService;
+  }
+
+  @Override
+  public String sayHello(String name) {
     return providerService.sayHello(name);
   }
 
-  @GetMapping("/exampleConfig")
+  @Override
   public String exampleConfig() {
     return providerService.exampleConfig();
   }
