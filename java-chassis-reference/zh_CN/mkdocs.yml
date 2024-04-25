@@ -86,11 +86,12 @@ nav:
     - 使用Apollo: config/apollo.md
     - 使用CSE1.0配置中心: config/cse1.md
 - 服务治理功能参考:
+    - 流量特征治理: references-handlers/rule-governance.md
+    - 流量特征治理最佳实践: references-handlers/governance-best-practise.md
     - 负载均衡: references-handlers/loadbalance.md
     - 限流: references-handlers/ratelimit.md
     - 灰度发布: references-handlers/router.md
     - 故障注入: references-handlers/fault-injection.md
-    - 流量特征治理: references-handlers/governance.md
     - 快速失败和重试: references-handlers/fail-retry.md
 - 网关功能参考:
     - 介绍: edge/open-service.md
