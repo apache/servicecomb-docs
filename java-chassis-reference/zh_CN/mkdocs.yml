@@ -109,9 +109,6 @@ nav:
     - 性能问题分析和调优: featured-topics/performance.md
 - 常用配置项参考:
     - REST Transport Client 配置项: config-reference/rest-transport-client.md
-    - Config Center Client 配置项: config-reference/config-center-client.md
-    - Service Center Client 配置项: config-reference/service-center-client.md
-    - ServiceComb Kie Client 配置项: config-reference/kie-client.md
 - 常见问题:
     - 'FAQ' : question-and-answer/faq.md
     - 'Q & A' : question-and-answer/question_answer.md

@@ -15,8 +15,6 @@ ServcieComb Service Center 提供了完备的注册发现机制， 是 Java Chas
 | servicecomb.registry.sc.healthCheckIntervalInSeconds | 30                     | 否 | 心跳间隔。                                                                                                    |
 | servicecomb.registry.sc.healthCheckTimes    | 3                      | 否 | 允许的心跳失败次数。当连续第times+1次心跳仍然失败时则实例被sc下线。即interval \* (times + 1)决定了实例被自动注销的时间。如果服务中心等待这么长的时间没有收取到心跳，会注销实例。 |
 
-servicecomb 与服务中心采用 HTTP 进行交互， HTTP client 相关配置可以参
-考 [Service Center Client 配置项](../config-reference/service-center-client.md)
 
 使用服务中心需要确保下面的软件包引入：
 
