@@ -9,3 +9,4 @@
 * [Java Chassis 3技术解密：易扩展的多种注册中心支持](secrets/registries.md)
 * [Java Chassis 3技术解密：与Spring Cloud的互操作](secrets/interoperability.md)
 * [Java Chassis 3技术解密：ZooKeeper注册和配置中心](secrets/zookeeper.md)
+* [Java Chassis 3技术解密：契约优先（API First）开发](secrets/api-first.md)
