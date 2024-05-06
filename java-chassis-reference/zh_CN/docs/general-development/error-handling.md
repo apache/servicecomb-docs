@@ -1,5 +1,7 @@
 # 异常处理
 
+>>> 建议在进行API设计的时候，一个API只包含一个返回值类型，因为站在使用者的角度，不管使用RPC风格还是REST风格访问，都非常简洁和直观。保留多个返回值和错误码设计，更多的是为了API接口设计兼容的需要。HTTP状态码通常无法很好的表达业务错误码，在进行API设计的时候，可以考虑所有的返回值类型都继承一个统一的基类，使用基类的错误码表示业务错误。 
+
 ## 异常分类及客户端如何判断异常类型
 
 * 业务异常：这类异常由业务接口定义。用户在获取到服务swagger定义的时候，就能够从定义中看到这类异常对
@@ -118,62 +120,56 @@
 有时候，业务需要将所有的未知异常、控制异常进行捕获，转换为对用户友好的消息。或者对控制异常进行捕获，将
 消息体转换为自定义的JSON格式。这里面有几个参考点。
 
-* 通过 `ExceptionToProducerResponseConverter` 拦截异常
+* 通过 `ExceptionConverter` 拦截异常
 
-    `ExceptionToProducerResponseConverter`能够拦截业务异常以及业务实现里面抛出的未知异常。但是不能拦截
-    Handler，HttpServerFilter 等抛出的异常。更加确切的是 `ProducerOperationHandler` 捕获的异常都会被
-    `ExceptionToProducerResponseConverter` 处理。 `ExceptionToProducerResponseConverter` 包含如下
-    几个接口：
+```java
+public class CustomExceptionExceptionConverter implements
+    ExceptionConverter<IllegalStateException> {
+  @Override
+  public boolean canConvert(Throwable throwable) {
+    return throwable instanceof IllegalStateException;
+  }
 
-    - `getExceptionClass()` 实现类所处理的异常类型。如果该方法返回`null`，则说明此实现类为默认converter。
-    - `Response convert(SwaggerInvocation swaggerInvocation, T e)` 处理异常逻辑，该方法返回的`Response`决定了ServiceComb将会返回何种状态码、何种response body的应答。
-    - `getOrder()` 实现类的优先级，该方法返回的值越小，优先级越高，如果不覆写该方法的话，则返回默认优先级`0`。对于处理同一异常类型的converter（或默认converter），只有优先级最高的生效。
+  @Override
+  public int getOrder() {
+    return 100;
+  }
 
-   在为异常选择converter时，会从异常本身的类型开始匹配，如果找不到对应的converter则逐级向上查找父类型的converter。当匹配到`Throwable`仍未找到converter时，将使用默认converter处理异常。
+  @Override
+  public InvocationException convert(Invocation invocation, IllegalStateException e,
+      StatusType genericStatus) {
+    IllegalStateErrorData data = new IllegalStateErrorData();
+    data.setId(500);
+    data.setMessage(e.getMessage());
+    data.setState(e.getMessage());
+    return new InvocationException(Status.INTERNAL_SERVER_ERROR, data);
+  }
+}
+```
 
-        public class CustomExceptionToProducerResponseConverter implements ExceptionToProducerResponseConverter<IllegalStateException> {
-            @Override
-            public Class<IllegalStateException> getExceptionClass() {
-              // 返回IllegalStateException表示该converter处理IllegalStateException类型的异常
-              return IllegalStateException.class;
-            }
-            
-            @Override
-            public int getOrder() {
-              // 返回的order值越小，优先级越高
-              return 100;
-            }
-            
-            @Override
-            public Response convert(SwaggerInvocation swaggerInvocation, IllegalStateException e) {
-              // 这里是处理异常的逻辑
-              IllegalStateErrorData data = new IllegalStateErrorData();
-              data.setId(500);
-              data.setMessage(e.getMessage());
-              data.setState(e.getMessage());
-              InvocationException state = new InvocationException(Status.INTERNAL_SERVER_ERROR, data);
-              return Response.failResp(state);
-            }
-        }
- 
-   ***说明*** : 2.0.2 之前的版本部分业务异常无法通过 ExceptionToProducerResponseConverter 捕获，
-    系统做了自动处理，不经过 ExceptionToProducerResponseConverter。 2.0.2 版本规范化了处理流程。 
+在META-INF下的services文件夹增加一个文件 `org.apache.servicecomb.core.exception.ExceptionConverter`，内容为: `org.apache.servicecomb.core.exception.converter.CustomExceptionExceptionConverter`。
 
 * 控制消息消息体序列化
 
-  控制消息消息体序列化的目的是简化消费者的异常处理逻辑，不用使用弱类型，而是使用确切类型。可以采用注册全局的错误码类型。
-  业务需要通过SPI实现org.apache.servicecomb.swagger.invocation.response.ResponseMetaMapper接口。
-  接口的核心内容是为每个错误码指定序列化类型：
+控制消息消息体序列化的目的是简化消费者的异常处理逻辑，不用使用弱类型，而是使用确切类型。可以采用注册全局的错误码类型。业务需要通过SPI实现org.apache.servicecomb.swagger.invocation.response.ResponseMetaMapper接口。接口的核心内容是为每个错误码指定序列化类型：
 
-        private final static Map<Integer, ResponseMeta> CODES = new HashMap<>(1);
-    
-        static {
-          ResponseMeta meta = new ResponseMeta();
-          meta.setJavaType(SimpleType.constructUnsafe(IllegalStateErrorData.class));
-          CODES.put(500, meta);
-        }
-    
-        @Override
-        public Map<Integer, ResponseMeta> getMapper() {
-          return CODES;
-        }
+```java
+public class CustomResponseMetaMapper implements ResponseMetaMapper {
+  private static final Map<Integer, JavaType> CODES = new HashMap<>(1);
+
+  static {
+    CODES.put(500, SimpleType.constructUnsafe(IllegalStateErrorData.class));
+  }
+
+  @Override
+  public int getOrder() {
+    return 100;
+  }
+
+  @Override
+  public Map<Integer, JavaType> getMapper() {
+    return CODES;
+  }
+}
+```
+
