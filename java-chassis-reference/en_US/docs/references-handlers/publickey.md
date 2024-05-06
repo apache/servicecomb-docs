@@ -54,6 +54,16 @@ servicecomb:
           rule: cust*
 ```
 
-The above rules are configured with blacklists, which do not allow microservice names to be accessed by hackers; whitelists allow access to services with microservice names named cust.
+The above rules are configured with black and white rule. includePathPatterns is set the request path that needs auth, and excludePathPatterns is set the request path that not need auth. black/white is microservice black and white rules.
+
+IncludePathPatterns, excludePathPatterns Supports three types of matching rules: prefix (xxx/), suffix (/xxx) and exact match.
+
+Logic for determining whether the current request requires authentication:
+
+1.Check whether the path of current request matches the excludePathPatterns setting rule. If yes, authentication is not required.
+
+2.If excludePathPatterns does not match, check whether a rule is configured for includePathPatterns. If no, all requests need to be authenticated; If set, check whether the path of current request matches the rule. If yes, authentication is required. If no, authentication is not required.
+
+Microservice black/white determination rules: which do not allow microservice names to be accessed by hackers; whitelists allow access to services with microservice names named cust.
 
 ServiceComb provides [trust-sample] (https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/trust-sample) to demonstrate the black and white list feature.
