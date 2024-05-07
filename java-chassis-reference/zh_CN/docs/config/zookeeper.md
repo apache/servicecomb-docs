@@ -65,12 +65,15 @@ servicecomb:
       ${environment}:
         ${application}:
           ${service}:
-            ${tag}:
-              exampleText: exampleTextValue
-              exampleYaml.yaml: exampleYamlValue
-              exampleYaml.yml: exampleYamlValue
-              exampleProperties.properties: examplePropertiesValue
+            ${version}:
+              ${tag}:
+                exampleText: exampleTextValue
+                exampleYaml.yaml: exampleYamlValue
+                exampleYaml.yml: exampleYamlValue
+                exampleProperties.properties: examplePropertiesValue
 ```
+
+配置文件的类型根据KEY的后缀确定。目前会解析 `.yaml`、`.yml`、`.properties`后缀，其他情况钧视为普通的key-value对。
 
 * 配置项参考
 
@@ -81,3 +84,4 @@ servicecomb:
 | servicecomb.config.zk.authenticationInfo      | 空              | 否    | 当认证方式为 digest 的时候，配置用户名密码信息，比如: user:password |
 | servicecomb.config.zk.connectionTimeoutMillis | 1000           | 否    | 连接超时时间                                        |
 | servicecomb.config.zk.sessionTimeoutMillis    | 60000          | 否    | 会话超时时间                                        |
+| servicecomb.config.zk.instance-tag            | 空              | 否    | 实例的TAG信息，用于TAG级别的配置查询                         |
