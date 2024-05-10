@@ -82,7 +82,8 @@ servicecomb:
 该规则默认关闭，如果需要开启，可以通过`servicecomb.loadbalance.filter.priorityInstanceProperty.enabled`配置打开。该功能在`PriorityInstancePropertyDiscoveryFilter`中实现。
 
 ## 配置路由规则
-开发者可以通过配置项指定负载均衡策略。
+
+可以通过配置项指定负载均衡策略。
 ```yaml
 servicecomb:
   loadbalance:
@@ -90,13 +91,24 @@ servicecomb:
       name: RoundRobin # Support RoundRobin,Random,WeightedResponse,SessionStickiness
 ```
 
-开发者可以针对不同的微服务配置不一样的策略，只需要给配置项增加服务名，例如：
+可以针对不同的微服务配置不一样的策略，只需要给配置项增加服务名，例如：
 ```yaml
 servicecomb:
   loadbalance:
     myservice:
       strategy:
         name: RoundRobin # Support RoundRobin,Random,WeightedResponse,SessionStickiness
+```
+
+还可以针对不同的契约和操作配置不一样的策略，例如：
+```yaml
+servicecomb:
+  loadbalance:
+    myservice:
+      myschema:
+        myoperation:
+          strategy:
+            name: RoundRobin # Support RoundRobin,Random,WeightedResponse,SessionStickiness
 ```
 
 每种策略还有一些专属配置项，也支持针对不同微服务进行配置。
@@ -112,16 +124,17 @@ servicecomb:
 ```
 
 ## 自定义
-负载均衡模块提供的功能已经非常强大，能够通过配置支持大部分应用场景。同时它也提供了强大的扩展能力，包括DiscoveryFilter、ServerListFilterExt、ExtensionsFactory（扩展IRule，RetryHandler等）。loadbalance模块本身包含了每一个扩展的实现，这里不再详细描述如何扩展，只简单描述步骤。开发者可以自行下载ServiceComb源码进行参考。
+负载均衡模块提供的功能已经非常强大，能够通过配置支持大部分应用场景。同时它也提供了强大的扩展能力，包括DiscoveryFilter、ServerListFilterExt、ExtensionsFactory（扩展RuleExt等）。负载均衡模块本身包含了每一个扩展的实现，这里不再详细描述如何扩展，只简单描述步骤。开发者可以自行下载Java Chassis源码进行参考。
 
 * DiscoveryFilter
   * 实现DiscoveryFilter接口
-  * 配置SPI：增加META-INF/services/org.apache.servicecomb.serviceregistry.discovery.DiscoveryFilter文件，内容为实现类的全名
+  * 声明为Bean
 
 * ServerListFilterExt
   * 实现ServerListFilterExt接口
   * 配置SPI：增加META-INF/services/org.apache.servicecomb.loadbalance.ServerListFilterExt文件，内容为实现类的全名
-  * 注意：这个开发说明适用于1.0.0及其以后的版本，早期的版本开发方式不同。
+  * 注意：建议尽可能使用DiscoveryFilter，这个接口主要为了兼容。
 
 * ExtensionsFactory
-  * 实现ExtensionsFactory，并使用@Component将其发布为一个spring bean。
+  * 实现ExtensionsFactory接口
+  * 声明为Bean

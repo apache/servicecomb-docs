@@ -39,7 +39,6 @@ nav:
     - Restful风格 - 使用 RestOperations: build-consumer/using-resttemplate.md
     - RPC风格: build-consumer/develop-consumer-using-rpc.md
     - 泛化调用: build-consumer/invoker.md
-    - 调用第三方REST服务: build-consumer/3rd-party-service-invoke.md
 - 定制请求处理流程:
     - 处理链介绍: references-handlers/intruduction.md
 - 通用功能开发:
