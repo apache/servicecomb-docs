@@ -5,7 +5,7 @@ zero-config是Java Chassis提供的轻量化服务中心，以支持在小规模
 zero-config支持多种工作模式：
 
 * local
-  单机模式，没有实例动态发现能力，所有的服务调用，都使用[调用第三方服务](../build-consumer/3rd-party-service-invoke.md)机制处理。
+  单机模式，没有实例动态发现能力。
   
 * multicast
   使用UDP多播发送微服务注册信息，适用于所有微服务实例都在同一个子网内的场景，每个微服务实例都相当于是一个服务中心实例。

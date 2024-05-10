@@ -32,7 +32,6 @@ nav:
     - Invoke control: 
         - Flow Control: build-consumer/flow-control.md
         - Fault Injection: build-consumer/fault-injection.md
-    - Invoke 3rd-party REST services: build-consumer/3rd-party-service-invoke.md
 - Transports: 
     - REST over Servlet: transports/rest-over-servlet.md
     - REST over Vertx: transports/rest-over-vertx.md
