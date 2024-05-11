@@ -98,9 +98,8 @@ nav:
     - 使用 `zuul` 和 `spring cloud gateway` 做网关: edge/zuul.md
     - nginx 网关简单介绍: edge/nginx.md
 - 安全特性参考:
-    - 公钥认证: references-handlers/publickey.md
+    - 微服务间认证: security/publickey.md
     - 使用TLS通信: security/tls.md
-    - 使用RSA认证: security/shi-yong-rsa-ren-zheng.md
 - 专题文章:
     - 特性介绍: featured-topics/features.md
     - 技术解密: featured-topics/secrets.md
