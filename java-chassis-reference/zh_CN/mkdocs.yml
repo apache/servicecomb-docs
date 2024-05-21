@@ -33,7 +33,6 @@ nav:
     - 参数效验: build-provider/parameter-validator.md
     - 程序启动逻辑: build-provider/bootup.md
     - IPV6配置和使用: build-provider/ipv6-configuration.md
-    - Access Log配置: build-provider/access-log-configuration.md
 - 开发服务消费者:
     - 基础概念: build-consumer/basics.md
     - Restful风格 - 使用 RestOperations: build-consumer/using-resttemplate.md
@@ -42,9 +41,6 @@ nav:
 - 定制请求处理流程:
     - 处理链介绍: references-handlers/intruduction.md
 - 通用功能开发:
-    - 应用性能监控: general-development/metrics.md
-    - 微服务调用链: general-development/microservice-invocation-chain.md
-    - 自定义调用链打点: general-development/customized-tracing.md
     - 本地开发和测试: general-development/local-develop-test.md
     - 文件上传下载: general-development/upload-download.md
     - Reactive: general-development/reactive.md
@@ -100,6 +96,11 @@ nav:
 - 安全特性参考:
     - 微服务间认证: security/publickey.md
     - 使用TLS通信: security/tls.md
+- 可观测功能参考:
+    - 应用性能监控: general-development/metrics.md
+    - 微服务调用链: general-development/microservice-invocation-chain.md
+    - Access Log配置: build-provider/access-log-configuration.md
+
 - 专题文章:
     - 特性介绍: featured-topics/features.md
     - 技术解密: featured-topics/secrets.md
