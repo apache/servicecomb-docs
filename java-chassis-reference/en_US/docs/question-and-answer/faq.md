@@ -51,9 +51,9 @@ last_modified_at: 2017-10-29T10:01:43-04:00
 9. **Q: After the microservice is started, the interface cannot be called correctly, or is there no error returned? **
 
     A: Please check that the calling path is exactly the same as the path published in the Producer implementation code. The boot log on the Producer side can see the output of the map path, for example:
-   
+
     `[INFO] Swagger mapped "{[/hello/], method=[GET], produces=[application/json]}"`
-   
+
     For different programming styles (models) to implement Producer documentation and notes, please see: [Jaxrs](/cn/users/develop-with-jax-rs/) [SpringMVC](/cn/users/develop-with-springmvc/) [Pojo](/cn/users/develop-with-transparent-rpc/) [Spring Boot](/cn/users/develop-with-spring-boot-starter/) .
     
 10. **Q: The port number under the microservice.yaml configuration file has been modified via eclipse. After starting the program, the port number does not work? **
@@ -91,14 +91,14 @@ For the return value of the exception, you can do this by throwing a custom Invo
 
      return "not expected";
    }
-   ```
+  ```
 
 11. **Q: How to customize the log configuration of your own microservice?**
 
     A: ServiceComb does not bind the logger, just uses slf4j, users can freely choose log4j/log4j2/logback and so on. ServiceComb provides a log4j extension that supports incremental configuration of log4j's properties files on a standard log4j basis.
     * By default, the configuration file is loaded by the rule: "classpath\*:config/log4j.properties"
     * Actually search all the ```config/log4j.properties and config/log4j.*.properties``` in the classpath, and cut out the ```\*``` from the searched file to perform alpha. Sort, then load in order, and the final synthesized file is used as the log4j configuration file.
-    * If you want to use ServiceComb's log4j extension, you need to call Log4jUtils.init, otherwise it will be used according to the rules of the standard logger.
+        * If you want to use ServiceComb's log4j extension, you need to call Log4jUtils.init, otherwise it will be used according to the rules of the standard logger.
 
 12. **Q: When the service is configured with multiple transports, how do you choose which transport to use at runtime? **
 
@@ -113,8 +113,8 @@ For the return value of the exception, you can do this by throwing a custom Invo
 
    * When a microservice producer opens both the highway and the RESTful endpoint
       * Only the highway transport jar is deployed in the consumer process, only the producer's highway endpoint is accessed.
-      * Only the RESTful transport jar is deployed in the consumer process, only the RESTful endpoint of the producer is accessed.
-      * In the consumer process, both the highway and RESTful transport jars are deployed, and the producer's highway and RESTful endpoints are accessed in turn.
+           * Only the RESTful transport jar is deployed in the consumer process, only the RESTful endpoint of the producer is accessed.
+              * In the consumer process, both the highway and RESTful transport jars are deployed, and the producer's highway and RESTful endpoints are accessed in turn.
 
       If, at this time, the consumer wants to use a transport to access the producer, it can be configured in the microservice.yaml of the consumer process, specifying the name of the transport:
 
@@ -127,13 +127,13 @@ For the return value of the exception, you can do this by throwing a custom Invo
 
    * When a microservice producer only opens the endpoint of the highway
       * The consumer process only deploys the highway transport jar, then the highway access is normally used.
-      *The consumer process only deploys RESTful transport jars and cannot be accessed
-      * The consumer process deploys both the highway and the RESTful transport jar, and the highway access is normally used.
+           *The consumer process only deploys RESTful transport jars and cannot be accessed
+              * The consumer process deploys both the highway and the RESTful transport jar, and the highway access is normally used.
 
    * When a microservice producer only opens RESTful endpoints
       *The consumer process only deploys the highway transport jar and cannot access it.
-      * The consumer process only deploys RESTful transport jars, which normally uses RESTful access.
-      * The consumer process deploys both the highway and the RESTful transport jar, and the RESTful access is normally used.
+           * The consumer process only deploys RESTful transport jars, which normally uses RESTful access.
+           * The consumer process deploys both the highway and the RESTful transport jar, and the RESTful access is normally used.
 
 
 13. **Q: The swagger body parameter type is incorrectly defined, causing the content registered in the service center to have no type information**
@@ -203,12 +203,12 @@ For the return value of the exception, you can do this by throwing a custom Invo
 14. **Q: Does the ServiceComb microservices framework service innovate via long connection?**
 
     A: http request via a long connection (with a timeout), and the highway mode also via a long connection (all the time).
- 
+
 15. **Q: Is the service disconnected service center registration information automatically deleted?**
 
     A: The service center heartbeat detects that the service instance is unavailable, only the service instance information is removed, and the static data of the service is not removed.
 
- 
+
 16. **Q: How to implement service registration if you use the tomcat method to integrate the ServiceComb microservices framework**
 
     A: If you use the ServiceComb sdk servlet method (using the transport-rest-servlet dependency) to deploy to the tomcat as a war package, you need to ensure that the rest port configuration in the service description file (microservice.yaml) is consistent with the external container to implement the service. Register correctly. Otherwise, the tomcat open port cannot be perceived.
@@ -245,7 +245,7 @@ For the return value of the exception, you can do this by throwing a custom Invo
       Return "Hello person " + person.getName();
     }
     ```
-   
+
 
 19. **Q: How does the ServiceComb microservices framework service customize the return status code?**
 
@@ -295,17 +295,17 @@ For the return value of the exception, you can do this by throwing a custom Invo
    2. Remove the log4j configuration file (it doesn't matter if you don't delete it, because it won't be used);
    3. Exclude the log4j introduced by the CSE framework, for example:
       ```xml
-      <dependency>
-          <groupId>org.apache.servicecomb</groupId>
-          <artifactId>provider-springmvc</artifactId>
-          <exclusions>
-              <exclusion>
-                  <groupId>log4j</groupId>
-                  <artifactId>log4j</artifactId>
-              </exclusion>
-          </exclusions>
-      </dependency>
-      ```
+           <dependency>
+               <groupId>org.apache.servicecomb</groupId>
+               <artifactId>provider-springmvc</artifactId>
+               <exclusions>
+                   <exclusion>
+                       <groupId>log4j</groupId>
+                       <artifactId>log4j</artifactId>
+                   </exclusion>
+               </exclusions>
+           </dependency>
+           ```
    4. Introducing the dependency of log4j2
 
       ```xml
@@ -407,8 +407,8 @@ For the return value of the exception, you can do this by throwing a custom Invo
     A:
     1. The schema is used to match the service contract. It is used to ensure that the server and the consumer contract are compatible. Each contract needs a unique ID and is stored in the service center.
     2. Schema maps to the interface concept of java. When the consumer uses the transparent rpc mode to develop, it can find which operation in the micro service. The method names between schemas are not unique.
-    3. operation qualified name is the key of the governance, and the URL cannot be directly searched because of the existence of the path parameter, and the qualified name will not change. Governance does not distinguish between transmissions. If governance goes by URL, then when highway is called in, it has to construct the url according to the parameters, and then the regular expression matches, which is too tossing.
-    4. http is just a transport channel, and there are other transport channels that do not need to be mapped to URLs.
+        3. operation qualified name is the key of the governance, and the URL cannot be directly searched because of the existence of the path parameter, and the qualified name will not change. Governance does not distinguish between transmissions. If governance goes by URL, then when highway is called in, it has to construct the url according to the parameters, and then the regular expression matches, which is too tossing.
+        4. http is just a transport channel, and there are other transport channels that do not need to be mapped to URLs.
 
 26. **Q: When the Rest client is invocating, it only takes the service name and URL, and does not need to specify the schema id. In fact, according to this URL, the specific contract can also be found. So what is the role of the specified schema id? **
 
@@ -418,7 +418,7 @@ For the return value of the exception, you can do this by throwing a custom Invo
 27. **Q: What is the concept of Transport? What is it used for? **
 
     A: The Transport is responsible for codec, and transmission. The communication model has two kinds of Rest and Highway. The Highway corresponds to the private protocol, which uses protobuf encoding, and the Rest uses json. Highway and Rest are based on vertx, and vertx is based on netty.
- 
+
 28. **Q: Is there be multiple appIDs and microservices in a service provider? What scenario will this happen? **
 
     A: Yes, what is expressed here is a concept of merge. The microservice.yaml file, which may exist in both jars, disks, and command line arguments, specifies that they are merged by priority and are used for added flexibility. In the jar is the default value, in addition to the environment variables, command line parameters, configuration center coverage, providing multiple layers of customization.
@@ -475,7 +475,7 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
 * **Q: How to ignore the attributes specified in the contract DTO? **
 
     A: If you are using 'rest transport', because it is Json serialization, you can use @JsonIgnore annotations to mark attributes that need to be ignored; 'highway transport' is not currently supported. Note that you need to update the version of the microservice after the modification, for example:
-  
+
   ```java
   public class OutputForTest{
   @JsonIgnore
@@ -484,9 +484,9 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
   ...
   }
   ```
- 
+
 * **Q: How to get the value of a field in the header in a user-defined handler**
-    A: Use the @ApiImplicitParams annotation declaration in the user-defined handler and the invocation.getArgs() to get the value of the header. E.g:
+      A: Use the @ApiImplicitParams annotation declaration in the user-defined handler and the invocation.getArgs() to get the value of the header. E.g:
   ```java
   public class MyHandler implements Handler {
     @ApiImplicitParams({@ApiImplicitParam(name = "tester", dataType = "string", paramType = "header")})
@@ -501,8 +501,7 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
 
     A: Service Center can be upgraded to version 4.0.0+ to solve [Service Center latest version portal] (http://apache.org/dyn/closer.cgi/incubator/servicecomb/incubator-servicecomb-service-center /1.0.0-m1/).
 
-
-*. **Q: Our API can not be accessed after microservices are up. It just returns *404 Not Found*. The codes we use is as follows:**
+* **Q: Our API can not be accessed after microservices are up. It just returns *404 Not Found*. The codes we use is as follows:**
 
    ```java
    @RestController
@@ -521,6 +520,29 @@ A: Rate limit has two main functions. First, it guarantees the service effect to
    public class WorkerController {}
    ```
 
-*. **Q: What\'s the default base path if I have not declared the value of RequestMapping annotation?**
+* **Q: What\'s the default base path if I have not declared the value of RequestMapping annotation?**
 
    A: Supposed the class name of your controller is *HelloController*, the base path is /HelloController.
+
+* **Q: How to use the function of compressed data transmission？**
+
+* A: To enable the response data compression transmission capability on the server, the following configuration is required:
+
+  ```yaml
+  servicecomb:
+    rest:
+      server:
+        compression: true
+  ```
+
+  At the same time, the consumer side needs to synchronize the activation of configuration items:
+
+  ```yaml
+  servicecomb:
+    rest:
+     client:
+       connection:
+         compression: true
+  ```
+  When the consumer sets the Accept Encoding: gzip, deflate field in the request header, the server will compress the response data based on the algorithm provided in this field and return it.
+
