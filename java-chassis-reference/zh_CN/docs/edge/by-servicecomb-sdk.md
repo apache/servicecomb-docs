@@ -152,7 +152,7 @@ servicecomb:
 
 ## 工作模式
 
-Edge Service默认工作于高性能的reactive模式:
+Edge Service工作于高性能的reactive模式:
 
 ![](../assets/reactive.png)
 
@@ -172,3 +172,5 @@ Edge Service的底层是基于netty的vertx，以上约束即是netty的reactive
 ## 扩展Edge Service的功能
 
 Edge Service和普通的微服务一样，通过 `EdgeFilter` 来扩展其处理功能。 流量特征治理等功能在Edge Service也是开箱即用的。 通过扩展 `EdgeFilter`， 还可以实现认证鉴权等功能。 
+
+> Edge Service的功能扩展务必满足上诉reactive工作模式要求，否则在高并发请求的条件下，非常容易造成服务不可用。对于不可避免的阻塞操作，可以放到独立的自定义线程池中执行，执行完毕再返回reactive工作模式。 
