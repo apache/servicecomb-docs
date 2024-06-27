@@ -11,3 +11,5 @@
 * [Java Chassis 3技术解密：ZooKeeper注册和配置中心](secrets/zookeeper.md)
 * [Java Chassis 3技术解密：契约优先（API First）开发](secrets/api-first.md)
 * [Java Chassis 3技术解密：接口维度负载均衡](secrets/load-balancer-operation.md)
+* [Java Chassis 3技术解密：实用的可观测性](secrets/observability.md)
+* [Java Chassis 3技术解密：流式响应和人工智能应用开发](secrets/sse.md)
