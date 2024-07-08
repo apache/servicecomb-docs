@@ -62,3 +62,6 @@ REST over HTTP（Vert.x)有以下配置项：
 几万条连接，业务需要根据实际业务规模进行合理的规划。在实例规模比较小的情况下，HTTP仍然是所有应用程序的最佳选择，它具备更好的兼容性
 和可靠性。当单个实例的连接数管理规模超过1万的时候，可以考虑切换为[http2](http2.md)。
 
+## 客户端配置
+
+参考 [REST Transport Client 配置项](../config-reference/rest-transport-client.md) 
