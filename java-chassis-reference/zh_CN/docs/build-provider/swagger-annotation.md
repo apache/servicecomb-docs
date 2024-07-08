@@ -4,9 +4,11 @@
 
 关于Swagger注解的含义，可以在 [Swagger注解文档](https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations) 中找到官方说明。
 
-## 例子
+## 常用例子
 
 * @OpenAPIDefinition
+
+`@OpenAPIDefinition`可以用来给契约添加Tag或者前缀信息。
 
 ```java
 @OpenAPIDefinition(servers = {@Server(url = "/SameService1")})
@@ -18,6 +20,8 @@ public interface SameService1 {
 
 * @Operation
 
+`@Operation`可以用来定义`operationId`或者给契约增加描述信息。 
+
 ```java
 @GetMapping(path = "/specialNameModel")
 @Operation(summary = "specialNameModel", operationId = "specialNameModel")
@@ -25,3 +29,16 @@ public SpecialNameModel specialNameModel(@RequestParam("code") int code, @Reques
   return model;
 }
 ```
+
+* @Parameter
+
+`@Parameter`可以用来描述 query 或者 header 参数的集合类型，给参数添加注释等。 
+
+```java
+@Path("headerListCSV")
+@GET
+String headerListCSV(@Parameter(name = "headerList", in = ParameterIn.HEADER, 
+    style = ParameterStyle.FORM, explode = Explode.FALSE)
+          List<String> headerList);
+```
+
