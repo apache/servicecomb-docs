@@ -1,12 +1,7 @@
 # 用 Spring MVC 开发微服务
 
 Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这套注解定义 REST 接口。 servicecomb 也
-支持使用这套标签定义 REST 接口。需要注意的是，servicecomb 只是使用这些注解，而注解的实现是项目自行开发的，
-实现的功能集合是 Spring MVC 注解的子集。可以阅读文章后面的内容了解具体的标签集合和使用约束。
-
-[SpringMVC Sample][spring-mvc-sample] 提供了一些基础的代码示例，可以下载使用。
-
-[spring-mvc-sample]: https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample
+支持使用这套标签定义 REST 接口。需要注意的是，servicecomb 只是使用这些注解，而注解的实现是项目自行开发的， 实现的功能集合是 Spring MVC 注解的子集。
 
 ## 开发步骤
 
@@ -14,139 +9,108 @@ Spring MVC 是 spring-web 项目定义的一套注解，开发者可以使用这
 
 * 定义服务接口（可选）
 
-  定义接口是一个好习惯， 它不是必须的。
+定义接口是一个好习惯， 它不是必须的。
 
-        ```java
-        public interface Hello {
-            String sayHi(String name);
-            String sayHello(Person person);
-        }
-        ```
+```java
+@RequestMapping(path = "/provider")
+public interface ProviderService {
+  @GetMapping("/sayHello")
+  String sayHello(@RequestParam("name") String name);
+}
+```
 
 * 实现服务接口
 
-  在服务的实现类上打上注解 `@RestSchema`，指定 `schemaId`。 注意 `schemaId` 需要保证微服务范围内唯一。
+在服务的实现类上打上注解 `@RestSchema`，指定 `schemaId`。 注意 `schemaId` 需要保证微服务范围内唯一。
 
-        ```java
-        @RestSchema(schemaId = "springmvcHello")
-        @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
-        public class SpringmvcHelloImpl implements Hello {
-            @Override
-            @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
-            public String sayHi(@RequestParam(name = "name") String name) {
-                return "Hello " + name;
-            }
-        
-            @Override
-            @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
-            public String sayHello(@RequestBody Person person) {
-                return "Hello person " + person.getName();
-            }
-        }
-        ```
+```java
+@RestSchema(schemaId = "ProviderController", 
+    schemaInterface = ProviderService.class)
+public class ProviderController implements ProviderService {
+  @Override
+  public String sayHello(String name) {
+    return "Hello " + name;
+  }
+}
+```
 
 
-## ServiceComb支持的 Spring MVC 注解说明
-
-servicecomb 支持使用 Spring MVC 提供的注解 `org.springframework.web.bind.annotation` 来声
-明REST接口，但是两者是独立的实现，而且有不一样的设计目标。servicecomb 的目标是提供跨语言、支持多通信协议的
-框架，因此去掉了Spring MVC中一些对跨语言支持不是很好的特性，也不支持特定运行框架强相关的特性，比
-如直接访问Servlet协议定义的`HttpServletRequest`。servicecomb 没有实现`@Controller`相关功
-能, 只实现了`@RestController`，即通过MVC模式进行页面渲染等功能都是不支持的。
-
-下面是一些具体差异。
+## Java Chassis 支持的 Spring MVC 注解说明
 
 * 常用标签支持
 
-  下面是CSE对于Spring MVC常用标签的支持情况。
+下面是CSE对于Spring MVC常用标签的支持情况。
 
-  ***表1-1 Spring MVC注解情况说明***
+***表1-1 Spring MVC注解情况说明***
 
-| 标签名称             | 是否支持 | 说明                                                          |
-|------------------|:----:|:------------------------------------------------------------|
-| RequestMapping   |  是   | 不允许制定多个Path，一个接口只允许一个Path，必须显示的声明 method 属性，只能定义唯一一个 method |
-| GetMapping       |  是   |                                                             |
-| PutMapping       |  是   |                                                             |
-| PostMapping      |  是   |                                                             |
-| DeleteMapping    |  是   |                                                             |
-| PatchMapping     |  是   |                                                             |
-| RequestParam     |  是   | 注意含义与Spring MVC不同。Java Chassis 表示 query 参数。                 |
-| CookieValue      |  是   |                                                             |
-| PathVariable     |  是   |                                                             |
-| RequestHeader    |  是   |                                                             |
-| RequestBody      |  是   | 目前支持application/json，plain/text                             |
-| RequestPart      |  是   | 用于文件上传的场景，对应的标签还有Part、MultipartFile                         |
-| ResponseBody     |  否   | 返回值缺省都是在body返回                                              |
-| ResponseStatus   |  否   | 可以通过ApiResponse指定返回的错误码                                     |
-| RequestAttribute |  是   | 注意含义与Spring MVC不同。Java Chassis 表示 form 参数。                  |
-| SessionAttribute |  否   | Servlet协议相关的标签                                              |
-| MatrixVariable   |  否   |                                                             |
-| ModelAttribute   |  否   |                                                             |
-| ControllerAdvice |  否   |                                                             |
-| CrossOrigin      |  否   |                                                             |
-| ExceptionHandler |  否   |                                                             |
-| InitBinder       |  否   |                                                             |
+| 标签名称              | 是否支持 | 说明                                                          |
+|:------------------|:-----|:------------------------------------------------------------|
+| RequestMapping    | 是    | 不允许制定多个Path，一个接口只允许一个Path，必须显示的声明 method 属性，只能定义唯一一个 method |
+| GetMapping        | 是    |                                                             |
+| PutMapping        | 是    |                                                             |
+| PostMapping       | 是    |                                                             |
+| DeleteMapping     | 是    |                                                             |
+| PatchMapping      | 是    |                                                             |
+| RequestParam      | 是    | 注意含义与Spring MVC不同。Java Chassis 表示 query 参数。                 |
+| CookieValue       | 是    |                                                             |
+| PathVariable      | 是    |                                                             |
+| RequestHeader     | 是    |                                                             |
+| RequestBody       | 是    | 目前支持application/json，plain/text                             |
+| RequestPart       | 是    | 用于文件上传的场景，对应的标签还有Part、MultipartFile                         |
+| ResponseBody      | 否    | 返回值缺省都是在body返回                                              |
+| ResponseStatus    | 否    | 可以通过ApiResponse指定返回的错误码                                     |
+| RequestAttribute  | 是    | 注意含义与Spring MVC不同。Java Chassis 表示 form 参数。                  |
+| SessionAttribute  | 否    | Servlet协议相关的标签                                              |
+| MatrixVariable    | 否    |                                                             |
+| ModelAttribute    | 否    |                                                             |
+| ControllerAdvice  | 否    |                                                             |
+| CrossOrigin       | 否    |                                                             |
+| ExceptionHandler  | 否    |                                                             |
+| InitBinder        | 否    |                                                             |
+
 
 * 服务声明方式
 
-  Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需
+Spring MVC使用`@RestController`声明服务，而ServiceComb使用`@RestSchema`声明服务，并且需
   要显式地使用`@RequestMapping`声明服务路径，以区分该服务是采用Spring MVC的标签还是使用JAX RS的标签。
 
-        ```
-        @RestSchema(schemaId = "springmvcHello")
-        @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
-        public class SpringmvcHelloImpl implements Hello {
-          ......
-        }
-        ```
+```java
+@RestSchema(schemaId = "springmvcHello")
+@RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
+public class SpringmvcHelloImpl implements Hello {
+  // implementations
+}
+```
 
-  servicecomb 也支持 `@RestController` 声明，等价于 `@RestSchma(schemaId="服务的class名称")`，这个
-  功能可以简化用户将老的应用改造为 servicecomb 。 建议用户使用`@RestSchema`显式声明schemaId，在管理
-  接口基本的配置项的时候，更加直观。
+Java Chassis 也支持 `@RestController` 声明，等价于 `@RestSchma(schemaId="服务的class名称")`，这个功能可以简化用户将老的应用改造为Java Chassis。 建议用户使用`@RestSchema`显式声明schemaId，在管理接口基本的配置项的时候，更加直观。
 
-  **注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
-  `servicecomb.provider.rest.scanRestController=false` 以关闭此功能。
+**注意**：如果不希望Java-Chassis扫描`@RestController`注解作为REST接口类处理，需要增加配置
+`servicecomb.provider.rest.scanRestController=false` 以关闭此功能。
 
 * 数据类型支持
 
-  Spring 技术实现的 Spring MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被json序列化和
-  反序列化。比如：
+采用Spring Web MVC，可以在服务定义中使用多种数据类型，只要这种数据类型能够被Json序列化和反序列化。比如：
 
-        ```
-        // 抽象类型
-        public void postData(@RequestBody Object data)
-        // 接口定义
-        public void postData(@RequestBody IPerson interfaceData)
-        // 没指定类型的泛型
-        public void postData(@RequestBody Map rawData)
-        ```
-  
-  Spring 技术早期都是基于 JSP/Servlet 协议标准的，还可以使用相关的 context 参数，比如：
-  
-        ```
-        // 具体协议相关的类型
-        public void postData(HttpServletRequest rquest, HttpServletResponse response)
-        ```  
-   
-  servicecomb 对于数据类型存在一定的限制，不允许使用接口、抽象类等数据类型定义参数，虽然 servicecomb
-  支持使用 Object 这个特殊的类型来处理类型无法确定的情况，但是建议尽可能少使用，使用 Object 作为类型，
-  运行时的类型不确定，可能给客户端代码的书写带来一定麻烦。
+```
+// 抽象类型
+public void postData(@RequestBody Object data)
+// 接口定义
+public void postData(@RequestBody IPerson interfaceData)
+// 没指定类型的泛型
+public void postData(@RequestBody Map rawData)
+// 具体协议相关的类型
+public void postData(HttpServletRequest rquest)
+```
 
-  servicecomb 也支持一些 context 参数， 参考[使用 Context 参数](context-param.md) 。但是由于 servicecomb 默认的运行环境并不是 JSP/Servlet 协议
-  环境，因此不能直接使用 `HttpServletRequest` 和 `HttpServletResponse`。 
+这些使用方式，无法确定接口的详细 RestFul 语义和输入输出格式，Java Chassis强调一个核心的原则：接口的输入输出在接口定义的时候就已经确定好，并且可以通过生成的 Open API 来显示的表达。因此不建议在接口声明的时候，采用接口、泛型、抽象类型等。
 
-  ServiceComb在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
+Java Chassis 也支持一些 context 参数， 参考[使用 Context 参数](context-param.md) 。但是由于 servicecomb 默认的运行环境并不是 JSP/Servlet 协议  环境，因此不能直接使用 `HttpServletRequest` 和 `HttpServletResponse`。 
 
-* 其他
-
-  更多开发过程中碰到的问题，可以参考[案例](https://bbs.huaweicloud.com/blogs/8b8d8584e70d11e8bd5a7ca23e93a891)。开发过程中存在疑问，也可以在这里进行提问。
-
+Java Chassis 在数据类型的支持方面的更多说明，请参考： [接口定义和数据类型](interface-constraints.md)
 
 ## 在响应中包含  HTTP header
 
-可以有多种方式在响应中包含 HTTP header， 下面代码展示了使用 ResponseEntity 包含 HTTP header。 需要注意
-使用 @ResponseHeaders 声明返回的 header 信息。 包含了 @ResponseHeaders 以后， 接口生成的契约中，也可以
-看到对应的 header 参数。
+可以有多种方式在响应中包含 HTTP header， 下面代码展示了使用 ResponseEntity 包含 HTTP header。 需要注意使用 @ResponseHeaders 声明返回的 header 信息。 包含了 @ResponseHeaders 以后， 接口生成的契约中，也可以看到对应的 header 参数。
 
 ```java
   @ResponseHeaders({@ResponseHeader(name = "h1", response = String.class),
