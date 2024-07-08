@@ -62,3 +62,7 @@ servicecomb:
 ## 微服务网关 Edge Service
 
 微服务网关Edge Service不支持Servlet协议，不建议将其部署到Tomcat。仍然使用可执行 jar 包部署。 
+
+## 客户端配置
+
+参考 [REST Transport Client 配置项](../config-reference/rest-transport-client.md)

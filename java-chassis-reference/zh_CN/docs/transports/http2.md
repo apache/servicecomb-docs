@@ -45,3 +45,6 @@ servicecomb:
 | servicecomb.Provider.requestWaitInPoolTimeout${op-priority} | 30000             | 在同步线程中排队等待执行的超时时间，单位为毫秒                                                  |                                                           |
 | servicecomb.rest.server.requestWaitInPoolTimeout            | 30000             | 同servicecomb.Provider.requestWaitInPoolTimeout${op-priority}, 该配置项优先级更高。 |                                                           |
 
+## 客户端配置
+
+参考 [REST Transport Client 配置项](../config-reference/rest-transport-client.md)
