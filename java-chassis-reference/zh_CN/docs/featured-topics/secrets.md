@@ -13,3 +13,4 @@
 * [Java Chassis 3技术解密：接口维度负载均衡](secrets/load-balancer-operation.md)
 * [Java Chassis 3技术解密：实用的可观测性](secrets/observability.md)
 * [Java Chassis 3技术解密：流式响应和人工智能应用开发](secrets/sse.md)
+* [Java Chassis 3技术解密：WebSocket和人工智能应用开发](secrets/websocket.md)
