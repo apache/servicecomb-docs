@@ -44,7 +44,7 @@ servicecomb:
 
 ## CommonHttpEdgeDispatcher 的治理
 
-CommonHttpEdgeDispatcher 集成了 loadbalance 模块提供的治理能力， 在 [负载均衡](../../references-handlers/loadbalance.md) 里面的治理
+CommonHttpEdgeDispatcher 集成了 loadbalance 模块提供的治理能力， 在 [负载均衡](../references-handlers/loadbalance.md) 里面的治理
 能力都可以使用，除了 `设置重试策略` 。 这个转发器通常被用于转发 UI 请求到后端的静态页面服务，以及遗留的使用 spring
 boot 开发的微服务， 或者采用 spring-cloud-huawei 接入服务中心的 spring cloud 微服务应用。 
 
