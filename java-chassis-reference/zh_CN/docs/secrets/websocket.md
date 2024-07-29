@@ -21,9 +21,9 @@ Java Chassis 3提供了非常简洁的WebSocket支持，满足上述场景对于
 ```java
 @RestSchema(schemaId = "WebsocketController")
 @RequestMapping(path = "/ws")
+@Transport(name = CoreConst.WEBSOCKET)
 public class WebsocketController {
   @PostMapping("/websocket")
-  @Transport(name = CoreConst.WEBSOCKET)
   public void websocket(ServerWebSocket serverWebsocket) {
     AtomicInteger receiveCount = new AtomicInteger(0);
     serverWebsocket.writeTextMessage("hello", r -> {
@@ -68,6 +68,7 @@ servicecomb:
 ```java
 @RestSchema(schemaId = "ClientWebsocketController")
 @RequestMapping(path = "/ws")
+@Transport(name = CoreConst.WEBSOCKET)
 public class ClientWebsocketController {
   interface ProviderService {
     WebSocket websocket();
@@ -77,7 +78,6 @@ public class ClientWebsocketController {
   private ProviderService providerService;
 
   @PostMapping("/websocket")
-  @Transport(name = CoreConst.WEBSOCKET)
   public void websocket(ServerWebSocket serverWebsocket) {
     WebSocket providerWebSocket = providerService.websocket();
     providerWebSocket.closeHandler(v -> serverWebsocket.close());
