@@ -63,6 +63,7 @@ nav:
     - REST over Servlet(Spring Boot Embedded): transports/rest-over-servlet-embedded.md
     - REST over Servlet(WAR): transports/rest-over-servlet.md
     - Highway: transports/highway-rpc.md
+    - Websocket: transports/websocket.md
 - 多样化的服务注册与发现功能:
     - 注册发现介绍: registry/introduction.md
     - 使用Service Center: registry/service-center.md
