@@ -31,7 +31,6 @@ nav:
     - 线程池: build-provider/thread-pool.md
     - 服务启动事件: build-provider/event-listener.md
     - 参数效验: build-provider/parameter-validator.md
-    - 程序启动逻辑: build-provider/bootup.md
     - IPV6配置和使用: build-provider/ipv6-configuration.md
 - 开发服务消费者:
     - 基础概念: build-consumer/basics.md
@@ -41,7 +40,6 @@ nav:
 - 定制请求处理流程:
     - 处理链介绍: references-handlers/intruduction.md
 - 通用功能开发:
-    - 本地开发和测试: general-development/local-develop-test.md
     - 文件上传下载: general-development/upload-download.md
     - Reactive: general-development/reactive.md
     - DNS自定义配置: general-development/dnsconfig.md
