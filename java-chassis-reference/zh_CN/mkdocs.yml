@@ -130,10 +130,8 @@ nav:
     - 2.8.0 升级 3.0.0指导: upgrading/2_8_0T3_0_0.md
 - 常用配置项参考:
     - REST Transport Client 配置项: config-reference/rest-transport-client.md
-- 常见问题:
-    - 'FAQ' : question-and-answer/faq.md
-    - 'Q & A' : question-and-answer/question_answer.md
-    - 微服务接口兼容常见问题: question-and-answer/interface-compatibility.md
+- 常见问题: question-and-answer/faq.md
+
 theme: material
 plugins:
     - search
