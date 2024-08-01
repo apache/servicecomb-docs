@@ -1,11 +1,10 @@
 # 负载均衡
-
 Java Chassis提供了强大的负载均衡能力, 在实例数非常多的场景，也能提供很好的性能。负载均衡的核心数据结构是 `DiscoveryTree`，`DiscoveryTree` 包含了一系列 `DiscoveryFilter`。  下图展示了负载均衡的处理过程：
 
 ![](discovery-tree.png)
 
-## 按照数据中心信息进行路由转发
-服务提供者和消费者都可以通过在microservice.yaml中声明自己的数据中心信息：
+## 按照数据中心信息进行亲和路由
+服务提供者和消费者都可以通过配置项声明自己的数据中心信息：
 ```yaml
 servicecomb:
   datacenter:
@@ -14,19 +13,32 @@ servicecomb:
     availableZone: my-Zone
 ```
 
-消费者通过比较自己的数据中心信息和提供者的信息，优先将请求转发到region和availableZone都相同的实例；如果不存在，则转发到region相同的实例；如果仍然不存在，则转发到其他实例。
-
-这里的region和availableZone是一般性的概念，用户可以自行确定其业务含义以便应用于资源隔离的场景中。可以参见[微服务实例之间的逻辑隔离关系](../build-provider/definition/isolate-relationship.md)，了解更多其他实例发现相关的隔离机制。
+消费者通过比较自己的数据中心信息和提供者的信息，优先将请求转发到region和availableZone都相同的实例；如果不存在，则转发到region相同的实例；如果仍然不存在，则转发到其他实例。这种路由方式一般称为数据中心亲和路由。
 
 该规则默认启用，如果不需要使用，可以通过 `servicecomb.loadbalance.filter.zoneaware.enabled` 进行关闭。数据中心信息隔离功能在 `ZoneAwareDiscoveryFilter` 实现。
+
+```yaml
+servicecomb:
+  loadbalance:
+    filter:
+      zoneaware:
+        enabled: true
+        ratio: 30
+        ratioCeiling: 70
+```
+
+`ratio` 和 `ratioCeiling` 分别控制分组实例个数的最小比例和最大比例。如果实例个数小于最小比例或者大于最大比例，那么该分组不启用数据中心亲和路由。它们通常用于防止亲和路由造成实例负载过高的问题。
+
+> 这两个配置项在3.2.1及其以后版本提供。
 
 ## 根据实例属性进行路由转发
 
 微服务可以指定实例的属性。实例属性可以在microservice.yaml中指定，也可以通过服务中心的API进行修改。
+
 ```yaml
-instance_description:
-  properties:
-    tags:
+servicecomb:
+  service:
+    properties:
       tag_key: tag_value
 ```
 
@@ -37,10 +49,10 @@ servicecomb:
     provider:   # 这里表示配置对名为"provider"的服务生效，如果是跨应用调用，则还需要加上AppID，如"AppIDOfProvider:provider"
       transactionControl:
         options:
-          tags:
-            tag_key: expected_tag_value
+          tag_key: expected_tag_value
 ```
-上面的配置表示只访问myservice所有实例中`tag_key`属性为`expected_tag_value`的实例。
+
+上面的配置表示只访问`provider`所有实例中`tag_key`属性为`expected_tag_value`的实例。
 
 该规则需要给每个服务单独配置，未配置表示不启用该规则，不支持对于所有服务的全局配置。
 
@@ -53,9 +65,10 @@ servicecomb:
 微服务的实例属性可以定义为具备优先级的格式，通过`.`符号进行分割。
 
 ```yaml
-instance_description:
-  properties:
-    KEY: a.b.c
+servicecomb:
+  service:
+    properties:
+      KEY: a.b.c
 ```
 
 消费者需要指定用于优先级匹配的实例属性key，默认的key为`environment`。
