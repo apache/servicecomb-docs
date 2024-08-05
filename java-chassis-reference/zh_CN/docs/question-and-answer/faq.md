@@ -8,6 +8,7 @@
 * [Q: 参数返回值不能使用泛型？](#Q4)
 * [Q: 实现类中 public 方法全部被发布为接口，如何排除？](#Q5)
 * [Q: 如何自定义某个Java方法对应的REST接口里的HTTP Status Code？](#Q6)
+* [Q: 使用HTTP Header参数出现乱码如何处理？](#Q7)
 
 <h2 id="Q1">Q: 契约生成会报错 Caused by: java.lang.Error: OperationId must be unique，不支持函数重载？</h2>
 
@@ -110,3 +111,19 @@ public MyService extends AbstractMyService implements MyInterface {
 
 * A:  参考[多个返回值和错误码](../build-provider/multi-code.md)
 
+<h2 id="Q7">Q: 使用HTTP Header参数出现乱码如何处理？</h2>
+
+* A:  根据HTTP协议，HTTP Header的值只允许ASCII字符。虽然HTTP协议历史上有些改进，但目前的标准场景，仍然建议只使用ASCII字符，否则会出现乱码。 因此，在使用HTTP Header参数的情况，如果使用了非ASCII字符集，需要在请求前对内容进行编码，在收到响应后，需要对内容进行解码。 
+
+```java
+// HTTP header只允许 ASCII 字符。
+// 在Header参数中使用特殊字符，需要在发送请求前进行编码，在收到响应后进行解码，具体编码方式可以业务自行选择。
+// 如果不进行编码，则可能会出现乱码（HTTP协议历史上只标准化了ASCII字符，其他字符集可能工作，可能不工作）。
+String encodedResult = controller.sayHei(HttpUtils.encodeURLParam("中文HTTP Header"));
+TestMgr.check("hei 中文HTTP Header", HttpUtils.decodeURLParam(encodedResult));
+```
+
+> 注意：InvocationContext也会使用HTTP Header进行传输，如果包含特殊字符，也需要在设置前编码，使用前解码。
+
+
+> 最佳实践：尽可能不在Header参数中使用特殊字符，特殊内容使用Body传输。
