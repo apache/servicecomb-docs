@@ -80,6 +80,6 @@ servicecomb:
 
 | 配置项名                                          | 默认值            | 是否必须 | 含义                                            | 
 |-----------------------------------------------|----------------|------|-----------------------------------------------|
-| servicecomb.config.zk.connect-string          | http://127.0.0.1:2379 | 是    | etcd的地址信息，可以配置多个，用逗号分隔。                  |
-| servicecomb.config.zk.authenticationInfo      | 空              | 否    | 当认证方式为 digest 的时候，配置用户名密码信息，比如: user:password |
-| servicecomb.config.zk.instance-tag            | 空              | 否    | 实例的TAG信息，用于TAG级别的配置查询                         |
+| servicecomb.config.etcd.connect-string          | http://127.0.0.1:2379 | 是    | etcd的地址信息，可以配置多个，用逗号分隔。                  |
+| servicecomb.config.etcd.authenticationInfo      | 空              | 否    | 当认证方式为 digest 的时候，配置用户名密码信息，比如: user:password |
+| servicecomb.config.etcd.instance-tag            | 空              | 否    | 实例的TAG信息，用于TAG级别的配置查询                         |
