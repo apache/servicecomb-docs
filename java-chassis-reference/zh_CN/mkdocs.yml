@@ -69,6 +69,7 @@ nav:
     - 使用Service Center: registry/service-center.md
     - 使用Nacos: registry/nacos.md
     - 使用ZooKeeper: registry/zookeeper.md
+    - 使用Etcd: registry/etcd.md
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
 - 多样化的配置管理功能:
@@ -77,6 +78,7 @@ nav:
     - 使用Kie: config/kie.md
     - 使用Nacos: config/nacos.md
     - 使用Zookeeper: config/zookeeper.md
+    - 使用Etcd: config/etcd.md
     - 使用Apollo: config/apollo.md
     - 使用CSE1.0配置中心: config/cse1.md
 - 服务治理功能参考:
