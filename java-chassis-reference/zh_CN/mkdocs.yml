@@ -72,6 +72,7 @@ nav:
     - 使用Etcd: registry/etcd.md
     - 本地注册发现: registry/local-registry.md
     - 去中心化注册发现: registry/distributed.md
+    - 使用Consul: registry/consul.md
 - 多样化的配置管理功能:
     - 服务配置介绍: config/general-config.md
     - 在程序中读取配置信息: config/read-config.md
@@ -81,6 +82,7 @@ nav:
     - 使用Etcd: config/etcd.md
     - 使用Apollo: config/apollo.md
     - 使用CSE1.0配置中心: config/cse1.md
+    - 使用Consul: config/consul.md
 - 服务治理功能参考:
     - 流量特征治理: references-handlers/rule-governance.md
     - 流量特征治理最佳实践: references-handlers/governance-best-practise.md
