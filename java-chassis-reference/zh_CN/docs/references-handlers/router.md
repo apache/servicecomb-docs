@@ -61,7 +61,7 @@ servicecomb:
 
 #### 规则说明
 
-- 匹配特定请求由match配置, match的配置逻辑和 [流量特征治理](governance.md) 一致。
+- 匹配特定请求由match配置, match的配置逻辑和 [流量特征治理](rule-governance.md) 一致。
 - business为目标服务名。
 - precedence为规则优先级，数字越大，优先级越高。
 - emptyProtection路由空实例保护开关，当按照设定的路由规则未匹配到实例时，开关打开则返回所有实例，开关关闭返回空实例，默认为打开。
