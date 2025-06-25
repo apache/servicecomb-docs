@@ -26,7 +26,7 @@ Java Chassis在设计之初，就内置了大量的可观测能力。使用上�
 
 > 动手试试： 可以通过下载和运行 [fence](https://github.com/apache/servicecomb-fence) 项目，体验上述问题定位流程和了解本章节介绍的实现原理。 也可以在实际的业务系统中，参考该项目构筑业务需要的可观测能力。 
 
-Java Chassis通过集成[应用性能监控](../../general-development/metrics.md)、[微服务调用链](../../general-development/microservice-invocation-chain.md)来生成调用链和指标，日志则使用 `slf4j` 来记录。 这些数据构成了可观测的基础， 接下来就是如何存储和采集这些数据。 
+Java Chassis通过集成[应用性能监控](../general-development/metrics.md)、[微服务调用链](../general-development/microservice-invocation-chain.md)来生成调用链和指标，日志则使用 `slf4j` 来记录。 这些数据构成了可观测的基础， 接下来就是如何存储和采集这些数据。 
 
 通过配置 `log4j2` , 可以将日志、调用链和指标都输出到日志文件。 特别的，该日志配置约束了数据存储的规则、路径，为`可观测API`提供了简单的实现方案。 
 
