@@ -10,6 +10,13 @@ Graceful shutdown can solve the following scenes:
 Graceful shutdown can't solve the following scenes:
 * KILL -9 PID or taskkill /f /pid
 
+## Special Scenes
+
+* In the K8S scenario, it failed to trigger graceful shutdown when using start.sh script starting the service.
+  1.script content: java -jar xxx
+  2.reason: After the container starts, the main process is not a Java process but the start.sh script. When K8S stops the pod, it only sends a termination signal to the main process. As a result, the Java process cannot receive the termination signal, making it impossible to perform a graceful shutdown.
+
+
 ## Effect
 When triggering graceful shutdown:
 * Provider:
