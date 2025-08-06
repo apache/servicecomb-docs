@@ -10,6 +10,12 @@ ServiceComb是通过JDK的ShutdownHook来完成优雅停机的。
 优雅停机解决不了以下场景：
 * KILL -9 PID 或 taskkill /f /pid
 
+## 特殊场景
+
+* K8S场景中使用start.sh脚本启动服务时无法触发优雅停机。
+  脚本内容：java -jar xxx
+  原因：因为容器启动后，主进程不是java进程，而是start.sh脚本，而K8S停止pod时，只会向主进程发送终止信号，进而java进程无法收到终止信号，所以无法进行优雅停机。
+
 ## 效果
 触发优雅停机时：
 * 服务提供者：
